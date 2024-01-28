@@ -20,18 +20,31 @@ async def create_client(hostport: str, api_token: str) -> hass_client.HomeAssist
 
 @dataclass
 class Home:
+    """A home assistant data wrapper."""
     areas: list[Area]
     devices: list[Device]
     entities: list[Entity]
     states: list[State]
 
     def devices_by_area(self, area_id: str) -> list[Device]:
+        """Get all devices in an area."""
         return [device for device in self.devices if device['area_id'] == area_id]
 
     def entities_by_device_id(self, device_id: str) -> list[Entity]:
-        return [entity for entity in self.entities if entity['device_id'] == device_id and entity['disabled_by'] is None]
+        """Get all entities for a device."""
+        entities = []
+        for entity in self.entities:
+            if entity['device_id'] != device_id:
+                continue
+            if entity['disabled_by'] is not None or entity['hidden_by'] is not None:
+                continue
+            if entity['entity_category'] is not None:
+                continue
+            entities.append(entity)
+        return entities
 
     def get_state(self, entity_id: str) -> State | None:
+        """Get the state for an entity."""
         for state in self.states:
             if state['entity_id'] == entity_id:
                 return state
