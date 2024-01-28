@@ -14,5 +14,3 @@
 1. Clone the https://github.com/marcelveldt/python-hass-client repo locally and install `pip3 install -e .`
 
 1. Open the notebook and select the venv interpreter and kernel
-
-## pre-release hass client
