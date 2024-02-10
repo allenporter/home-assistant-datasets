@@ -43,6 +43,13 @@ class Home:
             entities.append(entity)
         return entities
 
+    def entities_by_area(self, area_id: str) -> list[Entity]:
+        return [
+            entity
+            for device in self.devices_by_area(area_id)
+            for entity in self.entities_by_device_id(device['id'])
+        ]
+
     def get_state(self, entity_id: str) -> State | None:
         """Get the state for an entity."""
         for state in self.states:
