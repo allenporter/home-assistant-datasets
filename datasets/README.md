@@ -1,6 +1,8 @@
 # Datasets
 
 This directory contains synthetic data used for generating home information.
+The datasets in this repository are generated using the notebooks and seeds in
+the `../generation` directory.
 
 ## Homes
 
