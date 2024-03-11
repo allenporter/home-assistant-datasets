@@ -1,6 +1,26 @@
 # home-assistant-datasets
 
-## Notebooks
+A collection of datasets for evaluation (and in the future training) home automation
+AI models.
+
+## Datasets
+
+See the [datasets README](datasets/README.md) for details on the available
+datasets including Home descriptions, Area descriptions, Device descriptions
+and summaries that can be performed on a home.
+
+The device level datasets are defined using the [Synthetic Home](https://github.com/allenporter/home-assistant-synthetic-home/)
+format including its device registry of synthetic devices.
+
+## Synthetic Data Generation
+
+See the [generation README](generation/README.md) for more details on how synthetic
+data generation using LLMs works. The data is generated from a small amount of seed
+example data and a prompt, then is persisted.
+
+## Notebook Development enviroment
+
+This is an example of how to prepare the python venv for use with the jupyet notebooks:
 
 1. Create the virtual environment
 
