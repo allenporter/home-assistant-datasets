@@ -13,6 +13,7 @@ _LOGGER = logging.getLogger(__name__)
 
 CONFIG_DIR = "config"
 
+
 def get_arguments() -> argparse.Namespace:
     """Get parsed passed in arguments."""
     parser = argparse.ArgumentParser(description="Synthetic Home Evaluation Driver")
@@ -51,7 +52,11 @@ def main():
         with (config_dir / home_config_path.name).open("w") as out:
             out.write(content)
 
-    driver.Driver(home_config_path.name, output_dir).run_until_complete()
+    tool = driver.Driver(home_config_path.name, config_dir)
+    tool.run_until_complete()
+    if not tool.status:
+        _LOGGER.error("Failed to create synthetic home")
+        return 1
 
     return 0
 

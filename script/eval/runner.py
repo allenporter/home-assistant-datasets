@@ -25,6 +25,7 @@ from homeassistant.helpers import (
     entity_registry as er,
     issue_registry as ir,
     restore_state as rs,
+    translation,
 )
 from homeassistant.util import dt as dt_util
 from homeassistant.util.unit_system import METRIC_SYSTEM
@@ -70,6 +71,10 @@ async def async_create_home_assistant(
 
     # Load the registries
     entity.async_setup(hass)
+
+    hass.data[translation.TRANSLATION_FLATTEN_CACHE] = translation._TranslationCache(
+        hass
+    )
 
     from homeassistant import loader
 
