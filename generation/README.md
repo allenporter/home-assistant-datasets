@@ -7,6 +7,7 @@ The phases of generating data are currently:
 - Generate the Areas of the Home useful for automation
 - Generate the devices in each area
 - Generate interesting actions that can be used with the Home
+- Generate the subset of devices needed to evaluate the action
 
 There is a notebook for each phase, as well as seed data that is used for the
 n-shot examples at that phase. The notebooks help drive feeding data from the
