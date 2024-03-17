@@ -11,7 +11,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
 from homeassistant import config
 
-from . import runner
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -24,42 +23,33 @@ class DriverException(Exception):
     """Driver exception."""
 
 
-class ConfigDriver(runner.Runner):
+class ConfigDriver:
     """Driver that performs data generation."""
 
-    def __init__(
-        self, synthetic_home_config: pathlib.Path, storage_dir: pathlib.Path
-    ) -> None:
+    def __init__(self, synthetic_home_config: pathlib.Path) -> None:
         """Initialize the driver."""
-        super().__init__(storage_dir)
         self._synthetic_home_config = synthetic_home_config
 
-    async def _async_run_in_loop(self, hass: HomeAssistant) -> None:
-        _LOGGER.debug("Running driver")
+    async def async_setup(self, hass: HomeAssistant) -> None:
+        _LOGGER.info("Creating initial configuration")
         await config.async_create_default_config(hass)
 
-        _LOGGER.debug("Copying configuration")
-        os.mkdir(self._storage_dir / DEST_STORAGE_DIR)
+        _LOGGER.info("Copying synthetic home configuration")
+        os.mkdir(hass.config.config_dir / DEST_STORAGE_DIR)
         for config_file in STORAGE_RESOURCE_PATH.iterdir():
             _LOGGER.debug("Copying %s", config_file)
             shutil.copy(
                 str(config_file),
-                self._storage_dir / DEST_STORAGE_DIR / config_file.name,
+                hass.config.config_dir / DEST_STORAGE_DIR / config_file.name,
             )
 
-        await hass.async_start()
-
-        await self._async_create_synthetic_home(hass)
-
-        _LOGGER.debug("Done; Shutting down")
-
-    async def _async_create_synthetic_home(self, hass: HomeAssistant) -> bool:
+    async def async_run(self, hass: HomeAssistant) -> None:
         """Create the synthetic home configuration entry."""
         hash = hashlib.sha256()
         hash.update(self._synthetic_home_config.encode())
         unique_id = hash.hexdigest()
 
-        _LOGGER.debug(
+        _LOGGER.info(
             "Creating configuration entry %s", hass.data.get("custom_components")
         )
         entry = config_entries.ConfigEntry(
@@ -77,4 +67,5 @@ class ConfigDriver(runner.Runner):
         if entry.state != config_entries.ConfigEntryState.LOADED:
             _LOGGER.warning("Failed to setup synthetic home, in state: %s", entry.state)
             return False
+        _LOGGER.debug("Synthetic home setup complete")
         return True

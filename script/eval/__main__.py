@@ -6,7 +6,7 @@ import sys
 import logging
 import shutil
 
-from . import config_driver, eval_driver
+from . import config_driver, eval_driver, runner
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -17,6 +17,12 @@ CONFIG_DIR = "config"
 def get_arguments() -> argparse.Namespace:
     """Get parsed passed in arguments."""
     parser = argparse.ArgumentParser(description="Synthetic Home Evaluation Driver")
+    parser.add_argument(
+        "--log-level",
+        default="warning",
+        choices=["debug", "info", "warning", "error", "critical"],
+        help="The log level",
+    )
     parser.add_argument(
         "--config",
         type=str,
@@ -35,13 +41,19 @@ def get_arguments() -> argparse.Namespace:
     parser_create_config = subparsers.add_parser("create_config")
     parser_create_config.set_defaults(func=create_config)
 
-    parser_eavl = subparsers.add_parser("eval")
-    parser_eavl.set_defaults(func=eval)
+    parser_eval = subparsers.add_parser("eval")
+    parser_eval.set_defaults(func=eval)
+    parser_eval.add_argument(
+        "--agent_id",
+        type=str,
+        help="The conversation agent config entry id.",
+        required=True,
+    )
 
     return parser.parse_args()
 
 
-def create_config(args: argparse.Namespace) -> None:
+def create_config(args: argparse.Namespace) -> int:
     """Run the create config command."""
     output_dir = pathlib.Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
@@ -56,7 +68,14 @@ def create_config(args: argparse.Namespace) -> None:
         with (config_dir / home_config_path.name).open("w") as out:
             out.write(content)
 
-    config_driver.ConfigDriver(home_config_path.name, config_dir).run_until_complete()
+    driver = config_driver.ConfigDriver(home_config_path.name)
+    runtime_config = runner.RuntimeConfig(
+        config_dir=str(config_dir),
+        load_registries=True,
+        setup_callback=driver.async_setup,
+        run_callback=driver.async_run,
+    )
+    return runner.run(runtime_config)
 
 
 def eval(args: argparse.Namespace) -> None:
@@ -64,17 +83,22 @@ def eval(args: argparse.Namespace) -> None:
     output_dir = pathlib.Path(args.output_dir)
     config_dir = output_dir / CONFIG_DIR
     home_config_path = pathlib.Path(args.config)
-    eval_driver.EvalDriver(home_config_path.name, config_dir).run_until_complete()
+
+    driver = eval_driver.EvalDriver(home_config_path.name, args.agent_id)
+
+    runtime_config = runner.RuntimeConfig(
+        config_dir=str(config_dir),
+        load_registries=False,
+        run_callback=driver.async_run,
+    )
+    return runner.run(runtime_config)
 
 
 def main():
     """Evaluate an integration."""
-    logging.basicConfig(level=logging.DEBUG)
-
     args = get_arguments()
-    args.func(args)
-
-    return 0
+    logging.basicConfig(level=getattr(logging, args.log_level.upper()))
+    return args.func(args)
 
 
 if __name__ == "__main__":

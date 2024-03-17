@@ -3,11 +3,13 @@
 from importlib import resources
 import logging
 import pathlib
+from string import Template
 import yaml
 
 from homeassistant.core import HomeAssistant
+from homeassistant import bootstrap, config as conf_util, setup
+from homeassistant.config_entries import ConfigEntryState
 
-from . import runner
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -15,42 +17,127 @@ _LOGGER = logging.getLogger(__name__)
 STORAGE_RESOURCE_PATH = resources.files().joinpath("storage")
 DEST_STORAGE_DIR = ".storage"
 
-PROMPT = (
-    "You are a Home Automation agent responsible for summarizing the state of an area."
-)
+SYSTEM_PROMPT = """
+You are an agent running in Home Assistant. Your job is to summarize the status of an area
+which will be fed as input into other agents. The user will feed in details about
+areas and devices in the home, and you will respond with a summary of the status of the area.
+
+Your summaries are succint, and do not mention boring details or things that seem
+very mundane or minor. A one sentence summary is best.
+
+Here is an example of the input and output:
+
+Bedroom 1:
+- Bedroom 1 Light (Dimmable Smart Bulb)
+    light: off
+- Smart Lock (Encode Smart WiFi Deadbolt)
+    binary_sensor: off
+    binary_sensor Tamper: off
+    binary_sensor Battery: off
+    sensor Battery: 90 %
+Instruction: Check to make sure everything is normal at night
+Summary: The bedroom is secure.
+
+Driveway:
+- Black Model 3 (Model 3)
+  - binary_sensor Charging: off
+  - sensor Battery level: 90%
+  - sensor Battery range: 200 mi
+  - binary_sensor Pedestrian Gate: off
+  - switch Sprinkler: off
+Instruction: Monitor the state of the car and the driveway.
+Summary: The car is almost charged.
+"""
+
+SET_AREA_VARIABLE = """{%- set area = "$area" %}"""
+AREA_SUMMARY_TEMPLATE = """
+{{ area }}:
+  {%- for device in area_devices(area) -%}
+    {%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
+        {%- set device_name = device_attr(device, "name_by_user") | default(device_attr(device, "name"), True) %}
+
+- {{ device_name  }}{% if device_attr(device, "model") and (device_attr(device, "model") | string) not in (device_attr(device, "name") | string) %} ({{ device_attr(device, "model") }}){% endif %}
+      {%- set entity_info = namespace(printed=false) %}
+      {%- for entity_id in device_entities(device) -%}
+        {%- set entity_name = state_attr(entity_id, "friendly_name") | replace(device_name, "") | trim %}
+    {{ entity_id.split(".")[0] -}}
+        {%- if entity_name %} {{ entity_name }}{% endif -%}
+        : {{ states(entity_id, rounded=True, with_unit=True) }}
+      {%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+"""
+
+AREA_PROMPT = """
+{system_prompt}
+
+The user will enter an area with an instruction below and you will respond with a summary of the area.
+
+{set_area_variable}
+{area_summary_template}
+Summary:
+"""
+
+
+def make_prompt(area_name: str) -> str:
+    """Create a prompt for the agent to summarize the area."""
+    set_area_var = Template(SET_AREA_VARIABLE).substitute(area=area_name)
+    return AREA_PROMPT.format(
+        system_prompt=SYSTEM_PROMPT,
+        set_area_variable=set_area_var,
+        area_summary_template=AREA_SUMMARY_TEMPLATE,
+    )
 
 
 class DriverException(Exception):
     """Driver exception."""
 
 
-class EvalDriver(runner.Runner):
+class EvalDriver:
     """Driver that performs service calls and evaluates the results."""
 
     def __init__(
-        self, synthetic_home_config: pathlib.Path, storage_dir: pathlib.Path
+        self,
+        synthetic_home_config: pathlib.Path,
+        agent_id: str,
     ) -> None:
         """Initialize the driver."""
-        super().__init__(storage_dir)
         self._synthetic_home_config = synthetic_home_config
-        self._status = False
+        self._agent_id = agent_id
 
-    @property
-    def status(self) -> bool:
-        """Return the status of the driver."""
-        return self._status
-
-    async def _async_run_in_loop(self, hass: HomeAssistant) -> None:
-        _LOGGER.debug("Running driver")
-        await hass.async_start()
-        await self._async_evaluate_conversation_agent(hass)
-
-        _LOGGER.debug("Done; Shutting down")
-
-    async def _async_evaluate_conversation_agent(self, hass: HomeAssistant) -> bool:
+    async def async_run(self, hass: HomeAssistant) -> bool:
         """Run an evaluation on the home conversation agent."""
 
-        with open(self._storage_dir / self._synthetic_home_config, "r") as fd:
+        _LOGGER.info("Loading config entries")
+        config_dict = await conf_util.async_hass_config_yaml(hass)
+        await bootstrap.async_from_config_dict(config_dict, hass)
+
+        if not await setup.async_setup_component(hass, "http", {}):
+            raise DriverException("Failed to setup http component")
+
+        entries = hass.config_entries.async_entries()
+        _LOGGER.info("Found %s configuration entries", len(entries))
+        for entry in entries:
+            if entry.state != ConfigEntryState.LOADED:
+                _LOGGER.debug("Loading entry %s", entry)
+                result = await hass.config_entries.async_setup(entry.entry_id)
+                if not result:
+                    raise DriverException(f"Failed to setup entry {entry}")
+                await hass.async_block_till_done()
+
+        num_loaded = len(
+            [entry for entry in entries if entry.state == ConfigEntryState.LOADED]
+        )
+        num_failed = len(
+            [entry for entry in entries if entry.state != ConfigEntryState.LOADED]
+        )
+        _LOGGER.info(
+            "Loaded %s config entries and failed to load %s", num_loaded, num_failed
+        )
+
+        with open(
+            pathlib.Path(hass.config.config_dir) / self._synthetic_home_config, "r"
+        ) as fd:
             content = fd.read()
 
         obj = yaml.load(content, Loader=yaml.FullLoader)
@@ -62,15 +149,22 @@ class EvalDriver(runner.Runner):
         if not area_summaries:
             raise DriverException("No area summaries found in configuration")
 
-        _LOGGER.debug("Loaded %s area summariies to evaluate")
+        _LOGGER.info("Loaded %s area summariies to evaluate", len(area_summaries))
 
         for area_summary in area_summaries:
-            _LOGGER.debug("Evaluating area summary: %s", area_summary)
-            # await hass.services.async_call(
-            #     "conversation",
-            #     "process",
-            #     {"text": PROMPT},.format(area_summary=area_summary")},
-            #     blocking=True,
-            # )
+            _LOGGER.info("Evaluating area summary: %s", area_summary)
+            prompt = make_prompt(area_summary)
+            _LOGGER.debug("Evaluating prompt: %s", prompt)
+
+            service_response = await hass.services.async_call(
+                "conversation",
+                "process",
+                {"agent_id": self._agent_id, "text": prompt},
+                blocking=True,
+                return_response=True,
+            )
+            response = service_response["response"]
+            summary = response["speech"]["plain"]["speech"]
+            _LOGGER.info("Response: %s", summary)
 
         return True

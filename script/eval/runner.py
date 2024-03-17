@@ -6,18 +6,14 @@ install custom components or configure the instance.
 """
 
 import asyncio
-import pathlib
-import threading
+from dataclasses import dataclass
 import logging
-from typing import Any
-from unittest import mock
-from collections.abc import Generator, AsyncGenerator
-from contextlib import asynccontextmanager, contextmanager
+from collections.abc import AsyncGenerator, Awaitable, Callable
+from contextlib import asynccontextmanager
 
 from homeassistant.core import HomeAssistant, CoreState, EVENT_HOMEASSISTANT_STOP
-from homeassistant import config_entries
-from homeassistant import auth
-from homeassistant.auth import auth_store
+from homeassistant import config_entries, auth
+from homeassistant.auth.auth_store import AuthStore
 from homeassistant.helpers import (
     area_registry as ar,
     entity,
@@ -34,16 +30,30 @@ from homeassistant.util.unit_system import METRIC_SYSTEM
 _LOGGER = logging.getLogger(__name__)
 
 
+@dataclass
+class RuntimeConfig:
+    """Class to hold the information for running Home Assistant."""
+
+    config_dir: str
+    load_registries: bool = True
+
+    # Callback fired before Home Assistant is started
+    setup_callback: Callable[[HomeAssistant], Awaitable[None]] | None = None
+
+    # Callback fired after Home Assistant is started
+    run_callback: Callable[[HomeAssistant], Awaitable[None]] | None = None
+
+
 @asynccontextmanager
-async def async_create_home_assistant(
-    event_loop: asyncio.AbstractEventLoop,
-    storage_dir: pathlib.Path,
+async def _async_create_home_assistant(
+    runtime_config: RuntimeConfig,
 ) -> AsyncGenerator[HomeAssistant, None]:
     """Return a Home Assistant object pointing at test config dir."""
-    hass = HomeAssistant(str(storage_dir))
+    hass = HomeAssistant(runtime_config.config_dir)
 
-    store = auth_store.AuthStore(hass)
-    hass.auth = auth.AuthManager(hass, store, {}, {})
+    if runtime_config.load_registries:
+        auth_store = AuthStore(hass)
+        hass.auth = auth.AuthManager(hass, auth_store, {}, {})
 
     orig_tz = dt_util.DEFAULT_TIME_ZONE
 
@@ -80,11 +90,13 @@ async def async_create_home_assistant(
 
     loader.async_setup(hass)
 
-    await ar.async_load(hass)
-    await dr.async_load(hass)
-    await er.async_load(hass)
-    await ir.async_load(hass)
-    await rs.async_load(hass)
+    if runtime_config.load_registries:
+        await ar.async_load(hass)
+        await dr.async_load(hass)
+        await er.async_load(hass)
+        await ir.async_load(hass)
+        await rs.async_load(hass)
+        await auth_store.async_load()
 
     hass.set_state(CoreState.running)
 
@@ -94,61 +106,30 @@ async def async_create_home_assistant(
     dt_util.DEFAULT_TIME_ZONE = orig_tz
 
 
-class Runner:
-    """A runner that invokes Home Assistant.
+async def _setup_and_run_hass(runtime_config: RuntimeConfig) -> int:
+    """Set up Home Assistant and run."""
+    async with _async_create_home_assistant(runtime_config) as hass:
+        if runtime_config.setup_callback:
+            await runtime_config.setup_callback(hass)
+        await hass.async_start()
+        if runtime_config.run_callback:
+            await runtime_config.run_callback(hass)
+        await hass.async_stop()
+        return hass.exit_code
 
-    You can subclass this class and implement `async_run_in_loop`.
-    """
 
-    def __init__(self, storage_dir: pathlib.Path) -> None:
-        """Initialize the driver."""
-        self._storage_dir = storage_dir
+def run(runtime_config: RuntimeConfig) -> int:
+    """Run Home Assistant."""
 
-    @contextmanager
-    def _home_assistant(self) -> Generator[HomeAssistant, None, None]:
-        """Return a Home Assistant object pointing at test config directory."""
-        loop = asyncio.new_event_loop()
+    loop = asyncio.new_event_loop()
+    try:
         asyncio.set_event_loop(loop)
-        context_manager = async_create_home_assistant(loop, self._storage_dir)
-        hass = loop.run_until_complete(context_manager.__aenter__())
-
-        loop_stop_event = threading.Event()
-
-        def run_loop() -> None:
-            """Run event loop."""
-            loop._thread_ident = threading.get_ident()
-            loop.run_forever()
-            loop_stop_event.set()
-
-        orig_stop = hass.stop
-        hass._stopped = mock.Mock(set=loop.stop)
-
-        def start_hass(*mocks: Any) -> None:
-            """Start hass."""
-            asyncio.run_coroutine_threadsafe(
-                self._async_run_in_loop(hass), loop
-            ).result()
-
-        def stop_hass() -> None:
-            """Stop hass."""
-            orig_stop()
-            loop_stop_event.wait()
-
-        hass.start = start_hass
-        hass.stop = stop_hass
-
-        threading.Thread(name="LoopThread", target=run_loop, daemon=False).start()
-
-        yield hass
-        loop.run_until_complete(context_manager.__aexit__(None, None, None))
-        loop.close()
-
-    async def _async_run_in_loop(self, hass: HomeAssistant) -> None:
-        """Run in the Home Assistant event loop."""
-        pass
-
-    def run_until_complete(self) -> None:
-        """Start the driver and run until the work in the event loop is complete."""
-        with self._home_assistant() as hass:
-            hass.start()
-            hass.stop()
+        return loop.run_until_complete(_setup_and_run_hass(runtime_config))
+    finally:
+        try:
+            # _cancel_all_tasks_with_timeout(loop, TASK_CANCELATION_TIMEOUT)
+            loop.run_until_complete(loop.shutdown_asyncgens())
+            loop.run_until_complete(loop.shutdown_default_executor())
+        finally:
+            asyncio.set_event_loop(None)
+            loop.close()

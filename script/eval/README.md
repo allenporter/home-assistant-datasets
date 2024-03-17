@@ -66,8 +66,27 @@ using a normal conversation agent.
 
 ### Run an LLM Summary service call
 
+Get the conversation agent ID and run eval:
 ```
-$ python3 -m script.eval --config datasets/summaries/home1-us.yaml --output_dir="/tmp/2024-03-10/" eval
+$ cat "${OUTPUT_DIR}/config/.storage/core.config_entries"  | jq '.data.entries[] | [.entry_id, .title]'
+[
+  "033529aa639d5c10b824d643ad870644",
+  "Synthetic Home"
+]
+[
+  "abf5dcde966bf00b4ca0238df4a5de61",
+  "Sun"
+]
+[
+  "b46636a2b78f3b7068ccffd10d500f99",
+  "OpenAI Conversation"
+]
+```
+
+
+```
+$ AGENT_ID=b46636a2b78f3b7068ccffd10d500f99
+$ python3 -m script.eval --config datasets/summaries/home1-us.yaml --output_dir="${OUTPUT_DIR}" eval --agent_id="${AGENT_ID}"
 ```
 
 - Collect area state
