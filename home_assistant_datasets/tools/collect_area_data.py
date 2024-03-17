@@ -16,7 +16,6 @@ import logging
 
 from home_assistant_datasets.secrets import get_secret
 from home_assistant_datasets import hass_data
-from home_assistant_datasets import model_client
 
 
 async def start() -> None:

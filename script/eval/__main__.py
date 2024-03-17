@@ -6,8 +6,8 @@ import sys
 import logging
 import shutil
 
+from . import config_driver, eval_driver
 
-from . import driver
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,16 +29,20 @@ def get_arguments() -> argparse.Namespace:
         help="The output directory which is overwritten with the results.",
         required=True,
     )
-    arguments = parser.parse_args()
-    return arguments
+    subparsers = parser.add_subparsers(dest="func")
+    subparsers.required = True
+
+    parser_create_config = subparsers.add_parser("create_config")
+    parser_create_config.set_defaults(func=create_config)
+
+    parser_eavl = subparsers.add_parser("eval")
+    parser_eavl.set_defaults(func=eval)
+
+    return parser.parse_args()
 
 
-def main():
-    """Evaluate an integration."""
-    logging.basicConfig(level=logging.DEBUG)
-
-    args = get_arguments()
-
+def create_config(args: argparse.Namespace) -> None:
+    """Run the create config command."""
     output_dir = pathlib.Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
 
@@ -52,11 +56,23 @@ def main():
         with (config_dir / home_config_path.name).open("w") as out:
             out.write(content)
 
-    tool = driver.Driver(home_config_path.name, config_dir)
-    tool.run_until_complete()
-    if not tool.status:
-        _LOGGER.error("Failed to create synthetic home")
-        return 1
+    config_driver.ConfigDriver(home_config_path.name, config_dir).run_until_complete()
+
+
+def eval(args: argparse.Namespace) -> None:
+    """Run the evaluation command."""
+    output_dir = pathlib.Path(args.output_dir)
+    config_dir = output_dir / CONFIG_DIR
+    home_config_path = pathlib.Path(args.config)
+    eval_driver.EvalDriver(home_config_path.name, config_dir).run_until_complete()
+
+
+def main():
+    """Evaluate an integration."""
+    logging.basicConfig(level=logging.DEBUG)
+
+    args = get_arguments()
+    args.func(args)
 
     return 0
 

@@ -24,23 +24,27 @@ This is the initial baseline use case:
 
 This will setup the home, complete onboarding, and create the synthetic devices.
 
+Prepare the environment
 ```bash
 $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip3 install -r requirements.txt
-$ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custom_components/:${PWD}/../home-assistant-synthetic-home/"
 $ pip3 install -r ../home-assistant-synthetic-home/requirements.txt
-$ CONFIG_DIR="/tmp/2024-03-10/"
-$ python3 -m script.eval --config datasets/summaries/home1-us.yaml --output_dir="/tmp/2024-03-10/"
+```
+
+```
+$ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custom_components/:${PWD}/../home-assistant-synthetic-home/"
+$ OUTPUT_DIR="/tmp/2024-03-10/"
+$ python3 -m script.eval --config datasets/summaries/home1-us.yaml --output_dir="${OUTPUT_DIR}" create_config
 ```
 
 ### Create users
 
 This step will create a test user.
 ```
-$ hass --script auth -c /tmp/2024-03-10/config add ${USER} example-pass
+$ hass --script auth -c "${OUTPUT_DIR}/config" add ${USER} example-pass
 Auth created
-$ hass --script auth -c /tmp/2024-03-10/config list
+$ hass --script auth -c "${OUTPUT_DIR}/config" list
 allen
 
 Total users: 1
@@ -51,7 +55,7 @@ Total users: 1
 This is currently done manually. Run Home Assistant and set up the configuration
 you would like to evaluate.
 ```
-$ hass  -c /tmp/2024-03-10/config
+$ hass  -c "${OUTPUT_DIR}/config"
 ```
 
 Later we can either automate these steps, or reverse the order: First setup the
@@ -61,6 +65,10 @@ Make sure to remove the default prompt, if any, that is configured for the model
 using a normal conversation agent.
 
 ### Run an LLM Summary service call
+
+```
+$ python3 -m script.eval --config datasets/summaries/home1-us.yaml --output_dir="/tmp/2024-03-10/" eval
+```
 
 - Collect area state
 - Stick data into the prompt

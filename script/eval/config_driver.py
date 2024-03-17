@@ -1,8 +1,7 @@
-"""Driver that invokes home assistnat and pushes time forward."""
+"""Driver that creates the synthetic home configuration for Home Assistant."""
 
 import hashlib
 from importlib import resources
-from importlib.resources.abc import Traversable
 import logging
 import os
 import pathlib
@@ -11,7 +10,6 @@ import shutil
 from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
 from homeassistant import config
-from homeassistant import loader
 
 from . import runner
 
@@ -26,7 +24,7 @@ class DriverException(Exception):
     """Driver exception."""
 
 
-class Driver(runner.Runner):
+class ConfigDriver(runner.Runner):
     """Driver that performs data generation."""
 
     def __init__(
@@ -35,12 +33,6 @@ class Driver(runner.Runner):
         """Initialize the driver."""
         super().__init__(storage_dir)
         self._synthetic_home_config = synthetic_home_config
-        self._status = False
-
-    @property
-    def status(self) -> bool:
-        """Return the status of the driver."""
-        return self._status
 
     async def _async_run_in_loop(self, hass: HomeAssistant) -> None:
         _LOGGER.debug("Running driver")
@@ -57,7 +49,7 @@ class Driver(runner.Runner):
 
         await hass.async_start()
 
-        self._status = await self._async_create_synthetic_home(hass)
+        await self._async_create_synthetic_home(hass)
 
         _LOGGER.debug("Done; Shutting down")
 
