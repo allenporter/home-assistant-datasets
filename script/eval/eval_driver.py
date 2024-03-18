@@ -5,6 +5,7 @@ import logging
 import pathlib
 from string import Template
 import yaml
+import tqdm
 
 from homeassistant.core import HomeAssistant
 from homeassistant import bootstrap, config as conf_util, setup
@@ -144,7 +145,7 @@ class EvalDriver:
 
         _LOGGER.info("Loaded %s area summariies to evaluate", len(area_summaries))
 
-        for area_summary in area_summaries:
+        for area_summary in tqdm.tqdm(area_summaries):
             _LOGGER.info("Evaluating area summary: %s", area_summary)
             prompt = make_prompt(area_summary, area_summary)
             _LOGGER.debug("Evaluating prompt: %s", prompt)
