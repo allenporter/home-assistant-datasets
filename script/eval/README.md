@@ -134,7 +134,7 @@ You can now manually review the output of data collection:
 $ cat /tmp/2024-03-10//eval/1710727690/*.yaml | head -11
 ```
 
-Output:
+Each area has its own file that contains the instructions and the LLM response in the `response` field:
 ```yaml
 area: Backyard
 instructions:
@@ -148,6 +148,7 @@ instructions:
 - Check if the Smart Lock in Bedroom 1 is locked properly
 response: The bedroom is secure with the light off and the smart lock properly locked.
 ```
+
 
 In the future we want to:
 - Record the score (1, 2, 3)
