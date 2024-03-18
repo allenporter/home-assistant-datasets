@@ -35,7 +35,7 @@ $ pip3 install -r ../home-assistant-synthetic-home/requirements.txt
 ```
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custom_components/:${PWD}/../home-assistant-synthetic-home/"
 $ OUTPUT_DIR="/tmp/2024-03-10/"
-$ python3 -m script.eval --config datasets/summaries/home1-us.yaml --output_dir="${OUTPUT_DIR}" create_config
+$ python3 -m script.eval  --output_dir="${OUTPUT_DIR}" create_config --config datasets/summaries/home1-us.yaml
 ```
 
 ### Create users
@@ -52,8 +52,8 @@ Total users: 1
 
 ### Manually configure the conversation agent
 
-This is currently done manually. Run Home Assistant and set up the configuration
-you would like to evaluate.
+This is currently done manually. Run Home Assistant and set up the configuration,
+prompt, etc you would like to evaluate.
 ```
 $ hass -c "${OUTPUT_DIR}/config"
 ```
@@ -61,12 +61,10 @@ $ hass -c "${OUTPUT_DIR}/config"
 Later we can either automate these steps, or reverse the order: First setup the
 conversation agent, then setup the synthetic devices for different scenarios.
 
-Make sure to remove the default prompt, if any, that is configured for the model if
+Make sure to update the default prompt and that is configured for the model if
 using a normal conversation agent.
 
-### Run an LLM Summary service call
-
-Get the conversation agent ID and run eval:
+Get the conversation agent ID:
 ```
 $ cat "${OUTPUT_DIR}/config/.storage/core.config_entries"  | jq '.data.entries[] | [.entry_id, .title]'
 [
@@ -83,18 +81,42 @@ $ cat "${OUTPUT_DIR}/config/.storage/core.config_entries"  | jq '.data.entries[]
 ]
 ```
 
+### Run Evaluation
+
+This runs an eval of the "Area Summary" conversation agent. This will evaluate the "Answer summary"
+agent and create output files in the output directory under `eval/`
 
 ```
 $ AGENT_ID=b46636a2b78f3b7068ccffd10d500f99
-$ python3 -m script.eval --config datasets/summaries/home1-us.yaml --output_dir="${OUTPUT_DIR}" eval --agent_id="${AGENT_ID}"
+$ python3 -m script.eval --output_dir="${OUTPUT_DIR}" eval --agent_id="${AGENT_ID}" --eval_config_file=script/eval/eval_config.yaml
+...
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 9/9 [00:16<00:00,  1.79s/it]
+$ ls -l -R ${OUTPUT_DIR}/eval/
+/tmp/2024-03-10//eval/1710727690:
+backyard.yaml  bedroom-1.yaml  bedroom-2.yaml  bedroom-3.yaml  game-room.yaml  garage.yaml  kitchen.yaml  living-room.yaml  master-bedroom.yaml
 ```
-
-- Collect area state
-- Stick data into the prompt
-- Record the results
 
 ### Human Evaluation
 
-- Manually review all the answers
+You can now manually review the output:
+```
+$ cat /tmp/2024-03-10//eval/1710727690/backyard.yaml
+area: Backyard
+instructions:
+- Ensure that the Deck Lights in the Backyard are operational
+- Verify if the Outdoor Camera in the Backyard is detecting motion accurately
+response: The Deck Lights in the backyard are off, and the Outdoor Camera is not detecting
+  any motion.
+
+$ cat /tmp/2024-03-10//eval/1710727690/kitchen.yaml
+area: Kitchen
+instructions:
+- Check if the Kitchen Light is currently turned on
+- Determine if the Refrigerator is running efficiently
+response: The kitchen light is off and the refrigerator is not running.
+```
+
+In the future we want to:
 - Record the score (1, 2, 3)
 - Gather statistics on the results
+- Support many more homes and devices at once

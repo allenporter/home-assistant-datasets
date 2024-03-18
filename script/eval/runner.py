@@ -148,10 +148,18 @@ async def _setup_and_run_hass(runtime_config: RuntimeConfig) -> int:
     """Set up Home Assistant and run."""
     async with _async_create_home_assistant(runtime_config) as hass:
         if runtime_config.setup_callback:
-            await runtime_config.setup_callback(hass)
+            try:
+                await runtime_config.setup_callback(hass)
+            except Exception as err:
+                _LOGGER.exception("Error setting up runtime: %s", err)
+                return 1
         await hass.async_start()
         if runtime_config.run_callback:
-            await runtime_config.run_callback(hass)
+            try:
+                await runtime_config.run_callback(hass)
+            except Exception as err:
+                _LOGGER.exception("Error running callback: %s", err)
+                hass.exit_code = 1
         await hass.async_stop()
         return hass.exit_code
 

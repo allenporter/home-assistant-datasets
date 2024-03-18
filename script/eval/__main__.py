@@ -24,12 +24,6 @@ def get_arguments() -> argparse.Namespace:
         help="The log level",
     )
     parser.add_argument(
-        "--config",
-        type=str,
-        help="The yaml configuration file with synthetic home data.",
-        required=True,
-    )
-    parser.add_argument(
         "--output_dir",
         type=str,
         help="The output directory which is overwritten with the results.",
@@ -39,6 +33,12 @@ def get_arguments() -> argparse.Namespace:
     subparsers.required = True
 
     parser_create_config = subparsers.add_parser("create_config")
+    parser_create_config.add_argument(
+        "--config",
+        type=str,
+        help="The yaml configuration file with synthetic home data.",
+        required=True,
+    )
     parser_create_config.set_defaults(func=create_config)
 
     parser_eval = subparsers.add_parser("eval")
@@ -47,6 +47,12 @@ def get_arguments() -> argparse.Namespace:
         "--agent_id",
         type=str,
         help="The conversation agent config entry id.",
+        required=True,
+    )
+    parser_eval.add_argument(
+        "--eval_config_file",
+        type=str,
+        help="The evaluation configuration file.",
         required=True,
     )
 
@@ -82,10 +88,10 @@ def eval(args: argparse.Namespace) -> None:
     """Run the evaluation command."""
     output_dir = pathlib.Path(args.output_dir)
     config_dir = output_dir / CONFIG_DIR
-    home_config_path = pathlib.Path(args.config)
 
+    eval_config_file = pathlib.Path(args.eval_config_file)
     agent = eval_driver.ConversationAgent(args.agent_id)
-    driver = eval_driver.EvalDriver(home_config_path.name, agent)
+    driver = eval_driver.EvalDriver(eval_config_file, agent, output_dir)
 
     runtime_config = runner.RuntimeConfig(
         config_dir=str(config_dir),

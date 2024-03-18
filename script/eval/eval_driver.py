@@ -1,22 +1,24 @@
 """Driver that invokes home assistnat and pushes time forward."""
 
-from importlib import resources
+from dataclasses import dataclass, field
 import logging
+from mashumaro.codecs.yaml import yaml_decode
+import os
 import pathlib
+import tqdm
+import time
+from slugify import slugify
 from string import Template
 import yaml
-import tqdm
 
 from homeassistant.core import HomeAssistant
-from homeassistant import bootstrap, config as conf_util, setup
-from homeassistant.config_entries import ConfigEntryState
 
 
 _LOGGER = logging.getLogger(__name__)
 
-STORAGE_RESOURCE_PATH = resources.files().joinpath("storage")
-DEST_STORAGE_DIR = ".storage"
+EVAL_DIR = "eval"
 
+# This is a copy of the system prompt we are evaluating.
 SYSTEM_PROMPT = """
 You are an agent running in Home Assistant. Your job is to summarize the status of an area
 which will be fed as input into other agents. The user will feed in details about
@@ -35,7 +37,7 @@ Area: Bedroom 1
     binary_sensor Tamper: off
     binary_sensor Battery: off
     sensor Battery: 90 %
-Instruction: Check to make sure everything is normal at night
+Instructions: Check to make sure everything is normal at night
 Summary: The bedroom is secure.
 
 Area: Driveway
@@ -45,12 +47,16 @@ Area: Driveway
   - sensor Battery range: 200 mi
   - binary_sensor Pedestrian Gate: off
   - switch Sprinkler: off
-Instruction: Monitor the state of the car and the driveway.
+Instructions: Monitor the state of the car and the driveway.
 Summary: The car is almost charged.
+
 """
 
-SET_AREA_VARIABLE = """{%- set area = "$area" %}"""
 AREA_SUMMARY_TEMPLATE = """
+
+Here is the current state of all Areas. The user will ask you about one of these:
+
+{%- for area in areas() %}
 Area: {{ area }}
   {%- for device in area_devices(area) -%}
     {%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
@@ -66,33 +72,58 @@ Area: {{ area }}
       {%- endfor %}
     {%- endif %}
   {%- endfor %}
+{%- endfor %}
 """
 
 AREA_PROMPT = """
-{system_prompt}
-
-The user will enter an area with an instruction below and you will respond with a summary of the area.
-
-{set_area_variable}
-{area_summary_template}
-Instruction: {instruction}
+Area: {area_name}
+Instructions: {instructions}
 Summary:
 """
 
 
-def make_prompt(area_name: str, instruction: str) -> str:
+class DriverException(Exception):
+    """Driver exception."""
+
+
+def make_prompt(area_name: str, instructions: str) -> str:
     """Create a prompt for the agent to summarize the area."""
-    set_area_var = Template(SET_AREA_VARIABLE).substitute(area=area_name)
     return AREA_PROMPT.format(
         system_prompt=SYSTEM_PROMPT,
-        set_area_variable=set_area_var,
-        area_summary_template=AREA_SUMMARY_TEMPLATE,
-        instruction=instruction,
+        area_name=area_name,
+        instructions=instructions,
     )
 
 
-class DriverException(Exception):
-    """Driver exception."""
+@dataclass
+class AreaEvaluationConfig:
+    """Configuration for evaluating an area."""
+
+    area: str
+    """The name of the area."""
+
+    instructions: list[str] = field(default_factory=list)
+    """The instruction for the area."""
+
+
+@dataclass
+class EvaluationConfig:
+    """Data about a synthetic home."""
+
+    area_configs: list[AreaEvaluationConfig]
+
+
+def load_evaluation_config(config_file: pathlib.Path) -> EvaluationConfig:
+    """Load synthetic home configuration from disk."""
+    try:
+        with config_file.open("r") as f:
+            content = f.read()
+    except FileNotFoundError:
+        raise DriverException(f"Configuration file '{config_file}' does not exist")
+    try:
+        return yaml_decode(content, EvaluationConfig)
+    except ValueError as err:
+        raise DriverException(f"Could not parse config file '{config_file}': {err}")
 
 
 class ConversationAgent:
@@ -120,37 +151,52 @@ class EvalDriver:
 
     def __init__(
         self,
-        synthetic_home_config: pathlib.Path,
+        eval_config_path: pathlib.Path,
         agent: ConversationAgent,
+        output_dir: pathlib.Path,
     ) -> None:
         """Initialize the driver."""
-        self._synthetic_home_config = synthetic_home_config
+        self._eval_config = load_evaluation_config(eval_config_path)
+        if not self._eval_config.area_configs:
+            raise DriverException("No area configurations found in evaluation config")
         self._agent = agent
+        self._eval_dir = output_dir / EVAL_DIR / f"{time.time():.0f}"
 
     async def async_run(self, hass: HomeAssistant) -> bool:
         """Run an evaluation on the home conversation agent."""
-        with open(
-            pathlib.Path(hass.config.config_dir) / self._synthetic_home_config, "r"
-        ) as fd:
-            content = fd.read()
 
-        obj = yaml.load(content, Loader=yaml.FullLoader)
-        summaries = obj.get("summaries")
-        if not summaries:
-            raise DriverException("No summaries found in configuration")
+        _LOGGER.info(
+            "Loaded %s area summariies to evaluate", len(self._eval_config.area_configs)
+        )
+        os.makedirs(str(self._eval_dir), exist_ok=True)
 
-        area_summaries = summaries.get("area_summaries")
-        if not area_summaries:
-            raise DriverException("No area summaries found in configuration")
-
-        _LOGGER.info("Loaded %s area summariies to evaluate", len(area_summaries))
-
-        for area_summary in tqdm.tqdm(area_summaries):
-            _LOGGER.info("Evaluating area summary: %s", area_summary)
-            prompt = make_prompt(area_summary, area_summary)
+        for area_config in tqdm.tqdm(self._eval_config.area_configs):
+            _LOGGER.info(
+                "Evaluating area summary: %s, %s",
+                area_config.area,
+                area_config.instructions,
+            )
+            prompt = make_prompt(area_config.area, ", ".join(area_config.instructions))
             _LOGGER.debug("Evaluating prompt: %s", prompt)
 
-            summary = await self._agent.async_process(hass, prompt)
-            _LOGGER.info("Response: %s", summary)
+            response = await self._agent.async_process(hass, prompt)
+            _LOGGER.debug("Response: %s", response)
+
+            with open(self._eval_dir / f"{slugify(area_config.area)}.yaml", "w") as fd:
+                fd.write(
+                    yaml.dump(
+                        {
+                            "area": area_config.area,
+                            "instructions": area_config.instructions,
+                            "response": response,
+                        }
+                    )
+                )
+
+        _LOGGER.info(
+            "Wrote %s summariies to %s",
+            len(self._eval_config.area_configs),
+            self._eval_dir,
+        )
 
         return True
