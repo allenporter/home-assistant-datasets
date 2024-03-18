@@ -12,7 +12,6 @@ from homeassistant import config_entries
 from homeassistant import config
 
 
-
 _LOGGER = logging.getLogger(__name__)
 
 STORAGE_RESOURCE_PATH = resources.files().joinpath("storage")
@@ -35,12 +34,13 @@ class ConfigDriver:
         await config.async_create_default_config(hass)
 
         _LOGGER.info("Copying synthetic home configuration")
-        os.mkdir(hass.config.config_dir / DEST_STORAGE_DIR)
+        config_dir = pathlib.Path(hass.config.config_dir)
+        os.mkdir(config_dir / DEST_STORAGE_DIR)
         for config_file in STORAGE_RESOURCE_PATH.iterdir():
             _LOGGER.debug("Copying %s", config_file)
             shutil.copy(
                 str(config_file),
-                hass.config.config_dir / DEST_STORAGE_DIR / config_file.name,
+                config_dir / DEST_STORAGE_DIR / config_file.name,
             )
 
     async def async_run(self, hass: HomeAssistant) -> None:

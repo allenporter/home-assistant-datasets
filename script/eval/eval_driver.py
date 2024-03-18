@@ -11,7 +11,6 @@ from homeassistant import bootstrap, config as conf_util, setup
 from homeassistant.config_entries import ConfigEntryState
 
 
-
 _LOGGER = logging.getLogger(__name__)
 
 STORAGE_RESOURCE_PATH = resources.files().joinpath("storage")
@@ -27,7 +26,7 @@ very mundane or minor. A one sentence summary is best.
 
 Here is an example of the input and output:
 
-Bedroom 1:
+Area: Bedroom 1
 - Bedroom 1 Light (Dimmable Smart Bulb)
     light: off
 - Smart Lock (Encode Smart WiFi Deadbolt)
@@ -38,7 +37,7 @@ Bedroom 1:
 Instruction: Check to make sure everything is normal at night
 Summary: The bedroom is secure.
 
-Driveway:
+Area: Driveway
 - Black Model 3 (Model 3)
   - binary_sensor Charging: off
   - sensor Battery level: 90%
@@ -51,7 +50,7 @@ Summary: The car is almost charged.
 
 SET_AREA_VARIABLE = """{%- set area = "$area" %}"""
 AREA_SUMMARY_TEMPLATE = """
-{{ area }}:
+Area: {{ area }}
   {%- for device in area_devices(area) -%}
     {%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
         {%- set device_name = device_attr(device, "name_by_user") | default(device_attr(device, "name"), True) %}
@@ -75,22 +74,44 @@ The user will enter an area with an instruction below and you will respond with 
 
 {set_area_variable}
 {area_summary_template}
+Instruction: {instruction}
 Summary:
 """
 
 
-def make_prompt(area_name: str) -> str:
+def make_prompt(area_name: str, instruction: str) -> str:
     """Create a prompt for the agent to summarize the area."""
     set_area_var = Template(SET_AREA_VARIABLE).substitute(area=area_name)
     return AREA_PROMPT.format(
         system_prompt=SYSTEM_PROMPT,
         set_area_variable=set_area_var,
         area_summary_template=AREA_SUMMARY_TEMPLATE,
+        instruction=instruction,
     )
 
 
 class DriverException(Exception):
     """Driver exception."""
+
+
+class ConversationAgent:
+    """A client library for a conversation agent service call."""
+
+    def __init__(self, agent_id: str) -> None:
+        """Initialize the agent."""
+        self._agent_id = agent_id
+
+    async def async_process(self, hass: HomeAssistant, text: str) -> str:
+        """Process a text input and return the response."""
+        service_response = await hass.services.async_call(
+            "conversation",
+            "process",
+            {"agent_id": self._agent_id, "text": text},
+            blocking=True,
+            return_response=True,
+        )
+        response = service_response["response"]
+        return response["speech"]["plain"]["speech"]
 
 
 class EvalDriver:
@@ -99,42 +120,14 @@ class EvalDriver:
     def __init__(
         self,
         synthetic_home_config: pathlib.Path,
-        agent_id: str,
+        agent: ConversationAgent,
     ) -> None:
         """Initialize the driver."""
         self._synthetic_home_config = synthetic_home_config
-        self._agent_id = agent_id
+        self._agent = agent
 
     async def async_run(self, hass: HomeAssistant) -> bool:
         """Run an evaluation on the home conversation agent."""
-
-        _LOGGER.info("Loading config entries")
-        config_dict = await conf_util.async_hass_config_yaml(hass)
-        await bootstrap.async_from_config_dict(config_dict, hass)
-
-        if not await setup.async_setup_component(hass, "http", {}):
-            raise DriverException("Failed to setup http component")
-
-        entries = hass.config_entries.async_entries()
-        _LOGGER.info("Found %s configuration entries", len(entries))
-        for entry in entries:
-            if entry.state != ConfigEntryState.LOADED:
-                _LOGGER.debug("Loading entry %s", entry)
-                result = await hass.config_entries.async_setup(entry.entry_id)
-                if not result:
-                    raise DriverException(f"Failed to setup entry {entry}")
-                await hass.async_block_till_done()
-
-        num_loaded = len(
-            [entry for entry in entries if entry.state == ConfigEntryState.LOADED]
-        )
-        num_failed = len(
-            [entry for entry in entries if entry.state != ConfigEntryState.LOADED]
-        )
-        _LOGGER.info(
-            "Loaded %s config entries and failed to load %s", num_loaded, num_failed
-        )
-
         with open(
             pathlib.Path(hass.config.config_dir) / self._synthetic_home_config, "r"
         ) as fd:
@@ -153,18 +146,10 @@ class EvalDriver:
 
         for area_summary in area_summaries:
             _LOGGER.info("Evaluating area summary: %s", area_summary)
-            prompt = make_prompt(area_summary)
+            prompt = make_prompt(area_summary, area_summary)
             _LOGGER.debug("Evaluating prompt: %s", prompt)
 
-            service_response = await hass.services.async_call(
-                "conversation",
-                "process",
-                {"agent_id": self._agent_id, "text": prompt},
-                blocking=True,
-                return_response=True,
-            )
-            response = service_response["response"]
-            summary = response["speech"]["plain"]["speech"]
+            summary = await self._agent.async_process(hass, prompt)
             _LOGGER.info("Response: %s", summary)
 
         return True

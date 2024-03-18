@@ -84,21 +84,26 @@ def eval(args: argparse.Namespace) -> None:
     config_dir = output_dir / CONFIG_DIR
     home_config_path = pathlib.Path(args.config)
 
-    driver = eval_driver.EvalDriver(home_config_path.name, args.agent_id)
+    agent = eval_driver.ConversationAgent(args.agent_id)
+    driver = eval_driver.EvalDriver(home_config_path.name, agent)
 
     runtime_config = runner.RuntimeConfig(
         config_dir=str(config_dir),
         load_registries=False,
+        load_config_entries=True,
         run_callback=driver.async_run,
     )
     return runner.run(runtime_config)
 
 
-def main():
+def main() -> int:
     """Evaluate an integration."""
     args = get_arguments()
     logging.basicConfig(level=getattr(logging, args.log_level.upper()))
-    return args.func(args)
+    result = args.func(args)
+    if result != 0:
+        print(f"Failed with exit code {result}", file=sys.stderr)
+    return result
 
 
 if __name__ == "__main__":

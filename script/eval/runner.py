@@ -11,8 +11,9 @@ import logging
 from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import asynccontextmanager
 
+from homeassistant import config_entries, auth, config as conf_util, bootstrap, setup
 from homeassistant.core import HomeAssistant, CoreState, EVENT_HOMEASSISTANT_STOP
-from homeassistant import config_entries, auth
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.auth.auth_store import AuthStore
 from homeassistant.helpers import (
     area_registry as ar,
@@ -30,18 +31,53 @@ from homeassistant.util.unit_system import METRIC_SYSTEM
 _LOGGER = logging.getLogger(__name__)
 
 
+class RunnerException(Exception):
+    """Runner exception."""
+
+
 @dataclass
 class RuntimeConfig:
     """Class to hold the information for running Home Assistant."""
 
     config_dir: str
     load_registries: bool = True
+    load_config_entries: bool = False
 
     # Callback fired before Home Assistant is started
     setup_callback: Callable[[HomeAssistant], Awaitable[None]] | None = None
 
     # Callback fired after Home Assistant is started
     run_callback: Callable[[HomeAssistant], Awaitable[None]] | None = None
+
+
+async def async_setup_config_entries(hass: HomeAssistant) -> None:
+    """Initialize HomeAssistant configuration entires."""
+    config_dict = await conf_util.async_hass_config_yaml(hass)
+    await bootstrap.async_from_config_dict(config_dict, hass)
+
+    # Explicitly verify the http component is loaded
+    if not await setup.async_setup_component(hass, "http", {}):
+        raise RunnerException("Failed to setup http component")
+
+    entries = hass.config_entries.async_entries()
+    _LOGGER.info("Found %s configuration entries", len(entries))
+    for entry in entries:
+        if entry.state != ConfigEntryState.LOADED:
+            _LOGGER.debug("Loading entry %s", entry)
+            result = await hass.config_entries.async_setup(entry.entry_id)
+            if not result:
+                raise RunnerException(f"Failed to setup entry {entry}")
+            await hass.async_block_till_done()
+
+    num_loaded = len(
+        [entry for entry in entries if entry.state == ConfigEntryState.LOADED]
+    )
+    num_failed = len(
+        [entry for entry in entries if entry.state != ConfigEntryState.LOADED]
+    )
+    _LOGGER.info(
+        "Loaded %s config entries and failed to load %s", num_loaded, num_failed
+    )
 
 
 @asynccontextmanager
@@ -97,6 +133,8 @@ async def _async_create_home_assistant(
         await ir.async_load(hass)
         await rs.async_load(hass)
         await auth_store.async_load()
+    elif runtime_config.load_config_entries:
+        await async_setup_config_entries(hass)
 
     hass.set_state(CoreState.running)
 

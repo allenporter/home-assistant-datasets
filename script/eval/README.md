@@ -55,7 +55,7 @@ Total users: 1
 This is currently done manually. Run Home Assistant and set up the configuration
 you would like to evaluate.
 ```
-$ hass  -c "${OUTPUT_DIR}/config"
+$ hass -c "${OUTPUT_DIR}/config"
 ```
 
 Later we can either automate these steps, or reverse the order: First setup the
