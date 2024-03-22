@@ -62,21 +62,6 @@ def make_prompt(area_name: str) -> str:
     )
 
 
-@dataclass
-class AreaEvaluationConfig:
-    """Configuration for evaluating an area."""
-
-    area: str
-    """The name of the area."""
-
-@dataclass
-class EvaluationConfig:
-    """Data about a synthetic home."""
-
-    area_configs: list[AreaEvaluationConfig]
-
-
-
 class ConversationAgent:
     """A client library for a conversation agent service call."""
 

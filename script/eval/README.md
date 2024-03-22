@@ -32,7 +32,30 @@ $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custo
 1. Run the evaluation
 
 ```
-$ python3 -m script.eval --eval_dir evals/area_summary --log-level=debug --no-delete_tmpdir
+$ python3 -m script.eval --eval_dir evals/area_summary
+WARNING:homeassistant.loader:We found a custom integration synthetic_home which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 9/9 [00:07<00:00,  1.14it/s]
+```
+
+1. View the results in `evals/area_summary`
+
+```bash
+$ cat evals/area_summary/out/*.yaml | head -11
+```
+
+Each area has its own file that contains the instructions and the LLM response in the `response` field:
+```yaml
+area: Backyard
+response: In the backyard, there are Deck Lights which are outdoor smart string lights
+  and an Outdoor Camera which is the Spotlight Cam Battery. These devices help provide
+  lighting and security in the backyard area.
+area: Bedroom 1
+response: In Bedroom 1, you have a Dimmable Smart Bulb for lighting and a Encode Smart
+  WiFi Deadbolt for smart lock security.
+area: Bedroom 2
+response: In Bedroom 2, you have a warm glow bulb and a climate sensor (smart temperature
+  sensor) installed. The warm glow bulb provides a cozy and inviting atmosphere, while
+  the climate sensor helps you monitor the temperature in the room. This area is designed
 ```
 
 1. Rate the results (not yet managed)
@@ -81,28 +104,6 @@ configured by the [Synthetic Home integration](https://github.com/allenporter/ho
 
 
 ### Human Evaluation
-
-You can now manually review the output of data collection:
-
-```bash
-$ cat evals/area_summary/out/*.yaml | head -11
-```
-
-Each area has its own file that contains the instructions and the LLM response in the `response` field:
-```yaml
-area: Backyard
-response: In the backyard, there are Deck Lights which are outdoor smart string lights
-  and an Outdoor Camera which is the Spotlight Cam Battery. These devices help provide
-  lighting and security in the backyard area.
-area: Bedroom 1
-response: In Bedroom 1, you have a Dimmable Smart Bulb for lighting and a Encode Smart
-  WiFi Deadbolt for smart lock security.
-area: Bedroom 2
-response: In Bedroom 2, you have a warm glow bulb and a climate sensor (smart temperature
-  sensor) installed. The warm glow bulb provides a cozy and inviting atmosphere, while
-  the climate sensor helps you monitor the temperature in the room. This area is designed
-```
-
 
 In the future we want to:
 - Record the score (1, 2, 3)
