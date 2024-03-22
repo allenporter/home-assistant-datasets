@@ -16,14 +16,11 @@ from homeassistant.helpers import area_registry as ar
 
 _LOGGER = logging.getLogger(__name__)
 
-# This is a copy of the system prompt we are evaluating.
-SYSTEM_PROMPT = """
-You are an agent running in Home Assistant. Your job is to summarize the status of an area
-which will be fed as input into other agents. The user will feed in details about
-areas and devices in the home, and you will respond with a summary of the status of the area.
 
-Your summaries are succint, and do not mention boring details or things that seem
-very mundane or minor. A one sentence summary is best.
+AREA_SUMMARY_PROMPT = """
+Please summarize the status of an area of the home. Your summaries are succint,
+and do not mention boring details or things that seem very mundane or minor. A
+one sentence summary is best.
 
 Here is an example of the input and output:
 
@@ -48,30 +45,9 @@ Summary: The car is almost charged.
 
 """
 
-AREA_SUMMARY_TEMPLATE = """
-
-Here is the current state of all Areas. The user will ask you about one of these:
-
-{%- for area in areas() %}
-Area: {{ area }}
-  {%- for device in area_devices(area) -%}
-    {%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
-        {%- set device_name = device_attr(device, "name_by_user") | default(device_attr(device, "name"), True) %}
-
-- {{ device_name  }}{% if device_attr(device, "model") and (device_attr(device, "model") | string) not in (device_attr(device, "name") | string) %} ({{ device_attr(device, "model") }}){% endif %}
-      {%- set entity_info = namespace(printed=false) %}
-      {%- for entity_id in device_entities(device) -%}
-        {%- set entity_name = state_attr(entity_id, "friendly_name") | replace(device_name, "") | trim %}
-    {{ entity_id.split(".")[0] -}}
-        {%- if entity_name %} {{ entity_name }}{% endif -%}
-        : {{ states(entity_id, rounded=True, with_unit=True) }}
-      {%- endfor %}
-    {%- endif %}
-  {%- endfor %}
-{%- endfor %}
-"""
-
 AREA_PROMPT = """
+{system_prompt}
+
 Area: {area_name}
 Summary:
 """
@@ -81,7 +57,7 @@ Summary:
 def make_prompt(area_name: str) -> str:
     """Create a prompt for the agent to summarize the area."""
     return AREA_PROMPT.format(
-        system_prompt=SYSTEM_PROMPT,
+        system_prompt=AREA_SUMMARY_PROMPT,
         area_name=area_name,
     )
 

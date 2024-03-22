@@ -11,6 +11,7 @@ config_entries:
   title: OpenAI Conversation
   data:
     api_key: !secret api_key
+  # This is a copy of the default prompt to be super verbose.
   options:
     prompt: |-
       This smart home is controlled by Home Assistant.
@@ -33,3 +34,24 @@ config_entries:
     max_tokens: 150
     top_p: 1.0
     temperature: 0.5
+
+# A future prompt to evaluate:
+# Here is the current state of all Areas. The user will ask you about one of these:
+
+# {%- for area in areas() %}
+# Area: {{ area }}
+#   {%- for device in area_devices(area) -%}
+#     {%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
+#         {%- set device_name = device_attr(device, "name_by_user") | default(device_attr(device, "name"), True) %}
+
+# - {{ device_name  }}{% if device_attr(device, "model") and (device_attr(device, "model") | string) not in (device_attr(device, "name") | string) %} ({{ device_attr(device, "model") }}){% endif %}
+#       {%- set entity_info = namespace(printed=false) %}
+#       {%- for entity_id in device_entities(device) -%}
+#         {%- set entity_name = state_attr(entity_id, "friendly_name") | replace(device_name, "") | trim %}
+#     {{ entity_id.split(".")[0] -}}
+#         {%- if entity_name %} {{ entity_name }}{% endif -%}
+#         : {{ states(entity_id, rounded=True, with_unit=True) }}
+#       {%- endfor %}
+#     {%- endif %}
+#   {%- endfor %}
+# {%- endfor %}
