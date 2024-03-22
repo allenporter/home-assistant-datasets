@@ -4,14 +4,17 @@ import argparse
 import pathlib
 import sys
 import logging
-import shutil
+import tempfile
 
-from . import config_driver, eval_driver, runner
+from . import eval_driver, runner
+from . import loader  # noqa: F401
 
 
 _LOGGER = logging.getLogger(__name__)
 
+TMPDIR_PREFIX = "homeassistant-eval"
 CONFIG_DIR = "config"
+EVAL_CONFIG_FILE = "config.yaml"
 
 
 def get_arguments() -> argparse.Namespace:
@@ -24,89 +27,46 @@ def get_arguments() -> argparse.Namespace:
         help="The log level",
     )
     parser.add_argument(
-        "--output_dir",
+        "--eval_dir",
         type=str,
-        help="The output directory which is overwritten with the results.",
+        help="The evaluation configuration directory.",
         required=True,
     )
-    subparsers = parser.add_subparsers(dest="func")
-    subparsers.required = True
-
-    parser_create_config = subparsers.add_parser("create_config")
-    parser_create_config.add_argument(
-        "--config",
-        type=str,
-        help="The yaml configuration file with synthetic home data.",
-        required=True,
+    parser.add_argument(
+        "--delete_tmpdir",
+        default=True,
+        help="If disabled, will keep the Home Assistant directory for inspection.",
+        action=argparse.BooleanOptionalAction
     )
-    parser_create_config.set_defaults(func=create_config)
-
-    parser_eval = subparsers.add_parser("eval")
-    parser_eval.set_defaults(func=eval)
-    parser_eval.add_argument(
-        "--agent_id",
-        type=str,
-        help="The conversation agent config entry id.",
-        required=True,
-    )
-    parser_eval.add_argument(
-        "--eval_config_file",
-        type=str,
-        help="The evaluation configuration file.",
-        required=True,
-    )
-
     return parser.parse_args()
 
 
-def create_config(args: argparse.Namespace) -> int:
-    """Run the create config command."""
-    output_dir = pathlib.Path(args.output_dir)
-    output_dir.mkdir(exist_ok=True)
+def run_eval(args: argparse.Namespace) -> bool:
+    """Prepare and run the evaluation command"""
 
-    config_dir = output_dir / CONFIG_DIR
-    shutil.rmtree(config_dir, ignore_errors=True)
-    config_dir.mkdir()
+    eval_dir = pathlib.Path(args.eval_dir)
 
-    home_config_path = pathlib.Path(args.config)
-    with home_config_path.open() as fd:
-        content = fd.read()
-        with (config_dir / home_config_path.name).open("w") as out:
-            out.write(content)
+    with tempfile.TemporaryDirectory(prefix=TMPDIR_PREFIX, delete=args.delete_tmpdir) as tmp_dir:
+        config_dir = pathlib.Path(tmp_dir) / CONFIG_DIR
+        config_dir.mkdir()
 
-    driver = config_driver.ConfigDriver(home_config_path.name)
-    runtime_config = runner.RuntimeConfig(
-        config_dir=str(config_dir),
-        load_registries=True,
-        setup_callback=driver.async_setup,
-        run_callback=driver.async_run,
-    )
-    return runner.run(runtime_config)
+        driver = eval_driver.EvalDriver(eval_dir)
 
-
-def eval(args: argparse.Namespace) -> None:
-    """Run the evaluation command."""
-    output_dir = pathlib.Path(args.output_dir)
-    config_dir = output_dir / CONFIG_DIR
-
-    eval_config_file = pathlib.Path(args.eval_config_file)
-    agent = eval_driver.ConversationAgent(args.agent_id)
-    driver = eval_driver.EvalDriver(eval_config_file, agent, output_dir)
-
-    runtime_config = runner.RuntimeConfig(
-        config_dir=str(config_dir),
-        load_registries=False,
-        load_config_entries=True,
-        run_callback=driver.async_run,
-    )
-    return runner.run(runtime_config)
+        runtime_config = runner.RuntimeConfig(
+            config_dir=str(config_dir),
+            load_registries=False,
+            load_config_entries=True,
+            setup_callback=driver.async_setup,
+            run_callback=driver.async_run,
+        )
+        return runner.run(runtime_config)
 
 
 def main() -> int:
     """Evaluate an integration."""
     args = get_arguments()
     logging.basicConfig(level=getattr(logging, args.log_level.upper()))
-    result = args.func(args)
+    result = run_eval(args)
     if result != 0:
         print(f"Failed with exit code {result}", file=sys.stderr)
     return result

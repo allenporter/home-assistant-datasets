@@ -19,25 +19,35 @@ This is the initial baseline use case:
   - 2: Medium: Solid, not incorrect, though perhaps a missed opportunity
   - 3: High: Good
 
+### Running an eval
+
+1. Configure any paths to custom components
+
+```bash
+$ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custom_components/:${PWD}/../home-assistant-synthetic-home/"
+```
+
+1. Create an the evaluation directory. The directory needs to contain `eval_config.yaml` and an `eval.py` . See [evals/area_summary](evals/area_summary/) for an example.
+
+1. Run the evaluation
+
+```
+$ python3 -m script.eval --eval_dir evals/area_summary --log-level=debug --no-delete_tmpdir
+```
+
+1. Rate the results (not yet managed)
+
 
 ### Seed the devices in the Home
 
-This will setup the home, complete onboarding, and create the synthetic devices
+The above example will run Home Assistant, will setup the home, complete onboarding, and create the synthetic devices
 using the [Synthetic Home integration](https://github.com/allenporter/home-assistant-synthetic-home/).
 
-Prepare the environment
-```bash
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ pip3 install -r requirements.txt
-$ pip3 install -r ../home-assistant-synthetic-home/requirements.txt
-```
+You can run the evaluation with --no-delete_tmpdir and inspect the state of the created Home.
 
-Create a new Home Assistant configuration:
 ```bash
-$ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custom_components/:${PWD}/../home-assistant-synthetic-home/"
-$ OUTPUT_DIR="/tmp/2024-03-10/"
-$ python3 -m script.eval  --output_dir="${OUTPUT_DIR}" create_config --config datasets/summaries/home1-us.yaml
+# Get the temprary dir from the script.eval
+$ OUTPUT_DIR=/tmp/homeassistant-evalrqdy3axl
 ```
 
 Verify synthetic areas were created properly:
@@ -70,83 +80,27 @@ The devices currently have a default state, but can be updated with [Restorable 
 configured by the [Synthetic Home integration](https://github.com/allenporter/home-assistant-synthetic-home/).
 
 
-### Create users
-
-This step will create a test user taht you can use when manually logging in in the next step.
-```bash
-$ hass --script auth -c "${OUTPUT_DIR}/config" add ${USER} example-pass
-Auth created
-$ hass --script auth -c "${OUTPUT_DIR}/config" list
-allen
-
-Total users: 1
-```
-
-This step should not be needed in the future when automating integration setup.
-
-### Manually configure the conversation agent
-
-This is currently done manually. Run Home Assistant and set up the configuration,
-prompt, etc you would like to evaluate.
-```bash
-$ hass -c "${OUTPUT_DIR}/config"
-```
-
-Later we can either automate these steps, or reverse the order: First setup the
-conversation agent, then setup the synthetic devices for different scenarios.
-
-Make sure to update the default prompt and that is configured for the model if
-using a normal conversation agent.
-
-Get the conversation agent ID:
-```bash
-$ cat "${OUTPUT_DIR}/config/.storage/core.config_entries"  | jq -c '.data.entries[] | [.
-entry_id, .title]'
-```
-
-Will have the following output:
-```json
-["efaf1150ad0c1b30d3dce673cec1c096","Synthetic Home"]
-["00d640128da43b46a94eda6d094efd64","Sun"]
-["c6fe47c341a1c257139ea1e4ea22d342","OpenAI Conversation"]
-```
-
-### Run Data Collection
-
-This runs an eval of the "Area Summary" conversation agent. This will evaluate the "Answer summary"
-agent and create output files in the output directory under `eval/`
-
-```bash
-$ AGENT_ID=b46636a2b78f3b7068ccffd10d500f99
-$ python3 -m script.eval --output_dir="${OUTPUT_DIR}" eval --agent_id="${AGENT_ID}" --eval_config_file=script/eval/eval_config.yaml
-...
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 9/9 [00:16<00:00,  1.79s/it]
-$ ls -l -R ${OUTPUT_DIR}/eval/
-/tmp/2024-03-10//eval/1710727690:
-backyard.yaml  bedroom-1.yaml  bedroom-2.yaml  bedroom-3.yaml  game-room.yaml  garage.yaml  kitchen.yaml  living-room.yaml  master-bedroom.yaml
-```
-
 ### Human Evaluation
 
 You can now manually review the output of data collection:
 
 ```bash
-$ cat /tmp/2024-03-10//eval/1710727690/*.yaml | head -11
+$ cat evals/area_summary/out/*.yaml | head -11
 ```
 
 Each area has its own file that contains the instructions and the LLM response in the `response` field:
 ```yaml
 area: Backyard
-instructions:
-- Ensure that the Deck Lights in the Backyard are operational
-- Verify if the Outdoor Camera in the Backyard is detecting motion accurately
-response: The Deck Lights in the backyard are off, and the Outdoor Camera is not detecting
-  any motion.
+response: In the backyard, there are Deck Lights which are outdoor smart string lights
+  and an Outdoor Camera which is the Spotlight Cam Battery. These devices help provide
+  lighting and security in the backyard area.
 area: Bedroom 1
-instructions:
-- Determine if the Bedroom 1 Light is on or off
-- Check if the Smart Lock in Bedroom 1 is locked properly
-response: The bedroom is secure with the light off and the smart lock properly locked.
+response: In Bedroom 1, you have a Dimmable Smart Bulb for lighting and a Encode Smart
+  WiFi Deadbolt for smart lock security.
+area: Bedroom 2
+response: In Bedroom 2, you have a warm glow bulb and a climate sensor (smart temperature
+  sensor) installed. The warm glow bulb provides a cozy and inviting atmosphere, while
+  the climate sensor helps you monitor the temperature in the room. This area is designed
 ```
 
 

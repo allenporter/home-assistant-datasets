@@ -1,0 +1,35 @@
+conversation_agent_domain: openai_conversation
+eval_dir: evals/area_summary/out
+copy_config_files:
+  - datasets/devices/home1-us.yaml
+config_entries:
+- domain: synthetic_home
+  title: Synthetic Home
+  data:
+    config_filename: home1-us.yaml
+- domain: openai_conversation
+  title: OpenAI Conversation
+  data:
+    api_key: !secret api_key
+  options:
+    prompt: |-
+      This smart home is controlled by Home Assistant.
+
+      An overview of the areas and the devices in this smart home:
+      {%- for area in areas() %}
+      {%- set area_info = namespace(printed=false) %}
+      {%- for device in area_devices(area) -%}
+      {%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
+      {%- if not area_info.printed %}
+      {{ area_name(area) }}:
+      {%- set area_info.printed = true %}
+      {%- endif %}
+      - {{ device_attr(device, "name") }}{% if device_attr(device, "model") and (device_attr(device, "model") | string) not in (device_attr(device, "name") | string) %} ({{ device_attr(device, "model") }}){% endif %}
+      {%- endif %}
+      {%- endfor %}
+      {%- endfor %}
+      Answer the user's questions about the world truthfully.
+    chat_model: gpt-3.5-turbo
+    max_tokens: 150
+    top_p: 1.0
+    temperature: 0.5
