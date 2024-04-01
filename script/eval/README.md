@@ -27,6 +27,15 @@ This is the initial baseline use case:
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custom_components/:${PWD}/../home-assistant-synthetic-home/"
 ```
 
+Here is another example that configures multiple custom components for local AI:
+
+```bash
+$ mkdir custom_components
+$ ln -s ../../home-assistant-synthetic-home/custom_components/synthetic_home custom_components/synthetic_home
+$ ln -s ../../hass-openai-custom-conversation/custom_components/vicuna_conversation custom_components/vicuna_conversation
+$ export PYTHONPATH="${PYTHONPATH}:${PWD}/custom_components/"
+```
+
 1. Create an the evaluation directory. The directory needs to contain `eval_config.yaml` and an `eval.py` . See [evals/area_summary](evals/area_summary/) for an example.
 
 1. Run the evaluation

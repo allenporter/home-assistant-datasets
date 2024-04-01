@@ -26,6 +26,17 @@ _LOGGER = logging.getLogger(__name__)
 
 
 @pytest.fixture(autouse=True)
+def mock_allow_sockets(socket_enabled: Any) -> None:
+    """Remove all restrictions talking to sockets.
+
+    This is needed when talking to external data sources
+    like LLMs.
+    """
+    pytest_socket.pytest_runtest_teardown()
+    pass
+
+
+@pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(
     enable_custom_integrations: None,
 ) -> Generator[None, None, None]:
@@ -104,6 +115,23 @@ async def mock_openai_conversation(hass: HomeAssistant) -> MockConfigEntry:
     await hass.config_entries.async_setup(config_entry.entry_id)
     assert config_entry.state == ConfigEntryState.LOADED
     return config_entry
+
+
+@pytest.fixture(name="vicuna_conversation_config_entry")
+async def mock_vicuna_conversation(hass: HomeAssistant) -> MockConfigEntry:
+    config_entry = MockConfigEntry(
+        domain="vicuna_conversation",
+        data={
+            "api_key": "sk-0000000000000000000",
+            "base_url": secrets.get_secret("vicuna_convesation_base_url"),
+        },
+        options={},
+    )
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    assert config_entry.state == ConfigEntryState.LOADED
+    return config_entry
+
 
 
 class ConversationAgent:

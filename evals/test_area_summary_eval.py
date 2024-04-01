@@ -24,6 +24,7 @@ from home_assistant_datasets import secrets
 from .conftest import ConversationAgent, EvalRecordWriter
 
 from custom_components import synthetic_home  # Load synethic home
+from custom_components import vicuna_conversation
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -74,31 +75,43 @@ def make_prompt(area_name: str) -> str:
 
 
 @pytest.fixture(name="conversation_agent_id")
-async def mock_conversation_agent_id(conversation_agent_domain: str, openai_config_entry: MockConfigEntry) -> str:
+async def mock_conversation_agent_id(
+    conversation_agent_domain: str,
+    openai_config_entry: MockConfigEntry,
+    vicuna_conversation_config_entry: MockConfigEntry,
+) -> str:
     """Return the id for the conversation agent under test."""
     if conversation_agent_domain == "openai_conversation":
         return openai_config_entry.entry_id
+    if conversation_agent_domain == "vicuna_conversation":
+        return vicuna_conversation_config_entry.entry_id
     raise ValueError(f"Conversation Agent domain not found: {conversation_agent_domain}")
 
 
 @pytest.mark.parametrize(
-    ("synthetic_home_config", "conversation_agent_domain"),
+    ("conversation_agent_domain"),
     [
-        ("datasets/devices/home1-us.yaml", "openai_conversation"),
-        ("datasets/devices/apartament4-pl.yaml", "openai_conversation"),
-        ("datasets/devices/casa-adosada-en-la-costa-es.yaml", "openai_conversation"),
-        ("datasets/devices/lakeside-retreat-de.yaml", "openai_conversation"),
+        ("vicuna_conversation")
+    ]
+)
+@pytest.mark.parametrize(
+    ("synthetic_home_config"),
+    [
+        ("datasets/devices/home1-us.yaml"),
+        ("datasets/devices/apartament4-pl.yaml"),
+        ("datasets/devices/casa-adosada-en-la-costa-es.yaml"),
+        ("datasets/devices/lakeside-retreat-de.yaml"),
     ],
 )
-async def test_areas(hass: HomeAssistant, agent: ConversationAgent, synthetic_home_config: str, socket_enabled: Any) -> None:
-    """Example."""
-    writer = EvalRecordWriter(pathlib.Path("out"), pathlib.Path(synthetic_home_config).name)
-    await writer.open()
+async def test_areas(hass: HomeAssistant, agent: ConversationAgent, synthetic_home_config: str) -> None:
+    """Evaluation that tests an area summary."""
 
     area_registry = ar.async_get(hass)
     area_names = [ area.name for area in area_registry.async_list_areas() ]
-
     _LOGGER.info("Loaded %s areas to evaluate", len(area_names))
+
+    writer = EvalRecordWriter(pathlib.Path("out"), pathlib.Path(synthetic_home_config).name)
+    await writer.open()
 
     for area_name in area_names:
         _LOGGER.info(
