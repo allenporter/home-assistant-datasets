@@ -87,7 +87,23 @@ async def mock_openai_conversation(hass: HomeAssistant, system_prompt: str | Non
     config_entry = MockConfigEntry(
         domain="openai_conversation",
         data={
-            "api_key": secrets.get_secret("api_key"),
+            "api_key": secrets.get_secret("openai_api_key"),
+        },
+        options={"prompt": system_prompt} if system_prompt else {},
+    )
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    assert config_entry.state == ConfigEntryState.LOADED
+    return config_entry
+
+
+
+@pytest.fixture(name="google_genai_config_entry")
+async def mock_google_generative_ai_conversation(hass: HomeAssistant, system_prompt: str | None) -> MockConfigEntry:
+    config_entry = MockConfigEntry(
+        domain="google_generative_ai_conversation",
+        data={
+            "api_key": secrets.get_secret("google_api_key"),
         },
         options={"prompt": system_prompt} if system_prompt else {},
     )
@@ -146,7 +162,7 @@ async def mock_agent(conversation_agent_id: str) -> ConversationAgent:
 class EvalRecordWriter:
     """Writes records to the eval output."""
 
-    def __init__(self, eval_dir: pathlib.Path, filename: pathlib.Path):
+    def __init__(self, eval_dir: pathlib.Path, filename: str):
         """Initialize EvalRecordWriter."""
         os.makedirs(eval_dir, exist_ok=True)
         self._eval_output = eval_dir / filename

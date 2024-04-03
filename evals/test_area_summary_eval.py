@@ -5,6 +5,9 @@ import logging
 import pathlib
 from typing import Any
 import uuid
+from slugify import slugify
+import dataclasses
+from dataclasses import dataclass
 
 import pytest
 from pytest_subtests import SubTests
@@ -79,6 +82,69 @@ Summary:
 STRIP_PREFIX = "Summary: "
 
 
+@dataclass
+class SyntheticDeviceState:
+    """Information needed to set the synthetic state for an evaluation task."""
+
+    device_name: str
+    restorable_attribute: str
+
+    @property
+    def state_label(self) -> str:
+        """Identifier about the state of the devices under evaluation"""
+        return f"{slugify(self.device_name)}-{slugify(self.restorable_attribute)}"
+
+
+@dataclass
+class AreaSummaryTask:
+    """Detail about the task that is being evaluated."""
+
+    home_id: str
+    """Identifier for the synethetic home."""
+
+    home_name: str
+    """Human readable name for the home for context."""
+
+    area_id: str
+    """Identifier for the area being summarized."""
+
+    area_name: str
+    """Area name within the home that is being summarized and evaluated."""
+
+    device_state: SyntheticDeviceState
+    """The device state details  about the state of the devices under evaluation"""
+
+    @property
+    def task_id(self) -> str:
+        """An identifier that labels this area summary evaluation task."""
+        return f"{self.home_id}-{slugify(self.area_name)}-{self.device_state.state_label}"
+
+
+@dataclass
+class HomeAssistantContext:
+    """Additional context about the actual state of Home Assistant that si being evaluated."""
+
+    device_context: dict[str, Any]
+    """Details that reflect the actual synthetic device states under evaluation."""
+
+
+@dataclass
+class ModelConfig:
+    """The configuration for the conversation agent under evaluation."""
+
+    conversation_agent_domain: str
+    """The domain under evaluation."""
+
+    model_id: str
+    """Details about the model name being evaluated if the domain supports multiple models."""
+
+
+
+@pytest.fixture(name="system_prompt")
+def system_prompt_fixture() -> str:
+    return AREA_SUMMARY_PROMPT
+
+
 def make_prompt(area_name: str) -> str:
     """Create a prompt for the agent to summarize the area."""
     return AREA_PROMPT.format(
@@ -96,25 +162,45 @@ def cleanup_response(response: str) -> str:
     return response[index+len(STRIP_PREFIX):]
 
 
+@pytest.fixture(
+    name="model_config",
+    params=[
+        (ModelConfig("google_generative_ai_conversation", "gemini-pro")),
+        (ModelConfig("openai_conversation", "gpt-3.5")),
+        (ModelConfig("vicuna_conversation", "mistral-7b-instruct")),
+    ],
+)
+def model_config_fixture(request: pytest.FixtureRequest) -> ModelConfig:
+    """Fiture that defines which model is being evaluated."""
+    return request.param
+
+
 @pytest.fixture(name="conversation_agent_id")
 async def mock_conversation_agent_id(
-    conversation_agent_domain: str,
+    model_config: ModelConfig,
     openai_config_entry: MockConfigEntry,
     vicuna_conversation_config_entry: MockConfigEntry,
+    google_genai_config_entry: MockConfigEntry,
 ) -> str:
     """Return the id for the conversation agent under test."""
-    if conversation_agent_domain == "openai_conversation":
+    if model_config.conversation_agent_domain == "openai_conversation":
         return openai_config_entry.entry_id
-    if conversation_agent_domain == "vicuna_conversation":
+    if model_config.conversation_agent_domain == "google_generative_ai_conversation":
+        return google_genai_config_entry.entry_id
+    if model_config.conversation_agent_domain == "vicuna_conversation":
         return vicuna_conversation_config_entry.entry_id
-    raise ValueError(f"Conversation Agent domain not found: {conversation_agent_domain}")
+    raise ValueError(f"Conversation Agent domain not found: {model_config.conversation_agent_domain}")
 
 
 @pytest.fixture(name="eval_record_writer")
-def eval_record_writer_fixture(hass: HomeAssistant, model_id: str, synthetic_home_config: str) -> Generator[EvalRecordWriter, None, None]:
+def eval_record_writer_fixture(
+    hass: HomeAssistant,
+    model_config: ModelConfig,
+    synthetic_home_config: str
+) -> Generator[EvalRecordWriter, None, None]:
     """Fixture that prepares the eval output writer."""
     writer = EvalRecordWriter(
-        pathlib.Path("out") / model_id,
+        pathlib.Path("out") / model_config.model_id,
         pathlib.Path(synthetic_home_config).name,
     )
     writer.open()
@@ -122,10 +208,47 @@ def eval_record_writer_fixture(hass: HomeAssistant, model_id: str, synthetic_hom
     writer.close()
 
 
+@pytest.fixture(name="tasks_provider")
+def tasks_provider_fixture(
+    hass: HomeAssistant,
+    synthetic_home_yaml: str
+) -> Callable[[], Generator[AreaSummaryTask, None, None]]:
+    """Fixture that generates the tasks to evaluate."""
+
+    synthetic_home_config = yaml.load(synthetic_home_yaml, Loader=yaml.Loader)
+    home_name = synthetic_home_config["name"]
+    home_id = slugify(home_name)
+
+    area_registry = ar.async_get(hass)
+    area_entries = list(area_registry.async_list_areas())
+    _LOGGER.info("Loaded %s areas to evaluate", len(area_entries))
+
+    def func() -> Generator[AreaSummaryTask, None, None]:
+        for area_entry in area_entries:
+            area_name = area_entry.name
+
+            if (devices := synthetic_home_config["devices"].get(area_name)) is None:
+                return
+            for device_info in devices:
+                attributes = load_restorable_attributes(device_info["device_type"])
+                for attribute in attributes:
+                    device_state = SyntheticDeviceState(device_info["name"], attribute)
+
+                    yield AreaSummaryTask(
+                        home_id=home_id,
+                        home_name=home_name,
+                        area_id=area_entry.id,
+                        area_name=area_name,
+                        device_state=device_state,
+                    )
+
+    return func
+
+
 def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -> dict[str, Any]:
     """Return information about a device used for dumping a context record."""
     detail = {}
-    # Device information
+    # Dump device information
     if device_entry.model:
         detail["model"] = device_entry.model
     if device_entry.manufacturer:
@@ -141,65 +264,37 @@ def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -
     return detail
 
 
-def get_device_context_for_area(hass: HomeAssistant, area_id: str) -> dict[str, str]:
-    """Return the current entity states for an aarea."""
-    device_registry = dr.async_get(hass)
-    return {
-        device_entry.name: get_device_eval_context(hass, device_entry)
-        for device_entry in dr.async_entries_for_area(device_registry, area_id)
-    }
-
-
-@pytest.fixture(name="device_restorable_states")
-def device_restorable_states_fixture(synthetic_home_yaml: str) -> Callable[[str], Generator[list[tuple[str, str]], None, None]]:
-    """Fixture that prepares the device states that need to be evaluated."""
-
-    synthetic_home_config = yaml.load(synthetic_home_yaml, Loader=yaml.Loader)
-
-    def func(area_name: str) -> Generator[tuple[str | None, str | None], None, None]:
-        if (devices := synthetic_home_config["devices"].get(area_name)) is None:
-            return
-        for device_info in devices:
-            attributes = load_restorable_attributes(device_info["device_type"])
-            for attribute in attributes:
-                yield device_info["name"], attribute
-
-    return func
-
-
-@pytest.fixture(name="set_synthetic_device_state")
-async def set_synthetic_device_state_fixture(
+@pytest.fixture(name="prepare_state")
+async def prepare_state_fixture(
     hass: HomeAssistant,
     synthetic_home_config_entry: ConfigEntry
-) -> Callable[[str, str, str], Awaitable[None]]:
+) -> Callable[[AreaSummaryTask], Awaitable[None]]:
     """Fixture with a function call to change device state for evaluation."""
 
-    async def func(area_name: str, device_name: str, restorable_attribute: str) -> None:
-        _LOGGER.info("Changing device state for %s to %s", device_name, restorable_attribute)
+    async def func(area_summary_task: AreaSummaryTask) -> None:
+        device_state = area_summary_task.device_state
+        _LOGGER.info("Changing device state for %s to %s", device_state.device_name, device_state.restorable_attribute)
         await hass.services.async_call(
             "synthetic_home",
             "set_synthetic_device_state",
             service_data={
                 "config_entry_id": synthetic_home_config_entry.entry_id,
-                "area": area_name,
-                "device": device_name,
-                "restorable_attribute_key": restorable_attribute,
+                "area": area_summary_task.area_name,
+                "device": device_state.device_name,
+                "restorable_attribute_key": device_state.restorable_attribute,
             },
             blocking=True,
         )
 
+        device_registry = dr.async_get(hass)
+        return HomeAssistantContext(device_context={
+            device_entry.name: get_device_eval_context(hass, device_entry)
+            for device_entry in dr.async_entries_for_area(device_registry, area_id)
+        })
+
     return func
 
 
-@pytest.mark.parametrize(
-    ("model_id", "conversation_agent_domain", "system_prompt"),
-    [
-        # model_id is unique path output identifying this model
-        ("gpt-3.5", "openai_conversation", AREA_SUMMARY_PROMPT),
-        ("mistral-7b-instruct", "vicuna_conversation", AREA_SUMMARY_PROMPT),
-    ],
-    ids=["mistral-7b-instruct", "gpt-3.5"]
-)
 @pytest.mark.parametrize(
     ("synthetic_home_config"),
     [
@@ -209,47 +304,37 @@ async def set_synthetic_device_state_fixture(
         ("datasets/devices/lakeside-retreat-de.yaml"),
     ],
 )
-async def test_areas(
+async def test_collect_area_summaries(
     hass: HomeAssistant,
     agent: ConversationAgent,
     eval_record_writer: EvalRecordWriter,
     subtests: SubTests,
-    device_restorable_states: Generator[tuple[str | None, str | None], None, None],
-    set_synthetic_device_state: Callable[[str, str, str], Awaitable[None]],
+    tasks_provider: Callable[[], Generator[AreaSummaryTask, None, None]],
+    prepare_state: Callable[[AreaSummaryTask], Awaitable[HomeAssistantContext]],
 ) -> None:
-    """Evaluation that tests an area summary."""
+    """Collects model responses for area summaries."""
 
-    area_registry = ar.async_get(hass)
-    area_entries = list(area_registry.async_list_areas())
-    _LOGGER.info("Loaded %s areas to evaluate", len(area_entries))
+    for i, area_summary_task in enumerate(tasks_provider()):
+        with subtests.test(msg=area_summary_task.task_id, i=i):
 
-    i = 0
-    for area_entry in area_entries:
-        area_name = area_entry.name
-        for device_name, restorable_attribute in device_restorable_states(area_name):
-            with subtests.test(msg=f"{area_name}-{device_name}-{restorable_attribute}", i=i):
-                i = i + 1
+            # Setup the home for evaluation
+            context = await prepare_state(area_summary_task)
 
-                 # Exercice a different state of the device
-                _LOGGER.info("Changing device state for %s to %s", device_name, restorable_attribute)
-                await set_synthetic_device_state(area_name, device_name, restorable_attribute)
+            # Run the conversation agent
+            area_name = area_summary_task.area_name
+            prompt = make_prompt(area_name)
+            _LOGGER.info("Performing area summary: %s", area_name)
+            _LOGGER.debug("Area summary prompt: %s", prompt)
+            response = await agent.async_process(hass, prompt)
+            _LOGGER.debug("Area summary response: %s", response)
+            response = cleanup_response(response)
 
-                _LOGGER.info(
-                    "Evaluating area summary: %s",
-                    area_name,
-                )
-                prompt = make_prompt(area_name)
-                _LOGGER.debug("Evaluating prompt: %s", prompt)
-                response = await agent.async_process(hass, prompt)
-                _LOGGER.debug("Response: %s", response)
-                response = cleanup_response(response)
-
-                eval_record_writer.write(
-                    {
-                        "task": f"{area_name}-{device_name}-{restorable_attribute}"
-                        "uuid": str(uuid.uuid4()),
-                        "area": area_name,
-                        "response": response,
-                        "device_detail": get_device_context_for_area(hass, area_entry.id),
-                    }
-                )
+            eval_record_writer.write(
+                {
+                    "uuid": str(uuid.uuid4()),  # Unique based on the model evaluated
+                    "task_id": area_summary_task.task_id,
+                    "task": dataclasses.asdict(area_summary_task),
+                    "response": response,
+                    "context": dataclasses.asdict(context),
+                }
+            )
