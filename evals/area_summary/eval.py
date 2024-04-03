@@ -1,6 +1,5 @@
 """The Area Summary evaluation."""
 
-from dataclasses import dataclass
 import logging
 import pathlib
 import os

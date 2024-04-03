@@ -4,8 +4,7 @@ from collections.abc import Generator
 import logging
 import os
 import pathlib
-from slugify import slugify
-from typing import Any
+from typing import Any, TextIO
 from unittest.mock import patch, mock_open
 
 import pytest
@@ -14,12 +13,13 @@ import yaml
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.helpers import area_registry as ar
 from homeassistant.setup import async_setup_component
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from home_assistant_datasets import secrets
+
+from custom_components import synthetic_home  # noqa: F401
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -52,12 +52,11 @@ async def mock_default_components(hass: HomeAssistant) -> None:
     assert await async_setup_component(hass, "conversation", {})
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, name="synthetic_home_config_entry")
 async def mock_synthetic_home(hass: HomeAssistant, synthetic_home_yaml: str) -> MockConfigEntry:
     """Fixture for mock configuration entry."""
     config_entry = MockConfigEntry(domain="synthetic_home", data={"config_filename": "ignored"})
     config_entry.add_to_hass(hass)
-
 
     with patch(
         "custom_components.synthetic_home.home_model.synthetic_home.read_config_content",
@@ -65,8 +64,7 @@ async def mock_synthetic_home(hass: HomeAssistant, synthetic_home_yaml: str) -> 
     ):
         await hass.config_entries.async_setup(config_entry.entry_id)
         assert config_entry.state == ConfigEntryState.LOADED
-        yield
-
+        yield config_entry
 
 
 @pytest.fixture(name="synthetic_home_yaml")
@@ -77,39 +75,21 @@ def mock_synthetic_home_content(synthetic_home_config: str) -> str:
     return ""
 
 
+@pytest.fixture(name="system_prompt")
+async def system_prompt_fixture() -> None:
+    """Fixture to provide the system prompt or None to use the default."""
+    return None
 
-DEFAULT_OPENAI_PROMPT = """This smart home is controlled by Home Assistant.
 
-An overview of the areas and the devices in this smart home:
-{%- for area in areas() %}
-{%- set area_info = namespace(printed=false) %}
-{%- for device in area_devices(area) -%}
-{%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
-{%- if not area_info.printed %}
-{{ area_name(area) }}:
-{%- set area_info.printed = true %}
-{%- endif %}
-- {{ device_attr(device, "name") }}{% if device_attr(device, "model") and (device_attr(device, "model") | string) not in (device_attr(device, "name") | string) %} ({{ device_attr(device, "model") }}){% endif %}
-{%- endif %}
-{%- endfor %}
-{%- endfor %}
-Answer the user's questions about the world truthfully.
-"""
 
 @pytest.fixture(name="openai_config_entry")
-async def mock_openai_conversation(hass: HomeAssistant) -> MockConfigEntry:
+async def mock_openai_conversation(hass: HomeAssistant, system_prompt: str | None) -> MockConfigEntry:
     config_entry = MockConfigEntry(
         domain="openai_conversation",
         data={
             "api_key": secrets.get_secret("api_key"),
         },
-        options={
-            "prompt": DEFAULT_OPENAI_PROMPT,
-            "chat_model": "gpt-3.5-turbo",
-            "max_tokens": 150,
-            "top_p": 1.0,
-            "temperature": 0.5,
-        },
+        options={"prompt": system_prompt} if system_prompt else {},
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -118,14 +98,17 @@ async def mock_openai_conversation(hass: HomeAssistant) -> MockConfigEntry:
 
 
 @pytest.fixture(name="vicuna_conversation_config_entry")
-async def mock_vicuna_conversation(hass: HomeAssistant) -> MockConfigEntry:
+async def mock_vicuna_conversation(hass: HomeAssistant, system_prompt: str) -> MockConfigEntry:
+    # Ensure custom components used in the test are loaded
+    from custom_components import vicuna_conversation  # noqa: F401
+
     config_entry = MockConfigEntry(
         domain="vicuna_conversation",
         data={
             "api_key": "sk-0000000000000000000",
             "base_url": secrets.get_secret("vicuna_convesation_base_url"),
         },
-        options={},
+        options={"prompt": system_prompt} if system_prompt else {},
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -160,28 +143,27 @@ async def mock_agent(conversation_agent_id: str) -> ConversationAgent:
     return ConversationAgent(conversation_agent_id)
 
 
-
 class EvalRecordWriter:
     """Writes records to the eval output."""
 
-    def __init__(self, eval_dir: str, filename: str):
+    def __init__(self, eval_dir: pathlib.Path, filename: pathlib.Path):
         """Initialize EvalRecordWriter."""
         os.makedirs(eval_dir, exist_ok=True)
-        self._eval_output = pathlib.Path(eval_dir) / filename
-        self._fd = None
+        self._eval_output = eval_dir / filename
+        self._fd: TextIO | None = None
 
-    async def open(self) -> None:
+    def open(self) -> None:
         """Initialize the record writer."""
         self._fd = open(self._eval_output, "w")
         self._records = 0
 
-
-    async def write(self, record: dict[str, Any]) -> None:
+    def write(self, record: dict[str, Any]) -> None:
         """Write an eval record."""
         self._fd.write(yaml.dump(record, sort_keys=False, explicit_start=True))
+        self._fd.flush()
         self._records += 1
 
-    async def close(self) -> None:
+    def close(self) -> None:
         """Close the evaluation record."""
         _LOGGER.info(
             "Wrote %s summariies to %s",
@@ -189,6 +171,6 @@ class EvalRecordWriter:
             self._eval_output,
         )
 
-        if self._fd is None:
+        if self._fd is not None:
             self._fd.close()
             self._fd = None
