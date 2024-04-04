@@ -43,9 +43,9 @@ graph LR;
     I --> D
     K --> D
     M --> D
-
-
 ```
+
+The idea would also be to start building datasets that can be used for training in the future.
 
 ## Synthetic Datasets
 
