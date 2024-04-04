@@ -1,7 +1,51 @@
-# home-assistant-datasets
+# Home Assistant Datasets
 
-A collection of datasets for evaluation (and in the future training) home automation
-AI models.
+This package is a collection of datasets for evaluating AI Models in the context
+of Home Assistant. The overall approach is:
+- Synthetic Data Generation: Create synthetic datasets that represent a home
+- Synthetic Home: Load the data into Home Assistant and exercise different device states (e.g. light on, off)
+- Model Evaluation: Evaluate Home Assistant Conversation agents with different models (e.g. OpenAI, Google, local models)
+- Human Annotation: Humans can annotate the results (e.g. great, ok, bad)
+- Results Visualization: Track improvements over time with different models, prompts, tools, RAG, etc.
+
+```mermaid
+graph LR;
+    A[Synthetic Data Generation]
+    B[Dataset]
+    C[Model Evaluation]
+    D[Synthetic Home]
+    F[Human Annotation]
+    G[Visualize Results]
+
+    H[OpenAI]
+    I[Conversation Agent]
+
+    J[Local LM]
+    K[Conversation Agent]
+
+    L[Google]
+    M[Conversation Agent]
+
+    A --> B
+    B --> D
+    D --> C
+    C --> F
+    F --> G
+
+    H --> I
+    J --> K
+    L --> M
+
+    I --> C
+    K --> C
+    M --> C
+
+    I --> D
+    K --> D
+    M --> D
+
+
+```
 
 ## Synthetic Datasets
 
@@ -19,6 +63,36 @@ data generation using LLMs works. The data is generated from a small amount of s
 example data and a prompt, then is persisted.
 
 The synthetic data generation is run with Jupyter notebooks.
+
+
+```mermaid
+
+classDiagram
+    direction LR
+    Home <|-- Area
+    Area <|-- Device
+    Device <|-- EntityStates
+    class Home{
+        +String name
+        +String country_code
+        +String location
+        +String type
+    }
+    class Area {
+        +String name
+    }
+    class Device {
+        +String name
+        +String device_type
+        +String model
+        +String mfg
+        +String sw_version
+    }
+    class EntityState {
+        +String state
+    }
+
+```
 
 ## Model Evaluation
 
