@@ -26,6 +26,8 @@ from .conftest import ConversationAgent, EvalRecordWriter
 
 _LOGGER = logging.getLogger(__name__)
 
+MODEL_EVAL_OUTPUT = "model_outputs/area_summary"
+
 
 AREA_SUMMARY_PROMPT = """
 Please summarize the status of an area of the home. Your summaries are succint,
@@ -200,7 +202,7 @@ def eval_record_writer_fixture(
 ) -> Generator[EvalRecordWriter, None, None]:
     """Fixture that prepares the eval output writer."""
     writer = EvalRecordWriter(
-        pathlib.Path("out") / model_config.model_id,
+        pathlib.Path(MODEL_EVAL_OUTPUT) / model_config.model_id,
         pathlib.Path(synthetic_home_config).name,
     )
     writer.open()
