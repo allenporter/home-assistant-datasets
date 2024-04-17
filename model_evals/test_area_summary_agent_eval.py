@@ -1,4 +1,4 @@
-"""An evaluation for an Area Summary agent using a conversation agent with no context pruning."""
+"""An evaluation for the Summary Agent custom component summarizing an area with pruned context."""
 
 from collections.abc import Generator, Callable, Awaitable
 import logging
@@ -13,7 +13,7 @@ from pytest_subtests import SubTests
 import yaml
 
 from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.helpers import area_registry as ar, entity_registry as er, device_registry as dr
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -26,85 +26,9 @@ from .common import SyntheticDeviceState, HomeAssistantContext, ModelConfig, Are
 
 _LOGGER = logging.getLogger(__name__)
 
-MODEL_EVAL_OUTPUT = "model_outputs/area_summary"
-
-
-AREA_SUMMARY_PROMPT = """
-Please summarize the status of an area of the home. Your summaries are succint,
-and do not mention boring details or things that seem very mundane or minor. A
-one sentence summary is best.
-
-Here is an example of the input and output:
-
-Area: Bedroom 1
-- Bedroom 1 Light (Dimmable Smart Bulb)
-    light: off
-- Smart Lock (Encode Smart WiFi Deadbolt)
-    binary_sensor: off
-    binary_sensor Tamper: off
-    binary_sensor Battery: off
-    sensor Battery: 90 %
-Summary: The bedroom is secure.
-
-Area: Driveway
-- Black Model 3 (Model 3)
-  - binary_sensor Charging: off
-  - sensor Battery level: 90%
-  - sensor Battery range: 200 mi
-  - binary_sensor Pedestrian Gate: off
-  - switch Sprinkler: off
-Summary: The car is almost charged.
-
-Here is the current state of all Areas. The user will ask you about one of these:
-
-{%- for area in areas() %}
-Area: {{ area }}
-  {%- for device in area_devices(area) -%}
-    {%- if not device_attr(device, "disabled_by") and not device_attr(device, "entry_type") and device_attr(device, "name") %}
-        {%- set device_name = device_attr(device, "name_by_user") | default(device_attr(device, "name"), True) %}
-
-- {{ device_name  }}{% if device_attr(device, "model") and (device_attr(device, "model") | string) not in (device_attr(device, "name") | string) %} ({{ device_attr(device, "model") }}){% endif %}
-      {%- set entity_info = namespace(printed=false) %}
-      {%- for entity_id in device_entities(device) -%}
-        {%- set entity_name = state_attr(entity_id, "friendly_name") | replace(device_name, "") | trim %}
-    {{ entity_id.split(".")[0] -}}
-        {%- if entity_name %} {{ entity_name }}{% endif -%}
-        : {{ states(entity_id, rounded=True, with_unit=True) }}
-      {%- endfor %}
-    {%- endif %}
-  {%- endfor %}
-{%- endfor %}
-"""
-
-AREA_PROMPT = """
-Area: {area_name}
-Summary:
-"""
+MODEL_EVAL_OUTPUT = "model_outputs/area_summary_agent"
 
 STRIP_PREFIX = "Summary: "
-
-
-@pytest.fixture(name="system_prompt")
-def system_prompt_fixture() -> str:
-    return AREA_SUMMARY_PROMPT
-
-
-def make_prompt(area_name: str) -> str:
-    """Create a prompt for the agent to summarize the area."""
-    return AREA_PROMPT.format(
-        area_name=area_name,
-    )
-
-
-def cleanup_response(response: str) -> str:
-    """Perform any cleanup on the response where the LLM returns part of the prompt."""
-    response = response.lstrip()
-    try:
-        index = response.index(STRIP_PREFIX)
-    except ValueError:
-        return response
-    return response[index+len(STRIP_PREFIX):]
-
 
 @pytest.fixture(
     name="model_config",
@@ -119,8 +43,8 @@ def model_config_fixture(request: pytest.FixtureRequest) -> ModelConfig:
     return request.param
 
 
-@pytest.fixture(name="conversation_agent_id")
-async def mock_conversation_agent_id(
+@pytest.fixture(name="base_conversation_agent_id")
+async def mock_base_conversation_agent_id(
     model_config: ModelConfig,
     openai_config_entry: MockConfigEntry,
     vicuna_conversation_config_entry: MockConfigEntry,
@@ -134,6 +58,41 @@ async def mock_conversation_agent_id(
     if model_config.conversation_agent_domain == "vicuna_conversation":
         return vicuna_conversation_config_entry.entry_id
     raise ValueError(f"Conversation Agent domain not found: {model_config.conversation_agent_domain}")
+
+
+@pytest.fixture(name="summary_agent_config_entry")
+async def mock_summary_agent(hass: HomeAssistant, base_conversation_agent_id: str) -> MockConfigEntry:
+    # Ensure custom components used in the test are loaded
+    from custom_components import summary_agent  # noqa: F401
+
+    config_entry = MockConfigEntry(
+        domain="summary_agent",
+        data={
+            "agent_id": base_conversation_agent_id,
+        },
+    )
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    assert config_entry.state == ConfigEntryState.LOADED
+    return config_entry
+
+
+@pytest.fixture(name="conversation_agent_id")
+async def mock_conversation_agent_id(
+    summary_agent_config_entry: MockConfigEntry,
+) -> str:
+    """Return the id for the conversation agent under test."""
+    return summary_agent_config_entry.entry_id
+
+
+def cleanup_response(response: str) -> str:
+    """Perform any cleanup on the response where the LLM returns part of the prompt."""
+    response = response.lstrip()
+    try:
+        index = response.index(STRIP_PREFIX)
+    except ValueError:
+        return response
+    return response[index+len(STRIP_PREFIX):]
 
 
 @pytest.fixture(name="eval_record_writer")
@@ -266,10 +225,8 @@ async def test_collect_area_summaries(
 
             # Run the conversation agent
             area_name = area_summary_task.area_name
-            prompt = make_prompt(area_name)
             _LOGGER.info("Performing area summary: %s", area_name)
-            _LOGGER.debug("Area summary prompt: %s", prompt)
-            response = await agent.async_process(hass, prompt)
+            response = await agent.async_process(hass, area_name)
             _LOGGER.debug("Area summary response: %s", response)
             response = cleanup_response(response)
 

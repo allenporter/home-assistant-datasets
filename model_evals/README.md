@@ -24,8 +24,11 @@ Here is another example that configures multiple custom components for local AI:
 
 ```bash
 $ mkdir custom_components
-$ ln -s ../../home-assistant-synthetic-home/custom_components/synthetic_home custom_components/synthetic_home
-$ ln -s ../../hass-openai-custom-conversation/custom_components/vicuna_conversation custom_components/vicuna_conversation
+$ cd custom_components
+$ ln -s ../../home-assistant-synthetic-home/custom_components/synthetic_home synthetic_home
+$ ln -s ../../hass-openai-custom-conversation/custom_components/vicuna_conversation vicuna_conversation
+$ ln -s ../../home-assistant-summary-agent/custom_components/summary_agent summary_agent
+$ cd ..
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}/custom_components/"
 ```
 
