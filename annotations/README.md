@@ -8,7 +8,7 @@ See https://doccano.github.io/doccano/ for installation.
 
 1. Create a new project e.g. `Area Summary`
 1. Create the tags e.g. `Good`, `Bad`, `Neutral`.
-1. We want these options:
+1. We want these options for the project:
   - Allow single label.
   - Randomize Document order
   - Share annotations across users
@@ -46,7 +46,7 @@ Create labels of `Good`, `Bad`, and `Neutral` and export the dataset when done l
 Convert the labeled JSONL output into yaml.
 
 ```bash
-$ cat annotations.jsonl | python annotations/export.py  > model_outputs/area_summary/annotations.yaml
+$ cat model_outputs/area_summary_agent/annotations.jsonl  | python annotations/export.py  > model_outputs/area_summary_agent/annotations.yaml
 ```
 
 The output file contains the labeled task results which can be joined with the original

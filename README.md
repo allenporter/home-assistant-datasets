@@ -121,7 +121,7 @@ The initial use baseline use case of a model evaluation has the following steps:
 
 These can be used for human evaluation to determine the model quality.
 
-## Human Evaluation (WIP)
+## Human Evaluation
 
 In this phase, we take the model outputs from a human rater and use them for
 evaluation.
@@ -131,6 +131,8 @@ Human rater (me) scores the result quality:
   - 2: Medium: Solid, not incorrect, though perhaps a missed opportunity
   - 3: High: Good
 
+See the [annotations/](annotations/) directory for the human eval procedure
+using Doccano.
 
 ## Visualization (WIP)
 
