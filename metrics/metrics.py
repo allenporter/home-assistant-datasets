@@ -6,6 +6,8 @@ import pathlib
 import sys
 import yaml
 
+_LOGGER = logging.getLogger(__name__)
+
 ANNOTATIONS = "annotations.yaml"
 
 def get_arguments() -> argparse.Namespace:
@@ -35,6 +37,12 @@ def main():
     annotation_docs = yaml.load_all(annotations.read_text(), Loader=yaml.Loader)
     labels = {}
     for doc in annotation_docs:
+        try:
+            label = doc["label"][0]
+        except IndexError as err:
+            _LOGGER.info(f"Error extracting label from doc: {doc}: {err}")
+            raise err
+
         labels[doc["uuid"]] = doc["label"][0]
 
     model_results = {}
