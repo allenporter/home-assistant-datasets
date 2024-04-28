@@ -49,8 +49,9 @@ EXAMPLE_NUM = {
 @pytest.fixture(
     name="model_id",
     params=[
-        "gemma",
-        "llama3"
+        #"llama3",
+        #"gemma",
+        "mistral-7b-instruct",
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
