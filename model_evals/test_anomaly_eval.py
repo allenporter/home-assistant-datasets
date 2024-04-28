@@ -175,6 +175,8 @@ async def test_collect_area_summaries(
             _LOGGER.info("Processing task: %s", task.text)
             response = await agent.async_process(hass, task.text)
             _LOGGER.debug("Response: %s", response)
+
+            # Cleanup the response in case there are small text variations
             response = response.lower().lstrip()
             if response not in VALID_LABELS:
                 for valid_label in VALID_LABELS:
