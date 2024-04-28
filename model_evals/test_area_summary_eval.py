@@ -121,14 +121,6 @@ def model_id_fixture(request: pytest.FixtureRequest) -> str:
     return request.param
 
 
-@pytest.fixture(name="conversation_agent_id")
-async def mock_conversation_agent_id(
-    conversation_agent_config_entry: MockConfigEntry,
-) -> str:
-    """Return the id for the conversation agent under test."""
-    return conversation_agent_config_entry.entry_id
-
-
 @pytest.fixture(name="eval_record_writer")
 def eval_record_writer_fixture(
     hass: HomeAssistant,

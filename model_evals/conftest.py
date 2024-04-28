@@ -17,11 +17,10 @@ from homeassistant.setup import async_setup_component
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from home_assistant_datasets import secrets
 
 from custom_components import synthetic_home  # noqa: F401
 
-from .common import ModelConfig, Models
+from .common import ModelConfig
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -56,9 +55,28 @@ async def mock_default_components(hass: HomeAssistant) -> None:
     assert await async_setup_component(hass, "conversation", {})
 
 
+@pytest.fixture(name="synthetic_home_config")
+def mock_synthetic_home_config() -> str | None:
+    """Fixture to load the synthetic home config."""
+    return None
+
+
+@pytest.fixture(name="synthetic_home_yaml")
+def mock_synthetic_home_content(synthetic_home_config: str | None) -> str | None:
+    """Mock out the yaml config file contents."""
+    if synthetic_home_config is None:
+        return None
+    with pathlib.Path(synthetic_home_config).absolute().open("r") as f:
+        return f.read()
+
+
 @pytest.fixture(autouse=True, name="synthetic_home_config_entry")
-async def mock_synthetic_home(hass: HomeAssistant, synthetic_home_yaml: str) -> MockConfigEntry:
+async def mock_synthetic_home(hass: HomeAssistant, synthetic_home_yaml: str | None) -> MockConfigEntry | None:
     """Fixture for mock configuration entry."""
+    if synthetic_home_yaml is None:
+        yield None
+        return
+
     config_entry = MockConfigEntry(domain="synthetic_home", data={"config_filename": "ignored"})
     config_entry.add_to_hass(hass)
 
@@ -69,14 +87,6 @@ async def mock_synthetic_home(hass: HomeAssistant, synthetic_home_yaml: str) -> 
         await hass.config_entries.async_setup(config_entry.entry_id)
         assert config_entry.state == ConfigEntryState.LOADED
         yield config_entry
-
-
-@pytest.fixture(name="synthetic_home_yaml")
-def mock_synthetic_home_content(synthetic_home_config: str) -> str:
-    """Mock out the yaml config file contents."""
-    with pathlib.Path(synthetic_home_config).absolute().open("r") as f:
-        return f.read()
-    return ""
 
 
 @pytest.fixture(name="system_prompt")
@@ -135,6 +145,14 @@ class ConversationAgent:
         )
         response = service_response["response"]
         return response["speech"]["plain"]["speech"]
+
+
+@pytest.fixture(name="conversation_agent_id")
+async def mock_conversation_agent_id(
+    conversation_agent_config_entry: MockConfigEntry,
+) -> str:
+    """Return the id for the conversation agent under test."""
+    return conversation_agent_config_entry.entry_id
 
 
 @pytest.fixture(name="agent")
