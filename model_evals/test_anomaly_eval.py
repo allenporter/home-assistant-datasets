@@ -3,6 +3,7 @@
 from collections.abc import Generator, Callable
 import logging
 import pathlib
+import asyncio
 from dataclasses import dataclass
 import hashlib
 import uuid
@@ -49,9 +50,11 @@ EXAMPLE_NUM = {
 @pytest.fixture(
     name="model_id",
     params=[
-        #"llama3",
-        #"gemma",
-        "mistral-7b-instruct",
+        # "llama3",
+        # "gemma",
+        # "mistral-7b-instruct",
+        "gemini-pro",
+        #"gpt-3.5",
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
@@ -171,6 +174,7 @@ async def test_collect_area_summaries(
 
     for i, task in enumerate(tasks_provider()):
         with subtests.test(msg=task.task_id, i=i):
+            await asyncio.sleep(1)
 
             # Run the conversation agent
             _LOGGER.info("Processing task: %s", task.text)
