@@ -31,33 +31,25 @@ MODEL_EVAL_OUTPUT = "model_outputs/area_summary_agent"
 STRIP_PREFIX = "Summary: "
 
 @pytest.fixture(
-    name="model_config",
+    name="model_id",
     params=[
-        (ModelConfig("google_generative_ai_conversation", "gemini-pro")),
-        (ModelConfig("openai_conversation", "gpt-3.5")),
-        (ModelConfig("vicuna_conversation", "mistral-7b-instruct")),
+        "gemma",
+        # "gemini-pro",
+        # "gpt-3.5",
+        # "mistral-7b-instruct",
     ],
 )
-def model_config_fixture(request: pytest.FixtureRequest) -> ModelConfig:
+def model_id_fixture(request: pytest.FixtureRequest) -> str:
     """Fiture that defines which model is being evaluated."""
     return request.param
 
 
 @pytest.fixture(name="base_conversation_agent_id")
 async def mock_base_conversation_agent_id(
-    model_config: ModelConfig,
-    openai_config_entry: MockConfigEntry,
-    vicuna_conversation_config_entry: MockConfigEntry,
-    google_genai_config_entry: MockConfigEntry,
+    conversation_agent_config_entry: MockConfigEntry,
 ) -> str:
     """Return the id for the conversation agent under test."""
-    if model_config.conversation_agent_domain == "openai_conversation":
-        return openai_config_entry.entry_id
-    if model_config.conversation_agent_domain == "google_generative_ai_conversation":
-        return google_genai_config_entry.entry_id
-    if model_config.conversation_agent_domain == "vicuna_conversation":
-        return vicuna_conversation_config_entry.entry_id
-    raise ValueError(f"Conversation Agent domain not found: {model_config.conversation_agent_domain}")
+    return conversation_agent_config_entry.entry_id
 
 
 @pytest.fixture(name="summary_agent_config_entry")

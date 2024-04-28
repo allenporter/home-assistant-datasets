@@ -21,8 +21,12 @@ from home_assistant_datasets import secrets
 
 from custom_components import synthetic_home  # noqa: F401
 
+from .common import ModelConfig, Models
+
 
 _LOGGER = logging.getLogger(__name__)
+
+MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
 
 
 @pytest.fixture(autouse=True)
@@ -81,56 +85,36 @@ async def system_prompt_fixture() -> None:
     return None
 
 
+@pytest.fixture
+async def model_config(model_id: str) -> ModelConfig:
+    """Fixture to read the model config yaml."""
 
-@pytest.fixture(name="openai_config_entry")
-async def mock_openai_conversation(hass: HomeAssistant, system_prompt: str | None) -> MockConfigEntry:
+    with MODEL_CONFIG_FILE.open() as fd:
+        model_data = yaml.load(fd.read(), Loader=yaml.SafeLoader)
+
+    models = model_data.get("models", [])
+    for model in models:
+        if (config := ModelConfig(**model)).model_id == model_id:
+            return config
+
+    raise ValueError(f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}")
+
+
+@pytest.fixture(name="conversation_agent_config_entry")
+async def mock_conversation_agent_config_entry(
+    hass: HomeAssistant,
+    model_config: ModelConfig,
+    system_prompt: str | None
+) -> MockConfigEntry:
     config_entry = MockConfigEntry(
-        domain="openai_conversation",
-        data={
-            "api_key": secrets.get_secret("openai_api_key"),
-        },
+        domain=model_config.domain,
+        data=model_config.config_entry_data,
         options={"prompt": system_prompt} if system_prompt else {},
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     assert config_entry.state == ConfigEntryState.LOADED
     return config_entry
-
-
-
-@pytest.fixture(name="google_genai_config_entry")
-async def mock_google_generative_ai_conversation(hass: HomeAssistant, system_prompt: str | None) -> MockConfigEntry:
-    config_entry = MockConfigEntry(
-        domain="google_generative_ai_conversation",
-        data={
-            "api_key": secrets.get_secret("google_api_key"),
-        },
-        options={"prompt": system_prompt} if system_prompt else {},
-    )
-    config_entry.add_to_hass(hass)
-    await hass.config_entries.async_setup(config_entry.entry_id)
-    assert config_entry.state == ConfigEntryState.LOADED
-    return config_entry
-
-
-@pytest.fixture(name="vicuna_conversation_config_entry")
-async def mock_vicuna_conversation(hass: HomeAssistant, system_prompt: str) -> MockConfigEntry:
-    # Ensure custom components used in the test are loaded
-    from custom_components import vicuna_conversation  # noqa: F401
-
-    config_entry = MockConfigEntry(
-        domain="vicuna_conversation",
-        data={
-            "api_key": "sk-0000000000000000000",
-            "base_url": secrets.get_secret("vicuna_convesation_base_url"),
-        },
-        options={"prompt": system_prompt} if system_prompt else {},
-    )
-    config_entry.add_to_hass(hass)
-    await hass.config_entries.async_setup(config_entry.entry_id)
-    assert config_entry.state == ConfigEntryState.LOADED
-    return config_entry
-
 
 
 class ConversationAgent:

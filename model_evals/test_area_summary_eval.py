@@ -121,19 +121,10 @@ def model_config_fixture(request: pytest.FixtureRequest) -> ModelConfig:
 
 @pytest.fixture(name="conversation_agent_id")
 async def mock_conversation_agent_id(
-    model_config: ModelConfig,
-    openai_config_entry: MockConfigEntry,
-    vicuna_conversation_config_entry: MockConfigEntry,
-    google_genai_config_entry: MockConfigEntry,
+    conversation_agent_config_entry: MockConfigEntry,
 ) -> str:
     """Return the id for the conversation agent under test."""
-    if model_config.conversation_agent_domain == "openai_conversation":
-        return openai_config_entry.entry_id
-    if model_config.conversation_agent_domain == "google_generative_ai_conversation":
-        return google_genai_config_entry.entry_id
-    if model_config.conversation_agent_domain == "vicuna_conversation":
-        return vicuna_conversation_config_entry.entry_id
-    raise ValueError(f"Conversation Agent domain not found: {model_config.conversation_agent_domain}")
+    return conversation_agent_config_entry.entry_id
 
 
 @pytest.fixture(name="eval_record_writer")

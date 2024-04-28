@@ -34,18 +34,65 @@ $ export PYTHONPATH="${PYTHONPATH}:${PWD}/custom_components/"
 
 ## Model Config
 
+Models are configured via config entries which are dynamically built from a
+shorthand yaml configuration file which may contain urls or secrets to call
+your model either in the cloud or local. This allows you to run the same set of
+tasks across many models with minimal changes to the test configuration.
+
+The `models.yaml` file in the root of this project has this format:
+
+```yaml
+models:
+#
+# Cloud model examples
+#
+- model_id: gpt-3.5
+  domain: openai_conversation
+  config_entry_data:
+    api_key: sk-XXXXXXXXXXXXXXXXXXXXXXXX
+
+- model_id: gemini-pro
+  domain: google_generative_ai_conversation
+  config_entry_data:
+    api_key: XXXXXXXXXXXXXXXXXXXXXXXX
+
+# Example using a custom component
+- model_id: mistral-7b-instruct
+  domain: vicuna_conversation
+  config_entry_data:
+    api_key: sk-0000000000000000000
+    base_url: http://llama-cublas.llama:8000/v1
+
+#
+# Ollama examples
+#
+
+- model_id: llama3
+  domain: ollama
+  config_entry_data:
+    url: https://ollama.example/"
+    model: "llama3:latest"
+
+- model_id: gemma
+  domain: ollama
+  config_entry_data:
+    url: https://ollama.k8s.mrv.thebends.org/"
+    model: "gemma:7b"
+```
+
+
 You can configure which models are in scope by changing the test fixtures.
 
 ```python
 @pytest.fixture(
-    name="model_config",
+    name="model_id",
     params=[
-        (ModelConfig("google_generative_ai_conversation", "gemini-pro")),
-        (ModelConfig("openai_conversation", "gpt-3.5")),
-        (ModelConfig("vicuna_conversation", "mistral-7b-instruct")),
+        "gemini-pro",
+        "gpt-3.5",
+        "mistral-7b-instruct",
     ],
 )
-def model_config_fixture(request: pytest.FixtureRequest) -> ModelConfig:
+def model_id_fixture(request: pytest.FixtureRequest) -> str:
     """Fiture that defines which model is being evaluated."""
     return request.param
 ```

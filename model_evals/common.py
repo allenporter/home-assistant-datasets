@@ -31,11 +31,22 @@ class HomeAssistantContext:
 class ModelConfig:
     """The configuration for the conversation agent under evaluation."""
 
-    conversation_agent_domain: str
-    """The domain under evaluation."""
-
     model_id: str
     """Details about the model name being evaluated if the domain supports multiple models."""
+
+    domain: str
+    """The domain under evaluation."""
+
+    config_entry_data: dict[str, Any]
+    """The configuration entry data."""
+
+
+@dataclass
+class Models:
+    """The configuration for the full set of models in the config file."""
+
+    models: list[ModelConfig]
+    """The list of models under configuration"""
 
 
 
