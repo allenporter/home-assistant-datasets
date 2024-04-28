@@ -106,15 +106,17 @@ def cleanup_response(response: str) -> str:
     return response[index+len(STRIP_PREFIX):]
 
 
+
 @pytest.fixture(
-    name="model_config",
+    name="model_id",
     params=[
-        (ModelConfig("google_generative_ai_conversation", "gemini-pro")),
-        (ModelConfig("openai_conversation", "gpt-3.5")),
-        (ModelConfig("vicuna_conversation", "mistral-7b-instruct")),
+        "gemma",
+        # "gemini-pro",
+        # "gpt-3.5",
+        # "mistral-7b-instruct",
     ],
 )
-def model_config_fixture(request: pytest.FixtureRequest) -> ModelConfig:
+def model_id_fixture(request: pytest.FixtureRequest) -> str:
     """Fiture that defines which model is being evaluated."""
     return request.param
 
