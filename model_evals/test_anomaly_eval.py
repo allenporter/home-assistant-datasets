@@ -67,7 +67,7 @@ def model_id_fixture(request: pytest.FixtureRequest) -> str:
 @pytest.fixture(
     name="prompt_label",
     params=[
-        #"zero-shot",
+        "zero-shot",
         # "3-shot",
         # "5-shot",
         "10-shot",
