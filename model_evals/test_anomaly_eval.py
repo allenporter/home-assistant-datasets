@@ -43,6 +43,8 @@ summary.
 EVAL_RECORDS_SPLIT = 0.7
 EXAMPLE_NUM = {
     "zero-shot": 0,
+    "3-shot": 3,
+    "5-shot": 5,
     "10-shot": 10,
 }
 
@@ -50,9 +52,9 @@ EXAMPLE_NUM = {
 @pytest.fixture(
     name="model_id",
     params=[
-        "llama3",
+        #"llama3",
         "gemma",
-        "mistral-7b-instruct",
+        #"mistral-7b-instruct",
         #"gemini-pro",
         #"gpt-3.5",
     ],
@@ -64,7 +66,12 @@ def model_id_fixture(request: pytest.FixtureRequest) -> str:
 
 @pytest.fixture(
     name="prompt_label",
-    params=["zero-shot", "10-shot"],
+    params=[
+        #"zero-shot",
+        # "3-shot",
+        # "5-shot",
+        "10-shot",
+    ],
 )
 def prompt_label_fixture(request: pytest.FixtureRequest) -> str:
     return request.param
