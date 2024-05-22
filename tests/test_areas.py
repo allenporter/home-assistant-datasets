@@ -22,7 +22,7 @@ AREA_FILES = [
     )
 )
 def test_areas(filename: pathlib.Path) -> None:
-    """Test that the area datasets are formatted properpy."""
+    """Test that the area datasets are formatted properly."""
 
     document = yaml.load(filename.read_text(), Loader=yaml.SafeLoader)
     assert "name" in document
