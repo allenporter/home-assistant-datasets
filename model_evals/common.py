@@ -40,6 +40,8 @@ class ModelConfig:
     config_entry_data: dict[str, Any]
     """The configuration entry data."""
 
+    config_entry_options: dict[str, Any] | None = None
+    """The configuration entry options."""
 
 @dataclass
 class Models:

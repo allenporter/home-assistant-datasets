@@ -7,6 +7,7 @@ from typing import Any
 import uuid
 from slugify import slugify
 import dataclasses
+from unittest.mock import patch
 
 import pytest
 from pytest_subtests import SubTests
@@ -23,18 +24,6 @@ from .common import SyntheticDeviceState, HomeAssistantContext, ModelConfig
 _LOGGER = logging.getLogger(__name__)
 
 MODEL_EVAL_OUTPUT = "model_outputs/device_actions"
-
-
-PROMPT = """
-Call the intent tools to control the system.
-"""
-
-
-def make_prompt(area_name: str) -> str:
-    """Create a prompt for the agent to summarize the area."""
-    return PROMPT.format(
-        area_name=area_name,
-    )
 
 
 
@@ -117,6 +106,19 @@ def tasks_provider_fixture(
     return func
 
 
+@pytest.fixture(name="prompt_context_recorder", autouse=True)
+def mock_record_prompt_contex_fixturet() -> None:
+    """A fixture to record generative model prompts."""
+
+    # def side_effect(*args, **kwargs):
+    #     _LOGGER.info("side_effect called arg:  %s", args)
+    #     _LOGGER.info("side_effect called kw:  %s", kwargs)
+
+    # with patch("homeassistant.components.google_generative_ai_conversation.conversation.genai.GenerativeModel.start_chat", side_effect=side_effect) as mock_model:
+    #     yield
+
+
+
 def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -> dict[str, Any]:
     """Return information about a device used for dumping a context record."""
     detail = {}
@@ -188,10 +190,8 @@ async def test_collect_device_actions(
 
             # Run the conversation agent
             text = device_action_task.input_text
-            prompt = make_prompt(text)
-            _LOGGER.info("Performing device action: %s", text)
-            _LOGGER.debug("Prompt: %s", prompt)
-            response = await agent.async_process(hass, prompt)
+            _LOGGER.debug("Prompt: %s", text)
+            response = await agent.async_process(hass, text)
             _LOGGER.debug("Response: %s", response)
 
             eval_record_writer.write(
