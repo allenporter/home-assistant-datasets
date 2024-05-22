@@ -74,6 +74,9 @@ class DeviceActionTask:
     device_state: SyntheticDeviceState
     """The device state details  about the state of the devices under evaluation"""
 
+    expected_device_state: SyntheticDeviceState
+    """The device state details that are expected to be true after the task completes."""
+
     @property
     def task_id(self) -> str:
         """An identifier that labels this area summary evaluation task."""
@@ -88,35 +91,39 @@ def tasks_provider_fixture(
 ) -> Callable[[], Generator[DeviceActionTask, None, None]]:
     """Fixture that generates the tasks to evaluate."""
 
-    synthetic_home_config = yaml.load(synthetic_home_yaml, Loader=yaml.Loader)
+    synthetic_home_config = yaml.load(synthetic_home_yaml, Loader=yaml.SafeLoader)
     home_name = synthetic_home_config["name"]
     home_id = slugify(home_name)
+    country_code = synthetic_home_config["country_code"].lower()
+
+
+    device_actions_file = pathlib.Path(f"datasets/device-actions/{home_id}-{country_code}.yaml")
+    docs = yaml.load_all(device_actions_file.read_text(), Loader=yaml.SafeLoader)
 
     def func() -> Generator[DeviceActionTask, None, None]:
-        yield DeviceActionTask(
-            home_id=home_id,
-            area_name="Bedroom 3",
-            input_text="Please turn on the bedroom 3 light",
-            device_state=SyntheticDeviceState(
-                device_name="Bedroom 3 Light",
-                restorable_attribute="off",
-            ),
-        )
+        for doc in docs:
+            device_name = doc["device"]["name"]
+            device_area = doc["device"]["area"]
+            for action in doc["actions"]:
+                sentences = action["sentences"]
+                device_state = action["device_state"]
+                expected_device_state = action["expected_device_state"]
+                for sentence in sentences:
+                    yield DeviceActionTask(
+                        home_id=home_id,
+                        area_name=device_area,
+                        input_text=sentence,
+                        device_state=SyntheticDeviceState(
+                            device_name=device_name,
+                            restorable_attribute=device_state,
+                        ),
+                        expected_device_state=SyntheticDeviceState(
+                            device_name=device_name,
+                            restorable_attribute=expected_device_state,
+                        ),
+                    )
 
     return func
-
-
-@pytest.fixture(name="prompt_context_recorder", autouse=True)
-def mock_record_prompt_contex_fixturet() -> None:
-    """A fixture to record generative model prompts."""
-
-    # def side_effect(*args, **kwargs):
-    #     _LOGGER.info("side_effect called arg:  %s", args)
-    #     _LOGGER.info("side_effect called kw:  %s", kwargs)
-
-    # with patch("homeassistant.components.google_generative_ai_conversation.conversation.genai.GenerativeModel.start_chat", side_effect=side_effect) as mock_model:
-    #     yield
-
 
 
 def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -> dict[str, Any]:
@@ -135,9 +142,6 @@ def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -
             if uom := state.attributes.get("unit_of_measurement"):
                 state_str = f"{state_str} {uom}"
             detail[entity_entry.entity_id] = state_str
-
-    action_trace = trace.trace_get(clear=False)
-    detail["action_trace"] = action_trace
 
     return detail
 
@@ -169,11 +173,13 @@ async def prepare_state_fixture(
 
     return func
 
-
+@pytest.mark.parametrize("expected_lingering_timers", [(True)])
 @pytest.mark.parametrize(
     ("synthetic_home_config"),
     [
-        ("datasets/devices/apartament4-pl.yaml"),
+        # ("datasets/devices/dom1-pl.yaml"),
+        ("datasets/devices/home1-us.yaml"),
+        # ("datasets/devices/home7-dk.yaml"),
     ],
 )
 async def test_collect_device_actions(
@@ -190,6 +196,7 @@ async def test_collect_device_actions(
         with subtests.test(msg=device_action_task.task_id, i=i):
 
             # Setup the home for evaluation
+            trace.trace_clear()
             context = await prepare_state(device_action_task)
 
             # Run the conversation agent
