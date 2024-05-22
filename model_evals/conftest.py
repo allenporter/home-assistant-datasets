@@ -81,7 +81,7 @@ async def mock_synthetic_home(hass: HomeAssistant, synthetic_home_yaml: str | No
     config_entry.add_to_hass(hass)
 
     with patch(
-        "custom_components.synthetic_home.home_model.synthetic_home.read_config_content",
+        "synthetic_home.synthetic_home.read_config_content",
         mock_open(read_data=synthetic_home_yaml),
     ):
         await hass.config_entries.async_setup(config_entry.entry_id)
@@ -116,10 +116,15 @@ async def mock_conversation_agent_config_entry(
     model_config: ModelConfig,
     system_prompt: str | None
 ) -> MockConfigEntry:
+    options = {}
+    if model_config.config_entry_options:
+        options.update(model_config.config_entry_options)
+    if system_prompt:
+        options["prompt"] = system_prompt
     config_entry = MockConfigEntry(
         domain=model_config.domain,
         data=model_config.config_entry_data,
-        options={"prompt": system_prompt} if system_prompt else {},
+        options=options,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
