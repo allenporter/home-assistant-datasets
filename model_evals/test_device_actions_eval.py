@@ -15,7 +15,7 @@ import yaml
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import entity_registry as er, device_registry as dr
+from homeassistant.helpers import entity_registry as er, device_registry as dr, trace
 
 from .conftest import ConversationAgent, EvalRecordWriter
 from .common import SyntheticDeviceState, HomeAssistantContext, ModelConfig
@@ -135,6 +135,10 @@ def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -
             if uom := state.attributes.get("unit_of_measurement"):
                 state_str = f"{state_str} {uom}"
             detail[entity_entry.entity_id] = state_str
+
+    action_trace = trace.trace_get(clear=False)
+    detail["action_trace"] = action_trace
+
     return detail
 
 
@@ -193,6 +197,14 @@ async def test_collect_device_actions(
             _LOGGER.debug("Prompt: %s", text)
             response = await agent.async_process(hass, text)
             _LOGGER.debug("Response: %s", response)
+
+            context.device_context["trace"] = {
+                k: [
+                    item.as_dict()
+                    for item in items
+                ]
+                for k, items in trace.trace_get(clear=False).items()
+            }
 
             eval_record_writer.write(
                 {
