@@ -9,7 +9,7 @@ import yaml
 import synthetic_home
 
 
-AREA_FILES = [
+DEVICE_FILES = [
     filename
     for filename in pathlib.Path("datasets/devices/").glob("*.yaml")
 ]
@@ -18,14 +18,14 @@ AREA_FILES = [
 @pytest.mark.parametrize(
     ("filename"),
     [
-        (filename) for filename in AREA_FILES
+        (filename) for filename in DEVICE_FILES
     ],
     ids=(
-        str(filename) for filename in AREA_FILES
+        str(filename) for filename in DEVICE_FILES
     )
 )
 def test_devices(filename: pathlib.Path) -> None:
-    """Test that the area datasets are formatted properly."""
+    """Test that the device datasets are formatted properly."""
 
     registry = synthetic_home.device_types.load_device_type_registry()
 
