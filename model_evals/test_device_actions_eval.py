@@ -177,9 +177,9 @@ async def prepare_state_fixture(
 @pytest.mark.parametrize(
     ("synthetic_home_config"),
     [
-        # ("datasets/devices/dom1-pl.yaml"),
+        ("datasets/devices/dom1-pl.yaml"),
         ("datasets/devices/home1-us.yaml"),
-        # ("datasets/devices/home7-dk.yaml"),
+        ("datasets/devices/home7-dk.yaml"),
     ],
 )
 async def test_collect_device_actions(
