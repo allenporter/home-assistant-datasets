@@ -2,7 +2,7 @@
 
 ## Pre-requisites
 
-1. Create the virtual environment
+1. Create your virtual environment. If using a dev container just install the pip requirements.
 
     ```bash
     $ python3 -m venv venv
@@ -14,13 +14,15 @@
 The evaluations require custom components. You'll need to clone these and configure
 them for use.
 
-1. Configure any needed custom components under evaluation
+1. Configure any needed custom components under evaluation. You will need to clone somewhere https://github.com/allenporter/home-assistant-synthetic-home if using the evaluations in this package. If you are only
+evaluating AI agents from home assistant core you can just add `home-assistant-synthetic-home` to the path:
 
 ```bash
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/custom_components/:${PWD}/../home-assistant-synthetic-home/"
 ```
 
-Here is another example that configures multiple custom components for local AI:
+Here is another example that configures multiple custom components when using local AI outside of
+the core components in Home Assistant.
 
 ```bash
 $ mkdir custom_components
@@ -39,7 +41,8 @@ shorthand yaml configuration file which may contain urls or secrets to call
 your model either in the cloud or local. This allows you to run the same set of
 tasks across many models with minimal changes to the test configuration.
 
-The `models.yaml` file in the root of this project has this format:
+Create a `models.yaml` file in the root of this project has this format. This
+file is not checked into git and is private to you.
 
 ```yaml
 models:
@@ -50,11 +53,16 @@ models:
   domain: openai_conversation
   config_entry_data:
     api_key: sk-XXXXXXXXXXXXXXXXXXXXXXXX
+  config_entry_options:
+    llm_hass_api: assist
 
-- model_id: gemini-pro
+- model_id: gemini-1.5-flash
   domain: google_generative_ai_conversation
   config_entry_data:
     api_key: XXXXXXXXXXXXXXXXXXXXXXXX
+  config_entry_options:
+    chat_model: models/gemini-1.5-flash-latest
+    llm_hass_api: assist
 
 # Example using a custom component
 - model_id: mistral-7b-instruct
@@ -62,6 +70,8 @@ models:
   config_entry_data:
     api_key: sk-0000000000000000000
     base_url: http://llama-cublas.llama:8000/v1
+  config_entry_options:
+    llm_hass_api: assist
 
 #
 # Ollama examples
@@ -99,35 +109,42 @@ def model_id_fixture(request: pytest.FixtureRequest) -> str:
 
 ## Synthetic Home Config
 
+Most evaluations start up a synthetic home to use when testing. You can configure
+which homes to test with a fixture.
+
 ```python
-@pytest.mark.parametrize(
-    ("synthetic_home_config"),
-    [
-        ("datasets/devices/home1-us.yaml"),
-        ("datasets/devices/apartament4-pl.yaml"),
-        ("datasets/devices/casa-adosada-en-la-costa-es.yaml"),
-        ("datasets/devices/lakeside-retreat-de.yaml"),
+@pytest.fixture(
+    name="synthetic_home_config",
+    params=[
+        "datasets/devices/dom1-pl.yaml",
+        "datasets/devices/home1-us.yaml",
+        "datasets/devices/home7-dk.yaml",
     ],
 )
-async def test_collect_area_summaries(
+def synthetic_home_config_fixture(request: pytest.FixtureRequest) -> str:
+    """Fiture that defines the synthetic home configuration to use."""
+    return request.param
 ```
 
-## Configure secrets
+## Eval Design
 
-The configuration entries can reference secrets outside of the code, so
-you can stick them in `secrets.yaml` which is in the `.gitignore`:
+The actual eval itself is a pytest test. Most evaluations use the following fixtures or data types:
 
-```yaml
-openai_api_key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-google_api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-vicuna_convesation_base_url: http://llama-cublas.llama:8000/v1
-```
+- A task is typically a `@dataclass` that defines the unit of work to do.
+- `tasks_provider`: Creates the actual parameters to use during the evaluation. This may
+  read content from a yaml file and populate the task dataclass. For example,
+  it may contain a set of devices, their state, and a conversation agent command.
+- `prepare_state_fixture`: Sets the synthethic home device state as needed by the task
+- `eval_record_writer`: Records the output of the conversation agent and any additioanl context
+  needed to perform an evaluation (either offline or by human).
+- A test: Consumes tasks from the task provider, sets the state with the state fixture,
+  and calls the conversation agent.
 
-## Running the eval
+## Running Data Collection
 
-You can run the evaluation like this. **Note** that this will be making expensive
+You can run the model evaluation to collect convesation agent outputs like this. **Note** that this will be making expensive
 LLM calls.
 
 ```shell
-py.test evals/test_area_summary_eval.py
+py.test evals/test_device_actions_eval.py
 ```
