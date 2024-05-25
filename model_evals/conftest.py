@@ -71,13 +71,17 @@ def mock_synthetic_home_content(synthetic_home_config: str | None) -> str | None
 
 
 @pytest.fixture(autouse=True, name="synthetic_home_config_entry")
-async def mock_synthetic_home(hass: HomeAssistant, synthetic_home_yaml: str | None) -> MockConfigEntry | None:
+async def mock_synthetic_home(
+    hass: HomeAssistant, synthetic_home_yaml: str | None
+) -> MockConfigEntry | None:
     """Fixture for mock configuration entry."""
     if synthetic_home_yaml is None:
         yield None
         return
 
-    config_entry = MockConfigEntry(domain="synthetic_home", data={"config_filename": "ignored"})
+    config_entry = MockConfigEntry(
+        domain="synthetic_home", data={"config_filename": "ignored"}
+    )
     config_entry.add_to_hass(hass)
 
     with patch(
@@ -107,14 +111,14 @@ async def model_config(model_id: str) -> ModelConfig:
         if (config := ModelConfig(**model)).model_id == model_id:
             return config
 
-    raise ValueError(f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}")
+    raise ValueError(
+        f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}"
+    )
 
 
 @pytest.fixture(name="conversation_agent_config_entry")
 async def mock_conversation_agent_config_entry(
-    hass: HomeAssistant,
-    model_config: ModelConfig,
-    system_prompt: str | None
+    hass: HomeAssistant, model_config: ModelConfig, system_prompt: str | None
 ) -> MockConfigEntry:
     options = {}
     if model_config.config_entry_options:
@@ -197,3 +201,20 @@ class EvalRecordWriter:
         if self._fd is not None:
             self._fd.close()
             self._fd = None
+
+
+@pytest.fixture(name="eval_record_writer")
+def eval_record_writer_fixture(
+    hass: HomeAssistant,
+    model_config: ModelConfig,
+    synthetic_home_config: str,
+    eval_output_dir: str,
+) -> Generator[EvalRecordWriter, None, None]:
+    """Fixture that prepares the eval output writer."""
+    writer = EvalRecordWriter(
+        pathlib.Path(eval_output_dir) / model_config.model_id,
+        pathlib.Path(synthetic_home_config).name,
+    )
+    writer.open()
+    yield writer
+    writer.close()

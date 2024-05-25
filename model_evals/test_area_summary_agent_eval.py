@@ -3,6 +3,7 @@
 from collections.abc import Generator, Callable, Awaitable
 import logging
 import pathlib
+from dataclasses import dataclass
 from typing import Any
 import uuid
 from slugify import slugify
@@ -14,14 +15,20 @@ import yaml
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
-from homeassistant.helpers import area_registry as ar, entity_registry as er, device_registry as dr
+from homeassistant.helpers import (
+    area_registry as ar,
+    entity_registry as er,
+    device_registry as dr,
+)
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.synthetic_home.home_model.device_types import load_restorable_attributes
+from custom_components.synthetic_home.home_model.device_types import (
+    load_restorable_attributes,
+)
 
 from .conftest import ConversationAgent, EvalRecordWriter
-from .common import SyntheticDeviceState, HomeAssistantContext, ModelConfig, AreaSummaryTask
+from .common import HomeAssistantContext, ModelConfig
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -29,6 +36,7 @@ _LOGGER = logging.getLogger(__name__)
 MODEL_EVAL_OUTPUT = "model_outputs/area_summary_agent"
 
 STRIP_PREFIX = "Summary: "
+
 
 @pytest.fixture(
     name="model_id",
@@ -53,7 +61,9 @@ async def mock_base_conversation_agent_id(
 
 
 @pytest.fixture(name="summary_agent_config_entry")
-async def mock_summary_agent(hass: HomeAssistant, base_conversation_agent_id: str) -> MockConfigEntry:
+async def mock_summary_agent(
+    hass: HomeAssistant, base_conversation_agent_id: str
+) -> MockConfigEntry:
     # Ensure custom components used in the test are loaded
     from custom_components import summary_agent  # noqa: F401
 
@@ -84,14 +94,12 @@ def cleanup_response(response: str) -> str:
         index = response.index(STRIP_PREFIX)
     except ValueError:
         return response
-    return response[index+len(STRIP_PREFIX):]
+    return response[index + len(STRIP_PREFIX) :]
 
 
 @pytest.fixture(name="eval_record_writer")
 def eval_record_writer_fixture(
-    hass: HomeAssistant,
-    model_config: ModelConfig,
-    synthetic_home_config: str
+    hass: HomeAssistant, model_config: ModelConfig, synthetic_home_config: str
 ) -> Generator[EvalRecordWriter, None, None]:
     """Fixture that prepares the eval output writer."""
     writer = EvalRecordWriter(
@@ -103,10 +111,49 @@ def eval_record_writer_fixture(
     writer.close()
 
 
+@dataclass
+class SyntheticDeviceState:
+    """Information needed to set the synthetic state for an evaluation task."""
+
+    device_name: str
+    restorable_attribute: str
+
+    @property
+    def state_label(self) -> str:
+        """Identifier about the state of the devices under evaluation"""
+        return f"{slugify(self.device_name)}-{slugify(self.restorable_attribute)}"
+
+
+@dataclass
+class AreaSummaryTask:
+    """Detail about the task that is being evaluated."""
+
+    home_id: str
+    """Identifier for the synethetic home."""
+
+    home_name: str
+    """Human readable name for the home for context."""
+
+    area_id: str
+    """Identifier for the area being summarized."""
+
+    area_name: str
+    """Area name within the home that is being summarized and evaluated."""
+
+    device_state: SyntheticDeviceState
+    """The device state details about the state of the devices under evaluation"""
+
+    @property
+    def task_id(self) -> str:
+        """An identifier that labels this area summary evaluation task."""
+        return (
+            f"{self.home_id}-{slugify(self.area_name)}-{self.device_state.state_label}"
+        )
+
+
 @pytest.fixture(name="tasks_provider")
 def tasks_provider_fixture(
-    hass: HomeAssistant,
-    synthetic_home_yaml: str
+    hass: HomeAssistant, synthetic_home_yaml: str
 ) -> Callable[[], Generator[AreaSummaryTask, None, None]]:
     """Fixture that generates the tasks to evaluate."""
 
@@ -140,7 +187,9 @@ def tasks_provider_fixture(
     return func
 
 
-def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -> dict[str, Any]:
+def get_device_eval_context(
+    hass: HomeAssistant, device_entry: dr.DeviceEntry
+) -> dict[str, Any]:
     """Return information about a device used for dumping a context record."""
     detail = {}
     # Dump device information
@@ -161,14 +210,17 @@ def get_device_eval_context(hass: HomeAssistant, device_entry: dr.DeviceEntry) -
 
 @pytest.fixture(name="prepare_state")
 async def prepare_state_fixture(
-    hass: HomeAssistant,
-    synthetic_home_config_entry: ConfigEntry
+    hass: HomeAssistant, synthetic_home_config_entry: ConfigEntry
 ) -> Callable[[AreaSummaryTask], Awaitable[None]]:
     """Fixture with a function call to change device state for evaluation."""
 
     async def func(area_summary_task: AreaSummaryTask) -> None:
         device_state = area_summary_task.device_state
-        _LOGGER.info("Changing device state for %s to %s", device_state.device_name, device_state.restorable_attribute)
+        _LOGGER.info(
+            "Changing device state for %s to %s",
+            device_state.device_name,
+            device_state.restorable_attribute,
+        )
         await hass.services.async_call(
             "synthetic_home",
             "set_synthetic_device_state",
@@ -182,10 +234,14 @@ async def prepare_state_fixture(
         )
 
         device_registry = dr.async_get(hass)
-        return HomeAssistantContext(device_context={
-            device_entry.name: get_device_eval_context(hass, device_entry)
-            for device_entry in dr.async_entries_for_area(device_registry, area_summary_task.area_id)
-        })
+        return HomeAssistantContext(
+            device_context={
+                device_entry.name: get_device_eval_context(hass, device_entry)
+                for device_entry in dr.async_entries_for_area(
+                    device_registry, area_summary_task.area_id
+                )
+            }
+        )
 
     return func
 
