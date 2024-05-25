@@ -33,11 +33,9 @@ def eval_output_dir_fixture() -> str:
 @pytest.fixture(
     name="model_id",
     params=[
-        # "gemini-1.5-flash",
-        "gpt-3.5",
+        "gemini-1.5-flash",
+        "gpt-4o",
         # "mistral-7b-instruct",
-        # Have not tested with these models yet
-        # "gemma",
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
@@ -48,6 +46,7 @@ def model_id_fixture(request: pytest.FixtureRequest) -> str:
 @pytest.fixture(
     name="synthetic_home_config",
     params=[
+        "datasets/devices/desert-retreat-us.yaml",
         "datasets/devices/dom1-pl.yaml",
         "datasets/devices/home1-us.yaml",
         "datasets/devices/home7-dk.yaml",

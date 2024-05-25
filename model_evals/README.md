@@ -49,10 +49,11 @@ models:
 #
 # Cloud model examples
 #
-- model_id: gpt-3.5
+- model_id: gpt-4o
   domain: openai_conversation
   config_entry_data:
     api_key: sk-XXXXXXXXXXXXXXXXXXXXXXXX
+    chat_model: gpt-4o
   config_entry_options:
     llm_hass_api: assist
 
@@ -97,8 +98,8 @@ You can configure which models are in scope by changing the test fixtures.
 @pytest.fixture(
     name="model_id",
     params=[
-        "gemini-pro",
-        "gpt-3.5",
+        "gemini-1.5-flash",
+        "gpt-4o",
         "mistral-7b-instruct",
     ],
 )
