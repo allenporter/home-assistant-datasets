@@ -15,6 +15,7 @@ import yaml
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import device_registry as dr
+from homeassistant.components.conversation import trace
 
 from .conftest import ConversationAgent, EvalRecordWriter
 from .common import HomeAssistantContext
@@ -155,6 +156,7 @@ async def prepare_state_fixture(
                 },
                 blocking=True,
             )
+            await hass.async_block_till_done()
 
         return HomeAssistantContext()
 
@@ -182,7 +184,11 @@ async def test_collect_device_actions(
             text = device_action_task.input_text
             _LOGGER.debug("Prompt: %s", text)
             response = await agent.async_process(hass, text)
+            await hass.async_block_till_done()
             _LOGGER.debug("Response: %s", response)
+
+            if (traces := trace.async_get_traces()) and (last_trace := traces[-1]):
+                context.conversation_trace = last_trace.as_dict()
 
             eval_record_writer.write(
                 {

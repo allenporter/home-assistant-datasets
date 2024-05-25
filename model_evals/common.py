@@ -6,11 +6,13 @@ from dataclasses import dataclass, field
 
 @dataclass
 class HomeAssistantContext:
-    """Additional context about the actual state of Home Assistant that si being evaluated."""
+    """Additional context about the actual state of Home Assistant that is being evaluated."""
 
     device_context: dict[str, Any] = field(default_factory=dict)
     """Details that reflect the actual synthetic device states under evaluation."""
 
+    conversation_trace: dict[str, Any] = field(default_factory=dict)
+    """Details that reflect the actual synthetic device states under evaluation."""
 
 @dataclass
 class ModelConfig:
