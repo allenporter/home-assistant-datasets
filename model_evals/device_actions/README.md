@@ -60,7 +60,40 @@ model name defines a config entry and the conversation agent to use during evalu
 Here is an example `models.yaml`:
 
 ```yaml
+models:
+- model_id: assistant
+  domain: homeassistant
 
+- model_id: gemini-1.5-flash
+  domain: google_generative_ai_conversation
+  config_entry_data:
+    api_key: XXXXXXXXXXXX
+  config_entry_options:
+    chat_model: models/gemini-1.5-flash-latest
+    llm_hass_api: assist
+
+- model_id: gpt-4o
+  domain: openai_conversation
+  config_entry_data:
+    api_key: sk-XXXXXXXXXXXX
+    chat_model: gpt-4o
+  config_entry_options:
+    llm_hass_api: assist
+
+# Update when ollama supports tool calling
+- model_id: llama3
+  domain: ollama
+  config_entry_data:
+    url: http://ollama.ollama:11434/
+    model: llama3:latest
+
+- model_id: mistral-7b-instruct
+  domain: vicuna_conversation
+  config_entry_data:
+    api_key: sk-0000000000000000000
+    base_url: http://llama-cublas.llama:8000/v1
+  config_entry_options:
+    llm_hass_api: assist
 ```
 
 ```python

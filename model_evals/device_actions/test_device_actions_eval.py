@@ -33,9 +33,11 @@ _LOGGER = logging.getLogger(__name__)
 @pytest.fixture(
     name="model_id",
     params=[
-        "assistant"
-        # "gemini-1.5-flash",
+        # "assistant",
+        # "gpt-3.5",
         # "gpt-4o",
+        "gemini-1.5-flash",
+        # "gemini-pro",
         # "mistral-7b-instruct",
     ],
 )
@@ -133,7 +135,7 @@ async def test_collect_device_actions(
             _LOGGER.debug("Prompt: %s", text)
             try:
                 response = await agent.async_process(hass, text)
-            except HomeAssistantError as err:
+            except (HomeAssistantError, TypeError) as err:
                 response = str(err)
             await hass.async_block_till_done()
             _LOGGER.debug("Response: %s", response)
