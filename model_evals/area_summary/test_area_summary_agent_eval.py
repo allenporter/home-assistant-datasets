@@ -1,4 +1,7 @@
-"""An evaluation for the Summary Agent custom component summarizing an area with pruned context."""
+"""An evaluation for the Summary Agent custom component summarizing an area with pruned context.
+
+This generates the tasks to evaluate based on the active areas and devices in the home.
+"""
 
 from collections.abc import Generator, Callable, Awaitable
 import logging
@@ -23,17 +26,15 @@ from homeassistant.helpers import (
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.synthetic_home.home_model.device_types import (
-    load_restorable_attributes,
-)
+from synthetic_home.device_types import load_device_type_registry
 
-from .conftest import ConversationAgent, EvalRecordWriter
-from .common import HomeAssistantContext, ModelConfig
+from model_evals.common.conftest import ConversationAgent, EvalRecordWriter
+from model_evals.common.common import HomeAssistantContext
 
 
 _LOGGER = logging.getLogger(__name__)
 
-MODEL_EVAL_OUTPUT = "model_outputs/area_summary_agent"
+MODEL_EVAL_OUTPUT = "model_evals/area_summary/output/area_summary_agent"
 
 STRIP_PREFIX = "Summary: "
 
@@ -97,31 +98,28 @@ def cleanup_response(response: str) -> str:
     return response[index + len(STRIP_PREFIX) :]
 
 
-@pytest.fixture(name="eval_record_writer")
-def eval_record_writer_fixture(
-    hass: HomeAssistant, model_config: ModelConfig, synthetic_home_config: str
-) -> Generator[EvalRecordWriter, None, None]:
-    """Fixture that prepares the eval output writer."""
-    writer = EvalRecordWriter(
-        pathlib.Path(MODEL_EVAL_OUTPUT) / model_config.model_id,
-        pathlib.Path(synthetic_home_config).name,
-    )
-    writer.open()
-    yield writer
-    writer.close()
+@pytest.fixture(name="eval_output_file")
+def eval_output_file_fixture(model_id: str, synthetic_home_config: str) -> str:
+    """Sets the output filename for the evaluation run.
 
+    This output file needs to be unique across the test instances to avoid overwriting. For
+    example if you add a parameter based on the system prompt then this needs to create
+    a separate file containing an id of the prompt.
+    """
+    home_file = pathlib.Path(synthetic_home_config).name
+    return pathlib.Path(f"{MODEL_EVAL_OUTPUT}/{model_id}/{home_file}")
 
 @dataclass
-class SyntheticDeviceState:
+class DeviceState:
     """Information needed to set the synthetic state for an evaluation task."""
 
     device_name: str
-    restorable_attribute: str
+    device_state: str
 
     @property
     def state_label(self) -> str:
         """Identifier about the state of the devices under evaluation"""
-        return f"{slugify(self.device_name)}-{slugify(self.restorable_attribute)}"
+        return f"{slugify(self.device_name)}-{slugify(self.device_state)}"
 
 
 @dataclass
@@ -140,7 +138,7 @@ class AreaSummaryTask:
     area_name: str
     """Area name within the home that is being summarized and evaluated."""
 
-    device_state: SyntheticDeviceState
+    device_state: DeviceState
     """The device state details about the state of the devices under evaluation"""
 
     @property
@@ -165,6 +163,8 @@ def tasks_provider_fixture(
     area_entries = list(area_registry.async_list_areas())
     _LOGGER.info("Loaded %s areas to evaluate", len(area_entries))
 
+    device_type_registry = load_device_type_registry()
+
     def func() -> Generator[AreaSummaryTask, None, None]:
         for area_entry in area_entries:
             area_name = area_entry.name
@@ -172,16 +172,18 @@ def tasks_provider_fixture(
             if (devices := synthetic_home_config["devices"].get(area_name)) is None:
                 return
             for device_info in devices:
-                attributes = load_restorable_attributes(device_info["device_type"])
-                for attribute in attributes:
-                    device_state = SyntheticDeviceState(device_info["name"], attribute)
-
+                device_type = device_type_registry.device_types[
+                    device_info["device_type"]
+                ]
+                for device_state in device_type.device_states:
                     yield AreaSummaryTask(
                         home_id=home_id,
                         home_name=home_name,
                         area_id=area_entry.id,
                         area_name=area_name,
-                        device_state=device_state,
+                        device_state=DeviceState(
+                            device_info["name"], device_state.name
+                        ),
                     )
 
     return func
@@ -219,7 +221,7 @@ async def prepare_state_fixture(
         _LOGGER.info(
             "Changing device state for %s to %s",
             device_state.device_name,
-            device_state.restorable_attribute,
+            device_state.device_state,
         )
         await hass.services.async_call(
             "synthetic_home",
@@ -228,7 +230,7 @@ async def prepare_state_fixture(
                 "config_entry_id": synthetic_home_config_entry.entry_id,
                 "area": area_summary_task.area_name,
                 "device": device_state.device_name,
-                "restorable_attribute_key": device_state.restorable_attribute,
+                "device_state_key": device_state.device_state,
             },
             blocking=True,
         )

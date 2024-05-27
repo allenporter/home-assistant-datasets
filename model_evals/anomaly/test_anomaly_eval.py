@@ -3,7 +3,6 @@
 from collections.abc import Generator, Callable
 import logging
 import pathlib
-import asyncio
 from dataclasses import dataclass
 import hashlib
 import uuid
@@ -17,7 +16,6 @@ import yaml
 from homeassistant.core import HomeAssistant
 
 
-
 from .conftest import ConversationAgent, EvalRecordWriter
 from .common import ModelConfig
 
@@ -26,7 +24,7 @@ _LOGGER = logging.getLogger(__name__)
 
 MODEL_EVAL_OUTPUT = "model_outputs/anomaly"
 DATASET_FILE = "datasets/anomaly/anomaly.yaml"
-VALID_LABELS = ['normal', 'anomaly']
+VALID_LABELS = ["normal", "anomaly"]
 
 BASE_PROMPT = """
 You are a Home Automation Agent that will classify the state of an area of a
@@ -52,11 +50,11 @@ EXAMPLE_NUM = {
 @pytest.fixture(
     name="model_id",
     params=[
-        #"llama3",
+        # "llama3",
         "gemma",
-        #"mistral-7b-instruct",
-        #"gemini-pro",
-        #"gpt-3.5",
+        # "mistral-7b-instruct",
+        # "gemini-pro",
+        # "gpt-3.5",
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
@@ -127,13 +125,13 @@ def mock_dataset_records() -> list[dict[str, str]]:
 @pytest.fixture(name="eval_split")
 def mock_eval_records(dataset_records: list[dict[str, str]]) -> list[dict[str, str]]:
     """Fixture to read the dataset yaml contennts."""
-    return dataset_records[:int(EVAL_RECORDS_SPLIT * len(dataset_records))]
+    return dataset_records[: int(EVAL_RECORDS_SPLIT * len(dataset_records))]
 
 
 @pytest.fixture(name="fewshot_split")
 def mock_fewshot_records(dataset_records: list[dict[str, str]]) -> list[dict[str, str]]:
     """Fixture to read the dataset yaml contennts."""
-    return dataset_records[int(EVAL_RECORDS_SPLIT * len(dataset_records)):]
+    return dataset_records[int(EVAL_RECORDS_SPLIT * len(dataset_records)) :]
 
 
 @pytest.fixture(name="tasks_provider")
@@ -155,9 +153,10 @@ def tasks_provider_fixture(
     return func
 
 
-
 @pytest.fixture(name="system_prompt")
-def mock_system_prompt(prompt_label: str, fewshot_split: list[dict[str, str]]) -> list[dict[str, str]]:
+def mock_system_prompt(
+    prompt_label: str, fewshot_split: list[dict[str, str]]
+) -> list[dict[str, str]]:
     """Fixture to read the dataset yaml contennts."""
     records = fewshot_split
     random.shuffle(records)

@@ -14,6 +14,7 @@ class HomeAssistantContext:
     conversation_trace: dict[str, Any] = field(default_factory=dict)
     """Details that reflect the actual synthetic device states under evaluation."""
 
+
 @dataclass
 class ModelConfig:
     """The configuration for the conversation agent under evaluation."""

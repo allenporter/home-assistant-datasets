@@ -73,7 +73,7 @@ def mock_synthetic_home_content(synthetic_home_config: str | None) -> str | None
 @pytest.fixture(autouse=True, name="synthetic_home_config_entry")
 async def mock_synthetic_home(
     hass: HomeAssistant, synthetic_home_yaml: str | None
-) -> MockConfigEntry | None:
+) -> Generator[MockConfigEntry | None]:
     """Fixture for mock configuration entry."""
     if synthetic_home_yaml is None:
         yield None
@@ -173,10 +173,10 @@ async def mock_agent(conversation_agent_id: str) -> ConversationAgent:
 class EvalRecordWriter:
     """Writes records to the eval output."""
 
-    def __init__(self, eval_dir: pathlib.Path, filename: str):
+    def __init__(self, filename: pathlib.Path):
         """Initialize EvalRecordWriter."""
-        os.makedirs(eval_dir, exist_ok=True)
-        self._eval_output = eval_dir / filename
+        os.makedirs(filename.parent, exist_ok=True)
+        self._eval_output = filename
         self._fd: TextIO | None = None
 
     def open(self) -> None:
@@ -206,15 +206,10 @@ class EvalRecordWriter:
 @pytest.fixture(name="eval_record_writer")
 def eval_record_writer_fixture(
     hass: HomeAssistant,
-    model_config: ModelConfig,
-    synthetic_home_config: str,
-    eval_output_dir: str,
+    eval_output_file: pathlib.Path,
 ) -> Generator[EvalRecordWriter, None, None]:
     """Fixture that prepares the eval output writer."""
-    writer = EvalRecordWriter(
-        pathlib.Path(eval_output_dir) / model_config.model_id,
-        pathlib.Path(synthetic_home_config).name,
-    )
+    writer = EvalRecordWriter(eval_output_file)
     writer.open()
     yield writer
     writer.close()
