@@ -11,6 +11,7 @@ from pytest_subtests import SubTests
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry as dr
 from homeassistant.components.conversation import trace
 
@@ -32,9 +33,10 @@ _LOGGER = logging.getLogger(__name__)
 @pytest.fixture(
     name="model_id",
     params=[
+        "assistant"
         # "gemini-1.5-flash",
         # "gpt-4o",
-        "mistral-7b-instruct",
+        # "mistral-7b-instruct",
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
@@ -60,7 +62,7 @@ def eval_output_file_fixture(model_id: str, record_filename: str) -> str:
     example if you add a parameter based on the system prompt then this needs to create
     a separate file containing an id of the prompt.
     """
-    return pathlib.Path(f"{DIR}/output/{model_id}/{record_filename.name}.yaml")
+    return pathlib.Path(f"{DIR}/output/{model_id}/{record_filename.name}")
 
 
 @pytest.fixture(name="record")
@@ -108,7 +110,6 @@ async def prepare_state_fixture(
     return func
 
 
-@pytest.mark.parametrize("expected_lingering_timers", [(True)])
 async def test_collect_device_actions(
     hass: HomeAssistant,
     agent: ConversationAgent,
@@ -130,7 +131,10 @@ async def test_collect_device_actions(
             # Run the conversation agent
             text = device_action_task.input_text
             _LOGGER.debug("Prompt: %s", text)
-            response = await agent.async_process(hass, text)
+            try:
+                response = await agent.async_process(hass, text)
+            except HomeAssistantError as err:
+                response = str(err)
             await hass.async_block_till_done()
             _LOGGER.debug("Response: %s", response)
 

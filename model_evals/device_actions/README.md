@@ -57,6 +57,12 @@ or manually adjusting which data collection tasks are in scope.
 See the [model config](../README.md) section on how to configure `models.yaml`. Each
 model name defines a config entry and the conversation agent to use during evaluation.
 
+Here is an example `models.yaml`:
+
+```yaml
+
+```
+
 ```python
 @pytest.fixture(
     name="model_id",
@@ -105,6 +111,21 @@ You can now run the input phrases against the configured conversation agent.
 
 ```bash
 $ py.test model_evals/device_actions/test_device_actions_eval.py
+```
+
+If you want to iterate on a subset of the evaluation:
+
+```bash
+$ py.test model_evals/device_actions/test_device_actions_eval.py --collect-only
+...
+        <Coroutine test_collect_device_actions[model_evals/device_actions/dataset/home5-cn-fan.yaml-assistant]>
+...
+```
+
+Then you can run a single eval like this with debug enabled
+
+```bash
+$ py.test 'model_evals/device_actions/test_device_actions_eval.py::test_collect_device_actions[model_evals/device_actions/dataset/dom1-pl-todo-list.yaml-assistant]' -s -vv
 ```
 
 ## Evaluate
