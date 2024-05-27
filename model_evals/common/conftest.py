@@ -119,7 +119,9 @@ async def model_config(model_id: str) -> ModelConfig:
 @pytest.fixture(name="conversation_agent_config_entry")
 async def mock_conversation_agent_config_entry(
     hass: HomeAssistant, model_config: ModelConfig, system_prompt: str | None
-) -> MockConfigEntry:
+) -> MockConfigEntry | None:
+    if model_config.domain == "homeassistant":
+        return None
     options = {}
     if model_config.config_entry_options:
         options.update(model_config.config_entry_options)
@@ -158,9 +160,12 @@ class ConversationAgent:
 
 @pytest.fixture(name="conversation_agent_id")
 async def mock_conversation_agent_id(
-    conversation_agent_config_entry: MockConfigEntry,
+    model_config: ModelConfig,
+    conversation_agent_config_entry: MockConfigEntry | None,
 ) -> str:
     """Return the id for the conversation agent under test."""
+    if model_config.domain == "homeassistant":
+        return "conversation.home_assistant"
     return conversation_agent_config_entry.entry_id
 
 

@@ -25,7 +25,7 @@ class ModelConfig:
     domain: str
     """The domain under evaluation."""
 
-    config_entry_data: dict[str, Any]
+    config_entry_data: dict[str, Any] | None = None
     """The configuration entry data."""
 
     config_entry_options: dict[str, Any] | None = None
