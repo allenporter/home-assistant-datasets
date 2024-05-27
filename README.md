@@ -131,8 +131,8 @@ Human rater (me) scores the result quality:
   - 2: Medium: Solid, not incorrect, though perhaps a missed opportunity
   - 3: High: Good
 
-See the [annotations/](annotations/) directory for the human eval procedure
-using Doccano.
+See the [script/](script/) directory for more details on preparing the data for
+human eval procedure using Doccano.
 
 ## Visualization (WIP)
 
