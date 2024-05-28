@@ -37,7 +37,7 @@ _LOGGER = logging.getLogger(__name__)
         # "gpt-3.5",
         # "gpt-4o",
         # "gemini-1.5-flash",
-        # "gemini-pro",
+        "gemini-pro",
         # "mistral-7b-instruct",
     ],
 )
