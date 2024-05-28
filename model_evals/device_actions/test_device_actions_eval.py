@@ -34,9 +34,9 @@ _LOGGER = logging.getLogger(__name__)
     name="model_id",
     params=[
         # "assistant",
-        # "gpt-3.5",
+        "gpt-3.5",
         # "gpt-4o",
-        "gemini-1.5-flash",
+        # "gemini-1.5-flash",
         # "gemini-pro",
         # "mistral-7b-instruct",
     ],
