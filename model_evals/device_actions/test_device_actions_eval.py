@@ -33,8 +33,8 @@ _LOGGER = logging.getLogger(__name__)
 @pytest.fixture(
     name="model_id",
     params=[
-        # "assistant",
-        "gpt-3.5",
+        "assistant",
+        # "gpt-3.5",
         # "gpt-4o",
         # "gemini-1.5-flash",
         # "gemini-pro",
