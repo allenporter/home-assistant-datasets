@@ -1,4 +1,4 @@
-"""Device action online evaluation metrics."""
+"""Device action offline evaluation metrics."""
 
 from dataclasses import dataclass
 from typing import Any
@@ -32,26 +32,11 @@ class DeviceState(DataClassDictMixin):
     state: str
     """The state to set on the device."""
 
-
-@dataclass
-class EvalTask(DataClassDictMixin):
-    """Flattened detail about the task that is being evaluated."""
-
-    home_id: str
-    """Identifier for the synethetic home."""
-
-    input_text: str
-    """The conversation input text to state."""
-
-    device_states: list[DeviceState]
-    """The device state details to set as the start of the task."""
-
-
 @dataclass
 class Output(DataClassDictMixin):
     uuid: str
     task_id: str
-    task: EvalTask
+    task: dict[str, Any]
     response: str
     context: dict[str, Any]
 
@@ -92,6 +77,31 @@ def find_llm_call(trace: dict[str, Any]) -> dict[str, Any] | None:
             }
     return None
 
+COLUMNS = [
+    "model_id",
+    "label",
+    "device_type",
+    "text",
+    "response",
+    "tool_call",
+]
+
+
+def print_yaml_row(row: dict[str, Any]) -> None:
+    """Dump the record in yaml format."""
+    print(yaml.dump(row, sort_keys=False, explicit_start=True))
+
+
+def print_csv_row(row: dict[str, Any]) -> None:
+    """Dump the record in csv format."""
+    vals = []
+    for col in COLUMNS:
+        val = str(row[col])
+        val = val.replace("\"", "'")
+        vals.append(f"\"{val}\"")
+    print(",".join(vals))
+
+
 
 def main():
     args = get_arguments()
@@ -99,33 +109,44 @@ def main():
 
     model_outputs = pathlib.Path(args.model_outputs)
 
+
+    if args.output_type == "csv":
+        print(",".join(COLUMNS))
+    print_row = print_csv_row if args.output_type == "csv" else print_yaml_row
+
     model_docs: dict[str, list[dict[str, str]]] = {}
-    for model_output_file in model_outputs.glob("*.yaml"):
+    for model_output_file in model_outputs.glob("**/*.yaml"):
+        stem = model_output_file.relative_to(model_outputs)
+        filename = model_output_file.name[:-5] # strip .yaml
+        print(stem)
+        model_id = str(list(stem.parents)[0])
+
         documents = yaml.load_all(model_output_file.read_text(), Loader=yaml.Loader)
         for document in documents:
             output = Output(**document)
+            home_id = output.task["home_id"]
+            device_type = filename[len(home_id)+1:]
+            device_type = str(model_output_file.stem)[len(home_id)+1:]
+
+            label = "Bad"
+            unexpected_states = output.context["device_context"]["unexpected_states"]
+            if len(unexpected_states) == 0:
+                # Success!
+                label = "Good"
+                if "Sorry" in output.response:
+                    raise ValueError(f"Incorrect expected states logic? Response said Sorry but no changes: {output.task_id}")
 
             tool_call = find_llm_call(output.context.get("conversation_trace", {}))
-            if states := output.task.get("device_states"):
-                device_state = DeviceState(**states[0])
-                device_context = {"name": device_state.name, "area": device_state.area}
-            else:
-                device_context = {}
 
             simple_output = {
-                "uuid": output.uuid,
-                "task_id": output.task_id,
-                "input": output.task["input_text"],
-                "device_context": device_context,
-                "tool_call": tool_call,
+                "model_id": model_id,
+                "label": label,
+                "device_type": device_type,
+                "text": output.task["input_text"],
                 "response": output.response,
+                "tool_call": tool_call,
             }
-            if args.output_type == "json":
-                print(json.dumps({"text": json.dumps(simple_output, indent=2)}))
-            elif args.output_type == "yaml":
-                print(yaml.dump(simple_output, sort_keys=False, explicit_start=True))
-            else:
-                raise ValueError("Invalid --output_type not 'json' or 'yaml'")
+            print_row(simple_output)
 
 
 if __name__ == "__main__":

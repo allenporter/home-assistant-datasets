@@ -32,16 +32,16 @@ class DeviceState(DataClassDictMixin):
     name: str
     """Device name found in the synthetic home."""
 
-    area: str
-    """Device area found in the synthetic home."""
-
     state: str
     """The state to set on the device."""
+
+    area: str | None = None
+    """Device area found in the synthetic home."""
 
     @property
     def state_label(self) -> str:
         """Identifier about the state of the devices under evaluation"""
-        return f"{slugify(self.name)}-{slugify(self.area)}-{slugify(self.state)}"
+        return f"{slugify(self.name)}-{slugify(self.area or ".")}-{slugify(self.state)}"
 
 
 @dataclass
@@ -54,6 +54,8 @@ class Action(DataClassDictMixin):
     device_states: list[DeviceState]
     """The device states to prepare."""
 
+    expected_entity_changes: dict[str, dict[str, str]]
+    """The device states to assert on."""
 
 @dataclass
 class Record:
@@ -78,6 +80,9 @@ class EvalTask:
 
     device_states: list[DeviceState]
     """The device state details to set as the start of the task."""
+
+    expected_entity_changes: dict[str, dict[str, str]]
+    """The device states to assert on."""
 
     @property
     def task_id(self) -> str:
@@ -109,20 +114,7 @@ async def generate_tasks(record: Record) -> AsyncGenerator[EvalTask, None]:
 
         # Validate all device states
         for device_state in action.device_states:
-            if (area_devices := home.devices.get(device_state.area)) is None:
-                raise ValueError(
-                    f"Area {device_state.area} not found in synthetic home {record.home}"
-                )
-            found_device = next(
-                iter(
-                    [
-                        area_device
-                        for area_device in area_devices
-                        if area_device.name == device_state.name
-                    ]
-                ),
-                None,
-            )
+            found_device = home.find_devices_by_name(device_state.area, device_state.name)
             if found_device is None:
                 raise ValueError(
                     f"Device {device_state.name} not found in synthetic home {record.home} area {device_state.area}"
@@ -148,4 +140,5 @@ async def generate_tasks(record: Record) -> AsyncGenerator[EvalTask, None]:
                 home_id=record.home,
                 input_text=sentence,
                 device_states=action.device_states,
+                expected_entity_changes=action.expected_entity_changes,
             )
