@@ -84,6 +84,7 @@ COLUMNS = [
     "text",
     "response",
     "tool_call",
+    "entity_diff",
 ]
 
 
@@ -118,7 +119,6 @@ def main():
     for model_output_file in model_outputs.glob("**/*.yaml"):
         stem = model_output_file.relative_to(model_outputs)
         filename = model_output_file.name[:-5] # strip .yaml
-        print(stem)
         model_id = str(list(stem.parents)[0])
 
         documents = yaml.load_all(model_output_file.read_text(), Loader=yaml.Loader)
@@ -145,6 +145,7 @@ def main():
                 "text": output.task["input_text"],
                 "response": output.response,
                 "tool_call": tool_call,
+                "entity_diff": str(unexpected_states)
             }
             print_row(simple_output)
 

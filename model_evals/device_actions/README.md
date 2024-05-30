@@ -167,6 +167,12 @@ See [Annotations](../../script/README.md) for details on how to systematically
 run human annotations of the output. You can review the outputs manually without
 scoring exhaustively.
 
+However this also supports offline eval that can be dumped to csv:
+```bash
+$ python3 model_evals/device_actions/script/offline_eval.py --model_output=model_evals/device_actions/output/v2-2024-05-29/ --output_type=csv > model_evals/device_actions/annotations/2024-05-29.csv
+```
+
+
 For each directory convert to jsonl format:
 ```bash
 $ DIR=model_evals/device_actions/output/v1-2024-05-27/gpt-3.5
