@@ -79,6 +79,7 @@ def get_arguments() -> argparse.Namespace:
     )
     return parser.parse_args()
 
+
 def find_llm_call(trace: dict[str, Any]) -> dict[str, Any] | None:
     """Gets the llm call."""
     events = trace.get("events", [])

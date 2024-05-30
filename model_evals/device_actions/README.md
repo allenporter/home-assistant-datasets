@@ -170,14 +170,20 @@ scoring exhaustively.
 For each directory convert to jsonl format:
 ```bash
 $ DIR=model_evals/device_actions/output/v1-2024-05-27/gpt-3.5
-$ python3 model_evals/device_actions/export_output.py --model_outputs ${DIR} --output_type=json  > ${DIR}/outputs.json
+$ python3 model_evals/device_actions/script/export_output.py --model_outputs ${DIR} --output_type=json  > ${DIR}/outputs.json
 # Combine all into a single output file
 $ find . -name outputs.json | xargs -i cat {} > model_evals/device_actions/output/outputs-combined-2025-05-27.json
 ```
 
-One rated, convert back to yaml:
+One rated, export the jsonl file and convert back to yaml:
 
 ```bash
 $ ANNOTATION_FILE=model_evals/device_actions/annotations/2024-05-27
 $ cat ${ANNOTATION_FILE}.jsonl | python3 script/export.py > ${ANNOTATION_FILE}.yaml
+```
+
+Merge labels and outputs into a csv file to review or compute stats on:
+
+```bash
+$ python3 model_evals/device_actions/script/merge_labels.py --model_outputs=model_evals/device_actions/output/ --annotations_file model_evals/device_actions/annotations/2025-05-27.yaml --output_format=csv > model_evals/device_actions/annotations/2025-05-27-merged.csv
 ```

@@ -82,6 +82,8 @@ def main():
         tasks = yaml.load_all(output_file.read_text(), Loader=yaml.Loader)
         for task in tasks:
             uid = task["uuid"]
+            response = task["response"]
+            if ""
             label = labels.get(uid, "Unavailable")
             model_results[model_id][label] = model_results[model_id].get(label, 0) + 1
             if not label in model_samples[model_id]:
