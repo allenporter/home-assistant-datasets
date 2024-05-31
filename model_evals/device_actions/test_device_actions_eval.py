@@ -40,9 +40,10 @@ _LOGGER = logging.getLogger(__name__)
         # "assistant",
         # "gpt-3.5",
         "gpt-4o",
-        # "gemini-1.5-flash",
+        "gemini-1.5-flash",
         # "gemini-pro",
         # "mistral-7b-instruct",
+        # "hermes-2-pro-llama-3",
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
@@ -152,15 +153,15 @@ async def prepare_state_fixture(
 
     return func
 
-def compute_entity_diff(a: dict[str, str], b: dict[str, str]) -> dict[str, Any] | None:
+def compute_entity_diff(a: dict[str, str], b: dict[str, str], ignored: set[str]) -> dict[str, Any] | None:
     """Compute a diff between two entity states."""
 
     diff_attributes = set({})
     for k, v in a.items():
-        if b.get(k) != v:
+        if b.get(k) != v and k not in ignored:
             diff_attributes.add(k)
     for k in b:
-        if k not in a:
+        if k not in a and k not in ignored:
             diff_attributes.add(k)
     if not diff_attributes:
         return None
@@ -201,9 +202,10 @@ async def verify_state_fixture(
 
         diffs = {}
         for entity_id in states:
+            ignored_attributes = set(task.ignored_entity_changes.get(entity_id, [])) if task.ignored_entity_changes else set({})
             old = states[entity_id]
             new = updated_states[entity_id]
-            if diff := compute_entity_diff(old, new):
+            if diff := compute_entity_diff(old, new, ignored_attributes):
                 diffs[entity_id] = diff
         return {"unexpected_states": diffs}
 

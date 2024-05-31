@@ -22,7 +22,11 @@ DATASET_DIR = DIR / "dataset/"
 
 def dataset_files() -> list[pathlib.Path]:
     """Read all dataset files"""
-    return DATASET_DIR.glob("*.yaml")
+    return [
+        filename
+        for filename in DATASET_DIR.glob("*.yaml")
+        if "cover" in str(filename)
+    ]
 
 
 @dataclass
@@ -57,6 +61,10 @@ class Action(DataClassDictMixin):
     expected_entity_changes: dict[str, dict[str, str]]
     """The device states to assert on."""
 
+    ignored_entity_changes: dict[str, list[str]] | None = None
+    """The device state changes to ignored."""
+
+
 @dataclass
 class Record:
     """Represents an item in the dataset used to configure evaluation."""
@@ -83,6 +91,10 @@ class EvalTask:
 
     expected_entity_changes: dict[str, dict[str, str]]
     """The device states to assert on."""
+
+    ignored_entity_changes: dict[str, list[str]] | None= None
+    """The device state changes to ignored."""
+
 
     @property
     def task_id(self) -> str:
@@ -141,4 +153,5 @@ async def generate_tasks(record: Record) -> AsyncGenerator[EvalTask, None]:
                 input_text=sentence,
                 device_states=action.device_states,
                 expected_entity_changes=action.expected_entity_changes,
+                ignored_entity_changes=action.ignored_entity_changes,
             )
