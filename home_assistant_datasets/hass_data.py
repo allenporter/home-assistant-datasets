@@ -1,4 +1,8 @@
-"""A home assistant client library wrapper."""
+"""A home assistant client library wrapper.
+
+This is deprecated and can be replaced by the synthetic home inventory
+collection tools.
+"""
 
 from dataclasses import dataclass
 import hass_client

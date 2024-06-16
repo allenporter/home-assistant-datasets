@@ -8,7 +8,7 @@
     $ python3 -m venv venv
     $ source venv/bin/activate
     $ pip install --upgrade pip
-    $ pip3 install -r requirements.txt
+    $ pip3 install -r requirements_dev.txt
     ```
 
 The evaluations require custom components. You'll need to clone these and configure

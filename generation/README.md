@@ -30,7 +30,7 @@ This is an example of how to prepare the python venv for use with the jupyet not
     $ python3 -m venv venv
     $ source venv/bin/activate
     $ pip install --upgrade pip
-    $ pip3 install -r requirements.txt
+    $ pip3 install -r requirements_dev.txt
     ```
 
 1. Open the notebook and select the venv interpreter and kernel
