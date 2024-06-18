@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, Context
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
@@ -20,6 +20,7 @@ from home_assistant_datasets.data_model import ModelConfig
 from .data_model import (
     EvalTask,
     EntityState,
+    ModelOutput,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -89,9 +90,7 @@ async def verify_state_fixture(
         # Update states to what is expected
         for entity_id, entity_state in task.expect_changes.items():
             if entity_id not in states:
-                return {
-                    "unexpected_states": f"Entity defined in eval task does not exist: {entity_id}"
-                }
+                raise ValueError(f"Entity defined in eval task does not exist: {entity_id}")
             if entity_state.state is not None:
                 states[entity_id].state = entity_state.state
             if entity_state.attributes is not None:
@@ -104,9 +103,7 @@ async def verify_state_fixture(
 
         for entity_id in updated_states:
             if entity_id not in states:
-                return {
-                    "unexpected_states": f"Unexpected new entity found: {entity_id}"
-                }
+                return ValueError(f"Unexpected new entity found: {entity_id}")
 
         diffs = {}
         for entity_id in states:
@@ -119,9 +116,28 @@ async def verify_state_fixture(
             new = updated_states[entity_id]
             if diff := compute_entity_diff(old, new, ignored_attributes):
                 diffs[entity_id] = diff
-        return {"unexpected_states": diffs}
+        return diffs
 
     return func
+
+
+def dump_conversation_trace(trace: trace.ConversationTrace) -> dict[str, Any]:
+    """Serialize the conversation trace for evaluation."""
+    trace_data = trace.as_dict()
+    trace_events = trace_data["events"]
+    result = []
+    for trace_event in trace_events:
+        trace_event_data = trace_event["data"]
+        data = {}
+        for k, v in trace_event_data.items():
+            if isinstance(v, Context):
+                v = dict(v.as_dict())
+            data[k] = v
+        result.append({
+            "event_type": str(trace_event["event_type"]),
+            "data": data,
+        })
+    return result
 
 
 @pytest.mark.parametrize("expected_lingering_timers", [True])
@@ -154,29 +170,30 @@ async def test_assist_actions(
     _LOGGER.debug("Response: %s", response)
 
     updated_states = get_state()
+    try:
+        unexpected_states = await verify_state(eval_task, states, updated_states)
+    except ValueError as err:
+        unexpected_states = f"Error verifying state: {err}"
 
-    conversation_trace = {}
+    conversation_trace = []
     if (traces := trace.async_get_traces()) and (last_trace := traces[-1]):
-        conversation_trace = last_trace.as_dict()
-    _LOGGER.debug("states=%s", states.get("light.kitchen_light"))
-    _LOGGER.debug("updated_states=%s", updated_states.get("light.kitchen_light"))
-    unexpected_states = await verify_state(eval_task, states, updated_states)
+        conversation_trace = dump_conversation_trace(last_trace)
 
-    eval_record_writer.write(
-        {
-            "uuid": str(uuid.uuid4()),  # Unique based on the model evaluated
-            "task_id": eval_task.task_id,
-            "task": {
+    output = ModelOutput(
+        uuid=str(uuid.uuid4()),  # Unique based on the model evaluated
+        task_id=eval_task.task_id,
+        category=eval_task.category,
+        task={
                 "input_text": eval_task.input_text,
                 "expect_changes": {
                     k: dataclasses.asdict(v)
                     for k, v in (eval_task.expect_changes or {}).items()
                 },
-            },
-            "response": response,
-            "context": {
-                "unexpected_states": unexpected_states,
-                "conversation_trace": conversation_trace,
-            },
-        }
+        },
+        response=response,
+        context={
+            "unexpected_states": unexpected_states,
+            "conversation_trace": conversation_trace,
+        },
     )
+    eval_record_writer.write(dataclasses.asdict(output))

@@ -17,7 +17,7 @@ def pytest_addoption(parser):
     """Pytest arguments passed from the `collect` action to the test."""
     parser.addoption("--dataset")
     parser.addoption("--models")
-    parser.addoption("--output_dir")
+    parser.addoption("--model_output_dir")
 
 
 def pytest_generate_tests(metafunc) -> None:
@@ -26,7 +26,7 @@ def pytest_generate_tests(metafunc) -> None:
     models = metafunc.config.getoption("models").split(",")
     metafunc.parametrize("model_id", models)
 
-    output_dir = metafunc.config.getoption("output_dir")
+    output_dir = metafunc.config.getoption("model_output_dir")
 
     # Load the datasets
     dataset = metafunc.config.getoption("dataset")
@@ -52,7 +52,7 @@ def pytest_generate_tests(metafunc) -> None:
 
         try:
             eval_tasks = list(generate_tasks(record_path, dataset_path, output_path))
-        except (ValueError, AttributeError) as err:
+        except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(
                 f"Task record file '{str(record_path)}' was invalid: {err}"
             ) from err

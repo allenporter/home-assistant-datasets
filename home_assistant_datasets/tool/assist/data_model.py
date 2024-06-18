@@ -53,7 +53,11 @@ class Action(DataClassDictMixin):
 class Record:
     """Represents an item in the dataset used to configure evaluation."""
 
+    category: str
+    """Category used to describe the evaluation task when reporting"""
+
     tests: list[Action] | None = field(default_factory=list)
+    """The set of tasks to evaluate."""
 
 
 @dataclass
@@ -68,6 +72,9 @@ class EvalTask:
 
     record_id: str
     """Identifier for the synethetic home task."""
+
+    category: str
+    """Category used to describe the evaluation task when reporting"""
 
     input_text: str
     """The conversation input text to state."""
@@ -142,7 +149,18 @@ def generate_tasks(
                 output_dir=output_dir,
                 synthetic_home_yaml=yaml_contents,
                 record_id=record_id,
+                category=record.category,
                 input_text=sentence,
                 expect_changes=action.expect_changes,
                 ignore_changes=action.ignore_changes,
             )
+
+
+@dataclass
+class ModelOutput(DataClassDictMixin):
+    uuid: str
+    task_id: str
+    category: str
+    task: dict[str, Any]
+    response: str
+    context: dict[str, Any]

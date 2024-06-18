@@ -31,7 +31,7 @@ You can collect data from the API using the command:
 $ FIXTURES="home-assistant-datasets/datasets/assist/"
 $ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
 # Run without --dry_run to actually perform the collection (may send LLM RPCs)
-$ home-assistant-datasets assist_collect --models=gemini-1.5-flash --fixtures=${FIXTURES} --output_dir=${OUTPUT_DIR} --dry_run
+$ home-assistant-datasets assist_collect --models=gemini-1.5-flash --fixtures=${FIXTURES} --model_output_dir=${OUTPUT_DIR} --dry_run
 ```
 
 You need to have the synthetic home custom component installed with something like this:
@@ -76,9 +76,9 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         default=DEFAULT_DATASET,
     )
     args.add_argument(
-        "--output_dir",
+        "--model_output_dir",
         type=str,
-        help="Specifies home assistant API token.",
+        help="Specifies the directory where output data from the model is stored.",
         required=True,
     )
     args.add_argument(
@@ -130,9 +130,10 @@ def run(args: argparse.Namespace) -> int:
         "--disable-warnings",
         # Limit to tests in this directory
         "home_assistant_datasets/tool/assist",
+        # See flags defined in conftest.py
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
-        f"--output_dir={args.output_dir or ''}",
+        f"--model_output_dir={args.model_output_dir or ''}",
     ]
     if args.test_path:
         pytest_args.append(args.test_path)
