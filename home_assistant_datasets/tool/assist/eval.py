@@ -16,15 +16,9 @@ See `assist_eval` for creating offline evaluation reports.
 
 import argparse
 import logging
-import slugify
-from typing import Any
 
-import aiohttp
-
-from synthetic_home import inventory, common
 
 _LOGGER = logging.getLogger(__name__)
-
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -34,7 +28,6 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         type=str,
         help="Specifies home assistant API token.",
     )
-
 
 
 async def run(args: argparse.Namespace) -> int:

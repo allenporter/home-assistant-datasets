@@ -6,9 +6,8 @@ import logging
 import sys
 from pathlib import Path
 
-import asyncio
 
-from . import assist_collect, assist_eval
+from .assist import collect as assist_collect, eval as assist_eval
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -21,8 +20,12 @@ def get_base_arg_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="action", help="Action", required=True)
 
     # Subcommands
-    assist_collect.create_arguments(subparsers.add_parser("assist_collect"))
-    assist_eval.create_arguments(subparsers.add_parser("assist_eval"))
+    assist_parser = subparsers.add_parser("assist")
+    assist_subparsers = assist_parser.add_subparsers(
+        dest="subaction", help="Sub Action", required=True
+    )
+    assist_collect.create_arguments(assist_subparsers.add_parser("collect"))
+    assist_eval.create_arguments(assist_subparsers.add_parser("eval"))
 
     return parser
 
@@ -42,9 +45,14 @@ def main() -> int:
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
 
-    module = importlib.import_module(f".{args.action}", "home_assistant_datasets.tool")
-    _LOGGER.info("Running action %s", args.action)
-    result: int = asyncio.run(module.run(args))
+    if args.subaction:
+        module_name = f".{args.action}.{args.subaction}"
+    else:
+        module_name = f".{args.action}"
+
+    module = importlib.import_module(module_name, "home_assistant_datasets.tool")
+    _LOGGER.debug("Running action %s", module_name)
+    result: int = module.run(args)
     return result
 
 
