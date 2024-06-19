@@ -28,10 +28,10 @@ models:
 
 You can collect data from the API using the command:
 ```bash
-$ FIXTURES="home-assistant-datasets/datasets/assist/"
+$ DATASET="home-assistant-datasets/datasets/assist/"
 $ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
 # Run without --dry_run to actually perform the collection (may send LLM RPCs)
-$ home-assistant-datasets assist_collect --models=gemini-1.5-flash --fixtures=${FIXTURES} --model_output_dir=${OUTPUT_DIR} --dry_run
+$ home-assistant-datasets assist_collect --models=gemini-1.5-flash --dataset=${FIXTURES} --model_output_dir=${OUTPUT_DIR} --dry_run
 ```
 
 You need to have the synthetic home custom component installed with something like this:
@@ -85,18 +85,18 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
     args.add_argument(
         "--collect-only",
         action="store_true",
-        help="Only collect the list of tests without actually running them.",
+        help="A pytest pass through flag to only collect the list of tests without actually running them.",
     )
     args.add_argument(
         "-s",
         action="store_true",
-        help="Show streaming test output.",
+        help="A pytest pass through flag to show streaming test output.",
     )
 
     # Flags consistent with pytest for pass through
     args.add_argument(
         "test_path",
-        help="Optional path for collection actions to perform or full test node.",
+        help="A pytest pass through flag optional path for collection actions to perform or full test node.",
         type=str,
         default=None,
         nargs="?",
@@ -107,7 +107,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         "-v",
         action="count",
         dest="verbosity",
-        help="Increase verbosity.",
+        help="A pytest pass through flag to increase verbosity.",
     )
     verbosity_group.add_argument(
         "--verbosity",
@@ -115,7 +115,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         type=int,
         metavar="N",
         dest="verbosity",
-        help="Set verbosity. Default is 0",
+        help="A pytest pass through flag to set verbosity. Default is 0",
     )
     args.set_defaults(verbosity=0)
 
