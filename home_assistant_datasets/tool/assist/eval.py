@@ -14,10 +14,8 @@ import argparse
 import logging
 import pathlib
 from typing import Any
-from dataclasses import dataclass
 
 import yaml
-from mashumaro import DataClassDictMixin
 from mashumaro.codecs.yaml import yaml_decode
 
 from homeassistant.components.conversation import trace
@@ -28,10 +26,16 @@ from .data_model import ModelOutput
 _LOGGER = logging.getLogger(__name__)
 
 
-
 def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
     """Gets the llm call from the conversation trace."""
-    tool_call = next(iter(event for event in trace_events if event["event_type"] == trace.ConversationTraceEventType.LLM_TOOL_CALL), None)
+    tool_call = next(
+        iter(
+            event
+            for event in trace_events
+            if event["event_type"] == trace.ConversationTraceEventType.LLM_TOOL_CALL
+        ),
+        None,
+    )
     if tool_call is None:
         return None
 
@@ -64,10 +68,9 @@ def print_csv_row(row: dict[str, Any]) -> None:
     vals = []
     for col in COLUMNS:
         val = str(row[col])
-        val = val.replace("\"", "'")
-        vals.append(f"\"{val}\"")
+        val = val.replace('"', "'")
+        vals.append(f'"{val}"')
     print(",".join(vals))
-
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -92,17 +95,18 @@ def run(args: argparse.Namespace) -> int:
     print_row = print_csv_row if args.output_type == "csv" else print_yaml_row
     print_diff = str if args.output_type == "csv" else dict
 
-    model_docs: dict[str, list[dict[str, str]]] = {}
     for model_output_file in model_outputs.glob("**/*.yaml"):
         stem = model_output_file.relative_to(model_outputs)
-        filename = model_output_file.name[:-5] # strip .yaml
+        filename = model_output_file.name[:-5]  # strip .yaml
         model_id = str(list(stem.parents)[0])
         task_prefix = filename.split("-")[0]
 
         try:
             output = yaml_decode(model_output_file.read_text(), ModelOutput)
         except yaml.error.YAMLError as err:
-            raise ValueError(f"Unable to parse model output file: {model_output_file}: {str(err)}") from err
+            raise ValueError(
+                f"Unable to parse model output file: {model_output_file}: {str(err)}"
+            ) from err
 
         label = "Bad"
         unexpected_states = output.context["unexpected_states"]
@@ -110,16 +114,22 @@ def run(args: argparse.Namespace) -> int:
             # Success!
             label = "Good"
             if "Sorry" in output.response:
-                raise ValueError(f"Incorrect expected states logic? Response said Sorry but no unexpeted states: {output.task_id}")
-        print_row({
-            "model_id": model_id,
-            "category": output.category,
-            "task_prefix": task_prefix,
-            "label": label,
-            "text": output.task["input_text"],
-            "response": output.response,
-            "tool_call": find_llm_call(output.context.get("conversation_trace", {})),
-            "entity_diff": print_diff(unexpected_states)
-        })
+                raise ValueError(
+                    f"Incorrect expected states logic in {model_output_file}? Response said Sorry but no unexpected states: {output.task_id}"
+                )
+        print_row(
+            {
+                "model_id": model_id,
+                "category": output.category,
+                "task_prefix": task_prefix,
+                "label": label,
+                "text": output.task["input_text"],
+                "response": output.response,
+                "tool_call": find_llm_call(
+                    output.context.get("conversation_trace", {})
+                ),
+                "entity_diff": print_diff(unexpected_states),
+            }
+        )
 
     return 0

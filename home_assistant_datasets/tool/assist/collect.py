@@ -68,6 +68,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         "--models",
         type=str,
         help="Specifies models to load from the models.yaml file",
+        required=True,
     )
     args.add_argument(
         "--dataset",

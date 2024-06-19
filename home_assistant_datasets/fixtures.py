@@ -217,3 +217,27 @@ def eval_record_writer_fixture(
     writer.open()
     yield writer
     writer.close()
+
+
+@pytest.fixture(autouse=True)
+def validate_entities(
+    hass: HomeAssistant,
+    synthetic_home_config_entry: MockConfigEntry,
+    synthetic_home_yaml: str,
+) -> None:
+    """Fixture to verify that all entities are property created by synthetic home to avoid misconfiguration."""
+    inventory = yaml.load(synthetic_home_yaml, Loader=yaml.Loader)
+    assert inventory
+    if not (entities := inventory.get("entities")):
+        raise ValueError(
+            f"No entities were specified in the inventory file: {inventory.keys()}"
+        )
+    for entity in entities:
+        entity_id = entity["id"]
+        state = hass.states.get(entity_id)
+        assert state, f"Entity id not created {entity_id}"
+        assert state.state != "unavailable"
+        assert state.state not in (
+            "unavailable",
+            "unknown",
+        ), f"Entity id has unavailable state {entity_id}: {state.state}"

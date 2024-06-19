@@ -42,8 +42,13 @@ def get_state_fixture(
         for entity_entry in entity_entries:
             state = hass.states.get(entity_entry.entity_id)
             results[entity_entry.entity_id] = EntityState(
-                state=state.state, attributes=state.attributes
+                state=state.state, attributes=dict(state.attributes)
             )
+            assert state.state not in (
+                "unavailable",
+                "unknown",
+            ), f"Entity id has unavailable state {entity_entry.entity_id}: {state.state}"
+
         return results
 
     return func
@@ -90,7 +95,9 @@ async def verify_state_fixture(
         # Update states to what is expected
         for entity_id, entity_state in task.expect_changes.items():
             if entity_id not in states:
-                raise ValueError(f"Entity defined in eval task does not exist: {entity_id}")
+                raise ValueError(
+                    f"Entity defined in eval task does not exist: {entity_id}"
+                )
             if entity_state.state is not None:
                 states[entity_id].state = entity_state.state
             if entity_state.attributes is not None:
@@ -133,10 +140,12 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> dict[str, Any]:
             if isinstance(v, Context):
                 v = dict(v.as_dict())
             data[k] = v
-        result.append({
-            "event_type": str(trace_event["event_type"]),
-            "data": data,
-        })
+        result.append(
+            {
+                "event_type": str(trace_event["event_type"]),
+                "data": data,
+            }
+        )
     return result
 
 
@@ -148,15 +157,15 @@ async def test_assist_actions(
     model_config: ModelConfig,
     synthetic_home_config_entry: ConfigEntry,
     eval_task: EvalTask,
-    get_state: Callable[[], list[dict[str, dict[str, str]]]],
+    get_state: Callable[[], dict[str, EntityState]],
     verify_state: Callable[
         [EvalTask, dict[str, EntityState], dict[str, EntityState]],
         Awaitable[dict[str, Any]],
     ],
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Collects model responses for assist actions."""
 
-    # Setup the home for evaluation
     states = get_state()
 
     # Run the conversation agent
@@ -184,16 +193,23 @@ async def test_assist_actions(
         task_id=eval_task.task_id,
         category=eval_task.category,
         task={
-                "input_text": eval_task.input_text,
-                "expect_changes": {
-                    k: dataclasses.asdict(v)
-                    for k, v in (eval_task.expect_changes or {}).items()
-                },
+            "input_text": eval_task.input_text,
+            "expect_changes": {
+                k: dataclasses.asdict(v)
+                for k, v in (eval_task.expect_changes or {}).items()
+            },
         },
         response=response,
         context={
             "unexpected_states": unexpected_states,
             "conversation_trace": conversation_trace,
+            # TODO: Would be useful to support something like --dump-states for fully examining states
+            # "state": states,
+            # "updated_states": updated_states,
         },
     )
     eval_record_writer.write(dataclasses.asdict(output))
+
+    assert not [
+        record.levelname for record in caplog.records if record.levelname == "ERROR"
+    ]

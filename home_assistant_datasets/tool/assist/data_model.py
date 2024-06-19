@@ -12,6 +12,7 @@ from slugify import slugify
 
 from mashumaro import DataClassDictMixin
 from mashumaro.codecs.yaml import yaml_decode
+from mashumaro.config import BaseConfig
 import yaml
 
 
@@ -31,6 +32,9 @@ class EntityState(DataClassDictMixin):
             data.update(self.attributes)
         return data
 
+    class Config(BaseConfig):
+        forbid_extra_keys = True
+
 
 @dataclass
 class Action(DataClassDictMixin):
@@ -39,14 +43,17 @@ class Action(DataClassDictMixin):
     sentences: list[str]
     """Sentences spoken."""
 
-    setup: dict[str, EntityState]
+    setup: dict[str, EntityState] = field(default_factory=dict)
     """Initial entity states to override."""
 
-    expect_changes: dict[str, EntityState]
+    expect_changes: dict[str, EntityState] = field(default_factory=dict)
     """The device states to assert on."""
 
     ignore_changes: dict[str, list[str]] | None = None
-    """The device state changes to ignored."""
+    """The device state or attribute changes to ignored."""
+
+    class Config(BaseConfig):
+        forbid_extra_keys = True
 
 
 @dataclass
@@ -122,16 +129,16 @@ def generate_tasks(
     for action in record.tests:
         if not action.sentences:
             raise ValueError("No sentences defined for the action")
+        if not action.expect_changes:
+            raise ValueError("No expect_changes defined for the action")
 
         # Override any state data
         entities = synthetic_home_yaml.get("entities", [])
+        entities_dict = {entity["id"]: entity for entity in entities}
         for entity_id, entity_state in action.setup.items():
-            found_entity = next(
-                iter(e for e in entities if e.get("id") == entity_id), None
-            )
-            if found_entity is None:
+            if (found_entity := entities_dict.get(entity_id)) is None:
                 raise ValueError(
-                    f"No entity id '{entity_id}' found in fixture {fixture_path}"
+                    f"Entity `setup` entity id '{entity_id}' found in fixture {fixture_path}"
                 )
             if entity_state.state is not None:
                 found_entity["state"] = entity_state.state
@@ -140,11 +147,15 @@ def generate_tasks(
                     **(found_entity.get("attributes", {})),
                     **entity_state.attributes,
                 }
+            entities_dict[entity_id] = found_entity
+        synthetic_home_yaml["entities"] = list(entities_dict.values())
         yaml_contents = yaml.dump(
             synthetic_home_yaml, explicit_start=True, sort_keys=False
         )
 
         for sentence in action.sentences:
+            # if "Turn off all the fans" in sentence:
+            #     assert False, yaml_contents
             yield EvalTask(
                 output_dir=output_dir,
                 synthetic_home_yaml=yaml_contents,
