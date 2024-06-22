@@ -5,8 +5,10 @@ import logging
 import uuid
 import dataclasses
 from typing import Any
+import enum
 
 import pytest
+import yaml
 
 from homeassistant.core import HomeAssistant, Context
 from homeassistant.config_entries import ConfigEntry
@@ -54,6 +56,28 @@ def get_state_fixture(
     return func
 
 
+def compare_state(v: Any, other_v: Any) -> bool:
+    """Compare values for equivalence."""
+    # Coerce some equivalent types for simpler comparisons
+    if isinstance(v, tuple) or isinstance(other_v, tuple):
+        v = list(v)
+        other_v = list(v)
+        return v == other_v
+
+    if isinstance(v, enum.StrEnum) or isinstance(other_v, enum.StrEnum):
+        v = str(v)
+        other_v = str(other_v)
+        return v == other_v
+
+    if v == other_v:
+        return True
+
+    if str(v) == str(other_v):
+        return True
+
+    return False
+
+
 def compute_entity_diff(
     a_state: EntityState, b_state: EntityState, ignored: set[str]
 ) -> dict[str, Any] | None:
@@ -63,11 +87,13 @@ def compute_entity_diff(
 
     diff_attributes = set({})
     for k, v in a.items():
-        if b.get(k) != v and k not in ignored:
+        other_v = b.get(k)
+        if not compare_state(other_v, v):
             diff_attributes.add(k)
     for k in b:
-        if k not in a and k not in ignored:
+        if k not in a and k:
             diff_attributes.add(k)
+    diff_attributes = [k for k in diff_attributes if k not in ignored]
     if not diff_attributes:
         return None
     return {
@@ -165,6 +191,11 @@ async def test_assist_actions(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Collects model responses for assist actions."""
+
+    yaml.SafeDumper.add_multi_representer(
+        enum.StrEnum,
+        yaml.representer.SafeRepresenter.represent_str,
+    )
 
     states = get_state()
 

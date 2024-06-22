@@ -5,7 +5,7 @@ analysis of the model using the following command:
 
 ```bash
 $ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
-$ home-assistant-datasets assist_eval --model_output_dir=${OUTPUT_DIR}
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR}
 ```
 
 """
@@ -16,7 +16,7 @@ import pathlib
 from typing import Any
 
 import yaml
-from mashumaro.codecs.yaml import yaml_decode
+from mashumaro.mixins.yaml import EncodedData
 
 from homeassistant.components.conversation import trace
 
@@ -73,6 +73,10 @@ def print_csv_row(row: dict[str, Any]) -> None:
     print(",".join(vals))
 
 
+def yaml_decoder(data: EncodedData) -> dict[Any, Any]:
+    return yaml.load(data, yaml.UnsafeLoader)
+
+
 def create_arguments(args: argparse.ArgumentParser) -> None:
     """Get parsed passed in arguments."""
     args.add_argument(
@@ -88,7 +92,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
 
 
 def run(args: argparse.Namespace) -> int:
-
+    """Run the command line action."""
     model_outputs = pathlib.Path(args.model_output_dir)
     if args.output_type == "csv":
         print(",".join(COLUMNS))
@@ -102,8 +106,10 @@ def run(args: argparse.Namespace) -> int:
         task_prefix = filename.split("-")[0]
 
         try:
-            output = yaml_decode(model_output_file.read_text(), ModelOutput)
-        except yaml.error.YAMLError as err:
+            output = ModelOutput.from_yaml(
+                model_output_file.read_text(), decoder=yaml_decoder
+            )
+        except (yaml.error.YAMLError, ValueError) as err:
             raise ValueError(
                 f"Unable to parse model output file: {model_output_file}: {str(err)}"
             ) from err

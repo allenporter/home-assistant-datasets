@@ -18,6 +18,7 @@ def pytest_addoption(parser):
     parser.addoption("--dataset")
     parser.addoption("--models")
     parser.addoption("--model_output_dir")
+    parser.addoption("--categories")
 
 
 def pytest_generate_tests(metafunc) -> None:
@@ -43,6 +44,9 @@ def pytest_generate_tests(metafunc) -> None:
     if not dataset_files:
         raise ValueError(f"Could not find any dataset files in path: {dataset}")
 
+    categories_str = metafunc.config.getoption("categories")
+    categories = set(categories_str.split(",")) if categories_str else {}
+
     dataset_path = pathlib.Path(dataset)
     output_path = pathlib.Path(output_dir)
 
@@ -51,7 +55,9 @@ def pytest_generate_tests(metafunc) -> None:
         record_path = pathlib.Path(record_filename)
 
         try:
-            eval_tasks = list(generate_tasks(record_path, dataset_path, output_path))
+            eval_tasks = list(
+                generate_tasks(record_path, dataset_path, output_path, categories)
+            )
         except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(
                 f"Task record file '{str(record_path)}' was invalid: {err}"

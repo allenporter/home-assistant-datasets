@@ -84,9 +84,13 @@ async def mock_synthetic_home(
     )
     config_entry.add_to_hass(hass)
 
-    with patch(
-        "synthetic_home.inventory.read_config_content",
-        mock_open(read_data=synthetic_home_yaml),
+    with (
+        patch(
+            "synthetic_home.inventory.read_config_content",
+            mock_open(read_data=synthetic_home_yaml),
+        ),
+        # Performance improvements during evaluation
+        patch("custom_components.synthetic_home.cover.COVER_INSTANT", True),
     ):
         await hass.config_entries.async_setup(config_entry.entry_id)
         assert config_entry.state == ConfigEntryState.LOADED

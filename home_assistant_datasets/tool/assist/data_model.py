@@ -4,20 +4,23 @@ This file defines dataclasses that hold data for the eval run, essentially the
 output of parsing the yaml files.
 """
 
+import logging
 from typing import Any
 from dataclasses import dataclass, field
 from collections.abc import AsyncGenerator
 import pathlib
 from slugify import slugify
 
-from mashumaro import DataClassDictMixin
+from mashumaro.mixins.yaml import DataClassYAMLMixin
 from mashumaro.codecs.yaml import yaml_decode
 from mashumaro.config import BaseConfig
 import yaml
 
+_LOGGER = logging.getLogger(__name__)
+
 
 @dataclass
-class EntityState(DataClassDictMixin):
+class EntityState(DataClassYAMLMixin):
     """An entity state or attributes"""
 
     state: str | None = None
@@ -37,7 +40,7 @@ class EntityState(DataClassDictMixin):
 
 
 @dataclass
-class Action(DataClassDictMixin):
+class Action(DataClassYAMLMixin):
     """An individual data item action."""
 
     sentences: list[str]
@@ -57,7 +60,7 @@ class Action(DataClassDictMixin):
 
 
 @dataclass
-class Record:
+class Record(DataClassYAMLMixin):
     """Represents an item in the dataset used to configure evaluation."""
 
     category: str
@@ -68,7 +71,7 @@ class Record:
 
 
 @dataclass
-class EvalTask:
+class EvalTask(DataClassYAMLMixin):
     """Flattened detail about the task that is being evaluated."""
 
     output_dir: pathlib.Path
@@ -110,7 +113,10 @@ def read_record(filename: pathlib.Path) -> Record:
 
 
 def generate_tasks(
-    record_path: pathlib.Path, dataset_path: pathlib.Path, output_dir: pathlib.Path
+    record_path: pathlib.Path,
+    dataset_path: pathlib.Path,
+    output_dir: pathlib.Path,
+    categories: set[str],
 ) -> AsyncGenerator[EvalTask, None]:
     """Read and validate the dataset."""
     # Generate the record id based on the file path
@@ -126,6 +132,11 @@ def generate_tasks(
 
     # Generate the set of eval tasks based on the sentences under test
     record = read_record(record_path)
+    if categories and record.category not in categories:
+        _LOGGER.debug(
+            "Skipping record with category %s (not in %s)", record.category, categories
+        )
+        return
     for action in record.tests:
         if not action.sentences:
             raise ValueError("No sentences defined for the action")
@@ -168,7 +179,7 @@ def generate_tasks(
 
 
 @dataclass
-class ModelOutput(DataClassDictMixin):
+class ModelOutput(DataClassYAMLMixin):
     uuid: str
     task_id: str
     category: str

@@ -83,6 +83,11 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         required=True,
     )
     args.add_argument(
+        "--categories",
+        type=str,
+        help="Limit evaluation tasks to a specific category",
+    )
+    args.add_argument(
         "--collect-only",
         action="store_true",
         help="A pytest pass through flag to only collect the list of tests without actually running them.",
@@ -135,6 +140,7 @@ def run(args: argparse.Namespace) -> int:
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
+        f"--categories={args.categories or ''}",
     ]
     if args.test_path:
         pytest_args.append(args.test_path)

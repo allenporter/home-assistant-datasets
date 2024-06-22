@@ -38,13 +38,13 @@ relevant devices and their state used when testing.
 
 #### Record
 
-| Property                 | Description                                                                         |
-| ------------------------ | ----------------------------------------------------------------------------------- |
-| `category`               | A category used for slicing performance statistics                                  |
-| `tests.sentences`        | A list of conversation inputs e.g. `Please turn on the light`                       |
-| `tests.setup`            | Initial inventory entity state to setup in addition to the device fixture.          |
-| `tests.expected_changes` | Differences in inventory entity states that are expected to change during the test. |
-| `tests.ignore_changes`   | Entity attributes (or keyword `state`) to ignore when calculating changes.          |
+| Property               | Description                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| `category`             | A category used for slicing performance statistics                                  |
+| `tests.sentences`      | A list of conversation inputs e.g. `Please turn on the light`                       |
+| `tests.setup`          | Initial inventory entity state to setup in addition to the device fixture.          |
+| `tests.expect_changes` | Differences in inventory entity states that are expected to change during the test. |
+| `tests.ignore_changes` | Entity attributes (or keyword `state`) to ignore when calculating changes.          |
 
 These dataclasses are populated based on yaml files in the dataset subdirectories.
 
@@ -111,9 +111,9 @@ $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/"
 Or otherwise configure custom components in the `custom_components` directory.
 
 ```bash
-$ FIXTURES="home-assistant-datasets/datasets/assist/"
+$ DATASET="home-assistant-datasets/datasets/assist/"
 $ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
-$ home-assistant-datasets assist collect --models=assistant --fixtures=${FIXTURES} --model_output_dir={OUTPUT_DIR}
+$ home-assistant-datasets assist collect --models=assistant --dataset=${DATASET} --model_output_dir={OUTPUT_DIR}
 ```
 
 See `home-assistant-datasets assist collect --help` for options to control pytest.
