@@ -53,8 +53,8 @@ models:
   domain: openai_conversation
   config_entry_data:
     api_key: sk-XXXXXXXXXXXXXXXXXXXXXXXX
-    chat_model: gpt-4o
   config_entry_options:
+    chat_model: gpt-4o
     llm_hass_api: assist
 
 - model_id: gemini-1.5-flash

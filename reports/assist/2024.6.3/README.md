@@ -35,4 +35,9 @@ $ python3 -c "print(56.0/111)"
 0.5045045045045045
 ```
 
-model_id,task_prefix,category,label,text,response,tool_call,entity_diff
+## Costs
+
+The current evaluation with around 220 tasks has the following costs:
+- An evaluation of gemini-flash-1.5 was free (though there may be geo restrictions)
+- An evaluation of gpt-3.5 costed around $1.50
+- An evaluation of gpt-4o costed around $4. You will also likely see heavy rate limiting, making it *very* slow.

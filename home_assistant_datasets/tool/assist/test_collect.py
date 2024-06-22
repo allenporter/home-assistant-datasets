@@ -176,6 +176,7 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> dict[str, Any]:
 
 
 @pytest.mark.parametrize("expected_lingering_timers", [True])
+@pytest.mark.parametrize("expected_lingering_tasks", [True])
 async def test_assist_actions(
     hass: HomeAssistant,
     agent: ConversationAgent,

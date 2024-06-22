@@ -77,8 +77,8 @@ models:
     domain: openai_conversation
     config_entry_data:
       api_key: sk-XXXXXXXXXXXX
-      chat_model: gpt-4o
     config_entry_options:
+      chat_model: gpt-4o
       llm_hass_api: assist
 
   # Update when ollama supports tool calling
