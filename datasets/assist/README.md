@@ -112,7 +112,7 @@ Or otherwise configure custom components in the `custom_components` directory.
 
 ```bash
 $ DATASET="home-assistant-datasets/datasets/assist/"
-$ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
+$ OUTPUT_DIR="reports/assist/$(date +"%Y-%m-%d")/"
 $ home-assistant-datasets assist collect --models=assistant --dataset=${DATASET} --model_output_dir={OUTPUT_DIR}
 ```
 

@@ -20,6 +20,9 @@ class ModelConfig:
     config_entry_options: dict[str, Any] | None = None
     """The configuration entry options."""
 
+    version: int | None = None
+    """The version nnumber of the config entry."""
+
 
 @dataclass
 class Models:

@@ -1,0 +1,39 @@
+---
+uuid: e8b43a49-9227-43c7-8788-d10ebb581349
+task_id: intents_en_valve_hassturnoff-close_the_main_valve
+category: valve
+task:
+  input_text: close the main valve
+  expect_changes:
+    valve.main_valve:
+      state: closed
+      attributes:
+        current_position: 0
+response: closing main valve now
+context:
+  unexpected_states:
+    valve.main_valve:
+      expected:
+        current_position: 0
+        state: closed
+      got:
+        current_position: 100
+        state: open
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: close the main valve
+      context:
+        id: 01J1NTYYF31B3BNYESMAP1ATHF
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: a82bc0f2b1c92401f1391c4a63b3b164
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassCallService
+      tool_args:
+        service: valve.close
+        target_device: valve.main_valve

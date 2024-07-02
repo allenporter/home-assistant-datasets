@@ -134,6 +134,7 @@ async def mock_conversation_agent_config_entry(
         domain=model_config.domain,
         data=model_config.config_entry_data,
         options=options,
+        version=model_config.version or 1
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
