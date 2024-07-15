@@ -1,5 +1,6 @@
 """An evaluation for calling Device Actions, expected to be used to evaluate intents."""
 
+import asyncio
 from collections.abc import Callable, Awaitable
 import logging
 import uuid
@@ -27,7 +28,7 @@ from .data_model import (
 )
 
 _LOGGER = logging.getLogger(__name__)
-
+TIMEOUT = 15
 
 @pytest.fixture(name="get_state")
 def get_state_fixture(
@@ -205,9 +206,12 @@ async def test_assist_actions(
     text = eval_task.input_text
     _LOGGER.debug("Prompt: %s", text)
     try:
-        response = await agent.async_process(hass, text)
+        async with asyncio.timeout(TIMEOUT):
+            response = await agent.async_process(hass, text)
     except (HomeAssistantError, TypeError, json.JSONDecodeError) as err:
         response = str(err)
+    except (TimeoutError, asyncio.CancelledError) as err:
+        response = f"Timeout: {err}"
     await hass.async_block_till_done()
     _LOGGER.debug("Response: %s", response)
 
