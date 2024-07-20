@@ -1,6 +1,6 @@
 # Evaluation
 
-This is an evaluation of Home Assistant 2024.7.0b focused on tool control LLMs.
+This is an evaluation of Home Assistant 2024.8.0b focused on recently released models.
 
 ## Work log
 
@@ -11,10 +11,12 @@ This is an evaluation of Home Assistant 2024.7.0b focused on tool control LLMs.
 
 ### Prepare Eval environment
 
+Development version of home assistant
+
 ```bash
-$ pip3 install homeassistant==2024.7.0
+$ pip3 install -e /workspaces/core
 $ DATASET="./datasets/assist/"
-$ MODEL_OUTPUT_DIR=reports/assist/2024.7.0/
+$ MODEL_OUTPUT_DIR=reports/assist/2024.8.0b/
 ```
 
 ### model setup
@@ -22,13 +24,19 @@ $ MODEL_OUTPUT_DIR=reports/assist/2024.7.0/
 Using `models.yaml` to configure a local openai compatible integration:
 
 ```yaml
-- model_id: functionary-7b-v1.4
-  domain: vicuna_conversation
+- model_id: llama3-groq-tool-use
+  domain: ollama
   config_entry_data:
-    api_key: sk-0000000000000000000
-    base_url: http://llama-cublas.llama:8000/v1
+    url: http://ml-papers-ollama.devpod/v1
+    model: llama3-groq-tool-use:latest
   config_entry_options:
-    chat_model: functionary-7b-v1.4
+    llm_hass_api: assist
+- model_id: mistral-v3
+  domain: ollama
+  config_entry_data:
+    url: http://ml-papers-ollama.devpod/v1
+    model: mistral-tools:latest
+  config_entry_options:
     llm_hass_api: assist
 ```
 
@@ -36,7 +44,7 @@ Using `models.yaml` to configure a local openai compatible integration:
 
 
 ```bash
-$ MODEL=functionary-small-v2.5
+$ MODEL=llama3-groq-tool-use
 $ home-assistant-datasets assist collect --model_output_dir=${MODEL_OUTPUT_DIR} --dataset=${DATASET} --models=${MODEL}
 $ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=csv > ${MODEL_OUTPUT_DIR}/report.csv
 ```
