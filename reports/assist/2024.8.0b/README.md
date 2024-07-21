@@ -6,7 +6,7 @@ This is an evaluation of Home Assistant 2024.8.0b focused on recently released m
 
 ### Pre-requisites
 
-- Ensure any the synthetic home custom component is in the python environment e.g. `export PYTHONPATH="${PYTHONPATH}:/workspace/home-assistant-synthetic-home`
+- Ensure any the synthetic home custom component is in the python environment e.g. `export PYTHONPATH="${PYTHONPATH}:/workspace/home-assistant-synthetic-home` or `export PYTHONPATH="${PYTHONPATH}:${PWD}"`
 - Install this projects python dependencies e.g. `pip3 install -r requirements_dev.txt`
 
 ### Prepare Eval environment
