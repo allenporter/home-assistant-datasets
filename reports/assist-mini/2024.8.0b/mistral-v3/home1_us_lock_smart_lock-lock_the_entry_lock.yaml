@@ -1,5 +1,5 @@
 ---
-uuid: 7c06e65a-e045-4369-ba42-e714b37a79a0
+uuid: 17f49752-8d54-43fc-ad46-d8f015cf4846
 task_id: home1_us_lock_smart_lock-lock_the_entry_lock
 category: lock
 task:
@@ -8,71 +8,110 @@ task:
     lock.smart_lock:
       state: locked
       attributes: null
-response: '[TOOL_CALLS] To lock the entry smart lock, you can use the following command:
-
-
-  ```
-
-  HassTurnOn(''lock.smart_lock'', {''area'': ''Entry''})
-
-  ```
-
-
-  This will lock the smart lock in the entry area of your home.'
+response: ' Entry lock has been locked successfully.'
 context:
-  unexpected_states:
-    lock.smart_lock:
-      expected:
-        state: locked
-      got:
-        state: unlocked
+  unexpected_states: {}
   conversation_trace:
   - event_type: async_process
     data:
       text: Lock the entry lock
       context:
-        id: 01J3C2K6E6JYHQ4MH8XPARPCGN
+        id: 01J3CBNQX7SWMDY447G5KC390P
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3C2K6DD8DXP00MJNAW2H6AH
+      agent_id: 01J3CBNQW6NFJ8A7W7VQ3KQ1FP
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 18:58:43. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 21:37:24. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
-          \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
-          When controlling Home Assistant always call the intent tools. Use HassTurnOn\
-          \ to lock and HassTurnOff to unlock a lock. When controlling a device, prefer\
-          \ passing just its name and its domain (what comes before the dot in its\
-          \ entity id). When controlling an area, prefer passing just area name and\
-          \ domain.\nWhen a user asks to turn on all devices of a specific type, ask\
-          \ user to specify an area, unless there is only one device of that type.\n\
-          This device is not able to start timers.\nAn overview of the areas and the\
-          \ devices in this smart home:\nbinary_sensor.smart_lock:\n  names: Smart\
-          \ Lock\n  state: 'off'\n  areas: Entry\n  attributes:\n    device_class:\
-          \ lock\nbinary_sensor.smart_lock_tamper:\n  names: Smart Lock Tamper\n \
-          \ state: 'off'\n  areas: Entry\n  attributes:\n    device_class: tamper\n\
-          binary_sensor.smart_lock_battery:\n  names: Smart Lock Battery\n  state:\
-          \ 'off'\n  areas: Entry\n  attributes:\n    device_class: battery\nsensor.smart_lock_battery:\n\
-          \  names: Smart Lock Battery\n  state: '90'\n  areas: Entry\n  attributes:\n\
-          \    unit_of_measurement: '%'\n    device_class: battery\nlock.smart_lock:\n\
-          \  names: Smart Lock\n  state: unlocked\n  areas: Entry\n"
+          \ truthfully.\nTranslate the users command to control Home Assistant into\
+          \ an intent tool call. Use HassTurnOn to lock and HassTurnOff to unlock\
+          \ a lock. When controlling a device, prefer passing just its name and its\
+          \ domain (what comes before the dot in its entity id). When controlling\
+          \ an area, prefer passing just area name and domain.\nWhen a user asks to\
+          \ turn on all devices of a specific type, ask user to specify an area, unless\
+          \ there is only one device of that type.\nThis device is not able to start\
+          \ timers.\nAn overview of the areas and the devices in this smart home:\n\
+          - names: Smart Lock\n  domain: binary_sensor\n  state: 'off'\n  areas: Entry\n\
+          \  attributes:\n    device_class: lock\n- names: Smart Lock Tamper\n  domain:\
+          \ binary_sensor\n  state: 'off'\n  areas: Entry\n  attributes:\n    device_class:\
+          \ tamper\n- names: Smart Lock Battery\n  domain: binary_sensor\n  state:\
+          \ 'off'\n  areas: Entry\n  attributes:\n    device_class: battery\n- names:\
+          \ Smart Lock\n  domain: lock\n  state: unlocked\n  areas: Entry\n- names:\
+          \ Smart Lock Battery\n  domain: sensor\n  state: '90'\n  areas: Entry\n\
+          \  attributes:\n    unit_of_measurement: '%'\n    device_class: battery\n"
       - role: user
         content: Lock the entry lock
       - role: assistant
-        content: '[TOOL_CALLS] To lock the entry smart lock, you can use the following
-          command:
-
-
-          ```
-
-          HassTurnOn(''lock.smart_lock'', {''area'': ''Entry''})
-
-          ```
-
-
-          This will lock the smart lock in the entry area of your home.'
+        tool_calls:
+        - function:
+            name: HassTurnOn
+            arguments:
+              area: Entry
+              domain:
+              - lock
+              name: Smart Lock
+      - role: tool
+        content: '{"speech": {}, "response_type": "action_done", "data": {"targets":
+          [], "success": [{"name": "Entry", "type": "area", "id": "entry"}, {"name":
+          "Smart Lock", "type": "entity", "id": "lock.smart_lock"}], "failed": []}}'
+      - role: assistant
+        content: ' Entry lock has been locked successfully.'
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        area: Entry
+        domain:
+        - lock
+        name: Smart Lock

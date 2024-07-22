@@ -1,5 +1,5 @@
 ---
-uuid: 311da365-9cd2-49ad-9946-edcbcbe526af
+uuid: 2c628546-7f70-4141-b43f-deaac07896b7
 task_id: dom1_pl_todo_todo-add_clean_the_kitchen_to_my_todo_list
 category: todo
 task:
@@ -8,75 +8,112 @@ task:
     todo.personal_tasks:
       state: '1'
       attributes: null
-response: ' It seems like you don''t have Notion set up in your Home Assistant environment.
-  You can integrate it using a custom component or third-party integrations like home-assistant-integration-notion.
-  After setting it up, you will be able to use commands related to Notion in your
-  Home Assistant.'
+response: ' Cleaning the kitchen has been added to your todo list. You can find it
+  under Personal Tasks.'
 context:
-  unexpected_states:
-    todo.personal_tasks:
-      expected:
-        state: '1'
-      got:
-        state: '0'
+  unexpected_states: {}
   conversation_trace:
   - event_type: async_process
     data:
       text: Add clean the kitchen to my todo list
       context:
-        id: 01J3C2N4M23YQF8PR3YDGEXZ8Q
+        id: 01J3CBRFZ72YNWM5E4HK0RXR8R
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3C2N4K1ZFAPM3DDP29TJDED
+      agent_id: 01J3CBRFYCASZB2ZQXC197SPMZ
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 18:59:47. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 21:38:54. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
-          \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
-          When controlling Home Assistant always call the intent tools. Use HassTurnOn\
-          \ to lock and HassTurnOff to unlock a lock. When controlling a device, prefer\
-          \ passing just its name and its domain (what comes before the dot in its\
-          \ entity id). When controlling an area, prefer passing just area name and\
-          \ domain.\nWhen a user asks to turn on all devices of a specific type, ask\
-          \ user to specify an area, unless there is only one device of that type.\n\
-          This device is not able to start timers.\nAn overview of the areas and the\
-          \ devices in this smart home:\ntodo.personal_tasks:\n  names: Personal Tasks\n\
-          \  state: '0'\n"
+          \ truthfully.\nTranslate the users command to control Home Assistant into\
+          \ an intent tool call. Use HassTurnOn to lock and HassTurnOff to unlock\
+          \ a lock. When controlling a device, prefer passing just its name and its\
+          \ domain (what comes before the dot in its entity id). When controlling\
+          \ an area, prefer passing just area name and domain.\nWhen a user asks to\
+          \ turn on all devices of a specific type, ask user to specify an area, unless\
+          \ there is only one device of that type.\nThis device is not able to start\
+          \ timers.\nAn overview of the areas and the devices in this smart home:\n\
+          - names: Personal Tasks\n  domain: todo\n  state: '0'\n"
       - role: user
         content: Add clean the kitchen to my todo list
       - role: assistant
         tool_calls:
         - function:
-            name: Personal Tasks
-            arguments: null
-      - role: tool
-        content: '{"error": "HomeAssistantError", "error_text": "Tool \"Personal Tasks\"
-          not found"}'
-      - role: assistant
-        tool_calls:
-        - function:
-            name: Notion
+            name: HassListAddItem
             arguments:
-              task: Clean the kitchen
+              item: clean the kitchen
+              name: Personal Tasks
       - role: tool
-        content: '{"error": "HomeAssistantError", "error_text": "Tool \"Notion\" not
-          found"}'
+        content: '{"speech": {}, "response_type": "action_done", "data": {"targets":
+          [], "success": [], "failed": []}}'
       - role: assistant
-        content: ' It seems like you don''t have Notion set up in your Home Assistant
-          environment. You can integrate it using a custom component or third-party
-          integrations like home-assistant-integration-notion. After setting it up,
-          you will be able to use commands related to Notion in your Home Assistant.'
+        content: ' Cleaning the kitchen has been added to your todo list. You can
+          find it under Personal Tasks.'
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassListAddItem
+          parameters:
+            type: object
+            properties:
+              item:
+                type: string
+              name:
+                type: string
+            required: []
+          description: Add item to a todo list
   - event_type: llm_tool_call
     data:
-      tool_name: Personal Tasks
-      tool_args: {}
-  - event_type: llm_tool_call
-    data:
-      tool_name: Notion
+      tool_name: HassListAddItem
       tool_args:
-        task: Clean the kitchen
+        item: clean the kitchen
+        name: Personal Tasks

@@ -1,5 +1,5 @@
 ---
-uuid: 373f9d90-4b51-4de2-b9e7-8fe929853e56
+uuid: 05e7ae50-a111-4a6e-8a3f-46cfac917c11
 task_id: home5_cn_light_light-set_the_living_room_light_to_50_brightness
 category: light
 task:
@@ -10,9 +10,7 @@ task:
       attributes:
         brightness: 128
         color_mode: brightness
-response: ' To set the living room light to 50% brightness, you can say "HassLightSet
-  Living Room Light 50 brightness". This will adjust the brightness of your Living
-  Room Light to half its maximum.'
+response: 'Timeout: '
 context:
   unexpected_states:
     light.living_room_light:
@@ -25,37 +23,192 @@ context:
     data:
       text: Set the living room light to 50% brightness
       context:
-        id: 01J3C2HYA4HSVBDVQC6450YEGF
+        id: 01J3CBKQGMHSVBDVQC6450YEGF
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3C2HY96H2GTKBCSSH4HN60W
+      agent_id: 01J3CBKQFSH2GTKBCSSH4HN60W
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 18:58:02. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 21:36:18. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
-          \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
-          When controlling Home Assistant always call the intent tools. Use HassTurnOn\
-          \ to lock and HassTurnOff to unlock a lock. When controlling a device, prefer\
-          \ passing just its name and its domain (what comes before the dot in its\
-          \ entity id). When controlling an area, prefer passing just area name and\
-          \ domain.\nWhen a user asks to turn on all devices of a specific type, ask\
-          \ user to specify an area, unless there is only one device of that type.\n\
-          This device is not able to start timers.\nAn overview of the areas and the\
-          \ devices in this smart home:\nlight.living_room_light:\n  names: Living\
-          \ Room Light\n  state: 'on'\n  areas: Living Room\n  attributes:\n    brightness:\
-          \ '255'\nlight.kitchenette_light:\n  names: Kitchenette Light\n  state:\
-          \ 'off'\n  areas: Kitchenette\nlight.bedroom_1_light:\n  names: Bedroom\
-          \ 1 Light\n  state: 'off'\n  areas: Bedroom 1\nlight.bedroom_2_light:\n\
-          \  names: Bedroom 2 Light\n  state: 'off'\n  areas: Bedroom 2\nlight.porch_light:\n\
-          \  names: Porch Light\n  state: 'off'\n  areas: Front Porch\n"
+          \ truthfully.\nTranslate the users command to control Home Assistant into\
+          \ an intent tool call. Use HassTurnOn to lock and HassTurnOff to unlock\
+          \ a lock. When controlling a device, prefer passing just its name and its\
+          \ domain (what comes before the dot in its entity id). When controlling\
+          \ an area, prefer passing just area name and domain.\nWhen a user asks to\
+          \ turn on all devices of a specific type, ask user to specify an area, unless\
+          \ there is only one device of that type.\nThis device is not able to start\
+          \ timers.\nAn overview of the areas and the devices in this smart home:\n\
+          - names: Living Room Light\n  domain: light\n  state: 'on'\n  areas: Living\
+          \ Room\n  attributes:\n    brightness: '255'\n- names: Kitchenette Light\n\
+          \  domain: light\n  state: 'off'\n  areas: Kitchenette\n- names: Bedroom\
+          \ 1 Light\n  domain: light\n  state: 'off'\n  areas: Bedroom 1\n- names:\
+          \ Bedroom 2 Light\n  domain: light\n  state: 'off'\n  areas: Bedroom 2\n\
+          - names: Porch Light\n  domain: light\n  state: 'off'\n  areas: Front Porch\n"
       - role: user
         content: Set the living room light to 50% brightness
       - role: assistant
-        content: ' To set the living room light to 50% brightness, you can say "HassLightSet
-          Living Room Light 50 brightness". This will adjust the brightness of your
-          Living Room Light to half its maximum.'
+        tool_calls:
+        - function:
+            name: HassLightSet
+            arguments:
+              area: Living Room
+              brightness: 128
+              device_class:
+              - light
+              name: Living Room Light
+      - role: tool
+        content: '{"error": "InvalidSlotInfo", "error_text": "Received invalid slot
+          info for HassLightSet"}'
+      - role: assistant
+        tool_calls:
+        - function:
+            name: HassLightSet
+            arguments:
+              area: Living Room
+              brightness: 128
+              device_class:
+              - light
+              entity_id: living_room_light
+      - role: tool
+        content: '{"error": "InvalidSlotInfo", "error_text": "Received invalid slot
+          info for HassLightSet"}'
+      - role: assistant
+        tool_calls:
+        - function:
+            name: HassLightSet
+            arguments:
+              brightness: 128
+              device_class:
+              - light
+              entity_id: living_room_light
+      - role: tool
+        content: '{"error": "InvalidSlotInfo", "error_text": "Received invalid slot
+          info for HassLightSet"}'
+      - role: assistant
+        tool_calls:
+        - function:
+            name: HassLightSet
+            arguments:
+              brightness: 128
+              device_class:
+              - light
+              entity_id: living_room_light
+      - role: tool
+        content: '{"error": "InvalidSlotInfo", "error_text": "Received invalid slot
+          info for HassLightSet"}'
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassLightSet
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              color:
+                type: string
+              temperature:
+                type: integer
+                minimum: 0
+              brightness:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required: []
+          description: Sets the brightness or color of a light
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassLightSet
+      tool_args:
+        area: Living Room
+        brightness: 128
+        device_class:
+        - light
+        name: Living Room Light
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassLightSet
+      tool_args:
+        area: Living Room
+        brightness: 128
+        device_class:
+        - light
+        entity_id: living_room_light
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassLightSet
+      tool_args:
+        brightness: 128
+        device_class:
+        - light
+        entity_id: living_room_light
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassLightSet
+      tool_args:
+        brightness: 128
+        device_class:
+        - light
+        entity_id: living_room_light

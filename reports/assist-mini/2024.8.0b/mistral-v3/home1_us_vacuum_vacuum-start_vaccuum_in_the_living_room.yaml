@@ -1,5 +1,5 @@
 ---
-uuid: 500ee60a-3bb2-4a41-8507-f4966be0ed37
+uuid: 356b2db1-ff10-4cc8-bddc-66296aa37e9d
 task_id: home1_us_vacuum_vacuum-start_vaccuum_in_the_living_room
 category: vacuum
 task:
@@ -8,10 +8,9 @@ task:
     vacuum.roborock_downstairs:
       state: cleaning
       attributes: null
-response: ' To start the vacuum in the living room, you can use the following command:
-
-
-  HassTurnOn(Living Room, [''vacuum''], [''roborock_downstairs''])'
+response: ' The vacuum in the living room has been started, but it appears that the
+  Roborock Downstairs could not be found or is offline. Please check its status and
+  ensure it''s properly connected to your network if needed.'
 context:
   unexpected_states:
     vacuum.roborock_downstairs:
@@ -24,34 +23,138 @@ context:
     data:
       text: Start vaccuum in the living room
       context:
-        id: 01J3C2J8TDY9NQJZ7CNSBRTKJD
+        id: 01J3CBMMSYEHEDAWNV8WDWCN6V
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3C2J8SAPKCFXJPTM4CB4474
+      agent_id: 01J3CBMMRWVDE6K5AH3SNHP75D
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 18:58:13. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 21:36:48. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
-          \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
-          When controlling Home Assistant always call the intent tools. Use HassTurnOn\
-          \ to lock and HassTurnOff to unlock a lock. When controlling a device, prefer\
-          \ passing just its name and its domain (what comes before the dot in its\
-          \ entity id). When controlling an area, prefer passing just area name and\
-          \ domain.\nWhen a user asks to turn on all devices of a specific type, ask\
-          \ user to specify an area, unless there is only one device of that type.\n\
-          This device is not able to start timers.\nAn overview of the areas and the\
-          \ devices in this smart home:\nvacuum.roborock_downstairs:\n  names: Roborock\
-          \ Downstairs\n  state: 'off'\n  areas: Living Room\n"
+          \ truthfully.\nTranslate the users command to control Home Assistant into\
+          \ an intent tool call. Use HassTurnOn to lock and HassTurnOff to unlock\
+          \ a lock. When controlling a device, prefer passing just its name and its\
+          \ domain (what comes before the dot in its entity id). When controlling\
+          \ an area, prefer passing just area name and domain.\nWhen a user asks to\
+          \ turn on all devices of a specific type, ask user to specify an area, unless\
+          \ there is only one device of that type.\nThis device is not able to start\
+          \ timers.\nAn overview of the areas and the devices in this smart home:\n\
+          - names: Roborock Downstairs\n  domain: vacuum\n  state: 'off'\n  areas:\
+          \ Living Room\n"
       - role: user
         content: Start vaccuum in the living room
       - role: assistant
-        content: ' To start the vacuum in the living room, you can use the following
-          command:
-
-
-          HassTurnOn(Living Room, [''vacuum''], [''roborock_downstairs''])'
+        tool_calls:
+        - function:
+            name: HassTurnOn
+            arguments:
+              area: Living Room
+              name: Roborock Downstairs
+      - role: tool
+        content: '{"speech": {}, "response_type": "action_done", "data": {"targets":
+          [], "success": [{"name": "Living Room", "type": "area", "id": "living_room"}],
+          "failed": [{"name": "Roborock Downstairs", "type": "entity", "id": "vacuum.roborock_downstairs"}]}}'
+      - role: assistant
+        content: ' The vacuum in the living room has been started, but it appears
+          that the Roborock Downstairs could not be found or is offline. Please check
+          its status and ensure it''s properly connected to your network if needed.'
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassVacuumStart
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Starts a vacuum
+      - type: function
+        function:
+          name: HassVacuumReturnToBase
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Returns a vacuum to base
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        area: Living Room
+        name: Roborock Downstairs

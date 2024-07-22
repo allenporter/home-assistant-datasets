@@ -1,5 +1,5 @@
 ---
-uuid: 81fdaba6-dafe-4c1a-a9be-85840c6f146c
+uuid: 7de62f9c-693a-45b2-adb2-55b83819eea4
 task_id: home7_dk_cover_curtain_cover_curtain-set_the_smart_curtain_to_50
 category: cover
 task:
@@ -8,11 +8,8 @@ task:
     cover.smart_curtain:
       state: open
       attributes:
-        current_position: 100
-response: ' It seems that the tool "smart_curtain" is not available in your current
-  setup. You might need to add it to your Home Assistant configuration or make sure
-  it''s properly integrated. If you have any questions or need help, feel free to
-  ask!'
+        current_position: 50
+response: ' The smart curtain in the Living Room has been set to 50%.'
 context:
   unexpected_states: {}
   conversation_trace:
@@ -20,48 +17,127 @@ context:
     data:
       text: Set the smart curtain to 50%
       context:
-        id: 01J3C2M1THWHDZ1FDXPHBTHR99
+        id: 01J3CBQ9P4KVX44CR6RGPQW0CY
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3C2M1SSMMF4NFJM0WT32ASK
+      agent_id: 01J3CBQ9N9W1SGEW5ZH1MKHJD7
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 18:59:11. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 21:38:14. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
-          \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
-          When controlling Home Assistant always call the intent tools. Use HassTurnOn\
-          \ to lock and HassTurnOff to unlock a lock. When controlling a device, prefer\
-          \ passing just its name and its domain (what comes before the dot in its\
-          \ entity id). When controlling an area, prefer passing just area name and\
-          \ domain.\nWhen a user asks to turn on all devices of a specific type, ask\
-          \ user to specify an area, unless there is only one device of that type.\n\
-          This device is not able to start timers.\nAn overview of the areas and the\
-          \ devices in this smart home:\ncover.smart_curtain:\n  names: Smart Curtain\n\
-          \  state: open\n  areas: Living Room\n  attributes:\n    current_position:\
-          \ '100'\n    device_class: curtain\nsensor.smart_curtain_battery:\n  names:\
-          \ Smart Curtain Battery\n  state: '90'\n  areas: Living Room\n  attributes:\n\
-          \    unit_of_measurement: '%'\n    device_class: battery\n"
+          \ truthfully.\nTranslate the users command to control Home Assistant into\
+          \ an intent tool call. Use HassTurnOn to lock and HassTurnOff to unlock\
+          \ a lock. When controlling a device, prefer passing just its name and its\
+          \ domain (what comes before the dot in its entity id). When controlling\
+          \ an area, prefer passing just area name and domain.\nWhen a user asks to\
+          \ turn on all devices of a specific type, ask user to specify an area, unless\
+          \ there is only one device of that type.\nThis device is not able to start\
+          \ timers.\nAn overview of the areas and the devices in this smart home:\n\
+          - names: Smart Curtain\n  domain: cover\n  state: closed\n  areas: Living\
+          \ Room\n  attributes:\n    current_position: '0'\n    device_class: curtain\n\
+          - names: Smart Curtain Battery\n  domain: sensor\n  state: '90'\n  areas:\
+          \ Living Room\n  attributes:\n    unit_of_measurement: '%'\n    device_class:\
+          \ battery\n"
       - role: user
         content: Set the smart curtain to 50%
       - role: assistant
         tool_calls:
         - function:
-            name: smart_curtain
-            arguments: null
+            name: HassSetPosition
+            arguments:
+              area: Living Room
+              domain: cover
+              name: Smart Curtain
+              position: 50
       - role: tool
-        content: '{"error": "HomeAssistantError", "error_text": "Tool \"smart_curtain\"
-          not found"}'
+        content: '{"speech": {}, "response_type": "action_done", "data": {"targets":
+          [], "success": [{"name": "Living Room", "type": "area", "id": "living_room"},
+          {"name": "Smart Curtain", "type": "entity", "id": "cover.smart_curtain"}],
+          "failed": []}}'
       - role: assistant
-        content: ' It seems that the tool "smart_curtain" is not available in your
-          current setup. You might need to add it to your Home Assistant configuration
-          or make sure it''s properly integrated. If you have any questions or need
-          help, feel free to ask!'
+        content: ' The smart curtain in the Living Room has been set to 50%.'
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassSetPosition
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              position:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required:
+            - position
+          description: Sets the position of a device or entity
   - event_type: llm_tool_call
     data:
-      tool_name: smart_curtain
-      tool_args: {}
+      tool_name: HassSetPosition
+      tool_args:
+        area: Living Room
+        domain: cover
+        name: Smart Curtain
+        position: 50

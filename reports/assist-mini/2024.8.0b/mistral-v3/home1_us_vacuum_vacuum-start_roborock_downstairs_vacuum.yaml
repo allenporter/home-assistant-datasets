@@ -1,5 +1,5 @@
 ---
-uuid: f376f3ca-524e-4153-9df1-86c529580cc8
+uuid: e3e014d5-dfed-4777-a96c-b486edb9972f
 task_id: home1_us_vacuum_vacuum-start_roborock_downstairs_vacuum
 category: vacuum
 task:
@@ -8,11 +8,11 @@ task:
     vacuum.roborock_downstairs:
       state: cleaning
       attributes: null
-response: ' It seems like the tool "vacuum.roborock_downstairs" is not defined in
-  your Home Assistant configuration. Please make sure that you have correctly configured
-  the Roborock vacuum integration and that the tool for downstairs vacuuming is properly
-  set up. If you need assistance with the configuration, I''d be happy to help! Let
-  me know if you have any questions or issues.'
+response: ' It seems that there was an error while trying to turn on the Roborock
+  Downstairs vacuum. The device class provided doesn''t match with the device you
+  are using. Please ensure that you have specified the correct device class for your
+  Roborock vacuum. If you continue to experience issues, please try again or contact
+  customer support for assistance.'
 context:
   unexpected_states:
     vacuum.roborock_downstairs:
@@ -25,46 +25,150 @@ context:
     data:
       text: Start Roborock Downstairs vacuum
       context:
-        id: 01J3C2JB0DH148PQ2RRF4XR5DV
+        id: 01J3CBMRNWE6Y635FM6RVR0QNC
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3C2JAZMNNSNX03ZB3E7Z0VM
+      agent_id: 01J3CBMRN3D75JCPCREGC86AKT
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 18:58:15. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 21:36:52. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
-          \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
-          When controlling Home Assistant always call the intent tools. Use HassTurnOn\
-          \ to lock and HassTurnOff to unlock a lock. When controlling a device, prefer\
-          \ passing just its name and its domain (what comes before the dot in its\
-          \ entity id). When controlling an area, prefer passing just area name and\
-          \ domain.\nWhen a user asks to turn on all devices of a specific type, ask\
-          \ user to specify an area, unless there is only one device of that type.\n\
-          This device is not able to start timers.\nAn overview of the areas and the\
-          \ devices in this smart home:\nvacuum.roborock_downstairs:\n  names: Roborock\
-          \ Downstairs\n  state: 'off'\n  areas: Living Room\n"
+          \ truthfully.\nTranslate the users command to control Home Assistant into\
+          \ an intent tool call. Use HassTurnOn to lock and HassTurnOff to unlock\
+          \ a lock. When controlling a device, prefer passing just its name and its\
+          \ domain (what comes before the dot in its entity id). When controlling\
+          \ an area, prefer passing just area name and domain.\nWhen a user asks to\
+          \ turn on all devices of a specific type, ask user to specify an area, unless\
+          \ there is only one device of that type.\nThis device is not able to start\
+          \ timers.\nAn overview of the areas and the devices in this smart home:\n\
+          - names: Roborock Downstairs\n  domain: vacuum\n  state: 'off'\n  areas:\
+          \ Living Room\n"
       - role: user
         content: Start Roborock Downstairs vacuum
       - role: assistant
         tool_calls:
         - function:
-            name: vacuum.roborock_downstairs
-            arguments: null
+            name: HassTurnOn
+            arguments:
+              area: Downstairs
+              device_class:
+              - vacuum
+              domain: vacuum
+              name: Roborock Downstairs
       - role: tool
-        content: '{"error": "HomeAssistantError", "error_text": "Tool \"vacuum.roborock_downstairs\"
-          not found"}'
+        content: '{"error": "MatchFailedError", "error_text": "<MatchFailedError result=MatchTargetsResult(is_match=False,
+          no_match_reason=<MatchFailedReason.DEVICE_CLASS: 5>, states=[], no_match_name=None,
+          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''Roborock
+          Downstairs'', area_name=''Downstairs'', floor_name=None, domains={''vacuum''},
+          device_classes={''vacuum''}, features=None, states=None, assistant=''conversation'',
+          allow_duplicate_names=False), preferences=MatchTargetsPreferences(area_id=None,
+          floor_id=None)>"}'
       - role: assistant
-        content: ' It seems like the tool "vacuum.roborock_downstairs" is not defined
-          in your Home Assistant configuration. Please make sure that you have correctly
-          configured the Roborock vacuum integration and that the tool for downstairs
-          vacuuming is properly set up. If you need assistance with the configuration,
-          I''d be happy to help! Let me know if you have any questions or issues.'
+        content: ' It seems that there was an error while trying to turn on the Roborock
+          Downstairs vacuum. The device class provided doesn''t match with the device
+          you are using. Please ensure that you have specified the correct device
+          class for your Roborock vacuum. If you continue to experience issues, please
+          try again or contact customer support for assistance.'
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassVacuumStart
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Starts a vacuum
+      - type: function
+        function:
+          name: HassVacuumReturnToBase
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Returns a vacuum to base
   - event_type: llm_tool_call
     data:
-      tool_name: vacuum.roborock_downstairs
-      tool_args: {}
+      tool_name: HassTurnOn
+      tool_args:
+        area: Downstairs
+        device_class:
+        - vacuum
+        domain: vacuum
+        name: Roborock Downstairs
