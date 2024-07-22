@@ -1,5 +1,5 @@
 ---
-uuid: df1534ae-7665-4d25-b0dc-297b2b3b4f14
+uuid: ac4c43ff-c3a3-452f-b8ac-4eb86209f67c
 task_id: dom1_pl_lights_lights-turn_on_the_living_room_light
 category: light
 task:
@@ -10,26 +10,37 @@ task:
       attributes:
         brightness: 0
         color_mode: brightness
-response: The living room light has been turned on.
+response: It seems there's an issue with the living room light. I can try to identify
+  the correct name or area for it. Could you specify if you're referring to a different
+  room or device?
 context:
-  unexpected_states: {}
+  unexpected_states:
+    light.living_room_light:
+      expected:
+        color_mode: brightness
+        brightness: 0
+        state: 'on'
+      got:
+        color_mode: null
+        brightness: null
+        state: 'off'
   conversation_trace:
   - event_type: async_process
     data:
       text: Turn on the living room light
       context:
-        id: 01J3BQPX39RDCTXRWJ4FYT7S80
+        id: 01J3CEBK3P8AVHQG5ZQWNYXBZK
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3BQPX2KH0M221268S18ZPT8
+      agent_id: 01J3CEBK2WNHS5M1Q42DQREEM8
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 15:48:30. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 22:24:17. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
           \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
           When controlling Home Assistant always call the intent tools. Use HassTurnOn\
@@ -59,15 +70,106 @@ context:
             name: HassTurnOn
             arguments:
               area: Living Room
+              device_class:
+              - light
+              domain:
+              - homeassistant
+              name: living_room_light
       - role: tool
-        content: '{"speech": {}, "response_type": "action_done", "data": {"targets":
-          [], "success": [{"name": "Living Room", "type": "area", "id": "living_room"},
-          {"name": "Living Room Light", "type": "entity", "id": "light.living_room_light"}],
-          "failed": []}}'
+        content: '{"error": "MatchFailedError", "error_text": "<MatchFailedError result=MatchTargetsResult(is_match=False,
+          no_match_reason=<MatchFailedReason.DOMAIN: 4>, states=[], no_match_name=None,
+          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''living_room_light'',
+          area_name=''Living Room'', floor_name=None, domains={''homeassistant''},
+          device_classes={''light''}, features=None, states=None, assistant=''conversation'',
+          allow_duplicate_names=False), preferences=MatchTargetsPreferences(area_id=None,
+          floor_id=None)>"}'
       - role: assistant
-        content: The living room light has been turned on.
+        content: It seems there's an issue with the living room light. I can try to
+          identify the correct name or area for it. Could you specify if you're referring
+          to a different room or device?
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassLightSet
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              color:
+                type: string
+              temperature:
+                type: integer
+                minimum: 0
+              brightness:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required: []
+          description: Sets the brightness or color of a light
   - event_type: llm_tool_call
     data:
       tool_name: HassTurnOn
       tool_args:
         area: Living Room
+        device_class:
+        - light
+        domain:
+        - homeassistant
+        name: living_room_light

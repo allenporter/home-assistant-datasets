@@ -1,5 +1,5 @@
 ---
-uuid: 4b762cbf-e9f0-42dd-a0a6-dd943e362151
+uuid: 04976e4a-e09c-4aa3-b28f-f86754c024a7
 task_id: dom1_pl_lights_lights-please_turn_on_the_kitchen_light
 category: light
 task:
@@ -10,36 +10,36 @@ task:
       attributes:
         brightness: 0
         color_mode: brightness
-response: I'm sorry, but the kitchen light is already on. Would you like to adjust
-  its brightness or color?
+response: I'm sorry, but I couldn't find the kitchen light. Could you please provide
+  more details about it?
 context:
   unexpected_states:
     light.kitchen_light:
       expected:
-        state: 'on'
         color_mode: brightness
         brightness: 0
+        state: 'on'
       got:
-        state: 'off'
         color_mode: null
         brightness: null
+        state: 'off'
   conversation_trace:
   - event_type: async_process
     data:
       text: Please turn on the kitchen light
       context:
-        id: 01J3BQPRBG8XEGZ73CFQQ1A06W
+        id: 01J3CEBEEQMZ30EK646TG9YNGW
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3BQPRAM4NQESP6YDVSFEQCA
+      agent_id: 01J3CEBB7TZ2Y86ZB4A6HDB4YT
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 15:48:25. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 22:24:12. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
           \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
           When controlling Home Assistant always call the intent tools. Use HassTurnOn\
@@ -72,17 +72,94 @@ context:
               device_class:
               - light
               domain:
-              - light.kitchen_light
+              - homeassistant
+              name: kitchen_light
       - role: tool
         content: '{"error": "MatchFailedError", "error_text": "<MatchFailedError result=MatchTargetsResult(is_match=False,
           no_match_reason=<MatchFailedReason.DOMAIN: 4>, states=[], no_match_name=None,
-          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=None, area_name=''Kitchen'',
-          floor_name=None, domains={''light.kitchen_light''}, device_classes={''light''},
+          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''kitchen_light'',
+          area_name=''Kitchen'', floor_name=None, domains={''homeassistant''}, device_classes={''light''},
           features=None, states=None, assistant=''conversation'', allow_duplicate_names=False),
           preferences=MatchTargetsPreferences(area_id=None, floor_id=None)>"}'
       - role: assistant
-        content: I'm sorry, but the kitchen light is already on. Would you like to
-          adjust its brightness or color?
+        content: I'm sorry, but I couldn't find the kitchen light. Could you please
+          provide more details about it?
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassLightSet
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              color:
+                type: string
+              temperature:
+                type: integer
+                minimum: 0
+              brightness:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required: []
+          description: Sets the brightness or color of a light
   - event_type: llm_tool_call
     data:
       tool_name: HassTurnOn
@@ -91,4 +168,5 @@ context:
         device_class:
         - light
         domain:
-        - light.kitchen_light
+        - homeassistant
+        name: kitchen_light

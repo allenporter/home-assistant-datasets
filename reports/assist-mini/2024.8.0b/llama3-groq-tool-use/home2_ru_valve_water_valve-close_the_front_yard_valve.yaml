@@ -1,5 +1,5 @@
 ---
-uuid: 10d46940-b26b-4a30-b906-a63b2ff878ab
+uuid: b88399e6-67db-477d-999f-fde7faa481ce
 task_id: home2_ru_valve_water_valve-close_the_front_yard_valve
 category: valve
 task:
@@ -9,34 +9,34 @@ task:
       state: closed
       attributes:
         current_position: 0
-response: It seems like there's an issue with the function call. Could you please
-  provide more context or clarify what exactly you want to do?
+response: It seems like there was a problem finding the valve in the front yard. Could
+  you please provide more details or specify the exact name of the valve?
 context:
   unexpected_states:
     valve.irrigation_valve:
       expected:
-        current_position: 0
         state: closed
+        current_position: 0
       got:
-        current_position: 100
         state: open
+        current_position: 100
   conversation_trace:
   - event_type: async_process
     data:
       text: close the front yard valve
       context:
-        id: 01J3BQR3DDVTFA4D9YG3HNPK1K
+        id: 01J3CEDBN0W1E4HH9S1AYMVQWF
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3BQR3CMCC4Z40VVDEHB7GBJ
+      agent_id: 01J3CEDBM4YGM2KV5NG65QEHJY
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 15:49:09. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 22:25:15. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
           \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
           When controlling Home Assistant always call the intent tools. Use HassTurnOn\
@@ -61,27 +61,100 @@ context:
         - function:
             name: HassTurnOff
             arguments:
-              area:
-              - Front yard
+              area: Front yard
               device_class:
               - valve
               domain: []
               floor: ''
-              name:
-              - Irrigation Valve
+              name: Irrigation Valve
       - role: tool
-        content: '{"error": "InvalidSlotInfo", "error_text": "Received invalid slot
-          info for HassTurnOff"}'
+        content: '{"error": "MatchFailedError", "error_text": "<MatchFailedError result=MatchTargetsResult(is_match=False,
+          no_match_reason=<MatchFailedReason.DEVICE_CLASS: 5>, states=[], no_match_name=None,
+          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''Irrigation
+          Valve'', area_name=''Front yard'', floor_name=None, domains=None, device_classes={''valve''},
+          features=None, states=None, assistant=''conversation'', allow_duplicate_names=False),
+          preferences=MatchTargetsPreferences(area_id=None, floor_id=None)>"}'
       - role: assistant
-        content: It seems like there's an issue with the function call. Could you
-          please provide more context or clarify what exactly you want to do?
+        content: It seems like there was a problem finding the valve in the front
+          yard. Could you please provide more details or specify the exact name of
+          the valve?
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassSetPosition
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              position:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required:
+            - position
+          description: Sets the position of a device or entity
   - event_type: llm_tool_call
     data:
       tool_name: HassTurnOff
       tool_args:
-        area:
-        - Front yard
+        area: Front yard
         device_class:
         - valve
-        name:
-        - Irrigation Valve
+        name: Irrigation Valve

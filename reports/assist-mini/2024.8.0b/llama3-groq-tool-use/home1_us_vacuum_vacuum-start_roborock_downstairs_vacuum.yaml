@@ -1,5 +1,5 @@
 ---
-uuid: 0907ab72-e39e-4ffa-bdbb-3f9e6b83cfd7
+uuid: 48821861-6302-47c2-a207-eb6f9bc1b995
 task_id: home1_us_vacuum_vacuum-start_roborock_downstairs_vacuum
 category: vacuum
 task:
@@ -8,27 +8,33 @@ task:
     vacuum.roborock_downstairs:
       state: cleaning
       attributes: null
-response: The Roborock Downstairs vacuum has started in the Living Room. Is there
-  anything else you need assistance with?
+response: I'm sorry, but it seems like there's an issue with the Roborock Downstairs
+  vacuum. It doesn't seem to be configured correctly. Would you like to try something
+  else?
 context:
-  unexpected_states: {}
+  unexpected_states:
+    vacuum.roborock_downstairs:
+      expected:
+        state: cleaning
+      got:
+        state: 'off'
   conversation_trace:
   - event_type: async_process
     data:
       text: Start Roborock Downstairs vacuum
       context:
-        id: 01J3BQMBJRH148PQ2RRF4XR5DV
+        id: 01J3CE7XXAFV5F7WQ4JKKC8291
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3BQMBHYNNSNX03ZB3E7Z0VM
+      agent_id: 01J3CE7XWHEQ315HWY9MMH05SR
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 15:47:07. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 22:22:17. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
           \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
           When controlling Home Assistant always call the intent tools. Use HassTurnOn\
@@ -48,22 +54,120 @@ context:
             name: HassVacuumStart
             arguments:
               area: Living Room
-              domain:
+              device_class:
               - vacuum
+              domain:
+              - roborock
+              floor: ''
               name: Roborock Downstairs
       - role: tool
-        content: '{"speech": {}, "response_type": "action_done", "data": {"targets":
-          [], "success": [{"name": "Living Room", "type": "area", "id": "living_room"},
-          {"name": "Roborock Downstairs", "type": "entity", "id": "vacuum.roborock_downstairs"}],
-          "failed": []}}'
+        content: '{"error": "MatchFailedError", "error_text": "<MatchFailedError result=MatchTargetsResult(is_match=False,
+          no_match_reason=<MatchFailedReason.DOMAIN: 4>, states=[], no_match_name=None,
+          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''Roborock
+          Downstairs'', area_name=''Living Room'', floor_name=None, domains={''roborock''},
+          device_classes={''vacuum''}, features=None, states=None, assistant=''conversation'',
+          allow_duplicate_names=False), preferences=MatchTargetsPreferences(area_id=None,
+          floor_id=None)>"}'
       - role: assistant
-        content: The Roborock Downstairs vacuum has started in the Living Room. Is
-          there anything else you need assistance with?
+        content: I'm sorry, but it seems like there's an issue with the Roborock Downstairs
+          vacuum. It doesn't seem to be configured correctly. Would you like to try
+          something else?
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassVacuumStart
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Starts a vacuum
+      - type: function
+        function:
+          name: HassVacuumReturnToBase
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Returns a vacuum to base
   - event_type: llm_tool_call
     data:
       tool_name: HassVacuumStart
       tool_args:
         area: Living Room
-        domain:
+        device_class:
         - vacuum
+        domain:
+        - roborock
         name: Roborock Downstairs

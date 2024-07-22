@@ -1,5 +1,5 @@
 ---
-uuid: ba207740-24fa-47b6-8c54-c1ce1cde7f15
+uuid: f578d074-ae6c-4fd4-9924-be081662b427
 task_id: dom1_pl_lights_lights-turn_on_the_backyard_light
 category: light
 task:
@@ -10,36 +10,36 @@ task:
       attributes:
         brightness: 0
         color_mode: brightness
-response: I'm sorry, but I couldn't find a light in the Backyard. Could you specify
-  which one you want to turn on?
+response: It seems there's no light matching the name "Garden Light" in the Backyard.
+  Could you please provide more details or specify the correct device name?
 context:
   unexpected_states:
     light.garden_light:
       expected:
-        state: 'on'
         color_mode: brightness
         brightness: 0
+        state: 'on'
       got:
-        state: 'off'
         color_mode: null
         brightness: null
+        state: 'off'
   conversation_trace:
   - event_type: async_process
     data:
       text: Turn on the Backyard light
       context:
-        id: 01J3BQQ0P0MHBCAP81TJ04R3H4
+        id: 01J3CEBR1ZG2KA125M6VT7VNZC
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3BQQ0N7MP2SHA8JNR1SDBWC
+      agent_id: 01J3CEBR15A2HA23RJJR1KA0QC
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 15:48:34. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 22:24:22. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
           \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
           When controlling Home Assistant always call the intent tools. Use HassTurnOn\
@@ -73,16 +73,95 @@ context:
               - light
               domain:
               - light
+              floor: ''
+              name: Garden Light
       - role: tool
         content: '{"error": "MatchFailedError", "error_text": "<MatchFailedError result=MatchTargetsResult(is_match=False,
           no_match_reason=<MatchFailedReason.DEVICE_CLASS: 5>, states=[], no_match_name=None,
-          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=None, area_name=''Backyard'',
-          floor_name=None, domains={''light''}, device_classes={''light''}, features=None,
-          states=None, assistant=''conversation'', allow_duplicate_names=False), preferences=MatchTargetsPreferences(area_id=None,
-          floor_id=None)>"}'
+          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''Garden
+          Light'', area_name=''Backyard'', floor_name=None, domains={''light''}, device_classes={''light''},
+          features=None, states=None, assistant=''conversation'', allow_duplicate_names=False),
+          preferences=MatchTargetsPreferences(area_id=None, floor_id=None)>"}'
       - role: assistant
-        content: I'm sorry, but I couldn't find a light in the Backyard. Could you
-          specify which one you want to turn on?
+        content: It seems there's no light matching the name "Garden Light" in the
+          Backyard. Could you please provide more details or specify the correct device
+          name?
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassLightSet
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              color:
+                type: string
+              temperature:
+                type: integer
+                minimum: 0
+              brightness:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required: []
+          description: Sets the brightness or color of a light
   - event_type: llm_tool_call
     data:
       tool_name: HassTurnOn
@@ -92,3 +171,4 @@ context:
         - light
         domain:
         - light
+        name: Garden Light

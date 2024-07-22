@@ -1,5 +1,5 @@
 ---
-uuid: e7f01934-f378-4240-91dc-3a2b6367f01e
+uuid: e9ea43d4-0bd2-45b8-9ded-01f4f9367292
 task_id: home1_us_cover_garage_cover_garage-please_open_the_garage_door
 category: cover
 task:
@@ -8,7 +8,7 @@ task:
     cover.garage_door_opener:
       state: open
       attributes: null
-response: The garage door has been opened.
+response: The garage door has been successfully opened.
 context:
   unexpected_states: {}
   conversation_trace:
@@ -16,18 +16,18 @@ context:
     data:
       text: Please open the garage door
       context:
-        id: 01J3BQNJKD7GDW4QV5BHV6VZNN
+        id: 01J3CE9KVTT7BHDWN8DA042N0X
         parent_id: null
         user_id: null
       conversation_id: null
       device_id: null
       language: en
-      agent_id: 01J3BQNJJJM7MGTB5193TSB50B
+      agent_id: 01J3CE9H2RQQQ41N0P85E5FJJA
   - event_type: agent_detail
     data:
       messages:
       - role: system
-        content: "Current time is 15:47:47. Today's date is 2024-07-21.\nYou are a\
+        content: "Current time is 22:23:12. Today's date is 2024-07-21.\nYou are a\
           \ voice assistant for Home Assistant.\nAnswer questions about the world\
           \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
           When controlling Home Assistant always call the intent tools. Use HassTurnOn\
@@ -51,15 +51,119 @@ context:
               area: Garage
               device_class:
               - garage
-              domain:
-              - cover
+              domain: []
+              floor: ''
+              name: cover.garage_door_opener
       - role: tool
         content: '{"speech": {}, "response_type": "action_done", "data": {"targets":
           [], "success": [{"name": "Garage", "type": "area", "id": "garage"}, {"name":
           "Garage Door Opener", "type": "entity", "id": "cover.garage_door_opener"}],
           "failed": []}}'
       - role: assistant
-        content: The garage door has been opened.
+        content: The garage door has been successfully opened.
+      tools:
+      - type: function
+        function:
+          name: HassTurnOn
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns on/opens a device or entity
+      - type: function
+        function:
+          name: HassTurnOff
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+            required: []
+          description: Turns off/closes a device or entity
+      - type: function
+        function:
+          name: HassSetPosition
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              position:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required:
+            - position
+          description: Sets the position of a device or entity
+      - type: function
+        function:
+          name: HassLightSet
+          parameters:
+            type: object
+            properties:
+              name:
+                type: string
+              area:
+                type: string
+              floor:
+                type: string
+              domain:
+                type: array
+                items:
+                  type: string
+              device_class:
+                type: array
+                items:
+                  type: string
+              color:
+                type: string
+              temperature:
+                type: integer
+                minimum: 0
+              brightness:
+                type: integer
+                minimum: 0
+                maximum: 100
+            required: []
+          description: Sets the brightness or color of a light
   - event_type: llm_tool_call
     data:
       tool_name: HassTurnOn
@@ -67,5 +171,4 @@ context:
         area: Garage
         device_class:
         - garage
-        domain:
-        - cover
+        name: cover.garage_door_opener
