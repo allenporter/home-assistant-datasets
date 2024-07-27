@@ -1,0 +1,88 @@
+---
+uuid: 107882d3-f202-4aad-9938-43ba52cd2a11
+task_id: home2_ru_valve_water_valve-close_the_front_yard_valve
+category: valve
+task:
+  input_text: close the front yard valve
+  expect_changes:
+    valve.irrigation_valve:
+      state: closed
+      attributes:
+        current_position: 0
+response: I can't find a valve in the front yard. Can you try again?
+context:
+  unexpected_states:
+    valve.irrigation_valve:
+      expected:
+        current_position: 0
+        state: closed
+      got:
+        current_position: 100
+        state: open
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: close the front yard valve
+      context:
+        id: 01J3PGSPW3TW1F7JHGNCFM78ED
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: 01J3PGSPTX7R2RR2DC2KPFGPPS
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: "Current time is 20:19:21. Today's date is 2024-07-25.\nYou are a\
+          \ voice assistant for Home Assistant.\nAnswer questions about the world\
+          \ truthfully.\nAnswer in plain text. Keep it simple and to the point.\n\
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn\
+          \ to lock and HassTurnOff to unlock a lock. When controlling a device, prefer\
+          \ passing just its name and its domain (what comes before the dot in its\
+          \ entity id). When controlling an area, prefer passing just area name and\
+          \ domain.\nWhen a user asks to turn on all devices of a specific type, ask\
+          \ user to specify an area, unless there is only one device of that type.\n\
+          This device is not able to start timers.\nAn overview of the areas and the\
+          \ devices in this smart home:\nsensor.irrigation_valve_meter_reading:\n\
+          \  names: Irrigation Valve Meter-reading\n  state: '2000'\n  areas: Front\
+          \ yard\n  attributes:\n    unit_of_measurement: m\xB3\n    device_class:\
+          \ water\nsensor.irrigation_valve_battery:\n  names: Irrigation Valve Battery\n\
+          \  state: '75'\n  areas: Front yard\n  attributes:\n    unit_of_measurement:\
+          \ '%'\n    device_class: battery\nvalve.irrigation_valve:\n  names: Irrigation\
+          \ Valve\n  state: open\n  areas: Front yard\n  attributes:\n    current_position:\
+          \ '100'\n"
+      - role: user
+        content: close the front yard valve
+      - role: assistant
+        content: ''
+        tool_calls:
+        - function:
+            name: HassTurnOff
+            arguments:
+              area: Front yard
+              device_class:
+              - irrigation
+              domain: valve
+              name: Irrigation Valve
+      - role: tool
+        content: '{"error": "MatchFailedError", "error_text": "<MatchFailedError result=MatchTargetsResult(is_match=False,
+          no_match_reason=<MatchFailedReason.DEVICE_CLASS: 5>, states=[], no_match_name=None,
+          areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''Irrigation
+          Valve'', area_name=''Front yard'', floor_name=None, domains={''valve''},
+          device_classes={''irrigation''}, features=None, states=None, assistant=''conversation'',
+          allow_duplicate_names=False), preferences=MatchTargetsPreferences(area_id=None,
+          floor_id=None)>"}'
+      - role: assistant
+        content: I can't find a valve in the front yard. Can you try again?
+        tool_calls: null
+  - event_type: llm_tool_call
+    data:
+      tool_name: HassTurnOff
+      tool_args:
+        area: Front yard
+        device_class:
+        - irrigation
+        domain: valve
+        name: Irrigation Valve
