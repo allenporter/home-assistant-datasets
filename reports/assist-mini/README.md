@@ -48,7 +48,7 @@ Using `models.yaml` to configure a local model integrations:
 
 
 ```bash
-$ MODEL=llama3-groq-tool-use,mistral-v3
+$ MODEL=llama3.1,llama3-groq-tool-use
 $ home-assistant-datasets assist collect --model_output_dir=${MODEL_OUTPUT_DIR} --dataset=${DATASET} --models=${MODEL}
 $ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=csv > ${MODEL_OUTPUT_DIR}/report.csv
 ```
