@@ -38,5 +38,14 @@ Using `models.yaml` to configure a local openai compatible integration:
 ```bash
 $ MODEL=functionary-small-v2.5
 $ home-assistant-datasets assist collect --model_output_dir=${MODEL_OUTPUT_DIR} --dataset=${DATASET} --models=${MODEL}
+```
+
+View the eval results for all models:
+```bash
+$ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=report
+```
+
+Create a csv file of all the detailed results for review in a spreadsheet app like Google Sheets:
+```bash
 $ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=csv > ${MODEL_OUTPUT_DIR}/report.csv
 ```

@@ -34,7 +34,7 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
         iter(
             event
             for event in trace_events
-            if event["event_type"] == trace.ConversationTraceEventType.LLM_TOOL_CALL
+            if event["event_type"] in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
         ),
         None,
     )
