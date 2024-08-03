@@ -24,11 +24,11 @@ $ MODEL_OUTPUT_DIR=reports/assist/2024.8.0b/
 Using `models.yaml` to configure a local openai compatible integration:
 
 ```yaml
-- model_id: llama3-groq-tool-use
+- model_id: llama3.1
   domain: ollama
   config_entry_data:
     url: http://ml-papers-ollama.devpod/v1
-    model: llama3-groq-tool-use:latest
+    model: llama3.1:latest
   config_entry_options:
     llm_hass_api: assist
 - model_id: mistral-v3
@@ -46,5 +46,6 @@ Using `models.yaml` to configure a local openai compatible integration:
 ```bash
 $ MODEL=llama3-groq-tool-use
 $ home-assistant-datasets assist collect --model_output_dir=${MODEL_OUTPUT_DIR} --dataset=${DATASET} --models=${MODEL}
+$ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=report
 $ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=csv > ${MODEL_OUTPUT_DIR}/report.csv
 ```

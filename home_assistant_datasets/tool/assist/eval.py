@@ -17,6 +17,7 @@ from typing import Any
 
 import yaml
 from mashumaro.mixins.yaml import EncodedData
+from mashumaro.exceptions import MissingField
 
 from homeassistant.components.conversation import trace
 
@@ -152,7 +153,7 @@ def run(args: argparse.Namespace) -> int:
             output = ModelOutput.from_yaml(
                 model_output_file.read_text(), decoder=yaml_decoder
             )
-        except (yaml.error.YAMLError, ValueError) as err:
+        except (yaml.error.YAMLError, ValueError, MissingField) as err:
             raise ValueError(
                 f"Unable to parse model output file: {model_output_file}: {str(err)}"
             ) from err

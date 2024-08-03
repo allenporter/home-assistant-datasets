@@ -112,7 +112,7 @@ Or otherwise configure custom components in the `custom_components` directory.
 
 ```bash
 $ DATASET="home-assistant-datasets/datasets/assist/"
-$ OUTPUT_DIR="reports/assist/$(date +"%Y-%m-%d")/"
+$ OUTPUT_DIR="reports/assist/2024.8.0b"
 $ home-assistant-datasets assist collect --models=assistant --dataset=${DATASET} --model_output_dir={OUTPUT_DIR}
 ```
 
@@ -124,12 +124,13 @@ Once you have collected data from the model, you can perform a manual or offline
 evaluation of the results in the model output directoyr.
 
 ```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > report.csv
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=report
 ```
 
 You can export the results into a spreadsheet or perform other analysis. In this example, the assistnat pipeline successfully handled around 51% of queries.
 
 ```bash
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > report.csv
 $ wc -l report.csv
 113 report.csv
 $ grep Good report.csv | wc -l
