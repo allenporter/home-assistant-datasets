@@ -3,7 +3,6 @@
 import argparse
 import logging
 import pathlib
-import sys
 import yaml
 import random
 
@@ -47,6 +46,7 @@ def get_arguments() -> argparse.Namespace:
     )
     return parser.parse_args()
 
+
 def main():
     args = get_arguments()
     logging.basicConfig(level=getattr(logging, args.log_level.upper()))
@@ -82,11 +82,9 @@ def main():
         tasks = yaml.load_all(output_file.read_text(), Loader=yaml.Loader)
         for task in tasks:
             uid = task["uuid"]
-            response = task["response"]
-            if ""
             label = labels.get(uid, "Unavailable")
             model_results[model_id][label] = model_results[model_id].get(label, 0) + 1
-            if not label in model_samples[model_id]:
+            if label not in model_samples[model_id]:
                 model_samples[model_id][label] = []
             if args.samples and "task" in task:
                 model_samples[model_id][label].append(task["task"]["input_text"])
@@ -110,10 +108,7 @@ def main():
         for model_id, label_dict in model_results.items():
             row = []
             row.append(model_id)
-            row.extend([
-                str(label_dict.get(col, 0))
-                for col in cols
-            ])
+            row.extend([str(label_dict.get(col, 0)) for col in cols])
             print(",".join(row))
 
 

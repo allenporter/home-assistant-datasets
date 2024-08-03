@@ -2,7 +2,6 @@
 
 import yaml
 import json
-import pathlib
 import sys
 
 
