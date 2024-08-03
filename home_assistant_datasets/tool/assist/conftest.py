@@ -2,8 +2,10 @@
 
 import pathlib
 import logging
+import datetime
 
 import pytest
+from homeassistant.util import dt as dt_util
 
 from .data_model import (
     EvalTask,
@@ -67,6 +69,15 @@ def pytest_generate_tests(metafunc) -> None:
     metafunc.parametrize(
         "eval_task", [pytest.param(task, id=task.task_id) for task in tasks]
     )
+
+
+@pytest.fixture(autouse=True)
+def restore_tz() -> None:
+    yield
+    # Home Assistant teardown seems to run too soon and expects this so try to
+    # patch it in first.
+    dt_util.set_default_time_zone(datetime.UTC)
+
 
 
 @pytest.fixture(name="eval_output_file")

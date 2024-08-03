@@ -55,8 +55,8 @@ which parameters to adjust. This includes things like the model to use, the prom
 
 ### Configure Conversation Agents
 
-See the [model config](../README.md) section on how to configure `models.yaml`. Each
-model name defines a config entry and the conversation agent to use during evaluation.
+Models are configured in the `models.yaml` file in the root of this repository. These
+are configuration entries for home assistant integrations.
 
 Here is an example `models.yaml`:
 
@@ -97,22 +97,45 @@ models:
       llm_hass_api: assist
 ```
 
+### Prepare environment
+
+Create a virtual environment:
+
+```bash
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip3 install -r requirements_dev.txt
+$ pip3 install -e .
+```
+
+The above will by default use a somewhat recent version of home assistant but
+if you want to use one from a local environment then install it:
+
+```bash
+$ pip3 install -e /workspaces/core
+```
+
+You will need the [synthetic-home custom component](https://github.com/allenporter/synthetic-home)
+and you can either install it in a separate direcotry like this:
+```bash
+$ export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home/"
+```
+
+Or using a `custom_components` directory in the local directory if you have multiple
+custom components you wnat to evaluate:
+
+```bash
+$ export PYTHONPATH="${PYTHONPATH}:${PWD}"
+```
+
 ### Run
 
 You can collect data from the API using the command, which uses pytest as the
 underlying framework.
 
-You need to have the synthetic home custom component installed with something like this:
-
-```bash
-$ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/"
-```
-
-Or otherwise configure custom components in the `custom_components` directory.
-
 ```bash
 $ DATASET="datasets/assist/"
-$ OUTPUT_DIR="reports/assist/2024.8.0b"
+$ OUTPUT_DIR="reports/assist/2024.8.0b"  # Output based on home assistant version used
 $ MODEL=llama3.1
 $ home-assistant-datasets assist collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
