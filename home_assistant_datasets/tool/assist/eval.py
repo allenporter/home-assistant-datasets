@@ -8,6 +8,18 @@ $ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
 $ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR}
 ```
 
+Usage:
+```
+usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR] [--output_type {csv,yaml,report}]
+
+options:
+  -h, --help            show this help message and exit
+  --model_output_dir MODEL_OUTPUT_DIR
+                        Specifies the model output directory from `collect`.
+  --output_type {csv,yaml,report}
+                        Specifies the output type.
+```
+
 """
 
 import argparse
@@ -23,6 +35,8 @@ from homeassistant.components.conversation import trace
 
 from .data_model import ModelOutput
 from .eval_output import GOOD_LABEL, BAD_LABEL, create_writer, OutputType
+
+__all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -62,6 +76,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
     args.add_argument(
         "--output_type",
         type=OutputType,
+        choices=OutputType,
         help="Specifies the output type.",
     )
 

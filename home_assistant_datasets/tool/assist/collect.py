@@ -40,14 +40,23 @@ You need to have the synthetic home custom component installed with something li
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/"
 ```
 
-See `assist_eval` for creating offline evaluation reports.
+See `eval` for creating offline evaluation reports.
 
+Usage:
+```
+usage: home-assistant-datasets assist collect [-h] [--dry_run] --models MODELS [--dataset DATASET] --model_output_dir MODEL_OUTPUT_DIR
+                                              [--categories CATEGORIES] [--collect-only] [-s] [--verbose | --verbosity N]
+                                              [test_path]
+home-assistant-datasets assist collect: error: the following arguments are required: --models, --model_output_dir
+```
 """
 
 import argparse
 import logging
 
 import pytest
+
+__all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
