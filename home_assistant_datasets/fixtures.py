@@ -18,8 +18,6 @@ from homeassistant.setup import async_setup_component
 # TODO(#12): Support loading from the custom component or core development environment
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components import synthetic_home  # noqa: F401
-
 from home_assistant_datasets.data_model import ModelConfig
 
 from . import yaml_loaders
@@ -81,6 +79,8 @@ async def mock_synthetic_home(
         yield None
         return
 
+    from custom_components import synthetic_home  # noqa: F401
+
     config_entry = MockConfigEntry(
         domain="synthetic_home", data={"config_filename": "ignored"}
     )
@@ -139,7 +139,7 @@ async def mock_conversation_agent_config_entry(
         domain=model_config.domain,
         data=model_config.config_entry_data,
         options=options,
-        version=model_config.version or 1
+        version=model_config.version or 1,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
