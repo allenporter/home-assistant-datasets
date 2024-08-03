@@ -111,9 +111,10 @@ $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/"
 Or otherwise configure custom components in the `custom_components` directory.
 
 ```bash
-$ DATASET="home-assistant-datasets/datasets/assist/"
+$ DATASET="datasets/assist/"
 $ OUTPUT_DIR="reports/assist/2024.8.0b"
-$ home-assistant-datasets assist collect --models=assistant --dataset=${DATASET} --model_output_dir={OUTPUT_DIR}
+$ MODEL=llama3.1
+$ home-assistant-datasets assist collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
 
 See `home-assistant-datasets assist collect --help` for options to control pytest.
@@ -130,7 +131,7 @@ $ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_
 You can export the results into a spreadsheet or perform other analysis. In this example, the assistnat pipeline successfully handled around 51% of queries.
 
 ```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > report.csv
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > ${OUTPUT_DIR}/report.csv
 $ wc -l report.csv
 113 report.csv
 $ grep Good report.csv | wc -l
