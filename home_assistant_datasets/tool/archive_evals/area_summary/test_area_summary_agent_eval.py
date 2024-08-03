@@ -49,7 +49,7 @@ STRIP_PREFIX = "Summary: "
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
-    """Fiture that defines which model is being evaluated."""
+    """Fixture that defines which model is being evaluated."""
     return request.param
 
 
@@ -108,6 +108,7 @@ def eval_output_file_fixture(model_id: str, synthetic_home_config: str) -> str:
     """
     home_file = pathlib.Path(synthetic_home_config).name
     return pathlib.Path(f"{MODEL_EVAL_OUTPUT}/{model_id}/{home_file}")
+
 
 @dataclass
 class DeviceState:

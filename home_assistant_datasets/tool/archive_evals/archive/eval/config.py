@@ -23,7 +23,6 @@ from typing import Any
 _LOGGER = logging.getLogger(__name__)
 
 
-
 CONF_COPY_CONFIG_FILES = "copy_config_files"
 CONF_CONFIG_ENTRIES = "config_entries"
 
@@ -55,7 +54,7 @@ ONBOARDING_CONFIG = {
             "analytics",
             "integration",
         ]
-    }
+    },
 }
 
 
@@ -67,14 +66,14 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> None:
     # await config.async_create_default_config(hass)
 
     config_dir = pathlib.Path(hass.config.config_dir)
-    with (config_dir / CONFIURATION_YAML).open('w') as configuration_yaml_file:
+    with (config_dir / CONFIURATION_YAML).open("w") as configuration_yaml_file:
         configuration_yaml_file.write(yaml.dump(MINIMAL_CONFIG, sort_keys=False))
 
     os.makedirs(config_dir / STORAGE_DIR, exist_ok=True)
-    with (config_dir / ONBOARDING_FILE).open('w') as onboarding_file:
+    with (config_dir / ONBOARDING_FILE).open("w") as onboarding_file:
         json.dump(ONBOARDING_CONFIG, onboarding_file)
 
-    # Copy eval specifc configuration files
+    # Copy eval specific configuration files
     for config_file in config.get(CONF_COPY_CONFIG_FILES, []):
         shutil.copy(
             config_file,
@@ -84,7 +83,7 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> None:
 
 def create_config_entry(config_entry: dict[str, Any]) -> config_entries.ConfigEntry:
     """Create a ConfigEntry from a dict."""
-    # Arbitarily assign a unique id based on the contents of the entry
+    # Arbitrarily assign a unique id based on the contents of the entry
     hash = hashlib.sha256()
     hash.update(str(config_entry).encode())
     unique_id = hash.hexdigest()
@@ -101,7 +100,9 @@ def create_config_entry(config_entry: dict[str, Any]) -> config_entries.ConfigEn
     )
 
 
-async def async_setup_config_entries(hass: HomeAssistant, config: dict[str, Any]) -> None:
+async def async_setup_config_entries(
+    hass: HomeAssistant, config: dict[str, Any]
+) -> None:
     """Perform setup of any config entries specified in the dictionary."""
 
     for config_entry_dict in config.get(CONF_CONFIG_ENTRIES, []):
@@ -110,5 +111,11 @@ async def async_setup_config_entries(hass: HomeAssistant, config: dict[str, Any]
         await hass.config_entries.async_add(config_entry)
         await hass.async_block_till_done()
         if config_entry.state != config_entries.ConfigEntryState.LOADED:
-            _LOGGER.warning("Config entry %s failed to load: %s", config_entry.domain, config_entry.state)
-            raise ValueError(f"Failed to load config entry for domain {config_entry.domain}")
+            _LOGGER.warning(
+                "Config entry %s failed to load: %s",
+                config_entry.domain,
+                config_entry.state,
+            )
+            raise ValueError(
+                f"Failed to load config entry for domain {config_entry.domain}"
+            )

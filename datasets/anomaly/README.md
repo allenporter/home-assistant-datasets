@@ -1,4 +1,4 @@
-## Anomolies
+## Anomalies
 
-This dataset is used for classifying area summaries as anomolies vs classifying
+This dataset is used for classifying area summaries as anomalies vs classifying
 as operating normally

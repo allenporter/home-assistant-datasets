@@ -3,7 +3,7 @@
 This is a dataset for the Home Assistant LLM API ([blog post](https://developers.home-assistant.io/blog/2024/05/20/llm-api/)).
 
 See the `home-assistant-datasets assist` command for more details on how to
-run evalations.
+run evaluations.
 
 ## Dataset details
 
@@ -116,13 +116,14 @@ $ pip3 install -e /workspaces/core
 ```
 
 You will need the [synthetic-home custom component](https://github.com/allenporter/synthetic-home)
-and you can either install it in a separate direcotry like this:
+and you can either install it in a separate directory like this:
+
 ```bash
 $ export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home/"
 ```
 
 Or using a `custom_components` directory in the local directory if you have multiple
-custom components you wnat to evaluate:
+custom components you want to evaluate:
 
 ```bash
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}"

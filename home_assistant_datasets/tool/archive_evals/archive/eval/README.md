@@ -53,6 +53,7 @@ $ cat evals/area_summary/out/*.yaml | head -11
 ```
 
 Each area has its own file that contains the instructions and the LLM response in the `response` field:
+
 ```yaml
 area: Backyard
 response: In the backyard, there are Deck Lights which are outdoor smart string lights
@@ -69,7 +70,6 @@ response: In Bedroom 2, you have a warm glow bulb and a climate sensor (smart te
 
 1. Rate the results (not yet managed)
 
-
 ### Seed the devices in the Home
 
 The above example will run Home Assistant, will setup the home, complete onboarding, and create the synthetic devices
@@ -78,15 +78,18 @@ using the [Synthetic Home integration](https://github.com/allenporter/home-assis
 You can run the evaluation with --no-delete_tmpdir and inspect the state of the created Home.
 
 ```bash
-# Get the temprary dir from the script.eval
+# Get the temporary dir from the script.eval
 $ OUTPUT_DIR=/tmp/homeassistant-evalrqdy3axl
 ```
 
 Verify synthetic areas were created properly:
+
 ```bash
 $ cat "${OUTPUT_DIR}/config/.storage/core.area_registry" | jq '.data.areas[].name' | head -5
 ```
+
 Will output:
+
 ```json
 "Kitchen"
 "Living Room"
@@ -96,10 +99,13 @@ Will output:
 ```
 
 Verify synthetic devices were created properly:
+
 ```bash
 $ cat "${OUTPUT_DIR}/config/.storage/core.device_registry" | jq '.data.devices[].name' | head -5
 ```
+
 Will output:
+
 ```json
 "Kitchen Light"
 "Refrigerator"
@@ -111,10 +117,10 @@ Will output:
 The devices currently have a default state, but can be updated with [Restorable Attributes](https://github.com/allenporter/home-assistant-synthetic-home/?tab=readme-ov-file#restorable-attributes-using-service-calls)
 configured by the [Synthetic Home integration](https://github.com/allenporter/home-assistant-synthetic-home/).
 
-
 ### Human Evaluation
 
 In the future we want to:
+
 - Record the score (1, 2, 3)
 - Gather statistics on the results
 - Support many more homes and devices at once

@@ -50,7 +50,7 @@ class RuntimeConfig:
 
 
 async def async_setup_config_entries(hass: HomeAssistant) -> None:
-    """Initialize HomeAssistant configuration and existing config entires."""
+    """Initialize HomeAssistant configuration and existing config entries."""
     config_dict = await conf_util.async_hass_config_yaml(hass)
     await bootstrap.async_from_config_dict(config_dict, hass)
 

@@ -1,1 +1,1 @@
-"""Tool for evaluating code using a Home Assitant runner."""
+"""Tool for evaluating code using a Home Assistant runner."""

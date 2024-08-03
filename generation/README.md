@@ -3,6 +3,7 @@
 This directory contains notebooks and seeds for generating the datasets.
 
 The phases of generating data are currently:
+
 - Generate a description of a Home ([notebook](homes.ipynb))
 - Generate the Areas of the Home useful for automation ([notebook](areas.ipynb))
 - Generate the devices in each area ([notebook](devices.ipynb))
@@ -20,17 +21,17 @@ The data is generated in a format that can be consumed by https://github.com/all
 
 The next phase needed is to generate useful state data for triggering those actions.
 
-### Notebook Development enviroment
+### Notebook Development environment
 
 This is an example of how to prepare the python venv for use with the jupyet notebooks:
 
 1. Create the virtual environment
 
-    ```bash
-    $ python3 -m venv venv
-    $ source venv/bin/activate
-    $ pip install --upgrade pip
-    $ pip3 install -r requirements_dev.txt
-    ```
+   ```bash
+   $ python3 -m venv venv
+   $ source venv/bin/activate
+   $ pip install --upgrade pip
+   $ pip3 install -r requirements_dev.txt
+   ```
 
 1. Open the notebook and select the venv interpreter and kernel

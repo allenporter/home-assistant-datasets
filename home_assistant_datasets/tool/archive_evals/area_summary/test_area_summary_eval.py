@@ -121,7 +121,7 @@ def cleanup_response(response: str) -> str:
     ],
 )
 def model_id_fixture(request: pytest.FixtureRequest) -> str:
-    """Fiture that defines which model is being evaluated."""
+    """Fixture that defines which model is being evaluated."""
     return request.param
 
 
@@ -135,7 +135,7 @@ def model_id_fixture(request: pytest.FixtureRequest) -> str:
     ],
 )
 def synthetic_home_config_fixture(request: pytest.FixtureRequest) -> str:
-    """Fiture that defines which model is being evaluated."""
+    """Fixture that defines which model is being evaluated."""
     return request.param
 
 

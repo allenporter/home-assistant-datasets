@@ -3,7 +3,7 @@
 This is a dataset for the Home Assistant LLM API ([blog post](https://developers.home-assistant.io/blog/2024/05/20/llm-api/)) imported from the home assistant intents repo.
 
 See the `home-assistant-datasets assist` command for more details on how to
-run evalations.
+run evaluations.
 
 ## Dataset details
 

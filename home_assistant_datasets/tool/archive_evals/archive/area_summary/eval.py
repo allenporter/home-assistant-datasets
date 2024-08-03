@@ -17,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 AREA_SUMMARY_PROMPT = """
-Please summarize the status of an area of the home. Your summaries are succint,
+Please summarize the status of an area of the home. Your summaries are succinct,
 and do not mention boring details or things that seem very mundane or minor. A
 one sentence summary is best.
 
@@ -52,7 +52,6 @@ Summary:
 """
 
 
-
 def make_prompt(area_name: str) -> str:
     """Create a prompt for the agent to summarize the area."""
     return AREA_PROMPT.format(
@@ -81,7 +80,6 @@ class ConversationAgent:
         return response["speech"]["plain"]["speech"]
 
 
-
 async def async_run_eval(hass: HomeAssistant, config: dict[str, Any]) -> None:
     """Run the evaluation."""
 
@@ -89,17 +87,25 @@ async def async_run_eval(hass: HomeAssistant, config: dict[str, Any]) -> None:
     os.makedirs(eval_dir, exist_ok=True)
 
     # Find the conversation agent id to evaluate based on the domain in the config file
-    config_entry_ids = [ entry.entry_id for entry in hass.config_entries.async_entries() if entry.domain in config["conversation_agent_domain"] ]
+    config_entry_ids = [
+        entry.entry_id
+        for entry in hass.config_entries.async_entries()
+        if entry.domain in config["conversation_agent_domain"]
+    ]
     if len(config_entry_ids) > 1:
-        raise ValueError("Found more than one config entry for domain {config['convesation_agent_domain']}")
+        raise ValueError(
+            "Found more than one config entry for domain {config['convesation_agent_domain']}"
+        )
     if not config_entry_ids:
-        raise ValueError("Found no config entry for domain {config['convesation_agent_domain']}")
+        raise ValueError(
+            "Found no config entry for domain {config['convesation_agent_domain']}"
+        )
     conversation_agent_id = config_entry_ids[0]
 
     agent = ConversationAgent(conversation_agent_id)
 
     area_registry = ar.async_get(hass)
-    area_names = [ area.name for area in area_registry.async_list_areas() ]
+    area_names = [area.name for area in area_registry.async_list_areas()]
 
     _LOGGER.info("Loaded %s areas to evaluate", len(area_names))
 
