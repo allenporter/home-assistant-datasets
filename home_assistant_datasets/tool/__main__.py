@@ -6,7 +6,7 @@ import logging
 import sys
 from pathlib import Path
 
-
+from . import leaderboard
 from .assist import collect as assist_collect, eval as assist_eval
 
 
@@ -27,6 +27,8 @@ def get_base_arg_parser() -> argparse.ArgumentParser:
     assist_collect.create_arguments(assist_subparsers.add_parser("collect"))
     assist_eval.create_arguments(assist_subparsers.add_parser("eval"))
 
+    leaderboard.create_arguments(subparsers.add_parser("leaderboard"))
+
     return parser
 
 
@@ -45,7 +47,7 @@ def main() -> int:
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
 
-    if args.subaction:
+    if hasattr(args, "subaction"):
         module_name = f".{args.action}.{args.subaction}"
     else:
         module_name = f".{args.action}"

@@ -108,4 +108,4 @@ def create_writer(output_type: OutputType) -> WriterBase:
         return YamlWriter()
     if output_type == OutputType.REPORT:
         return ReportWriter()
-    raise ValueError("Unknown output type: {output_type}")
+    raise ValueError(f"Unknown output type: {output_type}")

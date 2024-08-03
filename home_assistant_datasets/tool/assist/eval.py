@@ -78,6 +78,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         type=OutputType,
         choices=OutputType,
         help="Specifies the output type.",
+        required=True,
     )
 
 
