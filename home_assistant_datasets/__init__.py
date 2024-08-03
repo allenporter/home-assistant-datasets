@@ -1,4 +1,6 @@
-"""Package for Home Assistant datasets."""
+"""
+.. include:: ../README.md
+"""
 
 __all__ = [
     "tool",
