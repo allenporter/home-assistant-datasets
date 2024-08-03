@@ -94,7 +94,7 @@ def main() -> None:
         print(yaml.dump(model_results, sort_keys=True, explicit_start=True))
 
         if args.samples:
-            limited_samples = {}
+            limited_samples: dict[str, dict[str, str]] = {}
             for model_id in model_samples:
                 limited_samples[model_id] = {}
                 for label in model_samples[model_id]:

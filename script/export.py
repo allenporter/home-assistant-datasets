@@ -5,7 +5,7 @@ import json
 import sys
 
 
-def main():
+def main() -> None:
     lines = sys.stdin.readlines()
     for line in lines:
         record = json.loads(line)

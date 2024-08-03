@@ -74,7 +74,7 @@ def pytest_generate_tests(metafunc: Any) -> None:
 
 
 @pytest.fixture(autouse=True)
-def restore_tz() -> Generator[None, None]:
+def restore_tz() -> Generator[None, None, None]:
     yield
     # Home Assistant teardown seems to run too soon and expects this so try to
     # patch it in first.
