@@ -99,18 +99,25 @@ classDiagram
 You can use the generated synthetic data in Home Assistat and with integrated
 converation agents to produce outputs for evaluation.
 
-This tool is meant to evaluate Home Automations. The initial target is an
-end-to-end feature evaluation that requires human evaluation, and is not
-automated or a low level evaluation. This will be evolved as more evaluation
-use cases are added to keep it simple.
-
 Model evaluation is currently performed with pytest, [Synthetic Home](https://github.com/allenporter/home-assistant-synthetic-home/), and any conversation agent (Open AI, Google, custom components, etc)
 
-See the [evals/](evals/README.md) directory for more information on running the evaluation.
+### Home Assistant Actions - Offline Evaluation
+
+The most commonly used evaluation is for the Home Assistant conversation agent actions
+for integrating with the assist pipeline. See the following dataset directories
+for more information on running an evaluation:
+
+- [datasets/assist](datasets/assist/README.md) - Dataset with a set of corner cases meant to challenge models on voice actions, but with a medium size home.
+- [datasets/assist-mini](datasets/assist-mini/README.md) - A much simpler dataset set of tasks for smaller models using very limited number of entities.
+- [datasets/intents](datasets/intents/README.md) - A dataset based on the home assistant intents repository unit tests that are used for the NLP model. These have a very large home.
+
+
+Models are configured in `models.yaml`.
 
 ### Example Evaluation for Area Summaries
 
-The initial use baseline use case of a model evaluation has the following steps:
+There are additional datasets for human evaluation of summarization tasks. These were the
+initial use case for this repo. It works something like this:
 
 - Configure the Synthetic Home and devices
 - Configure the conversation agent and prompt ("summarize this area")
@@ -119,11 +126,7 @@ The initial use baseline use case of a model evaluation has the following steps:
   - For each interesting device state in the area (e.g. lights on, lights off)
 - Record the results
 
-These can be used for human evaluation to determine the model quality.
-
-## Human Evaluation
-
-In this phase, we take the model outputs from a human rater and use them for
+These can be used for human evaluation to determine the model quality. In this phase, we take the model outputs from a human rater and use them for
 evaluation.
 
 Human rater (me) scores the result quality:
@@ -133,7 +136,3 @@ Human rater (me) scores the result quality:
 
 See the [script/](script/) directory for more details on preparing the data for
 human eval procedure using Doccano.
-
-## Visualization (WIP)
-
-Plot the annotated results to visualize the performance of the LLM models.

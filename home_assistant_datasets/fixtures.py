@@ -22,6 +22,8 @@ from custom_components import synthetic_home  # noqa: F401
 
 from home_assistant_datasets.data_model import ModelConfig
 
+from . import yaml_loaders
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -107,7 +109,10 @@ async def system_prompt_fixture() -> None:
 async def model_config(model_id: str) -> ModelConfig:
     """Fixture to read the model config yaml."""
     with MODEL_CONFIG_FILE.open() as fd:
-        model_data = yaml.load(fd.read(), Loader=yaml.SafeLoader)
+        try:
+            model_data = yaml.load(fd.read(), Loader=yaml_loaders.FastSafeLoader)
+        except Exception as err:
+            pytest.exit(f"Error while loading {MODEL_CONFIG_FILE}: {err}")
 
     models = model_data.get("models", [])
     for model in models:

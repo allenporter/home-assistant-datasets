@@ -18,11 +18,20 @@ for most of your git repo but leaving your secrets local.
 
 import yaml
 import os
+import pathlib
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 DEFAULT_SECRETS_FILE = "secrets.yaml"
 
+
 def get_secret(secret_name: str) -> str:
     """Get secret with the specified name."""
-    secrets_file = os.environ.get("SECRETS_FILE", DEFAULT_SECRETS_FILE)
+    secrets_file = pathlib.Path(os.environ.get("SECRETS_FILE", DEFAULT_SECRETS_FILE))
     secrets = yaml.load(open(secrets_file), Loader=yaml.Loader)
-    return secrets[secret_name]
+    try:
+        return secrets[secret_name]
+    except KeyError as err:
+        _LOGGER.debug("Could not find secret_name %s in keys (%s)", secret_name, secrets.keys())
+        raise KeyError(f"Could not find '{secret_name}' in secrets file {secrets_file}")
