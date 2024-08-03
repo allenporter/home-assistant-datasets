@@ -3,6 +3,7 @@
 import argparse
 import logging
 import pathlib
+from typing import Any
 import yaml
 import random
 
@@ -47,7 +48,7 @@ def get_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     args = get_arguments()
     logging.basicConfig(level=getattr(logging, args.log_level.upper()))
 
@@ -67,8 +68,8 @@ def main():
         all_label_values.add(label)
     all_label_values.add("Unavailable")
 
-    model_results = {}
-    model_samples = {}
+    model_results: dict[str, dict[str, Any]] = {}
+    model_samples: dict[str, dict[str, Any]] = {}
 
     output_files = model_outputs.glob("**/*.yaml")
     for output_file in output_files:

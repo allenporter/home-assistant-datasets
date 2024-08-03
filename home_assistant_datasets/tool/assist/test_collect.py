@@ -5,7 +5,7 @@ from collections.abc import Callable, Awaitable
 import logging
 import uuid
 import dataclasses
-from typing import Any
+from typing import Any, cast
 import enum
 import json
 
@@ -30,6 +30,7 @@ from .data_model import (
 _LOGGER = logging.getLogger(__name__)
 TIMEOUT = 25
 
+
 @pytest.fixture(name="get_state")
 def get_state_fixture(
     hass: HomeAssistant,
@@ -45,6 +46,9 @@ def get_state_fixture(
         results = {}
         for entity_entry in entity_entries:
             state = hass.states.get(entity_entry.entity_id)
+            assert state
+            assert state.state
+            assert state.attributes
             results[entity_entry.entity_id] = EntityState(
                 state=state.state, attributes=dict(state.attributes)
             )
@@ -64,12 +68,12 @@ def compare_state(v: Any, other_v: Any) -> bool:
     if isinstance(v, tuple) or isinstance(other_v, tuple):
         v = list(v)
         other_v = list(v)
-        return v == other_v
+        return cast(bool, v == other_v)
 
     if isinstance(v, enum.StrEnum) or isinstance(other_v, enum.StrEnum):
         v = str(v)
         other_v = str(other_v)
-        return v == other_v
+        return cast(bool, v == other_v)
 
     if v == other_v:
         return True
@@ -87,7 +91,7 @@ def compute_entity_diff(
     a = a_state.as_dict()
     b = b_state.as_dict()
 
-    diff_attributes = set({})
+    diff_attributes = set([])
     for k, v in a.items():
         other_v = b.get(k)
         if not compare_state(other_v, v):
@@ -95,7 +99,7 @@ def compute_entity_diff(
     for k in b:
         if k not in a and k:
             diff_attributes.add(k)
-    diff_attributes = [k for k in diff_attributes if k not in ignored]
+    diff_attributes = set({k for k in diff_attributes if k not in ignored})
     if not diff_attributes:
         return None
     return {
@@ -132,13 +136,13 @@ async def verify_state_fixture(
                 if states[entity_id].attributes is None:
                     states[entity_id].attributes = {}
                 states[entity_id].attributes = {
-                    **states[entity_id].attributes,
+                    **states[entity_id].attributes,  # type: ignore[dict-item]
                     **entity_state.attributes,
                 }
 
         for entity_id in updated_states:
             if entity_id not in states:
-                return ValueError(f"Unexpected new entity found: {entity_id}")
+                raise ValueError(f"Unexpected new entity found: {entity_id}")
 
         diffs = {}
         for entity_id in states:
@@ -156,7 +160,7 @@ async def verify_state_fixture(
     return func
 
 
-def dump_conversation_trace(trace: trace.ConversationTrace) -> dict[str, Any]:
+def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, Any]]:
     """Serialize the conversation trace for evaluation."""
     trace_data = trace.as_dict()
     trace_events = trace_data["events"]
@@ -216,6 +220,7 @@ async def test_assist_actions(
     _LOGGER.debug("Response: %s", response)
 
     updated_states = get_state()
+    unexpected_states: dict[str, Any] | str
     try:
         unexpected_states = await verify_state(eval_task, states, updated_states)
     except ValueError as err:

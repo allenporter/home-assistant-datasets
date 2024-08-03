@@ -29,7 +29,7 @@ class OutputType(enum.StrEnum):
 class WriterBase:
     """Base class for eval output."""
 
-    diff: dict | str = dict
+    diff: type[dict] | type[str] = dict
 
     def start(self) -> None:
         """Write the output start."""

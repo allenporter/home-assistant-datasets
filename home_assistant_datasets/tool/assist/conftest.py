@@ -3,6 +3,8 @@
 import pathlib
 import logging
 import datetime
+from typing import Any
+from collections.abc import Generator
 
 import pytest
 from homeassistant.util import dt as dt_util
@@ -15,7 +17,7 @@ from .data_model import (
 _LOGGER = logging.getLogger(__name__)
 
 
-def pytest_addoption(parser):
+def pytest_addoption(parser: Any) -> None:
     """Pytest arguments passed from the `collect` action to the test."""
     parser.addoption("--dataset")
     parser.addoption("--models")
@@ -23,7 +25,7 @@ def pytest_addoption(parser):
     parser.addoption("--categories")
 
 
-def pytest_generate_tests(metafunc) -> None:
+def pytest_generate_tests(metafunc: Any) -> None:
     """Generate test parameters for the evaluation from flags."""
     # Parameterize tests by the models under development
     models = metafunc.config.getoption("models").split(",")
@@ -47,7 +49,7 @@ def pytest_generate_tests(metafunc) -> None:
         raise ValueError(f"Could not find any dataset files in path: {dataset}")
 
     categories_str = metafunc.config.getoption("categories")
-    categories = set(categories_str.split(",")) if categories_str else {}
+    categories = set(categories_str.split(",") if categories_str else {})
 
     dataset_path = pathlib.Path(dataset)
     output_path = pathlib.Path(output_dir)
@@ -72,16 +74,15 @@ def pytest_generate_tests(metafunc) -> None:
 
 
 @pytest.fixture(autouse=True)
-def restore_tz() -> None:
+def restore_tz() -> Generator[None, None]:
     yield
     # Home Assistant teardown seems to run too soon and expects this so try to
     # patch it in first.
     dt_util.set_default_time_zone(datetime.UTC)
 
 
-
 @pytest.fixture(name="eval_output_file")
-def eval_output_file_fixture(model_id: str, eval_task: EvalTask) -> str:
+def eval_output_file_fixture(model_id: str, eval_task: EvalTask) -> pathlib.Path:
     """Sets the output filename for the evaluation run.
 
     This output file needs to be unique across the test instances to avoid overwriting. For

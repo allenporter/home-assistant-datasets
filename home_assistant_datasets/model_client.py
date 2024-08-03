@@ -16,14 +16,8 @@ class ModelClient:
         response = self.client.chat.completions.create(
             model=self.model_id,
             messages=[
-                {
-                    "content": prompt,
-                    "role": "system"
-                },
-                {
-                    "content": user_message,
-                    "role": "user"
-                }
+                {"content": prompt, "role": "system"},
+                {"content": user_message, "role": "user"},
             ],
         )
-        return "".join([choice.message.content for choice in response.choices])
+        return "".join([choice.message.content or "" for choice in response.choices])

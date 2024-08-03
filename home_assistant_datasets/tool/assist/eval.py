@@ -34,7 +34,7 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
             event
             for event in trace_events
             if event["event_type"]
-            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
+            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")  # type: ignore[attr-defined]
         ),
         None,
     )
@@ -48,7 +48,7 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
     }
 
 
-def yaml_decoder(data: EncodedData) -> dict[Any, Any]:
+def yaml_decoder(data: EncodedData) -> Any:
     return yaml.load(data, yaml.UnsafeLoader)
 
 

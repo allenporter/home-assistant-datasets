@@ -13,7 +13,7 @@ T = TypeVar("T")
 _DEFAULT_LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
 
 
-class FastSafeLoader(_DEFAULT_LOADER):
+class FastSafeLoader(_DEFAULT_LOADER):  # type: ignore
     """The fastest available safe loader, either C or Python.
 
     This exists to support capturing the stream file name in the same way as the
@@ -47,7 +47,7 @@ def yaml_decode(stream: Any, shape_type: Type[T] | Any) -> T:
     but accepts a stream rather than content string in order to implement
     custom tags based on the current filename.
     """
-    return YAMLDecoder(shape_type, pre_decoder_func=_default_decoder).decode(stream)
+    return YAMLDecoder(shape_type, pre_decoder_func=_default_decoder).decode(stream)  # type: ignore[no-any-return]
 
 
 def _include_tag_constructor(

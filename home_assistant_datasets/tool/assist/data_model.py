@@ -7,7 +7,7 @@ output of parsing the yaml files.
 import logging
 from typing import Any
 from dataclasses import dataclass, field
-from collections.abc import AsyncGenerator
+from collections.abc import Generator
 import pathlib
 from slugify import slugify
 
@@ -117,7 +117,7 @@ def generate_tasks(
     dataset_path: pathlib.Path,
     output_dir: pathlib.Path,
     categories: set[str],
-) -> AsyncGenerator[EvalTask, None]:
+) -> Generator[EvalTask, None, None]:
     """Read and validate the dataset."""
     # Generate the record id based on the file path
     relpath = record_path.relative_to(dataset_path)
@@ -137,7 +137,7 @@ def generate_tasks(
             "Skipping record with category %s (not in %s)", record.category, categories
         )
         return
-    for action in record.tests:
+    for action in record.tests or ():
         if not action.sentences:
             raise ValueError("No sentences defined for the action")
         if not action.expect_changes:

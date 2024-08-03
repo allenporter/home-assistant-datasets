@@ -35,4 +35,4 @@ def get_secret(secret_name: str) -> str:
             "Could not find secret_name %s in keys (%s)", secret_name, secrets.keys()
         )
         raise KeyError(f"Could not find '{secret_name}' in secrets file {secrets_file}")
-    return secrets[secret_name]
+    return str(secrets[secret_name])

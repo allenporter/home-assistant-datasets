@@ -1,10 +1,10 @@
 """Test fixtures for evaluations."""
 
-from collections.abc import Generator
+from collections.abc import AsyncGenerator, Generator
 import logging
 import os
 import pathlib
-from typing import Any, TextIO
+from typing import Any, TextIO, cast
 from unittest.mock import patch, mock_open
 
 import pytest
@@ -73,7 +73,7 @@ def mock_synthetic_home_content(synthetic_home_config: str | None) -> str | None
 @pytest.fixture(autouse=True, name="synthetic_home_config_entry")
 async def mock_synthetic_home(
     hass: HomeAssistant, synthetic_home_yaml: str | None
-) -> Generator[MockConfigEntry | None]:
+) -> AsyncGenerator[MockConfigEntry | None, None]:
     """Fixture for mock configuration entry."""
     if synthetic_home_yaml is None:
         yield None
@@ -163,19 +163,20 @@ class ConversationAgent:
             blocking=True,
             return_response=True,
         )
-        response = service_response["response"]
-        return response["speech"]["plain"]["speech"]
+        assert service_response
+        response: dict[str, Any] = service_response["response"]
+        return str(response["speech"]["plain"]["speech"])
 
 
 @pytest.fixture(name="conversation_agent_id")
 async def mock_conversation_agent_id(
     model_config: ModelConfig,
-    conversation_agent_config_entry: MockConfigEntry | None,
+    conversation_agent_config_entry: MockConfigEntry,
 ) -> str:
     """Return the id for the conversation agent under test."""
     if model_config.domain == "homeassistant":
         return "conversation.home_assistant"
-    return conversation_agent_config_entry.entry_id
+    return cast(str, conversation_agent_config_entry.entry_id)
 
 
 @pytest.fixture(name="agent")
@@ -200,6 +201,7 @@ class EvalRecordWriter:
 
     def write(self, record: dict[str, Any]) -> None:
         """Write an eval record."""
+        assert self._fd
         self._fd.write(yaml.dump(record, sort_keys=False, explicit_start=True))
         self._fd.flush()
         self._records += 1
