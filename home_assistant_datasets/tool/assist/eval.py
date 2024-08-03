@@ -143,7 +143,7 @@ def run(args: argparse.Namespace) -> int:
     model_good: dict[str, int] = {}
 
 
-    for model_output_file in model_outputs.glob("**/*.yaml"):
+    for model_output_file in model_outputs.glob("*/**/*.yaml"):
         stem = model_output_file.relative_to(model_outputs)
         filename = model_output_file.name[:-5]  # strip .yaml
         model_id = str(list(stem.parents)[0])
