@@ -6,7 +6,7 @@ import logging
 import sys
 from pathlib import Path
 
-from . import leaderboard
+from .leaderboard import prebuild as leaderboard_prebuild, build as leaderboard_build
 from .assist import collect as assist_collect, eval as assist_eval
 
 
@@ -27,7 +27,12 @@ def get_base_arg_parser() -> argparse.ArgumentParser:
     assist_collect.create_arguments(assist_subparsers.add_parser("collect"))
     assist_eval.create_arguments(assist_subparsers.add_parser("eval"))
 
-    leaderboard.create_arguments(subparsers.add_parser("leaderboard"))
+    leaderboard_parser = subparsers.add_parser("leaderboard")
+    leaderboard_subparsers = leaderboard_parser.add_subparsers(
+        dest="subaction", help="Sub Action", required=True
+    )
+    leaderboard_prebuild.create_arguments(leaderboard_subparsers.add_parser("prebuild"))
+    leaderboard_build.create_arguments(leaderboard_subparsers.add_parser("build"))
 
     return parser
 
