@@ -193,7 +193,7 @@ def run(args: argparse.Namespace) -> int:
             scores.append(best_record.good_percent_value() * 100)
 
         # Add an empty value to give more space outside of the controls
-        models.append("")
+        models.append(".")
         scores.append(-1)
 
         dataset_chart = chart.DatasetChart(
