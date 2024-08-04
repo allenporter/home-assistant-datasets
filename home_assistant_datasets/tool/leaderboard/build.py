@@ -21,7 +21,7 @@ from typing import Any
 
 import yaml
 
-from .config import REPORT_DIR, DATASETS, IGNORE_REPORTS, REPORT_FILE, eval_reports, EvalReport
+from .config import REPORT_DIR, DATASETS, IGNORE_REPORTS, REPORT_FILE, eval_reports, EvalReport, COLORS
 
 
 __all__ = []
@@ -140,13 +140,27 @@ def run(args: argparse.Namespace) -> int:
 
         for model_id in sorted_model_ids:
             records = model_scores[model_id][dataset]
+            x_axis.append(model_id)
             if not records:
+                bar.append(0)
                 continue
             best_record = records[0]
-            x_axis.append(model_id)
+#            x_axis.append(model_id)
             bar.append(float(f"{best_record.good_percent_value()*100:0.2f}"))
 
+
+        def make_bar(index: int, bars: list[int]) -> str:
+            values = ["0"] * len(bars)
+            values[index] = str(bars[index])
+            return " ".join(values)
+
         x_axis_str = ", ".join([model_id for model_id in x_axis])
+        color_str = ", ".join(COLORS[0:len(sorted_model_ids)])
+        bar_str = "\n".join([
+            f"  bar {make_bar(index, bar)}"
+            for index, model_id in enumerate(sorted_model_ids)
+        ])
+
         results.extend([
             "",
             f"""```mermaid
@@ -154,21 +168,21 @@ def run(args: argparse.Namespace) -> int:
 config:
     xyChart:
         width: 1600
-        height: 500
+        height: 600
         xAxis:
           labelFontSize: 10
           labelPadding: 10
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
+            plotColorPalette: "{color_str}"
 
 ---
 xychart-beta
   title "{dataset}"
   x-axis "Model" [{x_axis_str}]
   y-axis "Score" 0 --> 100
-  bar {bar}
+{bar_str}
 ```
 """,
         ])

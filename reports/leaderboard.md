@@ -25,14 +25,25 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
+            plotColorPalette: "#4285f4, #0F9D58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7"
 
 ---
 xychart-beta
   title "assist"
-  x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-7b]
+  x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
   y-axis "Score" 0 --> 100
-  bar [37.5, 56.25, 91.25, 75.0, 87.5, 90.0, 45.0, 20.0, 45.57, 3.75, 25.0]
+  bar 37.5 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 56.25 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 91.25 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 75.0 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 87.5 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 90.0 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 45.0 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 20.0 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 45.57 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 3.75 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 25.0
 ```
 
 
@@ -48,14 +59,25 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
+            plotColorPalette: "#4285f4, #0F9D58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7"
 
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
+  x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
   y-axis "Score" 0 --> 100
-  bar [63.27, 63.27, 97.96, 97.96, 34.69, 51.02, 83.67, 2.04, 27.08, 85.71]
+  bar 63.27 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 63.27 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 97.96 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 97.96 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 34.69 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 51.02 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 83.67 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 2.04 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 27.08 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 85.71
 ```
 
 
@@ -71,44 +93,23 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
+            plotColorPalette: "#4285f4, #0F9D58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7"
 
 ---
 xychart-beta
   title "intents"
-  x-axis "Model" [assistant, functionary-small-v2.5, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3]
+  x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
   y-axis "Score" 0 --> 100
-  bar [98.79, 37.58, 67.88, 81.21, 63.64, 25.45, 11.52, 22.56, 10.3]
-```
-
-
-
-```mermaid
----
-config:
-    xyChart:
-        width: 1600
-        height: 600
-        xAxis:
-          labelFontSize: 10
-          labelPadding: 10
-    themeVariables:
-        xyChart:
-            titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
-
----
-xychart-beta
-  title "intents"
-  x-axis "Model" [assistant, functionary-small-v2.5, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3]
-  y-axis "Score" 0 --> 100
-  bar [98.79, 0, 0, 0, 0, 0, 0, 0, 0]
-  bar [0, 37.58, 0, 0, 0, 0, 0, 0, 0]
-  bar [0, 0, 67.88, 0, 0, 0, 0, 0, 0]
-  bar [0, 0, 0, 81.21, 0, 0, 0, 0, 0]
-  bar [0, 0, 0, 0, 63.64, 0, 0, 0, 0]
-  bar [0, 0, 0, 0, 0, 25.45, 0, 0, 0]
-  bar [0, 0, 0, 0, 0, 0, 11.52, 0, 0]
-  bar [0, 0, 0, 0, 0, 0, 0, 22.56, 0]
-  bar [0, 0, 0, 0, 0, 0, 0, 0, 10.3]
+  bar 98.79 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 37.58 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 67.88 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 81.21 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 63.64 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 25.45 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 11.52 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 22.56 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 10.3 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 0
+  bar 0 0 0 0 0 0 0 0 0 0 0 0
 ```

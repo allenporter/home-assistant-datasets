@@ -20,6 +20,21 @@ IGNORE_REPORTS = {
     "reports/assist/2024.6.0dev-v3-2024-05-31",
 }
 REPORT_FILE = "reports.yaml"
+COLORS = [
+    "#4285f4",
+    "#0F9D58",
+    "#f4b400",
+    "#ea4335",
+    "#fbbc04",
+    "#34a853",
+    "#ff6d01",
+    "#46bdc6",
+    "#1155cc",
+    "#d5a6bd",
+    "#6aa84f",
+    "#674ea7",
+    "#d9ead3",
+]
 
 
 @dataclass
