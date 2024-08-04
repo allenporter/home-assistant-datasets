@@ -163,14 +163,20 @@ def run(args: argparse.Namespace) -> int:
         for model in  data_model.read_models().models
         if model.model_id in best_model_scores
     ]
+    dataset_cards = {
+        dataset_card.name: dataset_card
+        for dataset_card in data_model.read_dataset_cards()
+        if dataset_card.name in DATASETS
+    }
 
     # Markdown table with top model results
     leaderboard_table = create_leaderboard_table(best_model_scores)
 
+    results = [leaderboard_table]
+
     # TODO: Group models based on a rank of # of parameters (cloud, local, etc)
     # Use a fix set of colors for the model
     model_colors = chart.color_map(best_model_scores.keys())
-    charts = []
     # Generate a bar chart for each dataset
     for dataset in DATASETS:
         models = []
@@ -187,12 +193,8 @@ def run(args: argparse.Namespace) -> int:
         )
         chart_markdown = chart.model_xy_chart(dataset_chart, model_colors=model_colors)
 
-        charts.append(chart_markdown)
-
-    results = [
-        leaderboard_table,
-        *charts,
-    ]
+        results.append(table.format_dataset_card(dataset_cards[dataset]))
+        results.append(chart_markdown)
 
     leaderboard_file = report_dir / LEADERBOARD_FILE
     print(f"Updating {leaderboard_file}")

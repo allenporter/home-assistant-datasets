@@ -9,6 +9,21 @@ from . import yaml_loaders
 
 
 MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
+DATASET_CARD_FILES = list(pathlib.Path("datasets").glob("**/dataset_card.yaml"))
+
+
+@dataclass
+class DatasetCard:
+    """A description of a dataset."""
+
+    name: str
+    """The name of the dataset."""
+
+    description: str
+    """A detailed description of the dataset."""
+
+    urls: list[str]
+    """More information about the dataset."""
 
 
 @dataclass
@@ -72,3 +87,13 @@ def read_model(model_id: str) -> ModelConfig:
     raise ValueError(
         f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}"
     )
+
+
+
+def read_dataset_cards() -> list[DatasetCard]:
+    """Read models configuration file."""
+    cards = []
+    for dataset_card in DATASET_CARD_FILES:
+        dataset_data = yaml.load(dataset_card.read_text(), Loader=yaml.Loader)
+        cards.append(DatasetCard(**dataset_data))
+    return cards

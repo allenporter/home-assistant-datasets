@@ -12,6 +12,19 @@
 | llama3-groq-tool-use | 20.0% (+/- 4.5%) 2024.8.0b | 51.0% (+/- 7.1%) 2024.8.0b0 | 11.5% (+/- 2.5%) 2024.8.0b |
 | mistral-v3 | 3.8% (+/- 2.1%) 2024.8.0b | 2.0% (+/- 2.0%) 2024.8.0dev | 10.3% (+/- 2.4%) 2024.8.0b |
 | xlam-1b | 0.0% (+/- 0.0%)  | 27.1% (+/- 6.4%) 2024.8.0b0 | 0.0% (+/- 0.0%)  |
+
+## assist
+
+A dataset built to exercise the Home Assistant LLM API. The homes for this
+dataset were synthetically generated using gpt-3.5, and then manually curated
+to exercise the Home Assistant intents for controlling devices. The sentences
+were made intentionally more difficult than the existing assistant NLP for
+showcasing larger model reasoning capabilities.
+
+More information:
+- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist
+- https://developers.home-assistant.io/blog/2024/05/20/llm-api/
+
 ```mermaid
 ---
 config:
@@ -43,6 +56,17 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 25.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 45.0]
 ```
+
+## assist-mini
+
+A dataset built to exercise the Home Assistant LLM API. The homes for this
+dataset were synthetically generated using gpt-3.5, and then simplified for
+exercising smaller LLMs. The use cases are not intented to be very tricky or
+complicated and aimed at a smaller context window.
+
+More information:
+- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
+
 ```mermaid
 ---
 config:
@@ -73,6 +97,20 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 34.7, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.1]
 ```
+
+## intents
+
+A dataset built form the Home Assitant intents repo, modeled after existing
+NLP test cases for the assistant pipeline. This is mean to reuse the
+tests that already exist for the NLP, which turns out to expose some
+weaknesses of the LLMs and the currently exposed Home Assitant intent tools
+that the NLP has heuristics for. It also is a very large home which is
+challenging for smaller models given the ~100 or so devices.
+
+More information:
+- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/intents
+- https://github.com/home-assistant/intents
+
 ```mermaid
 ---
 config:
