@@ -37,6 +37,8 @@ class DatasetChart:
     scores: list[float]
 
 
+THEME_INIT = "%%{{init: {'themeCSS': '.mermaid .tick > text {rotate: -45deg; text-anchor: end !important;}' }}%%"
+
 def model_xy_chart(chart: DatasetChart, model_colors: dict[str, str]) -> str:
     """Return markdown for an XYChart."""
     x_axis_str = ", ".join(chart.models)
@@ -50,6 +52,7 @@ def model_xy_chart(chart: DatasetChart, model_colors: dict[str, str]) -> str:
         ]
     )
     return f"""```mermaid
+{THEME_INIT}
 ---
 config:
     xyChart:
