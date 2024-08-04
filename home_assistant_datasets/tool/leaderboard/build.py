@@ -177,7 +177,7 @@ def run(args: argparse.Namespace) -> int:
         scores = []
         for model_id in ranked_model_ids:
             best_record = best_model_scores[model_id][dataset]
-            if best_record.good_percent_value == 0:
+            if best_record.good_percent_value() == 0:
                 continue
             models.append(model_id)
             scores.append(best_record.good_percent_value() * 100)
