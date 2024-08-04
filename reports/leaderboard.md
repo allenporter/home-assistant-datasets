@@ -17,11 +17,11 @@
 ---
 config:
     xyChart:
-        width: 1600
+        width: 1500
         height: 800
         xAxis:
           labelFontSize: 12
-          labelPadding: 10
+          labelPadding: 8
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
@@ -51,11 +51,11 @@ xychart-beta
 ---
 config:
     xyChart:
-        width: 1600
+        width: 1500
         height: 800
         xAxis:
           labelFontSize: 12
-          labelPadding: 10
+          labelPadding: 8
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
@@ -85,11 +85,11 @@ xychart-beta
 ---
 config:
     xyChart:
-        width: 1600
+        width: 1500
         height: 800
         xAxis:
           labelFontSize: 12
-          labelPadding: 10
+          labelPadding: 8
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
