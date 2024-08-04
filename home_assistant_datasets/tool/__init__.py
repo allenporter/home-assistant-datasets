@@ -1,20 +1,20 @@
 """Home Assistant Datasets command line tools.
 
 ```
-home-assistant-datasets --help
-usage: home-assistant-datasets [-h] [--debug] {assist} ...
+usage: home-assistant-datasets [-h] [--debug] {assist,leaderboard} ...
 
 Home Assistant Datasets Utility
 
 positional arguments:
-  {assist}    Action
+  {assist,leaderboard}  Action
 
 options:
-  -h, --help  show this help message and exit
-  --debug     Enable log output
+  -h, --help            show this help message and exit
+  --debug               Enable log output
 ```
 """
 
 __all__ = [
     "assist",
+    "leaderboard"
 ]
