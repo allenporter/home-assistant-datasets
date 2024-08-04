@@ -139,12 +139,12 @@ def create_leaderboard_table(
     for model_id, dataset_scores in best_model_scores.items():
         row = [ model_id ]
         for dataset, best_record in dataset_scores.items():
-            if best_record.good_percent_value != 0:
+            if best_record.good_percent_value() != 0:
                 row.append(
                     f"{best_record.good_percent_value()*100:0.1f}% (+/- {best_record.stddev*100:0.1f}%) {best_record.dataset_label}"
                 )
             else:
-                row.append("0")
+                row.append("")
         rows.append(row)
     return table.table(cols, rows)
 
