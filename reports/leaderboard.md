@@ -22,7 +22,7 @@ config:
         height: 600
     themeVariables:
         xyChart:
-            titleColor: "#ff0000
+            titleColor: "#ff0000"
 
 ---
 xychart-beta
@@ -40,7 +40,7 @@ config:
         height: 600
     themeVariables:
         xyChart:
-            titleColor: "#ff0000
+            titleColor: "#ff0000"
 
 ---
 xychart-beta
@@ -58,7 +58,7 @@ config:
         height: 600
     themeVariables:
         xyChart:
-            titleColor: "#ff0000
+            titleColor: "#ff0000"
 
 ---
 xychart-beta
