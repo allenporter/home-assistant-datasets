@@ -174,9 +174,9 @@ def run(args: argparse.Namespace) -> int:
 config:
     xyChart:
         width: 1600
-        height: 600
+        height: 800
         xAxis:
-          labelFontSize: 10
+          labelFontSize: 12
           labelPadding: 10
     themeVariables:
         xyChart:
