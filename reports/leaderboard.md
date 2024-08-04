@@ -14,14 +14,14 @@
 | xlam-1b | 0 | 27.1% (+/- 6.4%) 2024.8.0b0 | 0 |
 
 ```mermaid
-
 ---
 config:
     xyChart:
         width: 1200
         height: 600
         xAxis:
-          labelFontSize: 12
+          labelFontSize: 8
+          labelPadding: 10
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
@@ -37,14 +37,14 @@ xychart-beta
 
 
 ```mermaid
-
 ---
 config:
     xyChart:
         width: 1200
         height: 600
         xAxis:
-          labelFontSize: 12
+          labelFontSize: 8
+          labelPadding: 10
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
@@ -60,14 +60,14 @@ xychart-beta
 
 
 ```mermaid
-
 ---
 config:
     xyChart:
         width: 1200
         height: 600
         xAxis:
-          labelFontSize: 12
+          labelFontSize: 8
+          labelPadding: 10
     themeVariables:
         xyChart:
             titleColor: "#ff0000"

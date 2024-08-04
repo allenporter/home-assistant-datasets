@@ -149,15 +149,15 @@ def run(args: argparse.Namespace) -> int:
         x_axis_str = ", ".join([model_id for model_id in x_axis])
         results.extend([
             "",
-            "```mermaid",
-            f"""
+            f"""```mermaid
 ---
 config:
     xyChart:
         width: 1200
         height: 600
         xAxis:
-          labelFontSize: 10
+          labelFontSize: 8
+          labelPadding: 10
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
