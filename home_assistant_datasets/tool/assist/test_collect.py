@@ -15,7 +15,7 @@ import yaml
 from homeassistant.core import HomeAssistant, Context
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import entity_registry as er, llm
 from homeassistant.components.conversation import trace
 
 from home_assistant_datasets.fixtures import ConversationAgent, EvalRecordWriter
@@ -171,6 +171,15 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
         for k, v in trace_event_data.items():
             if isinstance(v, Context):
                 v = dict(v.as_dict())
+            if isinstance(v, list) and v and isinstance(v[0], llm.Tool):
+                v = [
+                    {
+                        "name": tool.name,
+                        "description": tool.description,
+                        "parameters": str(tool.parameters),
+                    }
+                    for tool in v
+                ]
             data[k] = v
         result.append(
             {
@@ -250,6 +259,7 @@ async def test_assist_actions(
             # "updated_states": updated_states,
         },
     )
+    _LOGGER.info(output)
     eval_record_writer.write(dataclasses.asdict(output))
 
     # assert not [

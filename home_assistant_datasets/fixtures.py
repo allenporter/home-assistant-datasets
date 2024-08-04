@@ -15,6 +15,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.setup import async_setup_component
 
+from custom_components import synthetic_home  # noqa: F401
+
 # TODO(#12): Support loading from the custom component or core development environment
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -77,7 +79,6 @@ async def mock_synthetic_home(
         yield None
         return
 
-    from custom_components import synthetic_home  # noqa: F401
 
     config_entry = MockConfigEntry(
         domain="synthetic_home", data={"config_filename": "ignored"}

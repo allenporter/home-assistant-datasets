@@ -16,6 +16,10 @@ from .data_model import (
 
 _LOGGER = logging.getLogger(__name__)
 
+IGNORE_FILES = {
+    "_fixtures.yaml",
+    "dataset_card.yaml",
+}
 
 def pytest_addoption(parser: Any) -> None:
     """Pytest arguments passed from the `collect` action to the test."""
@@ -43,7 +47,7 @@ def pytest_generate_tests(metafunc: Any) -> None:
     dataset_files = [
         str(filename)
         for filename in pathlib.Path(dataset).glob("**/*.yaml")
-        if filename.name != "_fixtures.yaml"
+        if filename.name not in IGNORE_FILES
     ]
     if not dataset_files:
         raise ValueError(f"Could not find any dataset files in path: {dataset}")
