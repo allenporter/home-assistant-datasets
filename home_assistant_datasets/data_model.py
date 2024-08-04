@@ -39,7 +39,7 @@ class ModelConfig:
     description: str
     """A detailed description of the model tested."""
 
-    url: list[str] | None = None
+    urls: list[str] | None = None
     """A list of relevant urls for the model and its serving infrastructure."""
 
     config_entry_data: dict[str, Any] | None = None
@@ -87,7 +87,6 @@ def read_model(model_id: str) -> ModelConfig:
     raise ValueError(
         f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}"
     )
-
 
 
 def read_dataset_cards() -> list[DatasetCard]:

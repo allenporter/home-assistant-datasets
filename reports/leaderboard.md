@@ -1,3 +1,4 @@
+# LLM Leaderboard
 | Model | assist | assist-mini | intents |
 | --- | --- | --- | --- |
 | gemini-1.5-flash | 91.2% (+/- 3.2%) 2024.6.3 | 98.0% (+/- 2.0%) 2024.8.0dev | 0.0% (+/- 0.0%)  |
@@ -12,8 +13,9 @@
 | llama3-groq-tool-use | 20.0% (+/- 4.5%) 2024.8.0b | 51.0% (+/- 7.1%) 2024.8.0b0 | 11.5% (+/- 2.5%) 2024.8.0b |
 | mistral-v3 | 3.8% (+/- 2.1%) 2024.8.0b | 2.0% (+/- 2.0%) 2024.8.0dev | 10.3% (+/- 2.4%) 2024.8.0b |
 | xlam-1b | 0.0% (+/- 0.0%)  | 27.1% (+/- 6.4%) 2024.8.0b0 | 0.0% (+/- 0.0%)  |
+## Datasets
 
-## assist
+### assist
 
 A dataset built to exercise the Home Assistant LLM API. The homes for this
 dataset were synthetically generated using gpt-3.5, and then manually curated
@@ -57,7 +59,7 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 45.0]
 ```
 
-## assist-mini
+### assist-mini
 
 A dataset built to exercise the Home Assistant LLM API. The homes for this
 dataset were synthetically generated using gpt-3.5, and then simplified for
@@ -98,7 +100,7 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.1]
 ```
 
-## intents
+### intents
 
 A dataset built form the Home Assitant intents repo, modeled after existing
 NLP test cases for the assistant pipeline. This is mean to reuse the
@@ -140,3 +142,111 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 22.6, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 25.5]
 ```
+## Models
+
+### assistant
+
+The Home Assisatnt NLP assistant pipeline
+
+More information:
+- https://github.com/home-assistant/hassil
+
+
+### gpt-3.5
+
+Open AI Conversation integration using gpt-3.5 (175B)
+
+More information:
+- https://platform.openai.com/docs/models/gpt-3-5-turbo
+
+
+### gpt-4o
+
+Open AI Conversation integration using gpt-4o
+
+More information:
+- https://platform.openai.com/docs/models/gpt-4o
+
+
+### gpt-4o-mini
+
+Open AI Conversation integration using gpt-4o-mini
+
+More information:
+- https://platform.openai.com/docs/models/gpt-4o-mini
+
+
+### gemini-1.5-flash
+
+Google Generative AI integration using gemini flash (v1.5)
+
+More information:
+- https://blog.google/products/gemini/google-gemini-new-features-july-2024/
+
+
+### functionary-small-v2.5
+
+A custom open AI integration using functionary small v2.5 (8B) with a modified pre-release llama cpp python server.
+
+More information:
+- https://huggingface.co/meetkai/functionary-small-v2.5
+- https://github.com/abetlen/llama-cpp-python
+- https://github.com/allenporter/functionary-server
+
+
+### mistral-v3
+
+Mistral V3 (7B) using Ollama
+
+More information:
+- https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3
+- https://ollama.com/library/mistral
+- https://mistral.ai/news/announcing-mistral-7b/
+
+
+### llama3-groq-tool-use
+
+Groq tool use model fine tuned from llama3 (8B) using Ollama
+
+More information:
+- https://ollama.com/library/llama3-groq-tool-use
+- https://console.groq.com/docs/tool-use
+
+
+### llama3.1
+
+Llama 3.1 (8B) from Meta using Ollama
+
+More information:
+- https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct
+- https://ollama.com/library/llama3.1
+
+
+### xlam-7b
+
+XLam (7B) model from Salesforce using Ollama
+
+More information:
+- https://huggingface.co/Salesforce/xLAM-7b-fc-r
+- https://github.com/SalesforceAIResearch/xLAM
+- https://ollama.com/allenporter/xlam:7b
+
+
+### home-llm
+
+The home-llm v3 model based on Phi (3B) and custom component using service calls to control Home Assistant.
+
+More information:
+- https://github.com/acon96/home-llm/
+- https://huggingface.co/acon96/Home-3B-v3-GGUF
+- https://ollama.com/fixt/home-3b-v3
+
+
+### xlam-1b
+
+XLam (1B) model from Salesforce using Ollama
+
+More information:
+- https://huggingface.co/Salesforce/xLAM-1b-fc-r
+- https://github.com/SalesforceAIResearch/xLAM
+- https://ollama.com/allenporter/xlam:1b

@@ -3,10 +3,10 @@
 from home_assistant_datasets import data_model
 
 
-DATASET_CARD_MARKDOWN = """
-## {dataset_card.name}
+CARD_MARKDOWN = """
+### {name}
 
-{dataset_card.description}
+{description}
 
 More information:
 {urls}
@@ -15,11 +15,24 @@ More information:
 
 def format_dataset_card(dataset_card: data_model.DatasetCard) -> str:
     """Format a dataset card."""
-    return DATASET_CARD_MARKDOWN.format(
-        dataset_card=dataset_card,
+    return CARD_MARKDOWN.format(
+        name=dataset_card.name,
+        description=dataset_card.description,
         urls="\n".join(
             f"- {url}"
             for url in dataset_card.urls
+        )
+    )
+
+
+def format_model_card(model_card: data_model.ModelConfig) -> str:
+    """Format a dataset card."""
+    return CARD_MARKDOWN.format(
+        name=model_card.model_id,
+        description=model_card.description,
+        urls="\n".join(
+            f"- {url}"
+            for url in model_card.urls
         )
     )
 

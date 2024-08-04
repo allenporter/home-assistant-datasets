@@ -158,11 +158,11 @@ def run(args: argparse.Namespace) -> int:
 
     # Models in the config file are ranked/grouped logically for display display.
     # These models may not be present in the reports, however.
-    ranked_model_ids = [
-        model.model_id
-        for model in  data_model.read_models().models
+    ranked_model_ids = {
+        model.model_id: model
+        for model in data_model.read_models().models
         if model.model_id in best_model_scores
-    ]
+    }
     dataset_cards = {
         dataset_card.name: dataset_card
         for dataset_card in data_model.read_dataset_cards()
@@ -172,7 +172,11 @@ def run(args: argparse.Namespace) -> int:
     # Markdown table with top model results
     leaderboard_table = create_leaderboard_table(best_model_scores)
 
-    results = [leaderboard_table]
+    results = [
+        "# LLM Leaderboard",
+        leaderboard_table,
+        "## Datasets",
+    ]
 
     # TODO: Group models based on a rank of # of parameters (cloud, local, etc)
     # Use a fix set of colors for the model
@@ -195,6 +199,10 @@ def run(args: argparse.Namespace) -> int:
 
         results.append(table.format_dataset_card(dataset_cards[dataset]))
         results.append(chart_markdown)
+
+    results.append("## Models")
+    for model_card in ranked_model_ids.values():
+        results.append(table.format_model_card(model_card))
 
     leaderboard_file = report_dir / LEADERBOARD_FILE
     print(f"Updating {leaderboard_file}")
