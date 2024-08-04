@@ -31,7 +31,7 @@ config:
 xychart-beta
   title "assist"
   x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
-  y-axis "Score" 0 --> 100
+  y-axis "Score" 1 --> 100
   bar [37.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   bar [0, 56.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   bar [0, 0, 91.25, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -65,7 +65,7 @@ config:
 xychart-beta
   title "assist-mini"
   x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
-  y-axis "Score" 0 --> 100
+  y-axis "Score" 1 --> 100
   bar [63.27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   bar [0, 63.27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   bar [0, 0, 97.96, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -99,7 +99,7 @@ config:
 xychart-beta
   title "intents"
   x-axis "Model" [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
-  y-axis "Score" 0 --> 100
+  y-axis "Score" 1 --> 100
   bar [98.79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   bar [0, 37.58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   bar [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
