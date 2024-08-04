@@ -24,7 +24,7 @@ class ModelConfig:
     description: str
     """A detailed description of the model tested."""
 
-    url: list[str]
+    url: list[str] | None = None
     """A list of relevant urls for the model and its serving infrastructure."""
 
     config_entry_data: dict[str, Any] | None = None

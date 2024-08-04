@@ -18,6 +18,8 @@ import pathlib
 
 import yaml
 
+from home_assistant_datasets import data_model
+
 from .config import (
     REPORT_DIR,
     DATASETS,
@@ -154,6 +156,14 @@ def run(args: argparse.Namespace) -> int:
     model_scores = parse_model_reports(report_dir)
     best_model_scores = compute_best_scores(model_scores)
 
+    # Models in the config file are ranked/grouped logically for display display.
+    # These models may not be present in the reports, however.
+    ranked_model_ids = [
+        model.model_id
+        for model in  data_model.read_models().models
+        if model.model_id in best_model_scores
+    ]
+
     # Markdown table with top model results
     leaderboard_table = create_leaderboard_table(best_model_scores)
 
@@ -163,19 +173,9 @@ def run(args: argparse.Namespace) -> int:
     charts = []
     # Generate a bar chart for each dataset
     for dataset in DATASETS:
-
-        # Highest scoring models for this dataset
-        sorted_model_ids = sorted(
-            best_model_scores.keys(),
-            key=lambda model_id: best_model_scores[model_id][
-                dataset
-            ].good_percent_value(),
-            reverse=True,
-        )
-
         models = []
         scores = []
-        for model_id in sorted_model_ids:
+        for model_id in ranked_model_ids:
             best_record = best_model_scores[model_id][dataset]
             if best_record.good_percent_value == 0:
                 continue
