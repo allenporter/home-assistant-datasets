@@ -40,7 +40,7 @@ class DatasetChart:
 def model_xy_chart(chart: DatasetChart, model_colors: dict[str, str]) -> str:
     """Return markdown for an XYChart."""
     x_axis_str = ", ".join(chart.models)
-    color_str = ", ".join(model_colors[model_id] for model_id in chart.models)
+    color_str = ", ".join(model_colors.get(model_id, _COLORS[0]) for model_id in chart.models)
     bar_diagonal_values = np.zeros((len(chart.models), len(chart.models)))
     np.fill_diagonal(bar_diagonal_values, chart.scores)
     bar_str = "\n".join(
