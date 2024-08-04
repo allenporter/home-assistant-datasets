@@ -157,7 +157,7 @@ def run(args: argparse.Namespace) -> int:
         x_axis_str = ", ".join([model_id for model_id in x_axis])
         color_str = ", ".join(COLORS[0:len(sorted_model_ids)])
         bar_str = "\n".join([
-            f"  bar {make_bar(index, bar)}"
+            f"  bar [{make_bar(index, bar)}]"
             for index, model_id in enumerate(sorted_model_ids)
         ])
 
