@@ -73,7 +73,9 @@ xychart-beta
 A dataset built to exercise the Home Assistant LLM API. The homes for this
 dataset were synthetically generated using gpt-3.5, and then simplified for
 exercising smaller LLMs. The use cases are not intented to be very tricky or
-complicated and aimed at a smaller context window.
+complicated and aimed at a smaller context window. The number of devices/entities
+in each test is intentionally small (e.g. typically under 5 entities per test) to focus
+on tool calling capabilities rather than context retrieval.
 
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
@@ -115,9 +117,10 @@ xychart-beta
 A dataset built form the Home Assitant intents repo, modeled after existing
 NLP test cases for the assistant pipeline. This is mean to reuse the
 tests that already exist for the NLP, which turns out to expose some
-weaknesses of the LLMs and the currently exposed Home Assitant intent tools
-that the NLP has heuristics for. It also is a very large home which is
-challenging for smaller models given the ~100 or so devices.
+weaknesses or differences of interpretation of tasks. It also is a very large
+home which is challenging for smaller models given the ~100 or so devices. Lastly,
+there are some tests that have subtle mismatches that are reasonable (e.g.
+"minimium brightness" tests)
 
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/intents
