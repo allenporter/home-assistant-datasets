@@ -137,7 +137,7 @@ def create_leaderboard_table(
     cols = ["Model", *DATASETS]
     rows = []
     for model_id, dataset_scores in best_model_scores.items():
-        row = [f"| {model_id} "]
+        row = [ model_id ]
         for dataset, best_record in dataset_scores.items():
             if best_record.good_percent_value != 0:
                 row.append(
