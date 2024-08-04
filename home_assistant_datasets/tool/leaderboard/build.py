@@ -94,7 +94,7 @@ def run(args: argparse.Namespace) -> int:
                 model_scores[model_id][dataset] = []
             records = model_scores[model_id][dataset]
             records = sorted(records, key=ModelRecord.good_percent_value, reverse=True)
-            model_scores[model_id][eval_report.dataset] = records
+            model_scores[model_id][dataset] = records
 
     # Build leaderboard sorted by the first dataset score
     def best_score(model_id: str) -> float:
@@ -114,7 +114,7 @@ def run(args: argparse.Namespace) -> int:
             records = model_scores[model_id][dataset]
             if records:
                 best_record = records[0]
-                row.append(f"| {best_record.good_percent_value()*100:0.2f}% (+/- {best_record.stddev*100:0.2f}%) ")
+                row.append(f"| {best_record.good_percent_value()*100:0.1f}% (+/- {best_record.stddev*100:0.1f}%) {best_record.dataset_label} ")
             else:
                 row.append(f"| 0 ")
         row.append("|")
