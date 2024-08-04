@@ -162,7 +162,7 @@ config:
             plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
 
 ---
-xychart-beta,
+xychart-beta
   title "{dataset}"
   x-axis [{x_axis_str}]
   bar {bar}
