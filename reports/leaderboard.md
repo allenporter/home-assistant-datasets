@@ -17,8 +17,8 @@
 ---
 config:
     xyChart:
-        width: 1200
-        height: 600
+        width: 1600
+        height: 500
         xAxis:
           labelFontSize: 10
           labelPadding: 10
@@ -40,8 +40,8 @@ xychart-beta
 ---
 config:
     xyChart:
-        width: 1200
-        height: 600
+        width: 1600
+        height: 500
         xAxis:
           labelFontSize: 10
           labelPadding: 10
@@ -63,8 +63,8 @@ xychart-beta
 ---
 config:
     xyChart:
-        width: 1200
-        height: 600
+        width: 1600
+        height: 500
         xAxis:
           labelFontSize: 10
           labelPadding: 10
