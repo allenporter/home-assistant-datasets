@@ -18,7 +18,7 @@
 config:
     xyChart:
         width: 1600
-        height: 500
+        height: 600
         xAxis:
           labelFontSize: 10
           labelPadding: 10
@@ -41,7 +41,7 @@ xychart-beta
 config:
     xyChart:
         width: 1600
-        height: 500
+        height: 600
         xAxis:
           labelFontSize: 10
           labelPadding: 10
@@ -64,7 +64,7 @@ xychart-beta
 config:
     xyChart:
         width: 1600
-        height: 500
+        height: 600
         xAxis:
           labelFontSize: 10
           labelPadding: 10
@@ -79,4 +79,36 @@ xychart-beta
   x-axis "Model" [assistant, functionary-small-v2.5, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3]
   y-axis "Score" 0 --> 100
   bar [98.79, 37.58, 67.88, 81.21, 63.64, 25.45, 11.52, 22.56, 10.3]
+```
+
+
+
+```mermaid
+---
+config:
+    xyChart:
+        width: 1600
+        height: 600
+        xAxis:
+          labelFontSize: 10
+          labelPadding: 10
+    themeVariables:
+        xyChart:
+            titleColor: "#ff0000"
+            plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
+
+---
+xychart-beta
+  title "intents"
+  x-axis "Model" [assistant, functionary-small-v2.5, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3]
+  y-axis "Score" 0 --> 100
+  bar [98.79, 0, 0, 0, 0, 0, 0, 0, 0]
+  bar [0, 37.58, 0, 0, 0, 0, 0, 0, 0]
+  bar [0, 0, 67.88, 0, 0, 0, 0, 0, 0]
+  bar [0, 0, 0, 81.21, 0, 0, 0, 0, 0]
+  bar [0, 0, 0, 0, 63.64, 0, 0, 0, 0]
+  bar [0, 0, 0, 0, 0, 25.45, 0, 0, 0]
+  bar [0, 0, 0, 0, 0, 0, 11.52, 0, 0]
+  bar [0, 0, 0, 0, 0, 0, 0, 22.56, 0]
+  bar [0, 0, 0, 0, 0, 0, 0, 0, 10.3]
 ```
