@@ -32,7 +32,7 @@ __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-LEADERBOARD_FILE = "leaderboard.md"
+LEADERBOARD_FILE = "README.md"
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
