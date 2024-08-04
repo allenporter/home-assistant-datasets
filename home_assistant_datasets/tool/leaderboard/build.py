@@ -173,7 +173,7 @@ def run(args: argparse.Namespace) -> int:
     leaderboard_table = create_leaderboard_table(best_model_scores)
 
     results = [
-        "# LLM Leaderboard",
+        "# Home LLM Leaderboard",
         leaderboard_table,
         "## Datasets",
     ]
