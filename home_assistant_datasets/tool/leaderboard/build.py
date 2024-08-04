@@ -146,13 +146,14 @@ def run(args: argparse.Namespace) -> int:
             x_axis.append(model_id)
             bar.append(float(f"{best_record.good_percent_value()*100:0.2f}"))
 
+        x_axis_str = ", ".join([model_id for model_id in x_axis])
         results.extend([
             "",
             "```mermaid"
             "",
             "xychart-beta",
             f"  title \"{dataset}\"",
-            f"  x-axis {x_axis}",
+            f"  x-axis [{x_axis_str}]",
             f"  bar {bar}",
             "```",
         ])
