@@ -14,6 +14,12 @@ class ModelConfig:
     domain: str
     """The domain under evaluation."""
 
+    description: str
+    """A detailed description of the model tested."""
+
+    url: list[str]
+    """A list of relevant urls for the model and its serving infrastructure."""
+
     config_entry_data: dict[str, Any] | None = None
     """The configuration entry data."""
 
@@ -21,7 +27,7 @@ class ModelConfig:
     """The configuration entry options."""
 
     version: int | None = None
-    """The version nnumber of the config entry."""
+    """The version number of the config entry."""
 
 
 @dataclass
