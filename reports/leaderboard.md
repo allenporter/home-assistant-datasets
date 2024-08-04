@@ -20,7 +20,7 @@ config:
         width: 1200
         height: 600
         xAxis:
-          labelFontSize: 8
+          labelFontSize: 10
           labelPadding: 10
     themeVariables:
         xyChart:
@@ -43,7 +43,7 @@ config:
         width: 1200
         height: 600
         xAxis:
-          labelFontSize: 8
+          labelFontSize: 10
           labelPadding: 10
     themeVariables:
         xyChart:
@@ -66,7 +66,7 @@ config:
         width: 1200
         height: 600
         xAxis:
-          labelFontSize: 8
+          labelFontSize: 10
           labelPadding: 10
     themeVariables:
         xyChart:
