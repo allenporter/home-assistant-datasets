@@ -69,12 +69,7 @@ def read_models() -> Models:
             raise ValueError(f"Error while loading {MODEL_CONFIG_FILE}: {err}")
 
     models = model_data.get("models", [])
-    return Models(
-        models=[
-            ModelConfig(**model)
-            for model in models
-        ]
-    )
+    return Models(models=[ModelConfig(**model) for model in models])
 
 
 def read_model(model_id: str) -> ModelConfig:
