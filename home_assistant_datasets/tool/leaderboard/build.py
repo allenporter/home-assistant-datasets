@@ -150,7 +150,7 @@ def run(args: argparse.Namespace) -> int:
         results.extend([
             "",
             "```mermaid",
-            """
+            f"""
 ---
 config:
     xyChart:
@@ -159,13 +159,15 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
+            plotColorPalette: "#4285f4, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc"
+
+---
+xychart-beta,
+  title "{dataset}"
+  x-axis [{x_axis_str}]
+  bar {bar}
+```
 """,
-            "---",
-            "xychart-beta",
-            f"  title \"{dataset}\"",
-            f"  x-axis [{x_axis_str}]",
-            f"  bar {bar}",
-            "```",
         ])
 
     leaderboard_file = report_dir / LEADERBOARD_FILE
