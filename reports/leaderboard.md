@@ -1,4 +1,4 @@
-# LLM Leaderboard
+# Home LLM Leaderboard
 | Model | assist | assist-mini | intents |
 | --- | --- | --- | --- |
 | gemini-1.5-flash | 91.2% (+/- 3.2%) 2024.6.3 | 98.0% (+/- 2.0%) 2024.8.0dev | 0.0% (+/- 0.0%)  |
