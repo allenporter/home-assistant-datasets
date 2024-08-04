@@ -20,7 +20,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from home_assistant_datasets.data_model import ModelConfig
 
-from . import yaml_loaders, data_model
+from . import data_model
 
 
 _LOGGER = logging.getLogger(__name__)
