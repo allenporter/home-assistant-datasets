@@ -14,16 +14,13 @@ import argparse
 import logging
 import pathlib
 import subprocess
-from typing import Any
 
-import yaml
 
-from .config import REPORT_DIR, DATASETS, IGNORE_REPORTS, REPORT_FILE, eval_reports
+from .config import REPORT_DIR, eval_reports
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
-
 
 
 EVAL_CMD = [
