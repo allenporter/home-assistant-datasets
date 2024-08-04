@@ -18,7 +18,7 @@
 ---
 config:
     xyChart:
-        width: 1000
+        width: 1200
         height: 600
         xAxis:
           labelFontSize: 12
@@ -41,7 +41,7 @@ xychart-beta
 ---
 config:
     xyChart:
-        width: 1000
+        width: 1200
         height: 600
         xAxis:
           labelFontSize: 12
@@ -64,7 +64,7 @@ xychart-beta
 ---
 config:
     xyChart:
-        width: 1000
+        width: 1200
         height: 600
         xAxis:
           labelFontSize: 12
