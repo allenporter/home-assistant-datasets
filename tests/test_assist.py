@@ -8,10 +8,14 @@ from home_assistant_datasets.tool.assist import data_model
 
 
 DATASET_PATH = pathlib.Path("datasets/assist/")
+IGNORE_FILES = {
+    "_fixtures.yaml",
+    "dataset_card.yaml",
+}
 TEST_FILES = [
     filename
     for filename in DATASET_PATH.glob("**/*.yaml")
-    if filename.name != "_fixtures.yaml"
+    if filename.name not in IGNORE_FILES
 ]
 
 
