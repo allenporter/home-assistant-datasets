@@ -152,7 +152,7 @@ def run(args: argparse.Namespace) -> int:
         def make_bar(index: int, bars: list[int]) -> str:
             values = ["0"] * len(bars)
             values[index] = str(bars[index])
-            return " ".join(values)
+            return ", ".join(values)
 
         x_axis_str = ", ".join([model_id for model_id in x_axis])
         color_str = ", ".join(COLORS[0:len(sorted_model_ids)])
