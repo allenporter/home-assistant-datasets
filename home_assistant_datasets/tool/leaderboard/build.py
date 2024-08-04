@@ -187,7 +187,7 @@ config:
 xychart-beta
   title "{dataset}"
   x-axis "Model" [{x_axis_str}]
-  y-axis "Score" 0 --> 100
+  y-axis "Score" 1 --> 100
 {bar_str}
 ```
 """,
