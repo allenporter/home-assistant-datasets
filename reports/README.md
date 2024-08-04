@@ -28,7 +28,6 @@ More information:
 - https://developers.home-assistant.io/blog/2024/05/20/llm-api/
 
 ```mermaid
-%%{{init: {'themeCSS': '.mermaid .tick > text {rotate: -45deg; text-anchor: end !important;}' }}%%
 ---
 config:
     xyChart:
@@ -71,7 +70,6 @@ More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
 
 ```mermaid
-%%{{init: {'themeCSS': '.mermaid .tick > text {rotate: -45deg; text-anchor: end !important;}' }}%%
 ---
 config:
     xyChart:
@@ -116,7 +114,6 @@ More information:
 - https://github.com/home-assistant/intents
 
 ```mermaid
-%%{{init: {'themeCSS': '.mermaid .tick > text {rotate: -45deg; text-anchor: end !important;}' }}%%
 ---
 config:
     xyChart:
