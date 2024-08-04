@@ -16,12 +16,15 @@ from dataclasses import dataclass
 from collections.abc import Callable
 import math
 import pathlib
-import subprocess
-from typing import Any
 
 import yaml
 
-from .config import REPORT_DIR, DATASETS, IGNORE_REPORTS, REPORT_FILE, eval_reports, EvalReport, COLORS
+from .config import (
+    REPORT_DIR,
+    DATASETS,
+    eval_reports,
+    COLORS,
+)
 
 
 __all__ = []
@@ -60,7 +63,9 @@ class ModelRecord:
         return math.sqrt((p * (1 - p)) / self.total)
 
 
-def best_score_func(model_scores: dict[str, dict[str, ModelRecord]], dataset_name: str) -> Callable[[str], float]:
+def best_score_func(
+    model_scores: dict[str, dict[str, ModelRecord]], dataset_name: str
+) -> Callable[[str], float]:
     """Best score function."""
 
     def func(model_id: str) -> float:
@@ -78,7 +83,9 @@ def run(args: argparse.Namespace) -> int:
     for eval_report in eval_reports(report_dir):
         report_file = eval_report.report_file
         if not report_file.exists:
-            raise ValueError(f"Report file {report_file} does not exist, run `prebuild` first")
+            raise ValueError(
+                f"Report file {report_file} does not exist, run `prebuild` first"
+            )
 
         report = yaml.load(eval_report.report_file.read_text(), Loader=yaml.CSafeLoader)
         for model_data in report:
@@ -96,7 +103,6 @@ def run(args: argparse.Namespace) -> int:
                 )
             )
 
-
     # Sort reports by their best scores
     for model_id in model_scores:
         for dataset in DATASETS:
@@ -105,8 +111,6 @@ def run(args: argparse.Namespace) -> int:
             records = model_scores[model_id][dataset]
             records = sorted(records, key=ModelRecord.good_percent_value, reverse=True)
             model_scores[model_id][dataset] = records
-
-
 
     # Generate overall report sorted by the first dataset score
     best_score = best_score_func(model_scores, DATASETS[0])
@@ -122,12 +126,13 @@ def run(args: argparse.Namespace) -> int:
             records = model_scores[model_id][dataset]
             if records:
                 best_record = records[0]
-                row.append(f"| {best_record.good_percent_value()*100:0.1f}% (+/- {best_record.stddev*100:0.1f}%) {best_record.dataset_label} ")
+                row.append(
+                    f"| {best_record.good_percent_value()*100:0.1f}% (+/- {best_record.stddev*100:0.1f}%) {best_record.dataset_label} "
+                )
             else:
-                row.append(f"| 0 ")
+                row.append("| 0 ")
         row.append("|")
         results.append(row)
-
 
     # Generate a bar chart for each dataset
     for dataset in DATASETS:
@@ -145,9 +150,8 @@ def run(args: argparse.Namespace) -> int:
                 bar.append(0)
                 continue
             best_record = records[0]
-#            x_axis.append(model_id)
+            #            x_axis.append(model_id)
             bar.append(float(f"{best_record.good_percent_value()*100:0.2f}"))
-
 
         def make_bar(index: int, bars: list[int]) -> str:
             values = ["0"] * len(bars)
@@ -155,15 +159,17 @@ def run(args: argparse.Namespace) -> int:
             return ", ".join(values)
 
         x_axis_str = ", ".join([model_id for model_id in x_axis])
-        color_str = ", ".join(COLORS[0:len(sorted_model_ids)])
-        bar_str = "\n".join([
-            f"  bar [{make_bar(index, bar)}]"
-            for index, model_id in enumerate(sorted_model_ids)
-        ])
-
-        results.extend([
-            "",
-            f"""```mermaid
+        color_str = ", ".join(COLORS[0 : len(sorted_model_ids)])
+        bar_str = "\n".join(
+            [
+                f"  bar [{make_bar(index, bar)}]"
+                for index, model_id in enumerate(sorted_model_ids)
+            ]
+        )
+        results.extend(
+            [
+                "",
+                f"""```mermaid
 ---
 config:
     xyChart:
@@ -185,16 +191,11 @@ xychart-beta
 {bar_str}
 ```
 """,
-        ])
+            ]
+        )
 
     leaderboard_file = report_dir / LEADERBOARD_FILE
     print(f"Updating {leaderboard_file}")
-    leaderboard_file.write_text("\n".join([
-        "".join(row)
-        for row in results
-    ]))
-
-
-
+    leaderboard_file.write_text("\n".join(["".join(row) for row in results]))
 
     return 0
