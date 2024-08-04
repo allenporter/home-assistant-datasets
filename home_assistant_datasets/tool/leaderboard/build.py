@@ -149,8 +149,18 @@ def run(args: argparse.Namespace) -> int:
         x_axis_str = ", ".join([model_id for model_id in x_axis])
         results.extend([
             "",
-            "```mermaid"
-            "",
+            "```mermaid",
+            """
+---
+config:
+    xyChart:
+        width: 900
+        height: 600
+    themeVariables:
+        xyChart:
+            titleColor: "#ff0000
+""",
+            "---",
             "xychart-beta",
             f"  title \"{dataset}\"",
             f"  x-axis [{x_axis_str}]",

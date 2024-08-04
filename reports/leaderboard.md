@@ -14,6 +14,17 @@
 | xlam-1b | 0 | 27.1% (+/- 6.4%) 2024.8.0b0 | 0 |
 
 ```mermaid
+
+---
+config:
+    xyChart:
+        width: 900
+        height: 600
+    themeVariables:
+        xyChart:
+            titleColor: "#ff0000
+
+---
 xychart-beta
   title "assist"
   x-axis [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-7b]
@@ -21,6 +32,17 @@ xychart-beta
 ```
 
 ```mermaid
+
+---
+config:
+    xyChart:
+        width: 900
+        height: 600
+    themeVariables:
+        xyChart:
+            titleColor: "#ff0000
+
+---
 xychart-beta
   title "assist-mini"
   x-axis [assistant, functionary-small-v2.5, gemini-1.5-flash, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3, xlam-1b, xlam-7b]
@@ -28,6 +50,17 @@ xychart-beta
 ```
 
 ```mermaid
+
+---
+config:
+    xyChart:
+        width: 900
+        height: 600
+    themeVariables:
+        xyChart:
+            titleColor: "#ff0000
+
+---
 xychart-beta
   title "intents"
   x-axis [assistant, functionary-small-v2.5, gpt-3.5, gpt-4o, gpt-4o-mini, home-llm, llama3-groq-tool-use, llama3.1, mistral-v3]
