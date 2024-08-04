@@ -13,6 +13,14 @@
 | llama3-groq-tool-use | 20.0% (+/- 4.5%) 2024.8.0b | 51.0% (+/- 7.1%) 2024.8.0b0 | 11.5% (+/- 2.5%) 2024.8.0b |
 | mistral-v3 | 3.8% (+/- 2.1%) 2024.8.0b | 2.0% (+/- 2.0%) 2024.8.0dev | 10.3% (+/- 2.4%) 2024.8.0b |
 | xlam-1b |  | 27.1% (+/- 6.4%) 2024.8.0b0 |  |
+
+Implementation notes:
+- Note that not all models have been evaluated against all benchmarks. If a model is missing a run against a dataset, it just means it has not been evaluated.
+- Error bars are std dev based on the # of tasks in the dataset.
+- Local models evaluated using a GeForce GTX 1070 (8GB).
+- Local models quantized with either Q4_K_M or Q4_0 but see links below for details.
+- Temperature settings are based on the default values used in integrations.
+
 ## Datasets
 
 ### assist

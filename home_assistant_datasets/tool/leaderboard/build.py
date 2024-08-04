@@ -34,6 +34,14 @@ _LOGGER = logging.getLogger(__name__)
 
 LEADERBOARD_FILE = "README.md"
 
+IMPLEMENTATION_NOTES = """
+Implementation notes:
+- Note that not all models have been evaluated against all benchmarks. If a model is missing a run against a dataset, it just means it has not been evaluated.
+- Error bars are std dev based on the # of tasks in the dataset.
+- Local models evaluated using a GeForce GTX 1070 (8GB).
+- Local models quantized with either Q4_K_M or Q4_0 but see links below for details.
+- Temperature settings are based on the default values used in integrations.
+"""
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
     """Get parsed passed in arguments."""
@@ -175,6 +183,7 @@ def run(args: argparse.Namespace) -> int:
     results = [
         "# Home LLM Leaderboard",
         leaderboard_table,
+        IMPLEMENTATION_NOTES,
         "## Datasets",
     ]
 
