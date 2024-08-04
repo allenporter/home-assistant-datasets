@@ -13,6 +13,7 @@ options:
 import argparse
 import logging
 from dataclasses import dataclass
+from collections.abc import Callable
 import math
 import pathlib
 import subprocess
@@ -59,6 +60,15 @@ class ModelRecord:
         return math.sqrt((p * (1 - p)) / self.total)
 
 
+def best_score_func(model_scores: dict[str, dict[str, ModelRecord]], dataset_name: str) -> Callable[[str], float]:
+    """Best score function."""
+
+    def func(model_id: str) -> float:
+        records = model_scores[model_id][dataset_name]
+        return records[0].good_percent_value() if records else 0
+
+    return func
+
 
 def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
@@ -96,13 +106,11 @@ def run(args: argparse.Namespace) -> int:
             records = sorted(records, key=ModelRecord.good_percent_value, reverse=True)
             model_scores[model_id][dataset] = records
 
-    # Build leaderboard sorted by the first dataset score
-    def best_score(model_id: str) -> float:
-        records = model_scores[model_id][DATASETS[0]]
-        return records[0].good_percent_value() if records else 0
 
+
+    # Generate overall report sorted by the first dataset score
+    best_score = best_score_func(model_scores, DATASETS[0])
     sorted_model_ids = sorted(model_scores.keys(), key=best_score, reverse=True)
-
 
     results = [
         ["| Model | ", " | ".join(DATASETS), "|"],
@@ -121,11 +129,42 @@ def run(args: argparse.Namespace) -> int:
         results.append(row)
 
 
+    # Generate a bar chart for each dataset
+    for dataset in DATASETS:
+
+        best_score = best_score_func(model_scores, dataset)
+        sorted_model_ids = sorted(model_scores.keys())
+
+        x_axis = []
+        bar = []
+
+        for model_id in sorted_model_ids:
+            records = model_scores[model_id][dataset]
+            if not records:
+                continue
+            best_record = records[0]
+            x_axis.append(model_id)
+            bar.append(float(f"{best_record.good_percent_value()*100:0.2f}"))
+
+        results.extend([
+            "",
+            "```mermaid"
+            "",
+            "xychart-beta",
+            f"  title \"{dataset}\"",
+            f"  x-axis {x_axis}",
+            f"  bar {bar}",
+            "```",
+        ])
+
     leaderboard_file = report_dir / LEADERBOARD_FILE
     print(f"Updating {leaderboard_file}")
     leaderboard_file.write_text("\n".join([
         "".join(row)
         for row in results
     ]))
+
+
+
 
     return 0
