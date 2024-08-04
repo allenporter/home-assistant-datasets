@@ -11,9 +11,13 @@ models:
     domain: homeassistant
     description: The Home Assisatnt NLP assistant pipeline
 
+  #
+  # Large Cloud Models
+  #
+
   - model_id: gpt-3.5
     domain: openai_conversation
-    description: Open AI Conversation integration using gpt-3.5
+    description: Open AI Conversation integration using gpt-3.5 (175B)
     url:
       - https://platform.openai.com/docs/models/gpt-3-5-turbo
     config_entry_data:
@@ -66,10 +70,14 @@ models:
       chat_model: models/gemini-1.5-flash-latest
       llm_hass_api: assist
 
+  #
+  # Open Source smaller function calling models
+  #
+
   # Using an openai compatible custom component
   # https://github.com/allenporter/hass-openai-custom-conversation
   - model_id: functionary-small-v2.5
-    description: A custom open AI integration using functionary small v2.5 with a modified pre-release llama cpp python server.
+    description: A custom open AI integration using functionary small v2.5 (8B) with a modified pre-release llama cpp python server.
     domain: vicuna_conversation
     urL:
       - https://huggingface.co/meetkai/functionary-small-v2.5
@@ -85,7 +93,7 @@ models:
 
   - model_id: mistral-v3
     domain: ollama
-    description: Mistral V3 using Ollama
+    description: Mistral V3 (7B) using Ollama
     url:
       - https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3
       - https://ollama.com/library/mistral
@@ -96,18 +104,21 @@ models:
     config_entry_options:
       llm_hass_api: assist
 
-  - model_id: llama3
+  - model_id: llama3-groq-tool-use
     domain: ollama
-    description: Llama 3 from Meta using Ollama
+    description: Groq tool use model fine tuned from llama3 (8B) using Ollama
     url:
-      - https://ollama.com/library/llama3
+      - https://ollama.com/library/llama3-groq-tool-use
+      - https://console.groq.com/docs/tool-use
     config_entry_data:
       url: !secret ollama_url
-      model: llama3:latest
+      model: llama3-groq-tool-use:latest
+    config_entry_options:
+      llm_hass_api: assist
 
   - model_id: llama3.1
     domain: ollama
-    description: Llama 3.1 from Meta using Ollama
+    description: Llama 3.1 (8B) from Meta using Ollama
     url:
       - https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct
       - https://ollama.com/library/llama3.1
@@ -117,22 +128,9 @@ models:
     config_entry_options:
       llm_hass_api: assist
 
-  - model_id: xlam-1b
-    domain: ollama
-    description: XLam 1B model from Salesforce using Ollama
-    url:
-      - https://huggingface.co/Salesforce/xLAM-1b-fc-r
-      - https://github.com/SalesforceAIResearch/xLAM
-      - https://ollama.com/allenporter/xlam:1b
-    config_entry_data:
-      url: !secret ollama_url
-      model: allenporter/xlam:1b
-    config_entry_options:
-      llm_hass_api: assist
-
   - model_id: xlam-7b
     domain: ollama
-    description: XLam 7B model from Salesforce using Ollama
+    description: XLam (7B) model from Salesforce using Ollama
     url:
       - https://huggingface.co/Salesforce/xLAM-7b-fc-r
       - https://github.com/SalesforceAIResearch/xLAM
@@ -143,32 +141,14 @@ models:
     config_entry_options:
       llm_hass_api: assist
 
-  - model_id: gemma
-    domain: ollama
-    description: Gemma from Google using Ollama
-    url:
-      - https://ollama.com/library/gemma
-      - https://ai.google.dev/gemma/docs/model_card
-    config_entry_data:
-      url: !secret ollama_url
-      model: gemma:7b
-
-  - model_id: llama3-groq-tool-use
-    domain: ollama
-    description: Groq tool use model fine tuned from llama3using Ollama
-    url:
-      - https://ollama.com/library/llama3-groq-tool-use
-      - https://console.groq.com/docs/tool-use
-    config_entry_data:
-      url: !secret ollama_url
-      model: llama3-groq-tool-use:latest
-    config_entry_options:
-      llm_hass_api: assist
+  #
+  # Open Source smaller models
+  #
 
   # Configuration for home-llm custom component https://github.com/acon96/home-llm
   - model_id: home-llm
     domain: llama_conversation
-    description: The home-llm 3B v3 model and custom component using service calls to control Home Assistant.
+    description: The home-llm v3 model based on Phi (3B) and custom component using service calls to control Home Assistant.
     url:
       - https://github.com/acon96/home-llm/
       - https://huggingface.co/acon96/Home-3B-v3-GGUF
@@ -215,3 +195,39 @@ models:
       refresh_prompt_per_turn: true
       remember_conversation: true
       remember_num_interactions: 5
+
+  - model_id: xlam-1b
+    domain: ollama
+    description: XLam (1B) model from Salesforce using Ollama
+    url:
+      - https://huggingface.co/Salesforce/xLAM-1b-fc-r
+      - https://github.com/SalesforceAIResearch/xLAM
+      - https://ollama.com/allenporter/xlam:1b
+    config_entry_data:
+      url: !secret ollama_url
+      model: allenporter/xlam:1b
+    config_entry_options:
+      llm_hass_api: assist
+
+  #
+  # Non function calling models
+  #
+
+  - model_id: llama3
+    domain: ollama
+    description: Llama 3 (8B) from Meta using Ollama
+    url:
+      - https://ollama.com/library/llama3
+    config_entry_data:
+      url: !secret ollama_url
+      model: llama3:latest
+
+  - model_id: gemma
+    domain: ollama
+    description: Gemma (7B) from Google using Ollama
+    url:
+      - https://ollama.com/library/gemma
+      - https://ai.google.dev/gemma/docs/model_card
+    config_entry_data:
+      url: !secret ollama_url
+      model: gemma:7b

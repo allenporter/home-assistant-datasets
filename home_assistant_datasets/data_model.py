@@ -1,7 +1,14 @@
 """Common librarys for collecting model outputs for evaluation."""
 
 from typing import Any
+import pathlib
 from dataclasses import dataclass
+import yaml
+
+from . import yaml_loaders
+
+
+MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
 
 
 @dataclass
@@ -36,3 +43,32 @@ class Models:
 
     models: list[ModelConfig]
     """The list of models under configuration"""
+
+
+def read_models() -> Models:
+    """Read models configuration file."""
+    with MODEL_CONFIG_FILE.open() as fd:
+        try:
+            model_data = yaml.load(fd.read(), Loader=yaml_loaders.FastSafeLoader)
+        except Exception as err:
+            raise ValueError(f"Error while loading {MODEL_CONFIG_FILE}: {err}")
+
+    models = model_data.get("models", [])
+    return Models(
+        models=[
+            ModelConfig(**model)
+            for model in models
+        ]
+    )
+
+
+def read_model(model_id: str) -> ModelConfig:
+    """Read a specific model from the config file."""
+    models = read_models()
+    for model in models.models:
+        if model.model_id == model_id:
+            return model
+
+    raise ValueError(
+        f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}"
+    )

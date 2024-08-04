@@ -20,12 +20,10 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from home_assistant_datasets.data_model import ModelConfig
 
-from . import yaml_loaders
+from . import yaml_loaders, data_model
 
 
 _LOGGER = logging.getLogger(__name__)
-
-MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
 
 
 @pytest.fixture(autouse=True)
@@ -108,20 +106,10 @@ async def system_prompt_fixture() -> None:
 @pytest.fixture
 async def model_config(model_id: str) -> ModelConfig:
     """Fixture to read the model config yaml."""
-    with MODEL_CONFIG_FILE.open() as fd:
-        try:
-            model_data = yaml.load(fd.read(), Loader=yaml_loaders.FastSafeLoader)
-        except Exception as err:
-            pytest.exit(f"Error while loading {MODEL_CONFIG_FILE}: {err}")
-
-    models = model_data.get("models", [])
-    for model in models:
-        if (config := ModelConfig(**model)).model_id == model_id:
-            return config
-
-    raise ValueError(
-        f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}"
-    )
+    try:
+        return data_model.read_model(model_id)
+    except Exception as err:
+        pytest.exit(err)
 
 
 @pytest.fixture(name="conversation_agent_config_entry")
