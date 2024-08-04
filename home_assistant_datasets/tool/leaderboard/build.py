@@ -166,6 +166,7 @@ xychart-beta
   title "{dataset}"
   x-axis [{x_axis_str}]
   bar {bar}
+  bar {50, 50, 50, 50}
 ```
 """,
         ])
