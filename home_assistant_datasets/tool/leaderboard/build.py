@@ -154,8 +154,10 @@ def run(args: argparse.Namespace) -> int:
 ---
 config:
     xyChart:
-        width: 900
+        width: 1000
         height: 600
+        xAxis:
+          labelFontSize: 12
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
@@ -164,9 +166,9 @@ config:
 ---
 xychart-beta
   title "{dataset}"
-  x-axis [{x_axis_str}]
+  x-axis "Model" [{x_axis_str}]
+  y-axis "Score" 0 --> 100
   bar {bar}
-  bar [50, 50, 50, 50]
 ```
 """,
         ])
