@@ -8,7 +8,7 @@ def test_table() -> None:
 
     assert (
         table.table(
-            ("col 1", "col 2"),
+            ["col 1", "col 2"],
             [
                 ["a", "b"],
                 ["c", "d"],

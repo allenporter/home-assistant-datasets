@@ -79,7 +79,6 @@ async def mock_synthetic_home(
         yield None
         return
 
-
     config_entry = MockConfigEntry(
         domain="synthetic_home", data={"config_filename": "ignored"}
     )
@@ -110,7 +109,7 @@ async def model_config(model_id: str) -> ModelConfig:
     try:
         return data_model.read_model(model_id)
     except Exception as err:
-        pytest.exit(err)
+        pytest.exit(str(err))
 
 
 @pytest.fixture(name="conversation_agent_config_entry")

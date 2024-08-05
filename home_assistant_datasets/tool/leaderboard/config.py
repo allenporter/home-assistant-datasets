@@ -33,7 +33,7 @@ class EvalReport:
         return self.directory / REPORT_FILE
 
 
-def eval_reports(report_dir: pathlib.Path) -> Generator[EvalReport]:
+def eval_reports(report_dir: pathlib.Path) -> Generator[EvalReport, None, None]:
     """Generate the list of eval reports."""
     for dataset in DATASETS:
         dataset_dir = report_dir / dataset
