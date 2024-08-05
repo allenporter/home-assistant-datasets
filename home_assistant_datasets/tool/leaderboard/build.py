@@ -83,7 +83,7 @@ def parse_model_reports(
     model_scores: dict[str, dict[str, list[ModelRecord]]] = {}
     for eval_report in eval_reports(report_dir):
         report_file = eval_report.report_file
-        if not report_file.exists:
+        if not report_file.exists():
             raise ValueError(
                 f"Report file {report_file} does not exist, run `prebuild` first"
             )
