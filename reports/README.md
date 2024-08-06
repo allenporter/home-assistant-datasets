@@ -1,18 +1,18 @@
 # Home LLM Leaderboard
 | Model | assist (n=80) | assist-mini (n=49) | intents (n=165) |
 | --- | --- | --- | --- |
-| gemini-1.5-flash | 91.2 CI:&nbsp;6.2%&nbsp;2024.6.3 | 98.0 CI:&nbsp;4.0%&nbsp;2024.8.0dev | 63.0 CI:&nbsp;7.4%&nbsp;2024.8.0b |
-| gpt-4o-mini | 90.0 CI:&nbsp;6.6%&nbsp;2024.8.0b | 98.0 CI:&nbsp;4.0%&nbsp;2024.8.0dev | 63.6 CI:&nbsp;7.3%&nbsp;2024.8.0b |
-| gpt-4o | 87.5 CI:&nbsp;7.2%&nbsp;2024.6.3 |  | 81.2 CI:&nbsp;6.0%&nbsp;2024.6.3 |
-| gpt-3.5 | 75.0 CI:&nbsp;9.5%&nbsp;2024.6.3 |  | 67.9 CI:&nbsp;7.1%&nbsp;2024.6.3 |
-| functionary-small-v2.5 | 56.2 CI:&nbsp;10.9%&nbsp;2024.7.0 | 63.3 CI:&nbsp;13.5%&nbsp;2024.8.0dev | 37.6 CI:&nbsp;7.4%&nbsp;2024.6.3 |
-| llama3.1 | 45.6 CI:&nbsp;11.0%&nbsp;2024.8.0b | 83.7 CI:&nbsp;10.3%&nbsp;2024.8.0b0 | 22.6 CI:&nbsp;6.4%&nbsp;2024.8.0b |
-| home-llm | 45.0 CI:&nbsp;10.9%&nbsp;2024.6.3 | 34.7 CI:&nbsp;13.3%&nbsp;2024.8.0dev | 25.5 CI:&nbsp;6.6%&nbsp;2024.6.3 |
-| assistant | 37.5 CI:&nbsp;10.6%&nbsp;2024.6.3 | 63.3 CI:&nbsp;13.5%&nbsp;2024.8.0dev | 98.8 CI:&nbsp;1.7%&nbsp;2024.6.3 |
-| xlam-7b | 25.0 CI:&nbsp;9.5%&nbsp;2024.8.0b | 85.7 CI:&nbsp;9.8%&nbsp;2024.8.0b0 |  |
-| llama3-groq-tool-use | 20.0 CI:&nbsp;8.8%&nbsp;2024.8.0b | 51.0 CI:&nbsp;14.0%&nbsp;2024.8.0b0 | 11.5 CI:&nbsp;4.9%&nbsp;2024.8.0b |
-| mistral-v3 | 3.8 CI:&nbsp;4.2%&nbsp;2024.8.0b | 2.0 CI:&nbsp;4.0%&nbsp;2024.8.0dev | 10.3 CI:&nbsp;4.6%&nbsp;2024.8.0b |
-| xlam-1b |  | 27.1 CI:&nbsp;12.6%&nbsp;2024.8.0b0 |  |
+| gemini-1.5-flash | 91.2% <span style="font-size:0.5em;">CI:&nbsp;6.2%&nbsp;2024.6.3</span> | 98.0% <span style="font-size:0.5em;">CI:&nbsp;4.0%&nbsp;2024.8.0dev</span> | 63.0% <span style="font-size:0.5em;">CI:&nbsp;7.4%&nbsp;2024.8.0b</span> |
+| gpt-4o-mini | 90.0% <span style="font-size:0.5em;">CI:&nbsp;6.6%&nbsp;2024.8.0b</span> | 98.0% <span style="font-size:0.5em;">CI:&nbsp;4.0%&nbsp;2024.8.0dev</span> | 63.6% <span style="font-size:0.5em;">CI:&nbsp;7.3%&nbsp;2024.8.0b</span> |
+| gpt-4o | 87.5% <span style="font-size:0.5em;">CI:&nbsp;7.2%&nbsp;2024.6.3</span> |  | 81.2% <span style="font-size:0.5em;">CI:&nbsp;6.0%&nbsp;2024.6.3</span> |
+| gpt-3.5 | 75.0% <span style="font-size:0.5em;">CI:&nbsp;9.5%&nbsp;2024.6.3</span> |  | 67.9% <span style="font-size:0.5em;">CI:&nbsp;7.1%&nbsp;2024.6.3</span> |
+| functionary-small-v2.5 | 56.2% <span style="font-size:0.5em;">CI:&nbsp;10.9%&nbsp;2024.7.0</span> | 63.3% <span style="font-size:0.5em;">CI:&nbsp;13.5%&nbsp;2024.8.0dev</span> | 37.6% <span style="font-size:0.5em;">CI:&nbsp;7.4%&nbsp;2024.6.3</span> |
+| llama3.1 | 45.6% <span style="font-size:0.5em;">CI:&nbsp;11.0%&nbsp;2024.8.0b</span> | 83.7% <span style="font-size:0.5em;">CI:&nbsp;10.3%&nbsp;2024.8.0b0</span> | 22.6% <span style="font-size:0.5em;">CI:&nbsp;6.4%&nbsp;2024.8.0b</span> |
+| home-llm | 45.0% <span style="font-size:0.5em;">CI:&nbsp;10.9%&nbsp;2024.6.3</span> | 34.7% <span style="font-size:0.5em;">CI:&nbsp;13.3%&nbsp;2024.8.0dev</span> | 25.5% <span style="font-size:0.5em;">CI:&nbsp;6.6%&nbsp;2024.6.3</span> |
+| assistant | 37.5% <span style="font-size:0.5em;">CI:&nbsp;10.6%&nbsp;2024.6.3</span> | 63.3% <span style="font-size:0.5em;">CI:&nbsp;13.5%&nbsp;2024.8.0dev</span> | 98.8% <span style="font-size:0.5em;">CI:&nbsp;1.7%&nbsp;2024.6.3</span> |
+| xlam-7b | 25.0% <span style="font-size:0.5em;">CI:&nbsp;9.5%&nbsp;2024.8.0b</span> | 85.7% <span style="font-size:0.5em;">CI:&nbsp;9.8%&nbsp;2024.8.0b0</span> |  |
+| llama3-groq-tool-use | 20.0% <span style="font-size:0.5em;">CI:&nbsp;8.8%&nbsp;2024.8.0b</span> | 51.0% <span style="font-size:0.5em;">CI:&nbsp;14.0%&nbsp;2024.8.0b0</span> | 11.5% <span style="font-size:0.5em;">CI:&nbsp;4.9%&nbsp;2024.8.0b</span> |
+| mistral-v3 | 3.8% <span style="font-size:0.5em;">CI:&nbsp;4.2%&nbsp;2024.8.0b</span> | 2.0% <span style="font-size:0.5em;">CI:&nbsp;4.0%&nbsp;2024.8.0dev</span> | 10.3% <span style="font-size:0.5em;">CI:&nbsp;4.6%&nbsp;2024.8.0b</span> |
+| xlam-1b |  | 27.1% <span style="font-size:0.5em;">CI:&nbsp;12.6%&nbsp;2024.8.0b0</span> |  |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
