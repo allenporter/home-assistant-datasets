@@ -11,7 +11,10 @@ options:
 ```
 """
 
-__all__ = [
-    "collect",
-    "eval",
-]
+from . import collect, eval
+
+SUBCMDS = {
+    "collect": collect,
+    "eval": eval,
+}
+__all__ = list(SUBCMDS)

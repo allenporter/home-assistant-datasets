@@ -3,14 +3,35 @@
 import argparse
 import importlib
 import logging
+import types
 import sys
 from pathlib import Path
 
-from .leaderboard import prebuild as leaderboard_prebuild, build as leaderboard_build
-from .assist import collect as assist_collect, eval as assist_eval
+from . import assist, leaderboard
 
 
 _LOGGER = logging.getLogger(__name__)
+
+SUBCMDS = {
+    "assist": assist,
+    "leaderboard": leaderboard,
+}
+
+
+def create_arguments(
+    parser: argparse.ArgumentParser, subcmds: dict[str, types.ModuleType]
+) -> None:
+    """Recursively add sub commands/submodules and arguments to the parser"""
+    for name, module in subcmds.items():
+        if not hasattr(module, "SUBCMDS"):
+            module.create_arguments(parser.add_parser(name))
+            continue
+
+        cmd_parser = parser.add_parser(name)
+        subparsers = cmd_parser.add_subparsers(
+            dest="subaction", help="Sub Action", required=True
+        )
+        create_arguments(subparsers, module.SUBCMDS)
 
 
 def get_base_arg_parser() -> argparse.ArgumentParser:
@@ -18,21 +39,7 @@ def get_base_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Home Assistant Datasets Utility")
     parser.add_argument("--debug", action="store_true", help="Enable log output")
     subparsers = parser.add_subparsers(dest="action", help="Action", required=True)
-
-    # Subcommands
-    assist_parser = subparsers.add_parser("assist")
-    assist_subparsers = assist_parser.add_subparsers(
-        dest="subaction", help="Sub Action", required=True
-    )
-    assist_collect.create_arguments(assist_subparsers.add_parser("collect"))
-    assist_eval.create_arguments(assist_subparsers.add_parser("eval"))
-
-    leaderboard_parser = subparsers.add_parser("leaderboard")
-    leaderboard_subparsers = leaderboard_parser.add_subparsers(
-        dest="subaction", help="Sub Action", required=True
-    )
-    leaderboard_prebuild.create_arguments(leaderboard_subparsers.add_parser("prebuild"))
-    leaderboard_build.create_arguments(leaderboard_subparsers.add_parser("build"))
+    create_arguments(subparsers, SUBCMDS)
 
     return parser
 

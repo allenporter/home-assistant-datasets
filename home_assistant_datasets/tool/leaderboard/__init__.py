@@ -11,7 +11,11 @@ options:
 ```
 """
 
-__all__ = [
-    "prebuild",
-    "build",
-]
+from . import prebuild, build
+
+
+SUBCMDS = {
+    "prebuild": prebuild,
+    "build": build,
+}
+__all__ = list(SUBCMDS)
