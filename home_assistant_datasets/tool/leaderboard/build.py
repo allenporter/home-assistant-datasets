@@ -155,7 +155,7 @@ def create_leaderboard_table(
         for dataset, best_record in dataset_scores.items():
             if best_record.good_percent_value() != 0:
                 ci = 1.96 * best_record.stddev*100
-                row.append(f"{best_record.good_percent_value()*100:0.1f}%<br>CI: +/- {ci:0.1f} / {best_record.dataset_label}")
+                row.append(f"{best_record.good_percent_value()*100:0.1f} CI:&nbsp;{ci:0.1f}%&nbsp;{best_record.dataset_label}")
             else:
                 row.append("")
         rows.append(row)
