@@ -36,6 +36,7 @@ LEADERBOARD_FILE = "README.md"
 
 IMPLEMENTATION_NOTES = """
 Implementation notes:
+- CI is large given small number of samples in the datasets.
 - Note that not all models have been evaluated against all benchmarks. If a model is missing a run against a dataset, it just means it has not been evaluated.
 - Error bars are std dev based on the # of tasks in the dataset.
 - Local models evaluated using a GeForce GTX 1070 (8GB).
@@ -142,16 +143,24 @@ def create_leaderboard_table(
     best_model_scores: dict[str, dict[str, ModelRecord]]
 ) -> str:
     """Create leaderboard markdown table."""
-    cols = ["Model", *DATASETS]
+    cols = ["Model"]
+    first_model_id = next(iter(best_model_scores.keys()))
+    for dataset in DATASETS:
+        assert best_model_scores[first_model_id][dataset]
+        num_samples = best_model_scores[first_model_id][dataset].total
+        cols.append(f"{dataset} (n={num_samples})")
+        cols.append("95% CI / version")
     rows = []
     for model_id, dataset_scores in best_model_scores.items():
         row = [ model_id ]
         for dataset, best_record in dataset_scores.items():
             if best_record.good_percent_value() != 0:
                 row.append(
-                    f"{best_record.good_percent_value()*100:0.1f}% (+/- {best_record.stddev*100:0.1f}%) {best_record.dataset_label}"
-                )
+                    f"{best_record.good_percent_value()*100:0.1f}%")
+                ci = 1.96 * best_record.stddev*100
+                row.append(f"+/- {ci:0.1f} / {best_record.dataset_label}")
             else:
+                row.append("")
                 row.append("")
         rows.append(row)
     return table.table(cols, rows)
