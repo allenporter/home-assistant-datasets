@@ -149,18 +149,14 @@ def create_leaderboard_table(
         assert best_model_scores[first_model_id][dataset]
         num_samples = best_model_scores[first_model_id][dataset].total
         cols.append(f"{dataset} (n={num_samples})")
-        cols.append("95% CI / version")
     rows = []
     for model_id, dataset_scores in best_model_scores.items():
         row = [ model_id ]
         for dataset, best_record in dataset_scores.items():
             if best_record.good_percent_value() != 0:
-                row.append(
-                    f"{best_record.good_percent_value()*100:0.1f}%")
                 ci = 1.96 * best_record.stddev*100
-                row.append(f"+/- {ci:0.1f} / {best_record.dataset_label}")
+                row.append(f"{best_record.good_percent_value()*100:0.1f}%<br>CI: +/- {ci:0.1f} / {best_record.dataset_label}")
             else:
-                row.append("")
                 row.append("")
         rows.append(row)
     return table.table(cols, rows)
