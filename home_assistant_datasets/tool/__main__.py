@@ -19,19 +19,19 @@ SUBCMDS = {
 
 
 def create_arguments(
-    parser: argparse.ArgumentParser, subcmds: dict[str, types.ModuleType]
+    parser: argparse._SubParsersAction[argparse.ArgumentParser],
+    subcmds: dict[str, types.ModuleType],
 ) -> None:
     """Recursively add sub commands/submodules and arguments to the parser"""
     for name, module in subcmds.items():
-        if not hasattr(module, "SUBCMDS"):
-            module.create_arguments(parser.add_parser(name))
-            continue
-
         cmd_parser = parser.add_parser(name)
-        subparsers = cmd_parser.add_subparsers(
-            dest="subaction", help="Sub Action", required=True
+        subparsers: argparse._SubParsersAction[argparse.ArgumentParser] = (
+            cmd_parser.add_subparsers(
+                dest="subaction", help="Sub Action", required=True
+            )
         )
-        create_arguments(subparsers, module.SUBCMDS)
+        for inner_name, inner_module in module.SUBCMDS.items():
+            inner_module.create_arguments(subparsers.add_parser(inner_name))
 
 
 def get_base_arg_parser() -> argparse.ArgumentParser:
