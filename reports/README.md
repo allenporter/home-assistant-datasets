@@ -222,7 +222,7 @@ More information:
 
 ### llama3-groq-tool-use
 
-Groq tool use model fine tuned from llama3 (8B) using Ollama with 8k contex window.
+Groq tool use model fine tuned from llama3 (8B) using Ollama
 
 More information:
 - https://ollama.com/library/llama3-groq-tool-use
