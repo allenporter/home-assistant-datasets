@@ -5,11 +5,11 @@
 | gpt-4o-mini | 90.0% (CI:&nbsp;6.6%, 2024.8.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.6% (CI:&nbsp;7.3%, 2024.8.0b) |
 | gpt-4o | 87.5% (CI:&nbsp;7.2%, 2024.6.3) |  | 81.2% (CI:&nbsp;6.0%, 2024.6.3) |
 | gpt-3.5 | 75.0% (CI:&nbsp;9.5%, 2024.6.3) |  | 67.9% (CI:&nbsp;7.1%, 2024.6.3) |
+| llama3.1 | 66.2% (CI:&nbsp;10.4%, 2024.9.0dev) | 83.7% (CI:&nbsp;10.3%, 2024.8.0b0) | 22.6% (CI:&nbsp;6.4%, 2024.8.0b) |
 | functionary-small-v2.5 | 56.2% (CI:&nbsp;10.9%, 2024.7.0) | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 37.6% (CI:&nbsp;7.4%, 2024.6.3) |
-| llama3.1 | 45.6% (CI:&nbsp;11.0%, 2024.8.0b) | 83.7% (CI:&nbsp;10.3%, 2024.8.0b0) | 22.6% (CI:&nbsp;6.4%, 2024.8.0b) |
+| xlam-7b | 51.2% (CI:&nbsp;11.0%, 2024.9.0dev) | 85.7% (CI:&nbsp;9.8%, 2024.8.0b0) |  |
 | home-llm | 45.0% (CI:&nbsp;10.9%, 2024.6.3) | 34.7% (CI:&nbsp;13.3%, 2024.8.0dev) | 25.5% (CI:&nbsp;6.6%, 2024.6.3) |
 | assistant | 37.5% (CI:&nbsp;10.6%, 2024.6.3) | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 98.8% (CI:&nbsp;1.7%, 2024.6.3) |
-| xlam-7b | 25.0% (CI:&nbsp;9.5%, 2024.8.0b) | 85.7% (CI:&nbsp;9.8%, 2024.8.0b0) |  |
 | llama3-groq-tool-use | 20.0% (CI:&nbsp;8.8%, 2024.8.0b) | 51.0% (CI:&nbsp;14.0%, 2024.8.0b0) | 11.5% (CI:&nbsp;4.9%, 2024.8.0b) |
 | mistral-v3 | 3.8% (CI:&nbsp;4.2%, 2024.8.0b) | 2.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 10.3% (CI:&nbsp;4.6%, 2024.8.0b) |
 | xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |
@@ -48,7 +48,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#46bdc6, #ea4335, #f4b400, #0f9d58, #4285f4, #fbbc04, #6aa84f, #d5a6bd, #34a853, #1155cc, #ff6d01, #4285f4"
+            plotColorPalette: "#1155cc, #ea4335, #f4b400, #0f9d58, #4285f4, #34a853, #6aa84f, #d5a6bd, #fbbc04, #ff6d01, #46bdc6, #4285f4"
 
 ---
 xychart-beta
@@ -63,8 +63,8 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 56.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.8, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 45.6, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 25.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 66.2, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 51.2, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 45.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
@@ -93,7 +93,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#46bdc6, #0f9d58, #4285f4, #fbbc04, #6aa84f, #d5a6bd, #34a853, #1155cc, #ff6d01, #674ea7, #4285f4"
+            plotColorPalette: "#1155cc, #0f9d58, #4285f4, #34a853, #6aa84f, #d5a6bd, #fbbc04, #ff6d01, #46bdc6, #674ea7, #4285f4"
 
 ---
 xychart-beta
@@ -139,7 +139,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#46bdc6, #ea4335, #f4b400, #0f9d58, #4285f4, #fbbc04, #6aa84f, #d5a6bd, #34a853, #ff6d01, #4285f4"
+            plotColorPalette: "#1155cc, #ea4335, #f4b400, #0f9d58, #4285f4, #34a853, #6aa84f, #d5a6bd, #fbbc04, #46bdc6, #4285f4"
 
 ---
 xychart-beta
@@ -222,7 +222,7 @@ More information:
 
 ### llama3-groq-tool-use
 
-Groq tool use model fine tuned from llama3 (8B) using Ollama
+Groq tool use model fine tuned from llama3 (8B) using Ollama with 8k contex window.
 
 More information:
 - https://ollama.com/library/llama3-groq-tool-use
@@ -231,7 +231,7 @@ More information:
 
 ### llama3.1
 
-Llama 3.1 (8B) from Meta using Ollama
+Llama 3.1 (8B) from Meta using Ollama with 8k contex window.
 
 More information:
 - https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct
@@ -240,7 +240,7 @@ More information:
 
 ### xlam-7b
 
-XLam (7B) model from Salesforce using Ollama
+XLam (7B) model from Salesforce using Ollama with 4k context window.
 
 More information:
 - https://huggingface.co/Salesforce/xLAM-7b-fc-r
