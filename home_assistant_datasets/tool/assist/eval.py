@@ -80,6 +80,12 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="Specifies the output type.",
         required=True,
     )
+    args.add_argument(
+        "--ignore_invalid",
+        type=bool,
+        action=argparse.BooleanOptionalAction,
+        help="Ignore empty or invalid eval results from in progress evals.",
+    )
 
 
 def run(args: argparse.Namespace) -> int:
@@ -98,9 +104,10 @@ def run(args: argparse.Namespace) -> int:
                 model_output_file.read_text(), decoder=yaml_decoder
             )
         except (yaml.error.YAMLError, ValueError, MissingField) as err:
-            raise ValueError(
-                f"Unable to parse model output file: {model_output_file}: {str(err)}"
-            ) from err
+            if args.ignore_invalid:
+                _LOGGER.error("Unable to parse model output file: %s: %s", model_output_file, err)
+                continue
+            raise ValueError(f"Unable to parse model output file: {model_output_file}: {str(err)}")
 
         label = BAD_LABEL
         unexpected_states = output.context["unexpected_states"]
