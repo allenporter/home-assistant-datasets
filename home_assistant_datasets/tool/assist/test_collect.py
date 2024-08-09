@@ -28,7 +28,7 @@ from .data_model import (
 )
 
 _LOGGER = logging.getLogger(__name__)
-TIMEOUT = 25
+TIMEOUT = 40
 
 
 @pytest.fixture(name="get_state")

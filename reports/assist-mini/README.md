@@ -15,7 +15,15 @@ local models which have not performed that well on the `assist` dataset.
 
 ### Prepare Eval environment
 
-Development version of home assistant
+Prepare dev environment:
+
+``bash
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip3 install -r requirements_dev.txt
+```
+
+Development version of home assistant if needed:
 
 ```bash
 $ pip3 install -e /workspaces/core
