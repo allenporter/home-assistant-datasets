@@ -7,7 +7,7 @@ import types
 import sys
 from pathlib import Path
 
-from . import assist, leaderboard
+from . import assist, leaderboard, home_llm
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -15,6 +15,7 @@ _LOGGER = logging.getLogger(__name__)
 SUBCMDS = {
     "assist": assist,
     "leaderboard": leaderboard,
+    "home_llm": home_llm,
 }
 
 
