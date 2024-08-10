@@ -7,7 +7,7 @@ The phases of generating data are currently:
 - Generate a description of a Home ([notebook](homes.ipynb))
 - Generate the Areas of the Home useful for automation ([notebook](areas.ipynb))
 - Generate the devices in each area ([notebook](devices.ipynb))
-- Generate interesting actions that can be used within the home ([notebook](actions.ipynb))
+- Generate interesting actions that can be used within the home ([notebook](device-actions.ipynb))
 - Generate the subset of devices needed to evaluate the action
 - Generate a list of possible things to consider when summariziing an area ([notebook](summaries.ipynb))
 - Generate a list of anomalies in a home ([notebook](anomalies.ipynb))
