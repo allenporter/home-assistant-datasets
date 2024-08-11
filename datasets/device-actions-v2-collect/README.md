@@ -11,5 +11,5 @@ output set.
 $ home-assistant-datasets assist collect --dataset ./datasets/device-actions-v2-fixtures/ --model_output_dir=./datasets/device-actions-v2-collect/ --models=assistant
 ```
 
-The `generatio/device-actions-collect.ipynb` notebook is used to copy out the
+The `generatio/device-actions.ipynb` notebook is used to copy out the
 succesful sentences and intents.
