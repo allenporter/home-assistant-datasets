@@ -46,10 +46,10 @@ class Action(DataClassYAMLMixin):
     sentences: list[str]
     """Sentences spoken."""
 
-    setup: dict[str, EntityState] = field(default_factory=dict)
+    setup: dict[str, EntityState] | None = field(default_factory=dict)
     """Initial entity states to override."""
 
-    expect_changes: dict[str, EntityState] = field(default_factory=dict)
+    expect_changes: dict[str, EntityState] | None = field(default_factory=dict)
     """The device states to assert on."""
 
     ignore_changes: dict[str, list[str]] | None = None
@@ -89,7 +89,7 @@ class EvalTask(DataClassYAMLMixin):
     input_text: str
     """The conversation input text to state."""
 
-    expect_changes: dict[str, EntityState]
+    expect_changes: dict[str, EntityState] | None = None
     """The device states to assert on."""
 
     ignore_changes: dict[str, list[str]] | None = None
@@ -140,8 +140,8 @@ def generate_tasks(
     for action in record.tests or ():
         if not action.sentences:
             raise ValueError("No sentences defined for the action")
-        if not action.expect_changes:
-            raise ValueError("No expect_changes defined for the action")
+        # if not action.expect_changes:
+        #     raise ValueError("No expect_changes defined for the action")
 
         # Override any state data
         entities = synthetic_home_yaml.get("entities", [])
