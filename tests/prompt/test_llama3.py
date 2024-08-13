@@ -1,31 +1,42 @@
 """Tests for llama3 prompt building."""
 
+from syrupy import SnapshotAssertion
+
 from home_assistant_datasets.prompt import llama3
 
 
-def test_empty_messages() -> None:
+TOOLS = [
+    llama3.Tool(
+        name="get_current_conditions",
+        description="Get the current weather conditions for a specific location",
+        parameters={"location": {"type": "string"}},
+    )
+]
+TOOL_CALLS = [
+    llama3.ToolCall(
+        name="get_current_conditions",
+        arguments={"location": "San Francisco, CA"},
+    )
+]
+
+
+def test_empty_messages(snapshot: SnapshotAssertion) -> None:
     """Test an empty list of messages."""
 
-    assert llama3.build_prompt(messages=[]) == "<|eot_id|>"
+    assert llama3.build_prompt(messages=[]) == snapshot
 
 
-def test_system() -> None:
-    """Test an empty list of messages."""
+def test_system(snapshot: SnapshotAssertion) -> None:
+    """Test a single system message."""
 
     prompt = llama3.build_prompt(
         messages=[llama3.Message(role="system", content="You are a helpful assistant.")]
     )
-    assert (
-        prompt
-        == """<|start_header_id|>system<|end_header_id|>
+    assert prompt == snapshot
 
 
-You are a helpful assistant.<|eot_id|>"""
-    )
-
-
-def test_system_tools() -> None:
-    """Test an empty list of messages."""
+def test_conversation(snapshot: SnapshotAssertion) -> None:
+    """Test a conversation."""
 
     prompt = llama3.build_prompt(
         messages=[
@@ -35,69 +46,89 @@ def test_system_tools() -> None:
             ),
             llama3.Message(
                 role="user",
-                tools=[llama3.Tool("tool1", parameters={"arg1": {"type": "string"}})],
-            ),
-        ]
-    )
-    assert (
-        prompt
-        == """<|start_header_id|>system<|end_header_id|>
-
-
-You are a helpful assistant.
-
-You are a helpful assistant with tool calling capabilities. When you receive a tool call response, use the output to format an answer to the orginal use question.<|eot_id|><|start_header_id|>user<|end_header_id|>
-
-Given the following functions, please respond with a JSON for a function call with its proper arguments that best answers the given prompt.
-
-Respond in the format {"name": function name, "parameters": dictionary of argument name and its value}. Do not use variables.
-
-{"name": "tool1", "arguments": {"arg1": {"type": "string"}}}
-
-<|eot_id|><|start_header_id|>assistant<|end_header_id|>
-
-"""
-    )
-
-
-def test_tool_call() -> None:
-    """Test an empty list of messages."""
-
-    prompt = llama3.build_prompt(
-        messages=[
-            llama3.Message(
-                role="system",
-                content="You are a helpful assistant.",
-            ),
-            llama3.Message(
-                role="user",
-                tools=[
-                    llama3.Tool(
-                        name="get_current_conditions",
-                        description="Get the current weather conditions for a specific location",
-                        parameters={"location": {"type": "string"}},
-                    )
-                ],
+                content="What is the capital of France?"
             ),
             llama3.Message(
                 role="assistant",
-                tools=[
-                    llama3.ToolCall(
-                        name="get_current_conditions",
-                        arguments={"location": "San Francisco, CA"},
-                    )
-                ],
+                content="The capital of France is Paris."
+            ),
+        ]
+    )
+    assert prompt == snapshot
+
+
+def test_system_tools(snapshot: SnapshotAssertion) -> None:
+    """Test a system message with tools."""
+
+    prompt = llama3.build_prompt(
+        messages=[
+            llama3.Message(
+                role="system",
+                content="You are a helpful assistant.",
+            ),
+            llama3.Message(
+                role="user",
+                content="What is the weather like today in SF?",
+            ),
+        ],
+        tools=TOOLS,
+    )
+    assert prompt == snapshot
+
+
+def test_tool_call(snapshot: SnapshotAssertion) -> None:
+    """Test a tool call with output."""
+
+    prompt = llama3.build_prompt(
+        messages=[
+            llama3.Message(
+                role="system",
+                content="You are a helpful assistant.",
+            ),
+            llama3.Message(
+                role="user",
+                content="What is the weather like today in SF?",
+            ),
+            llama3.Message(
+                role="assistant",
+                tool_calls=TOOL_CALLS,
             ),
             llama3.Message(
                 role="tool",
                 content='{"output": "Clouds giving way to sun Hi: 76° Tonight: Mainly clear early, then areas of low clouds forming Lo: 56°"}',
             ),
-        ]
+        ],
+        tools=TOOLS,
     )
-    assert (
-        prompt
-        == """
+    assert prompt == snapshot
 
 
-"""
+def test_tool_call_conversation(snapshot: SnapshotAssertion) -> None:
+    """Test a tool call conversation."""
+
+    prompt = llama3.build_prompt(
+        messages=[
+            llama3.Message(
+                role="system",
+                content="You are a helpful assistant.",
+            ),
+            llama3.Message(
+                role="user",
+                content="What is the weather like today in SF?",
+            ),
+            llama3.Message(
+                role="assistant",
+                tool_calls=TOOL_CALLS,
+            ),
+            llama3.Message(
+                role="tool",
+                content='{"output": "Clouds giving way to sun Hi: 76° Tonight: Mainly clear early, then areas of low clouds forming Lo: 56°"}',
+            ),
+            llama3.Message(
+                role="assistant",
+                content="The weather in SF looks cloudy today.",
+            ),
+        ],
+        tools=TOOLS,
     )
+    assert prompt == snapshot

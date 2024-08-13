@@ -35,7 +35,8 @@ class Tool:
                     "description": self.description,
                     "parameters": self.parameters,
                 },
-            }
+            },
+            indent=4,
         )
 
 
@@ -43,11 +44,10 @@ class Tool:
 class Message:
     role: str
     content: str = ""
-    tools: list[Tool] = field(default_factory=list)
     tool_calls: list[ToolCall] = field(default_factory=list)
 
 
-def build_prompt(messages: list[Message]) -> str:
+def build_prompt(messages: list[Message], tools: list[Tool] | None = None) -> str:
     """Build a llama3.1 prompt from the list of messages."""
 
     env = Environment(
@@ -60,19 +60,9 @@ def build_prompt(messages: list[Message]) -> str:
         iter([message.content for message in messages if message.role == "system"]),
         None,
     )
-    tools: list[str] | None = next(
-        iter(
-            [
-                tool.json()
-                for message in messages
-                if message.tools
-                for tool in message.tools
-            ]
-        ),
-        None,
-    )
+    tools_json: str | None = "\n".join([ tool.json() for tool in tools ]) if tools else None
     return template.render(
         system=system or "",
-        tools=tools,
+        tools=tools_json,
         messages=messages,
     )
