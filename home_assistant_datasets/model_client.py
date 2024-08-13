@@ -34,4 +34,4 @@ class GoogleClient:
     def complete(self, prompt: str, user_message: str) -> str:
         """Complete a user message."""
         response = self.client.generate_content(f"{prompt}\n{user_message}")
-        return response.text
+        return response.text or ""

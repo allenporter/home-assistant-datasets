@@ -46,17 +46,17 @@ class Action(DataClassYAMLMixin):
     sentences: list[str]
     """Sentences spoken."""
 
-    setup: dict[str, EntityState] | None = field(default_factory=dict)
+    setup: dict[str, EntityState] = field(default_factory=dict)
     """Initial entity states to override."""
 
-    expect_changes: dict[str, EntityState] | None = field(default_factory=dict)
+    expect_changes: dict[str, EntityState] = field(default_factory=dict)
     """The device states to assert on."""
 
     ignore_changes: dict[str, list[str]] | None = None
     """The device state or attribute changes to ignored."""
 
     class Config(BaseConfig):
-        forbid_extra_keys = True
+        forbid_extra_keys = False
 
 
 @dataclass
