@@ -146,7 +146,7 @@ def generate_tasks(
         # Override any state data
         entities = synthetic_home_yaml.get("entities", [])
         entities_dict = {entity["id"]: entity for entity in entities}
-        for entity_id, entity_state in action.setup.items():
+        for entity_id, entity_state in (action.setup or {}).items():
             if (found_entity := entities_dict.get(entity_id)) is None:
                 raise ValueError(
                     f"Entity `setup` entity id '{entity_id}' found in fixture {fixture_path}"

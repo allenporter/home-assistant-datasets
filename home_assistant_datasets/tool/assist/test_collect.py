@@ -125,7 +125,7 @@ async def verify_state_fixture(
         updated_states: dict[str, EntityState],
     ) -> dict[str, Any]:
         # Update states to what is expected
-        for entity_id, entity_state in task.expect_changes.items():
+        for entity_id, entity_state in (task.expect_changes or {}).items():
             if entity_id not in states:
                 raise ValueError(
                     f"Entity defined in eval task does not exist: {entity_id}"
