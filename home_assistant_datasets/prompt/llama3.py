@@ -47,6 +47,15 @@ class Message:
     tool_calls: list[ToolCall] = field(default_factory=list)
 
 
+@dataclass
+class ConversationRecord:
+    instructions: str
+    tools: list[Tool] | None
+    input: str
+    output: str | None
+    tool_calls: list[ToolCall] | None = None
+
+
 def build_prompt(messages: list[Message], tools: list[Tool] | None = None) -> str:
     """Build a llama3.1 prompt from the list of messages."""
 
@@ -66,3 +75,16 @@ def build_prompt(messages: list[Message], tools: list[Tool] | None = None) -> st
         tools=tools_json,
         messages=messages,
     )
+
+
+
+def build_prompt_record(record: ConversationRecord) -> str:
+    """Build a llama3.1 prompt from a training record."""
+    if not record.output or not record.tool_calls:
+        raise ValueError("Could not find assistant output to train, no output or tool_calls")
+    messages: list[Message] = [
+        Message(role="system", content=record.instructions),
+        Message(role="user", content=input),
+        Message(role="assistant", content=record.output, tool_calls=record.tool_calls),
+    ]
+    return build_prompt(messages, record.tools)

@@ -132,3 +132,17 @@ def test_tool_call_conversation(snapshot: SnapshotAssertion) -> None:
         tools=TOOLS,
     )
     assert prompt == snapshot
+
+
+def test_converation_record(snapshot: SnapshotAssertion) -> None:
+    """Test a training record."""
+
+    message = llama3.ConversationRecord(**{
+        "instructions": "You are a helpful assistant.",
+        "tools": TOOLS,
+        "input": "What is the weather like today in SF?",
+        "output": "I will call a weather tool",
+        "tool_calls": TOOL_CALLS,
+    })
+    prompt = llama3.build_prompt_record(message)
+    assert prompt == snapshot
