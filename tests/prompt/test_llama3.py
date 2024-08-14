@@ -1,6 +1,7 @@
 """Tests for llama3 prompt building."""
 
 from syrupy import SnapshotAssertion
+import pathlib
 
 from home_assistant_datasets.prompt import llama3
 
@@ -44,14 +45,8 @@ def test_conversation(snapshot: SnapshotAssertion) -> None:
                 role="system",
                 content="You are a helpful assistant.",
             ),
-            llama3.Message(
-                role="user",
-                content="What is the capital of France?"
-            ),
-            llama3.Message(
-                role="assistant",
-                content="The capital of France is Paris."
-            ),
+            llama3.Message(role="user", content="What is the capital of France?"),
+            llama3.Message(role="assistant", content="The capital of France is Paris."),
         ]
     )
     assert prompt == snapshot
@@ -137,12 +132,25 @@ def test_tool_call_conversation(snapshot: SnapshotAssertion) -> None:
 def test_converation_record(snapshot: SnapshotAssertion) -> None:
     """Test a training record."""
 
-    message = llama3.ConversationRecord(**{
-        "instructions": "You are a helpful assistant.",
-        "tools": TOOLS,
-        "input": "What is the weather like today in SF?",
-        "output": "I will call a weather tool",
-        "tool_calls": TOOL_CALLS,
-    })
+    message = llama3.ConversationRecord(
+        **{
+            "instructions": "You are a helpful assistant.",
+            "tools": TOOLS,
+            "input": "What is the weather like today in SF?",
+            "output": "I will call a weather tool",
+            "tool_calls": TOOL_CALLS,
+        }
+    )
     prompt = llama3.build_prompt_record(message)
     assert prompt == snapshot
+
+
+def test_llama3_dataset_from_conversations() -> None:
+    """Test generating a huggingface dataset from conversation records."""
+
+    ds = llama3.llama3_dataset_from_conversations(
+        pathlib.Path("datasets/device-actions-v2-collect/train")
+    )
+    record = next(iter(ds))
+    assert "text" in record
+    assert record["text"][:19] == "<|start_header_id|>"

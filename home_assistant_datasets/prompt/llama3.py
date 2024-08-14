@@ -1,16 +1,20 @@
 """Library for creating llama3 prompts."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 import json
+import pathlib
+from collections.abc import Generator
+from mashumaro.mixins.yaml import DataClassYAMLMixin
 
+from datasets import IterableDataset
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 TEMPLATE_FILE = "llama3.j2"
 
 
 @dataclass
-class ToolCall:
+class ToolCall(DataClassYAMLMixin):
     name: str
     arguments: dict[str, Any]
 
@@ -20,7 +24,7 @@ class ToolCall:
 
 
 @dataclass
-class Tool:
+class Tool(DataClassYAMLMixin):
     name: str
     description: str
     parameters: dict[str, Any]
@@ -41,14 +45,14 @@ class Tool:
 
 
 @dataclass
-class Message:
+class Message(DataClassYAMLMixin):
     role: str
-    content: str = ""
-    tool_calls: list[ToolCall] = field(default_factory=list)
+    content: str | None = None
+    tool_calls: list[ToolCall] | None = None
 
 
 @dataclass
-class ConversationRecord:
+class ConversationRecord(DataClassYAMLMixin):
     instructions: str
     tools: list[Tool] | None
     input: str
@@ -69,7 +73,9 @@ def build_prompt(messages: list[Message], tools: list[Tool] | None = None) -> st
         iter([message.content for message in messages if message.role == "system"]),
         None,
     )
-    tools_json: str | None = "\n".join([ tool.json() for tool in tools ]) if tools else None
+    tools_json: str | None = (
+        "\n".join([tool.json() for tool in tools]) if tools else None
+    )
     return template.render(
         system=system or "",
         tools=tools_json,
@@ -77,14 +83,26 @@ def build_prompt(messages: list[Message], tools: list[Tool] | None = None) -> st
     )
 
 
-
 def build_prompt_record(record: ConversationRecord) -> str:
     """Build a llama3.1 prompt from a training record."""
-    if not record.output or not record.tool_calls:
-        raise ValueError("Could not find assistant output to train, no output or tool_calls")
+    if not record.output and not record.tool_calls:
+        raise ValueError(
+            "Could not find assistant output to train, no output or tool_calls"
+        )
     messages: list[Message] = [
         Message(role="system", content=record.instructions),
-        Message(role="user", content=input),
+        Message(role="user", content=record.input),
         Message(role="assistant", content=record.output, tool_calls=record.tool_calls),
     ]
     return build_prompt(messages, record.tools)
+
+
+def llama3_dataset_from_conversations(dataset_dir: pathlib.Path) -> IterableDataset:
+    """Create a huggingface dataset from a training conversation record."""
+
+    def func() -> Generator[dict[str, str], None, None]:
+        for filename in dataset_dir.glob("*.yaml"):
+            record = ConversationRecord.from_yaml(filename.read_text())
+            yield {"text": build_prompt_record(record)}
+
+    return IterableDataset.from_generator(func)
