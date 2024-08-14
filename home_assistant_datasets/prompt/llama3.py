@@ -1,6 +1,6 @@
 """Library for creating llama3 prompts."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 import json
 import pathlib
@@ -47,8 +47,8 @@ class Tool(DataClassYAMLMixin):
 @dataclass
 class Message(DataClassYAMLMixin):
     role: str
-    content: str | None = None
-    tool_calls: list[ToolCall] | None = None
+    content: str = ""
+    tool_calls: list[ToolCall] = field(default_factory=list)
 
 
 @dataclass
@@ -91,8 +91,8 @@ def build_prompt_record(record: ConversationRecord) -> str:
         )
     messages: list[Message] = [
         Message(role="system", content=record.instructions),
-        Message(role="user", content=record.input),
-        Message(role="assistant", content=record.output, tool_calls=record.tool_calls),
+        Message(role="user", content=record.input or ""),
+        Message(role="assistant", content=record.output, tool_calls=record.tool_calls or []),
     ]
     return build_prompt(messages, record.tools)
 

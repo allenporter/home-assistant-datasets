@@ -145,7 +145,23 @@ def test_converation_record(snapshot: SnapshotAssertion) -> None:
     assert prompt == snapshot
 
 
-def test_llama3_dataset_from_conversations() -> None:
+def test_converation_record_output(snapshot: SnapshotAssertion) -> None:
+    """Test a training record."""
+
+    message = llama3.ConversationRecord(
+        **{
+            "instructions": "You are a helpful assistant.",
+            "tools": TOOLS,
+            "input": "What is the weather like today in SF?",
+            "output": "I can't help you with that.",
+            "tool_calls": None,
+        }
+    )
+    prompt = llama3.build_prompt_record(message)
+    assert prompt == snapshot
+
+
+def test_llama3_dataset_from_conversations(snapshot: SnapshotAssertion) -> None:
     """Test generating a huggingface dataset from conversation records."""
 
     ds = llama3.llama3_dataset_from_conversations(
@@ -153,4 +169,4 @@ def test_llama3_dataset_from_conversations() -> None:
     )
     record = next(iter(ds))
     assert "text" in record
-    assert record["text"][:19] == "<|start_header_id|>"
+    assert record["text"] == snapshot
