@@ -132,8 +132,8 @@ def test_tool_call_conversation(snapshot: SnapshotAssertion) -> None:
 def test_converation_record(snapshot: SnapshotAssertion) -> None:
     """Test a training record."""
 
-    message = llama3.ConversationRecord(
-        **{
+    message = llama3.ConversationRecord.from_dict(
+        {
             "instructions": "You are a helpful assistant.",
             "tools": TOOLS,
             "input": "What is the weather like today in SF?",
