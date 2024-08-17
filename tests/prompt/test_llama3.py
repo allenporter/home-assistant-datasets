@@ -151,7 +151,7 @@ def test_converation_record_output(snapshot: SnapshotAssertion) -> None:
     message = llama3.ConversationRecord.from_dict(
         {
             "instructions": "You are a helpful assistant.",
-            "tools": TOOLS,
+            "tools": [tool.to_dict() for tool in TOOLS],
             "input": "What is the weather like today in SF?",
             "output": "I can't help you with that.",
             "tool_calls": None,
