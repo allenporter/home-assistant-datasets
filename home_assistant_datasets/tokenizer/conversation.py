@@ -1,18 +1,10 @@
-"""Library for converations for use with the chat template."""
+"""Library for conversations for use with the chat template."""
 
-import pathlib
-from functools import cache
 from dataclasses import dataclass, field
 from typing import Any
 import json
-import pathlib
-import logging
-from collections.abc import Generator
-from mashumaro.mixins.json import DataClassJSONMixin
+from mashumaro.mixins.json import DataClassJSONMixin, EncodedData, Encoder
 from mashumaro.mixins.yaml import DataClassYAMLMixin
-
-from datasets import IterableDataset
-from jinja2 import Environment, PackageLoader, TemplateError
 
 
 @dataclass
@@ -25,10 +17,10 @@ class ToolCall(DataClassYAMLMixin):
         return json.dumps(
             {"name": self.name, "parameters": self.arguments},
             **{
-              **kwargs,
-              "sort_keys": False,
-            }
-         )
+                **kwargs,
+                "sort_keys": False,
+            },
+        )
 
 
 @dataclass
@@ -37,9 +29,13 @@ class Tool(DataClassYAMLMixin, DataClassJSONMixin):
     description: str
     parameters: dict[str, Any]
 
-    def to_json(self, **kwargs: Any) -> str:
+    def to_json(
+        self,
+        encoder: Encoder = json.dumps,
+        **to_dict_kwargs: Any,
+    ) -> EncodedData:
         """Serialize the Tool as a json string for the prompt."""
-        return json.dumps(
+        return encoder(
             {
                 "type": "function",
                 "function": {
@@ -49,9 +45,9 @@ class Tool(DataClassYAMLMixin, DataClassJSONMixin):
                 },
             },
             **{
-              **kwargs,
-              "sort_keys": False,
-            }
+                **to_dict_kwargs,
+                "sort_keys": False,
+            },
         )
 
 
@@ -79,5 +75,9 @@ class ConversationRecord(DataClassYAMLMixin, DataClassJSONMixin):
         return [
             Message(role="system", content=self.instructions),
             Message(role="user", content=self.input or ""),
-            Message(role="assistant", content=self.output, tool_calls=self.tool_calls or []),
+            Message(
+                role="assistant",
+                content=self.output or "",
+                tool_calls=self.tool_calls or [],
+            ),
         ]
