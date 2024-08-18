@@ -5,7 +5,6 @@ from functools import cache
 from typing import Any
 import json
 import logging
-from mashumaro.mixins.json import DataClassJSONMixin
 
 from jinja2 import Environment, PackageLoader
 
@@ -30,11 +29,21 @@ def load_tokenizer_config(file: pathlib.Path) -> dict[str, Any]:
         return json.loads(fd.read())  # type: ignore[no-any-return]
 
 
-def to_json(obj: Any, **kwargs: Any) -> Any:
-    """Serialize an object to json."""
-    if issubclass(type(obj), DataClassJSONMixin):
-        return obj.to_json(**kwargs)
-    return json.dumps(obj, **kwargs)
+# Json function copied from transformers library
+def tojson(x, ensure_ascii=False, indent=None, separators=None, sort_keys=False):  # type: ignore
+    # We override the built-in tojson filter because Jinja's default filter escapes HTML characters
+    # We also expose some options like custom indents and separators
+    return json.dumps(
+        x,
+        ensure_ascii=ensure_ascii,
+        indent=indent,
+        separators=separators,
+        sort_keys=sort_keys,
+    )
+
+
+def raise_exception(args: Any) -> None:
+    raise ValueError(args)
 
 
 def build_prompt(
@@ -52,12 +61,14 @@ def build_prompt(
     env = Environment(
         loader=PackageLoader("home_assistant_datasets", "tokenizer"),
     )
-    env.policies["json.dumps_function"] = to_json
+    env.filters["tojson"] = tojson
+    env.globals["raise_exception"] = raise_exception
     template = env.from_string(chat_template)
 
     return template.render(
         **config,
-        tools=tools,
-        messages=messages,
+        tools=[tool.to_dict() for tool in tools] if tools else None,
+        messages=[message.to_dict() for message in messages],
         add_generation_prompt=add_generation_prompt,
+        raise_exception=raise_exception,
     )

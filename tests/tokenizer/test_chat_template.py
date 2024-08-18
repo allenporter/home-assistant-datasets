@@ -89,7 +89,9 @@ def test_tool_call(snapshot: SnapshotAssertion) -> None:
             ),
             conversation.Message(
                 role="tool",
-                content='{"output": "Clouds giving way to sun Hi: 76° Tonight: Mainly clear early, then areas of low clouds forming Lo: 56°"}',
+                content={
+                    "output": "Clouds giving way to sun Hi: 76° Tonight: Mainly clear early, then areas of low clouds forming Lo: 56°"
+                },
             ),
         ],
         tools=TOOLS,
@@ -117,7 +119,9 @@ def test_tool_call_conversation(snapshot: SnapshotAssertion) -> None:
             ),
             conversation.Message(
                 role="tool",
-                content='{"output": "Clouds giving way to sun Hi: 76° Tonight: Mainly clear early, then areas of low clouds forming Lo: 56°"}',
+                content={
+                    "output": "Clouds giving way to sun Hi: 76° Tonight: Mainly clear early, then areas of low clouds forming Lo: 56°"
+                },
             ),
             conversation.Message(
                 role="assistant",

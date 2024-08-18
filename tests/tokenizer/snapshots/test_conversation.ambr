@@ -1,0 +1,56 @@
+# serializer version: 1
+# name: test_conversation_serialization
+  list([
+    dict({
+      'content': 'You are a helpful assistant',
+      'role': 'system',
+    }),
+    dict({
+      'content': 'What is the capital of France?',
+      'role': 'user',
+    }),
+    dict({
+      'content': 'Paris.',
+      'role': 'assistant',
+    }),
+  ])
+# ---
+# name: test_conversation_serialization.1
+  '{"instructions": "You are a helpful assistant", "input": "What is the capital of France?", "output": "Paris."}'
+# ---
+# name: test_conversation_serialization.2
+  '{"messages": "[{\\"role\\": \\"system\\", \\"content\\": \\"You are a helpful assistant\\"}, {\\"role\\": \\"user\\", \\"content\\": \\"What is the capital of France?\\"}, {\\"role\\": \\"assistant\\", \\"content\\": \\"Paris.\\"}]"}'
+# ---
+# name: test_conversation_tools_serialization
+  list([
+    dict({
+      'content': 'You are a helpful assistant.',
+      'role': 'system',
+    }),
+    dict({
+      'content': 'What is the weather in San Francisco?',
+      'role': 'user',
+    }),
+    dict({
+      'content': '',
+      'role': 'assistant',
+      'tool_calls': list([
+        dict({
+          'function': dict({
+            'arguments': dict({
+              'location': 'San Francisco, CA',
+            }),
+            'name': 'get_current_conditions',
+          }),
+          'type': 'function',
+        }),
+      ]),
+    }),
+  ])
+# ---
+# name: test_conversation_tools_serialization.1
+  '{"instructions": "You are a helpful assistant.", "tools": [{"type": "function", "function": {"name": "get_current_conditions", "description": "Get the current weather conditions for a specific location", "parameters": {"location": {"type": "string"}}}}], "input": "What is the weather in San Francisco?", "tool_calls": [{"name": "get_current_conditions", "arguments": "{\\"location\\": \\"San Francisco, CA\\"}"}]}'
+# ---
+# name: test_conversation_tools_serialization.2
+  '{"messages": "[{\\"role\\": \\"system\\", \\"content\\": \\"You are a helpful assistant.\\"}, {\\"role\\": \\"user\\", \\"content\\": \\"What is the weather in San Francisco?\\"}, {\\"role\\": \\"assistant\\", \\"content\\": \\"\\", \\"tool_calls\\": [{\\"type\\": \\"function\\", \\"function\\": {\\"name\\": \\"get_current_conditions\\", \\"arguments\\": {\\"location\\": \\"San Francisco, CA\\"}}}]}]", "tools": "[{\\"type\\": \\"function\\", \\"function\\": {\\"name\\": \\"get_current_conditions\\", \\"description\\": \\"Get the current weather conditions for a specific location\\", \\"parameters\\": {\\"location\\": {\\"type\\": \\"string\\"}}}}]"}'
+# ---
