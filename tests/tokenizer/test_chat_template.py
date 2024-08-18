@@ -1,7 +1,6 @@
 """Tests for chat template builders."""
 
 from syrupy import SnapshotAssertion
-import pathlib
 
 from home_assistant_datasets.tokenizer import conversation, chat_template
 
@@ -25,7 +24,9 @@ def test_system(snapshot: SnapshotAssertion) -> None:
     """Test a single system message."""
 
     prompt = chat_template.build_prompt(
-        messages=[conversation.Message(role="system", content="You are a helpful assistant.")],
+        messages=[
+            conversation.Message(role="system", content="You are a helpful assistant.")
+        ],
         add_generation_prompt=True,
     )
     assert prompt == snapshot
@@ -41,7 +42,9 @@ def test_conversation(snapshot: SnapshotAssertion) -> None:
                 content="You are a helpful assistant.",
             ),
             conversation.Message(role="user", content="What is the capital of France?"),
-            conversation.Message(role="assistant", content="The capital of France is Paris."),
+            conversation.Message(
+                role="assistant", content="The capital of France is Paris."
+            ),
         ]
     )
     assert prompt == snapshot
