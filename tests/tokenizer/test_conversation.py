@@ -1,6 +1,5 @@
 """Tests for the conversation serialization library."""
 
-import dataclasses
 from syrupy import SnapshotAssertion
 from home_assistant_datasets.tokenizer import conversation
 
@@ -86,7 +85,7 @@ def test_complex_tool_call_serialization() -> None:
     """Test tool calls."""
     tool_call = conversation.ToolCall(
         name="get_current_conditions",
-        arguments={"location": { "type": "city", "name": "San Francisco, CA"} },
+        arguments={"location": {"type": "city", "name": "San Francisco, CA"}},
     )
     assert tool_call.to_dict() == {
         "name": "get_current_conditions",
@@ -95,7 +94,7 @@ def test_complex_tool_call_serialization() -> None:
 
     tool_call = conversation.ToolCall(
         name="get_current_conditions",
-        arguments={"locations": ["San Francisco, CA", "Los Angeles, CA"] },
+        arguments={"locations": ["San Francisco, CA", "Los Angeles, CA"]},
     )
     assert tool_call.to_dict() == {
         "name": "get_current_conditions",
