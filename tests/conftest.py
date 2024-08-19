@@ -23,6 +23,6 @@ class DifferentDirectoryExtension(AmberSnapshotExtension):
 
 
 @pytest.fixture
-def snapshot(snapshot: SnapshotAssertion):
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
     """Fixture to override the snapshot directory."""
     return snapshot.use_extension(DifferentDirectoryExtension)

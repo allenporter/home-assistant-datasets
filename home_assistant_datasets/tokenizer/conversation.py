@@ -19,7 +19,6 @@ class ToolCall(DataClassJSONMixin):
 
     name: str
     arguments: dict[str, Any] = field(
-        default=None,
         metadata={"serialize": lambda v: json.dumps(v)},
     )
 
@@ -55,7 +54,7 @@ class Tool:
 @dataclass
 class Message(DataClassYAMLMixin):
     role: str
-    content: str = ""
+    content: str | dict[str, Any] = ""
     tool_calls: list[ToolCall] | None = field(
         default=None,
         metadata={"serialize": lambda v: [c.to_message_dict() for c in v] if v else None},
