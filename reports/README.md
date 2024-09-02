@@ -15,6 +15,7 @@
 | mistral-v3 | 3.8% (CI:&nbsp;4.2%, 2024.8.0b) | 2.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 10.3% (CI:&nbsp;4.6%, 2024.8.0b) |
 | xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |
 | claude-3-5-sonnet |  | 95.9% (CI:&nbsp;5.5%, 2024.9.0b2) |  |
+| claude-3-haiku |  | 98.0% (CI:&nbsp;4.0%, 2024.9.0b2) |  |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -96,26 +97,27 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#d5a6bd, #0f9d58, #4285f4, #4285f4, #ff6d01, #674ea7, #6aa84f, #34a853, #46bdc6, #fbbc04, #1155cc, #d9ead3, #4285f4"
+            plotColorPalette: "#d5a6bd, #0f9d58, #4285f4, #4285f4, #0f9d58, #ff6d01, #674ea7, #6aa84f, #34a853, #46bdc6, #fbbc04, #1155cc, #d9ead3, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [assistant, gpt-4o-mini, gemini-1.5-flash, claude-3-5-sonnet, functionary-small-v2.5, mistral-v3, llama3-groq-tool-use, llama3.1, xlam-7b, assist-llm, home-llm, xlam-1b, .]
+  x-axis "Model" [assistant, gpt-4o-mini, gemini-1.5-flash, claude-3-5-sonnet, claude-3-haiku, functionary-small-v2.5, mistral-v3, llama3-groq-tool-use, llama3.1, xlam-7b, assist-llm, home-llm, xlam-1b, .]
   y-axis "Score" 1 --> 100
-  bar [63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 51.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.7, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 34.7, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.1, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
+  bar [63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 51.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.7, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 34.7, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.1, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
 ### intents
@@ -207,10 +209,18 @@ More information:
 
 ### claude-3-5-sonnet
 
-Google Generative AI integration using gemini flash (v1.5)
+Anthropic integration using Claude 3.5 Sonnet
 
 More information:
-- https://blog.google/products/gemini/google-gemini-new-features-july-2024/
+- https://www.anthropic.com/news/claude-3-5-sonnet
+
+
+### claude-3-haiku
+
+Anthropic integration using Claude 3 Haiku
+
+More information:
+- https://www.anthropic.com/news/claude-3-haiku
 
 
 ### functionary-small-v2.5
