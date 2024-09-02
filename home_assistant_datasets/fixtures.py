@@ -164,7 +164,7 @@ async def mock_conversation_agent_id(
     """Return the id for the conversation agent under test."""
     if model_config.domain == "homeassistant":
         return "conversation.home_assistant"
-    return cast(str, conversation_agent_config_entry.entry_id)
+    return cast(str, "conversation.mock_title")  # conversation_agent_config_entry.entry_id)
 
 
 @pytest.fixture(name="agent")
