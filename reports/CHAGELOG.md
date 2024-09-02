@@ -2,6 +2,11 @@
 
 This is a work log of major updates to the leaderboard.
 
+## 2024-09-02
+
+- claude-3.5-sonnet `assist-mini` scores 95%
+- claude-3-haiku `assist-mini` scores 98%
+
 ## 2024-08-08
 
 Reports that many ollama context sizes are defaulting to well below what the model supports
