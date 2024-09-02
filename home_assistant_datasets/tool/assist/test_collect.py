@@ -29,6 +29,7 @@ from .data_model import (
 
 _LOGGER = logging.getLogger(__name__)
 TIMEOUT = 40
+MAX_TRIES = 3
 
 
 @pytest.fixture(name="get_state")
@@ -218,15 +219,23 @@ async def test_assist_actions(
     # Run the conversation agent
     text = eval_task.input_text
     _LOGGER.debug("Prompt: %s", text)
-    try:
-        async with asyncio.timeout(TIMEOUT):
-            response = await agent.async_process(hass, text)
-    except (HomeAssistantError, TypeError, json.JSONDecodeError) as err:
-        response = str(err)
-    except (TimeoutError, asyncio.CancelledError) as err:
-        response = f"Timeout: {err}"
-    await hass.async_block_till_done()
-    _LOGGER.debug("Response: %s", response)
+    tries = 0
+    response = None
+    retryable = True
+    while tries < MAX_TRIES and retryable:
+        retryable = False
+        try:
+            async with asyncio.timeout(TIMEOUT):
+                response = await agent.async_process(hass, text)
+        except (HomeAssistantError, TypeError, json.JSONDecodeError) as err:
+            response = str(err)
+        except (TimeoutError, asyncio.CancelledError) as err:
+            _LOGGER.debug("Timeout error (tries=%s)", tries)
+            response = f"Timeout (after {tries} tries)"
+            tries = tries + 1
+            retryable = True
+        await hass.async_block_till_done()
+        _LOGGER.debug("Response: %s", response)
 
     updated_states = get_state()
     unexpected_states: dict[str, Any] | str
@@ -257,6 +266,7 @@ async def test_assist_actions(
             # TODO: Would be useful to support something like --dump-states for fully examining states
             # "state": states,
             # "updated_states": updated_states,
+            "tries": tries,
         },
     )
     _LOGGER.info(output)
