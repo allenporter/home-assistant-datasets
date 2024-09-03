@@ -229,7 +229,7 @@ async def test_assist_actions(
                 response = await agent.async_process(hass, text)
         except (HomeAssistantError, TypeError, json.JSONDecodeError) as err:
             response = str(err)
-        except (TimeoutError, asyncio.CancelledError) as err:
+        except (TimeoutError, asyncio.CancelledError):
             _LOGGER.debug("Timeout error (tries=%s)", tries)
             response = f"Timeout (after {tries} tries)"
             tries = tries + 1
