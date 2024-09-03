@@ -220,7 +220,7 @@ async def test_assist_actions(
     text = eval_task.input_text
     _LOGGER.debug("Prompt: %s", text)
     tries = 0
-    response = None
+    response = ""
     retryable = True
     while tries < MAX_TRIES and retryable:
         retryable = False
