@@ -7,6 +7,9 @@ import types
 import sys
 from pathlib import Path
 
+# Ensure home assistant recorder is patched before actually loading
+from pytest_homeassistant_custom_component import patch_recorder
+
 from . import assist, leaderboard
 
 
