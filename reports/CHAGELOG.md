@@ -2,6 +2,10 @@
 
 This is a work log of major updates to the leaderboard.
 
+## 2024-09-24
+
+- mistral-nemo for `assist-mini` scores 81%
+
 ## 2024-09-02
 
 - claude-3.5-sonnet `assist-mini` scores 95%
