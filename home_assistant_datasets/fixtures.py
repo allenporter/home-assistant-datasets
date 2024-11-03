@@ -4,7 +4,7 @@ from collections.abc import AsyncGenerator, Generator
 import logging
 import os
 import pathlib
-from typing import Any, TextIO, cast
+from typing import Any, TextIO
 from unittest.mock import patch, mock_open
 
 import pytest
