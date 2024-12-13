@@ -34,5 +34,5 @@ def get_secret(secret_name: str) -> str:
         _LOGGER.debug(
             "Could not find secret_name %s in keys (%s)", secret_name, secrets.keys()
         )
-        raise KeyError(f"Could not find '{secret_name}' in secrets file {secrets_file}")
+        raise KeyError(f"Could not find '{secret_name}' in secrets file {secrets_file.resolve()}")
     return str(secrets[secret_name])
