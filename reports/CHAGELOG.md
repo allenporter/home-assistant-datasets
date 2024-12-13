@@ -2,6 +2,10 @@
 
 This is a work log of major updates to the leaderboard.
 
+## 2024-12-24
+
+- gemini-2.0-flash for `assist-mini` scores 93.9%
+
 ## 2024-09-24
 
 - mistral-nemo for `assist-mini` scores 81%
