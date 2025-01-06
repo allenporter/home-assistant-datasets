@@ -20,7 +20,7 @@ from custom_components import synthetic_home  # noqa: F401
 # TODO(#12): Support loading from the custom component or core development environment
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from home_assistant_datasets.data_model import ModelConfig
+from home_assistant_datasets.data_model import ModelConfig, EntryConfig
 
 from . import data_model
 
@@ -112,10 +112,31 @@ async def model_config(model_id: str) -> ModelConfig:
         pytest.exit(str(err))
 
 
+@pytest.fixture
+async def prerequisites() -> list[EntryConfig]:
+    """Fixture to read the prerequisites yaml."""
+    return data_model.read_prerequisites()
+
+
 @pytest.fixture(name="conversation_agent_config_entry")
 async def mock_conversation_agent_config_entry(
-    hass: HomeAssistant, model_config: ModelConfig, system_prompt: str | None
+    hass: HomeAssistant,
+    model_config: ModelConfig,
+    system_prompt: str | None,
+    prerequisites: list[EntryConfig],
 ) -> MockConfigEntry | None:
+    """Fixture to create a conversation agent config entry."""
+    for entry in prerequisites:
+        config_entry = MockConfigEntry(
+            domain=entry.domain,
+            data=entry.config_entry_data,
+            options=entry.config_entry_options,
+            version=entry.version or 1,
+        )
+        config_entry.add_to_hass(hass)
+        await hass.config_entries.async_setup(config_entry.entry_id)
+        assert config_entry.state == ConfigEntryState.LOADED
+
     if model_config.domain == "homeassistant":
         return None
     options = {}

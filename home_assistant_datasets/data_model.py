@@ -27,6 +27,23 @@ class DatasetCard:
 
 
 @dataclass
+class EntryConfig:
+    """The configuration entry for the model under evaluation."""
+
+    domain: str
+    """The domain of the entry."""
+
+    config_entry_data: dict[str, Any] | None = None
+    """The configuration entry data."""
+
+    config_entry_options: dict[str, Any] | None = None
+    """The configuration entry options."""
+
+    version: int | None = None
+    """The version number of the config entry."""
+
+
+@dataclass
 class ModelConfig:
     """The configuration for the conversation agent under evaluation."""
 
@@ -59,6 +76,9 @@ class Models:
     models: list[ModelConfig]
     """The list of models under configuration"""
 
+    prerequisites: list[EntryConfig]
+    """The prerequisites for the models under evaluation."""
+
 
 def read_models() -> Models:
     """Read models configuration file."""
@@ -69,7 +89,11 @@ def read_models() -> Models:
             raise ValueError(f"Error while loading {MODEL_CONFIG_FILE}: {err}")
 
     models = model_data.get("models", [])
-    return Models(models=[ModelConfig(**model) for model in models])
+    prerequisites = model_data.get("prerequisites", [])
+    return Models(
+        models=[ModelConfig(**model) for model in models],
+        prerequisites=[EntryConfig(**prerequisite) for prerequisite in prerequisites],
+    )
 
 
 def read_model(model_id: str) -> ModelConfig:
@@ -82,6 +106,11 @@ def read_model(model_id: str) -> ModelConfig:
     raise ValueError(
         f"Model config file '{MODEL_CONFIG_FILE}' did not contain model_id: {model_id}"
     )
+
+
+def read_prerequisites() -> list[EntryConfig]:
+    """Read the prerequisites for the models under evaluation."""
+    return read_models().prerequisites
 
 
 def read_dataset_cards() -> list[DatasetCard]:
