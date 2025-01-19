@@ -12,8 +12,8 @@ Create a virtual environment:
 ```bash
 $ uv venv
 $ source .venv/bin/activate
-$ uv pip install -r requirements_dev.txt
-$ uv pip install -r requirements_eval.txt
+$ uv pip install -r requirements_dev.txt --prerelease=allow
+$ uv pip install -r requirements_eval.txt --prerelease=allow
 ```
 
 ### Local Home Assistant (optional)
