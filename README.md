@@ -101,6 +101,9 @@ converation agents to produce outputs for evaluation.
 
 Model evaluation is currently performed with pytest, [Synthetic Home](https://github.com/allenporter/home-assistant-synthetic-home/), and any conversation agent (Open AI, Google, custom components, etc)
 
+See [docs/eval.md] for instructions on how run an evaluation and update the
+leaderboard.
+
 ### Home Assistant Actions - Offline Evaluation
 
 The most commonly used evaluation is for the Home Assistant conversation agent actions

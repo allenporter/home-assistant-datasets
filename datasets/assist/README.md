@@ -102,10 +102,10 @@ models:
 Create a virtual environment:
 
 ```bash
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ pip3 install -r requirements_dev.txt
-$ pip3 install -r requirements_eval.txt
+$ uv venv
+$ source .venv/bin/activate
+$ uv pip install -r requirements_dev.txt
+$ uv pip install -r requirements_eval.txt
 ```
 
 The above will by default use a somewhat recent version of home assistant but
@@ -123,7 +123,8 @@ $ export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home/"
 ```
 
 Or using a `custom_components` directory in the local directory if you have multiple
-custom components you want to evaluate:
+custom components you want to evaluate. This means you will need to sym link
+all of the custom components into that directory:
 
 ```bash
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}"
@@ -140,6 +141,8 @@ $ OUTPUT_DIR="reports/assist/2024.8.0b"  # Output based on home assistant versio
 $ MODEL=llama3.1
 $ home-assistant-datasets assist collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
+
+If you don't know the homeassistnat version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
 
 See `home-assistant-datasets assist collect --help` for options to control pytest.
 
