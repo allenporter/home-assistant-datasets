@@ -1,5 +1,6 @@
 """Initialize the yaml_loaders extensions."""
 
+import logging
 from pathlib import Path
 from typing import Any, TypeVar, Type
 
@@ -7,6 +8,8 @@ import yaml
 from mashumaro.codecs.yaml import YAMLDecoder
 
 from . import secrets
+
+_LOGGER = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
@@ -73,12 +76,21 @@ def _include_tag_constructor(
         return yaml.load(include_file, Loader=FastSafeLoader)
 
 
+_missing_secrets: set[str] = set({})
+
+
 def _get_secret_constructor(
     loader: yaml.SafeLoader, node: yaml.nodes.ScalarNode
 ) -> Any:
     """Load a file from the filesystem."""
-    setcret_name = node.value
-    return secrets.get_secret(setcret_name)
+    secret_name = node.value
+    try:
+        return secrets.get_secret(secret_name)
+    except KeyError as err:
+        if secret_name not in _missing_secrets:
+            _LOGGER.warning("Unable to load secret, proceeding anyway: %s", err)
+        _missing_secrets.add(secret_name)
+        return None
 
 
 # Register the custom tag constructors.

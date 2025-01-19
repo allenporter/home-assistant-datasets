@@ -139,7 +139,7 @@ def run(args: argparse.Namespace) -> int:
     verbosity = args.verbosity
 
     # Skip any output for unknown tags
-    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ''
+    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""
 
     # nest_asyncio.apply()
     pytest_args = [
