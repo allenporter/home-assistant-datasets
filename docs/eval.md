@@ -82,8 +82,8 @@ If you don't know the homeassistnat version, you can run `uv pip freeze | grep "
 
 You can score the outputs by running the `eval` command.
 
-```
-$ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=csv > ${MODEL_OUTPUT_DIR}/report.csv
+```bash
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > ${OUTPUT_DIR}/report.csv
 ```
 
 ### Leaderboard
