@@ -11,7 +11,7 @@ local models which have not performed that well on the `assist` dataset.
 - Ensure any the synthetic home custom component is in the python environment e.g.:
   - `export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home"`
   - `export PYTHONPATH="${PYTHONPATH}:${PWD}"`
-- Install this projects python dependencies e.g. `pip3 install -r requirements_dev.txt`
+- Install this projects python dependencies e.g. `pip3 install -r requirements_dev.txt && pip3 install -r requirements_eval.txt`
 
 ### Prepare Eval environment
 
