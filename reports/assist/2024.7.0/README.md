@@ -7,7 +7,7 @@ This is an evaluation of Home Assistant 2024.7.0b focused on tool control LLMs.
 ### Pre-requisites
 
 - Ensure any the synthetic home custom component is in the python environment e.g. `export PYTHONPATH="${PYTHONPATH}:/workspace/home-assistant-synthetic-home`
-- Install this projects python dependencies e.g. `pip3 install -r requirements_dev.txt`
+- Install this projects python dependencies e.g. `pip3 install -r requirements_dev.txt && pip3 install -r requirements_eval.txt`
 
 ### Prepare Eval environment
 

@@ -9,7 +9,7 @@ This is an evaluation of [Home LLM](https://github.com/acon96/home-llm) running 
 - Configure Ollama with `fixt/home-3b-v3:latest` ([example](https://github.com/allenporter/k8s-gitops/commit/55a4b5a86a33d1ae43f7d62075a04507f19e68de))
 - Make sym links in `custom_components` to `home-assistant-synthetic-home` and `home-llm` custom components.
 - Ensure any the synthetic home custom component is in the python environment e.g. `export PYTHONPATH="${PYTHONPATH}:${PWD}`
-- Install this python dependencies for all projects e.g. `pip3 install -r requirements_dev.txt`
+- Install this python dependencies for all projects e.g. `pip3 install -r requirements_dev.txt && pip3 install -r requirements_eval.txt`
 
 The `llama_conversation` custom component is configured using OLLama which is copied from a live configuration:
 
