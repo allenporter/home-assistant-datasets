@@ -1,5 +1,5 @@
 # Home LLM Leaderboard
-| Model | assist (n=80) | assist-mini (n=49) | intents (n=0) |
+| Model | assist (n=80) | assist-mini (n=49) | intents (n=165) |
 | --- | --- | --- | --- |
 | llama3.3 | 92.5% (CI:&nbsp;5.8%, 2025.1.2) | 91.8% (CI:&nbsp;7.7%, 2025.1.2) |  |
 | gemini-1.5-flash | 91.2% (CI:&nbsp;6.2%, 2024.6.3) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.0% (CI:&nbsp;7.4%, 2024.8.0b) |
