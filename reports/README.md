@@ -370,7 +370,7 @@ More information:
 Llama 3.3 (70B) from Meta using Ollama
 
 More information:
-- https://ollama.com/library/llama3
+- https://ollama.com/library/llama3.3
 
 
 ### llama3.3-awq
