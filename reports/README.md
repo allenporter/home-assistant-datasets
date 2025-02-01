@@ -188,7 +188,9 @@ xychart-beta
 
 ### assist-mini-stateless
 
-The `assist-mini` dataset run with the stateless assist mini API.
+The `assist-mini` dataset run with the stateless assist mini API. This prompt
+does not contain the current state of the entities, and provides a GetState
+API that can be used if needed as a tool.
 
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
