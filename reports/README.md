@@ -23,6 +23,7 @@
 | xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |  |
 | claude-3-5-sonnet |  | 95.9% (CI:&nbsp;5.5%, 2024.9.0b2) |  |  |
 | mistral-nemo |  | 81.6% (CI:&nbsp;10.8%, 2024.9.2) |  |  |
+| claude-3-5-haiku |  |  |  | 79.6% (CI:&nbsp;11.3%, 2025.2.0b) |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -208,16 +209,17 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #0f9d58, #4285f4"
+            plotColorPalette: "#f4b400, #0f9d58, #d5a6bd, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini-stateless"
-  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, .]
+  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, claude-3-5-haiku, .]
   y-axis "Score" 1 --> 100
-  bar [93.9, 0.0, 0.0]
-  bar [0.0, 93.9, 0.0]
-  bar [0.0, 0.0, -1.0]
+  bar [93.9, 0.0, 0.0, 0.0]
+  bar [0.0, 93.9, 0.0, 0.0]
+  bar [0.0, 0.0, 79.6, 0.0]
+  bar [0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
 
@@ -275,6 +277,14 @@ Anthropic integration using Claude 3.5 Sonnet
 
 More information:
 - https://www.anthropic.com/news/claude-3-5-sonnet
+
+
+### claude-3-5-haiku
+
+Anthropic integration using Claude 3.5 Haiku
+
+More information:
+- https://www.anthropic.com/news/3-5-models-and-computer-use
 
 
 ### claude-3-haiku
