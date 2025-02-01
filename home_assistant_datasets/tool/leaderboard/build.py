@@ -39,8 +39,8 @@ Implementation notes:
 - CI is large given small number of samples in the datasets.
 - Note that not all models have been evaluated against all benchmarks. If a model is missing a run against a dataset, it just means it has not been evaluated.
 - Error bars are std dev based on the # of tasks in the dataset.
-- Local models evaluated using a GeForce GTX 1070 (8GB).
 - Local models quantized with either Q4_K_M or Q4_0 but see links below for details.
+- Most small local models evaluated using a GeForce GTX 1070 (8GB). Larger models were contributed by other hardware mixes.
 - Temperature settings are based on the default values used in integrations.
 """
 
