@@ -182,6 +182,7 @@ def create_leaderboard_table(
         num_samples = best_model_scores[first_model_id][dataset].total
         text = [
             dataset,
+            " ",
             "$${\\color{gray}",
             "\\small{\\textsf{",
             f"(n={num_samples})",
