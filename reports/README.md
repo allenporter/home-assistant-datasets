@@ -1,28 +1,28 @@
 # Home LLM Leaderboard
-| Model | assist (n=80) | assist-mini (n=49) | intents (n=165) |
-| --- | --- | --- | --- |
-| llama3.3 | 92.5% (CI:&nbsp;5.8%, 2025.1.2) | 91.8% (CI:&nbsp;7.7%, 2025.1.2) |  |
-| gemini-1.5-flash | 91.2% (CI:&nbsp;6.2%, 2024.6.3) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.0% (CI:&nbsp;7.4%, 2024.8.0b) |
-| gpt-4o-mini | 90.0% (CI:&nbsp;6.6%, 2024.8.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.6% (CI:&nbsp;7.3%, 2024.8.0b) |
-| claude-3-haiku | 88.2% (CI:&nbsp;10.8%, 2024.9.0b2) | 98.0% (CI:&nbsp;4.0%, 2024.9.0b2) |  |
-| gpt-4o | 87.5% (CI:&nbsp;7.2%, 2024.6.3) |  | 81.2% (CI:&nbsp;6.0%, 2024.6.3) |
-| llama3.3-awq | 86.2% (CI:&nbsp;7.5%, 2025.1.2) | 100.0% (CI:&nbsp;0.0%, 2025.1.2) |  |
-| qwen2.5 | 81.2% (CI:&nbsp;8.6%, 2024.9.2) | 85.7% (CI:&nbsp;9.8%, 2024.9.2) |  |
-| gpt-3.5 | 75.0% (CI:&nbsp;9.5%, 2024.6.3) |  | 67.9% (CI:&nbsp;7.1%, 2024.6.3) |
-| assist-llm | 67.5% (CI:&nbsp;10.3%, 2024.9.0dev) | 81.6% (CI:&nbsp;10.8%, 2024.9.0dev) |  |
-| llama3.1 | 66.2% (CI:&nbsp;10.4%, 2024.9.0dev) | 83.7% (CI:&nbsp;10.3%, 2024.8.0b0) | 43.6% (CI:&nbsp;7.6%, 2024.9.0dev) |
-| llama3.2-3b | 62.5% (CI:&nbsp;10.6%, 2024.9.2) | 81.6% (CI:&nbsp;10.8%, 2024.9.2) |  |
-| functionary-small-v2.5 | 56.2% (CI:&nbsp;10.9%, 2024.7.0) | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 37.6% (CI:&nbsp;7.4%, 2024.6.3) |
-| xlam-7b | 51.2% (CI:&nbsp;11.0%, 2024.9.0dev) | 85.7% (CI:&nbsp;9.8%, 2024.8.0b0) |  |
-| home-llm | 45.0% (CI:&nbsp;10.9%, 2024.6.3) | 34.7% (CI:&nbsp;13.3%, 2024.8.0dev) | 25.5% (CI:&nbsp;6.6%, 2024.6.3) |
-| assistant | 37.5% (CI:&nbsp;10.6%, 2024.6.3) | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 98.8% (CI:&nbsp;1.7%, 2024.6.3) |
-| llama3-groq-tool-use | 20.0% (CI:&nbsp;8.8%, 2024.8.0b) | 51.0% (CI:&nbsp;14.0%, 2024.8.0b0) | 11.5% (CI:&nbsp;4.9%, 2024.8.0b) |
-| llama3.2-1b | 7.5% (CI:&nbsp;5.8%, 2024.9.2) | 4.1% (CI:&nbsp;5.5%, 2024.9.2) |  |
-| mistral-v3 | 3.8% (CI:&nbsp;4.2%, 2024.8.0b) | 2.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 10.3% (CI:&nbsp;4.6%, 2024.8.0b) |
-| xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |
-| mistral-nemo |  | 81.6% (CI:&nbsp;10.8%, 2024.9.2) |  |
-| gemini-2.0-flash |  | 93.9% (CI:&nbsp;6.7%, 2024.12.2) |  |
-| claude-3-5-sonnet |  | 95.9% (CI:&nbsp;5.5%, 2024.9.0b2) |  |
+| Model | assist (n=80) | assist-mini (n=49) | intents (n=0) | assist-mini-stateless (n=0) |
+| --- | --- | --- | --- | --- |
+| llama3.3 | 92.5% (CI:&nbsp;5.8%, 2025.1.2) | 91.8% (CI:&nbsp;7.7%, 2025.1.2) |  |  |
+| gemini-1.5-flash | 91.2% (CI:&nbsp;6.2%, 2024.6.3) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.0% (CI:&nbsp;7.4%, 2024.8.0b) | 85.7% (CI:&nbsp;9.8%, 2025.2.0b) |
+| gpt-4o-mini | 90.0% (CI:&nbsp;6.6%, 2024.8.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.6% (CI:&nbsp;7.3%, 2024.8.0b) | 89.8% (CI:&nbsp;8.5%, 2025.2.0b) |
+| claude-3-haiku | 88.2% (CI:&nbsp;10.8%, 2024.9.0b2) | 98.0% (CI:&nbsp;4.0%, 2024.9.0b2) |  |  |
+| gpt-4o | 87.5% (CI:&nbsp;7.2%, 2024.6.3) |  | 81.2% (CI:&nbsp;6.0%, 2024.6.3) |  |
+| llama3.3-awq | 86.2% (CI:&nbsp;7.5%, 2025.1.2) | 100.0% (CI:&nbsp;0.0%, 2025.1.2) |  |  |
+| qwen2.5 | 81.2% (CI:&nbsp;8.6%, 2024.9.2) | 85.7% (CI:&nbsp;9.8%, 2024.9.2) |  |  |
+| gpt-3.5 | 75.0% (CI:&nbsp;9.5%, 2024.6.3) |  | 67.9% (CI:&nbsp;7.1%, 2024.6.3) |  |
+| assist-llm | 67.5% (CI:&nbsp;10.3%, 2024.9.0dev) | 81.6% (CI:&nbsp;10.8%, 2024.9.0dev) |  |  |
+| llama3.1 | 66.2% (CI:&nbsp;10.4%, 2024.9.0dev) | 83.7% (CI:&nbsp;10.3%, 2024.8.0b0) | 43.6% (CI:&nbsp;7.6%, 2024.9.0dev) |  |
+| llama3.2-3b | 62.5% (CI:&nbsp;10.6%, 2024.9.2) | 81.6% (CI:&nbsp;10.8%, 2024.9.2) |  |  |
+| functionary-small-v2.5 | 56.2% (CI:&nbsp;10.9%, 2024.7.0) | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 37.6% (CI:&nbsp;7.4%, 2024.6.3) |  |
+| xlam-7b | 51.2% (CI:&nbsp;11.0%, 2024.9.0dev) | 85.7% (CI:&nbsp;9.8%, 2024.8.0b0) |  |  |
+| home-llm | 45.0% (CI:&nbsp;10.9%, 2024.6.3) | 34.7% (CI:&nbsp;13.3%, 2024.8.0dev) | 25.5% (CI:&nbsp;6.6%, 2024.6.3) |  |
+| assistant | 37.5% (CI:&nbsp;10.6%, 2024.6.3) | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 98.8% (CI:&nbsp;1.7%, 2024.6.3) |  |
+| llama3-groq-tool-use | 20.0% (CI:&nbsp;8.8%, 2024.8.0b) | 51.0% (CI:&nbsp;14.0%, 2024.8.0b0) | 11.5% (CI:&nbsp;4.9%, 2024.8.0b) |  |
+| llama3.2-1b | 7.5% (CI:&nbsp;5.8%, 2024.9.2) | 4.1% (CI:&nbsp;5.5%, 2024.9.2) |  |  |
+| mistral-v3 | 3.8% (CI:&nbsp;4.2%, 2024.8.0b) | 2.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 10.3% (CI:&nbsp;4.6%, 2024.8.0b) |  |
+| gemini-2.0-flash |  | 93.9% (CI:&nbsp;6.7%, 2024.12.2) |  |  |
+| xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |  |
+| claude-3-5-sonnet |  | 95.9% (CI:&nbsp;5.5%, 2024.9.0b2) |  |  |
+| mistral-nemo |  | 81.6% (CI:&nbsp;10.8%, 2024.9.2) |  |  |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -110,7 +110,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #f4b400, #0f9d58, #46bdc6, #1155cc, #ea4335, #674ea7, #fbbc04, #ff6d01, #ff6d01, #f4b400, #d5a6bd, #6aa84f, #ea4335, #d9ead3, #1155cc, #4285f4, #34a853, #4285f4, #34a853, #4285f4"
+            plotColorPalette: "#0f9d58, #f4b400, #0f9d58, #34a853, #46bdc6, #ea4335, #674ea7, #fbbc04, #1155cc, #ff6d01, #f4b400, #d5a6bd, #6aa84f, #ea4335, #d9ead3, #1155cc, #4285f4, #ff6d01, #4285f4, #34a853, #4285f4"
 
 ---
 xychart-beta
@@ -184,6 +184,37 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 43.6, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 25.5, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
+```
+
+### assist-mini-stateless
+
+The `assist-mini` dataset run with the stateless assist mini API.
+
+More information:
+- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
+
+```mermaid
+---
+config:
+    xyChart:
+        width: 1500
+        height: 800
+        xAxis:
+          labelFontSize: 12
+          labelPadding: 8
+    themeVariables:
+        xyChart:
+            titleColor: "#ff0000"
+            plotColorPalette: "#f4b400, #0f9d58, #4285f4"
+
+---
+xychart-beta
+  title "assist-mini-stateless"
+  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, .]
+  y-axis "Score" 1 --> 100
+  bar [89.8, 0.0, 0.0]
+  bar [0.0, 85.7, 0.0]
+  bar [0.0, 0.0, -1.0]
 ```
 ## Models
 

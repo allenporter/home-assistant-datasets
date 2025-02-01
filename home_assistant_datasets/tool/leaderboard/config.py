@@ -12,6 +12,7 @@ DATASETS = [
     "assist",
     "assist-mini",
     "intents",
+    "assist-mini-stateless"
 ]
 IGNORE_REPORTS = {
     "reports/assist/2024.6.0dev-baseline-2024-05-27",
