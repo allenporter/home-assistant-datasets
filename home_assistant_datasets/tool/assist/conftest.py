@@ -9,6 +9,8 @@ from collections.abc import Generator
 import pytest
 from homeassistant.util import dt as dt_util
 
+from home_assistant_datasets.data_model import DATASET_CARD_FILE, read_dataset_card
+
 from .data_model import (
     EvalTask,
     generate_tasks,
@@ -18,7 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 
 IGNORE_FILES = {
     "_fixtures.yaml",
-    "dataset_card.yaml",
+    DATASET_CARD_FILE,
 }
 
 def pytest_addoption(parser: Any) -> None:
@@ -41,12 +43,19 @@ def pytest_generate_tests(metafunc: Any) -> None:
     dataset = metafunc.config.getoption("dataset")
     if not dataset:
         raise ValueError("No dataset path specified")
+    metafunc.parametrize("dataset", [dataset], scope="module")
+
+    dataset_path = pathlib.Path(dataset)
+    dataset_card = read_dataset_card(dataset_path / DATASET_CARD_FILE)
+    if dataset_card.path:
+        # The dataset card points to files in another directory
+        dataset_path = pathlib.Path(dataset_card.path)
 
     # Tests are parameterized by the files that contain device actions. Ignore
     # fixtures and load those separately below.
     dataset_files = [
         str(filename)
-        for filename in pathlib.Path(dataset).glob("**/*.yaml")
+        for filename in dataset_path.glob("**/*.yaml")
         if filename.name not in IGNORE_FILES
     ]
     if not dataset_files:
@@ -55,7 +64,6 @@ def pytest_generate_tests(metafunc: Any) -> None:
     categories_str = metafunc.config.getoption("categories")
     categories = set(categories_str.split(",") if categories_str else {})
 
-    dataset_path = pathlib.Path(dataset)
     output_path = pathlib.Path(output_dir)
 
     tasks = []

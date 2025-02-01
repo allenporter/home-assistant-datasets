@@ -2,17 +2,18 @@
 
 from typing import Any
 import pathlib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import yaml
 
 from . import yaml_loaders
 
 
 MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
-DATASET_CARD_FILES = list(pathlib.Path("datasets").glob("**/dataset_card.yaml"))
+DATASET_CARD_FILE = "dataset_card.yaml"
+DATASET_CARD_FILES = list(pathlib.Path("datasets").glob(f"**/{DATASET_CARD_FILE}"))
 
 
-@dataclass
+@dataclass(kw_only=True)
 class DatasetCard:
     """A description of a dataset."""
 
@@ -25,6 +26,14 @@ class DatasetCard:
     urls: list[str]
     """More information about the dataset."""
 
+    path: str | None = field(default=None)
+    """Path to use for reading the dataset files instead of the current directory."""
+
+    config_entry_data: dict[str, Any] | None = field(default=None)
+    """Additional config entry data to include in model entry configs for this dataset."""
+
+    config_entry_options: dict[str, Any] | None = field(default=None)
+    """Additional config entry options to include in model entry configs for this dataset."""
 
 @dataclass
 class EntryConfig:
@@ -111,15 +120,20 @@ def read_model(model_id: str) -> ModelConfig:
     )
 
 
+def read_dataset_card(dataset_card: pathlib.Path) -> DatasetCard:
+    """Read a single dastaset configuration file."""
+    data = yaml.load(dataset_card.read_text(), Loader=yaml.Loader)
+    return DatasetCard(**data)
+
+
 def read_prerequisites() -> list[EntryConfig]:
     """Read the prerequisites for the models under evaluation."""
     return read_models().prerequisites
 
 
 def read_dataset_cards() -> list[DatasetCard]:
-    """Read models configuration file."""
+    """Read dataset configuration file."""
     cards = []
     for dataset_card in DATASET_CARD_FILES:
-        dataset_data = yaml.load(dataset_card.read_text(), Loader=yaml.Loader)
-        cards.append(DatasetCard(**dataset_data))
+        cards.append(read_dataset_card(dataset_card))
     return cards

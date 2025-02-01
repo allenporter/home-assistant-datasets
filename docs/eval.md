@@ -80,7 +80,8 @@ If you don't know the homeassistnat version, you can run `uv pip freeze | grep "
 
 ### Evaluate
 
-You can score the outputs by running the `eval` command.
+You can score the outputs by running the `eval` command, or skip this step if
+you just want to rebuild the leaderboard.
 
 ```bash
 $ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > ${OUTPUT_DIR}/report.csv

@@ -210,7 +210,8 @@ async def test_assist_actions(
     rate_limiter: Limiter,
 ) -> None:
     """Collects model responses for assist actions."""
-    rate_limiter.try_acquire('item')
+    if rate_limiter:
+        rate_limiter.try_acquire('item')
 
     yaml.SafeDumper.add_multi_representer(
         enum.StrEnum,
