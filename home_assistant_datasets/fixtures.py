@@ -173,10 +173,11 @@ async def mock_conversation_agent_config_entry(
         options["prompt"] = system_prompt
     config_entry = MockConfigEntry(
         domain=model_config.domain,
-        data=model_config.config_entry_data,
+        data=data,
         options=options,
         version=model_config.version or 1,
     )
+    _LOGGER.info("Config entry options=%s", config_entry.options)
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     assert config_entry.state == ConfigEntryState.LOADED
