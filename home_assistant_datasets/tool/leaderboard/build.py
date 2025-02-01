@@ -202,12 +202,15 @@ def create_leaderboard_table(
                 text_parts = [
                     "$${",
                 ]
+                score = best_record.good_percent_value()
                 if model_id in best_dataset_scores[dataset]:
+                    text_parts.append("\\color{lime}")
+                elif score > 0.9:
                     text_parts.append("\\color{green}")
                 else:
                     text_parts.append("\\color{gray}")
                 text_parts.extend([
-                    f"{best_record.good_percent_value()*100:0.1f}",
+                    f"{score*100:0.1f}",
                     "\\\\% \\space",  # % sign
                     # Put the CI and dataset label in small gray text
                     "\\color{gray}\\tiny{\\textsf{",
