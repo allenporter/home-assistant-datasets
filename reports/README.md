@@ -1,29 +1,29 @@
 # Home LLM Leaderboard
-| Model | assist-mini-stateless (n=49) | assist-mini (n=49) | assist (n=0) | intents (n=0) |
+| Model | assist-mini-stateless (n=49) | assist-mini (n=0) | assist (n=0) | intents (n=0) |
 | --- | --- | --- | --- | --- |
-| gemini-2.0-flash | $${\color{green}95.9\%}$$ (CI:&nbsp;5.5%, 2025.2.0b) | 93.9 (CI:&nbsp;6.7%, 2024.12.2) | $${\color{red}NA}$$ | $${\color{red}NA}$$ |
-| gemini-1.5-flash | 93.9 (CI:&nbsp;6.7%, 2025.2.0b) | 98.0 (CI:&nbsp;4.0%, 2024.8.0dev) | 91.2 (CI:&nbsp;6.2%, 2024.6.3) | 63.0 (CI:&nbsp;7.4%, 2024.8.0b) |
-| gpt-4o-mini | 93.9 (CI:&nbsp;6.7%, 2025.2.0b) | 98.0 (CI:&nbsp;4.0%, 2024.8.0dev) | 90.0 (CI:&nbsp;6.6%, 2024.8.0b) | 63.6 (CI:&nbsp;7.3%, 2024.8.0b) |
-| claude-3-5-haiku | 79.6 (CI:&nbsp;11.3%, 2025.2.0b) | $${\color{red}NA}$$ | $${\color{red}NA}$$ | $${\color{red}NA}$$ |
-| llama3.3-awq | $${\color{red}NA}$$ | $${\color{green}100.0\%}$$ (CI:&nbsp;0.0%, 2025.1.2) | 86.2 (CI:&nbsp;7.5%, 2025.1.2) | $${\color{red}NA}$$ |
-| claude-3-haiku | $${\color{red}NA}$$ | 98.0 (CI:&nbsp;4.0%, 2024.9.0b2) | 88.2 (CI:&nbsp;10.8%, 2024.9.0b2) | $${\color{red}NA}$$ |
-| claude-3-5-sonnet | $${\color{red}NA}$$ | 95.9 (CI:&nbsp;5.5%, 2024.9.0b2) | $${\color{red}NA}$$ | $${\color{red}NA}$$ |
-| llama3.3 | $${\color{red}NA}$$ | 91.8 (CI:&nbsp;7.7%, 2025.1.2) | $${\color{green}92.5\%}$$ (CI:&nbsp;5.8%, 2025.1.2) | $${\color{red}NA}$$ |
-| qwen2.5 | $${\color{red}NA}$$ | 85.7 (CI:&nbsp;9.8%, 2024.9.2) | 81.2 (CI:&nbsp;8.6%, 2024.9.2) | $${\color{red}NA}$$ |
-| xlam-7b | $${\color{red}NA}$$ | 85.7 (CI:&nbsp;9.8%, 2024.8.0b0) | 51.2 (CI:&nbsp;11.0%, 2024.9.0dev) | $${\color{red}NA}$$ |
-| llama3.1 | $${\color{red}NA}$$ | 83.7 (CI:&nbsp;10.3%, 2024.8.0b0) | 66.2 (CI:&nbsp;10.4%, 2024.9.0dev) | 43.6 (CI:&nbsp;7.6%, 2024.9.0dev) |
-| assist-llm | $${\color{red}NA}$$ | 81.6 (CI:&nbsp;10.8%, 2024.9.0dev) | 67.5 (CI:&nbsp;10.3%, 2024.9.0dev) | $${\color{red}NA}$$ |
-| llama3.2-3b | $${\color{red}NA}$$ | 81.6 (CI:&nbsp;10.8%, 2024.9.2) | 62.5 (CI:&nbsp;10.6%, 2024.9.2) | $${\color{red}NA}$$ |
-| mistral-nemo | $${\color{red}NA}$$ | 81.6 (CI:&nbsp;10.8%, 2024.9.2) | $${\color{red}NA}$$ | $${\color{red}NA}$$ |
-| functionary-small-v2.5 | $${\color{red}NA}$$ | 63.3 (CI:&nbsp;13.5%, 2024.8.0dev) | 56.2 (CI:&nbsp;10.9%, 2024.7.0) | 37.6 (CI:&nbsp;7.4%, 2024.6.3) |
-| assistant | $${\color{red}NA}$$ | 63.3 (CI:&nbsp;13.5%, 2024.8.0dev) | 37.5 (CI:&nbsp;10.6%, 2024.6.3) | $${\color{green}98.8\%}$$ (CI:&nbsp;1.7%, 2024.6.3) |
-| llama3-groq-tool-use | $${\color{red}NA}$$ | 51.0 (CI:&nbsp;14.0%, 2024.8.0b0) | 20.0 (CI:&nbsp;8.8%, 2024.8.0b) | 11.5 (CI:&nbsp;4.9%, 2024.8.0b) |
-| home-llm | $${\color{red}NA}$$ | 34.7 (CI:&nbsp;13.3%, 2024.8.0dev) | 45.0 (CI:&nbsp;10.9%, 2024.6.3) | 25.5 (CI:&nbsp;6.6%, 2024.6.3) |
-| xlam-1b | $${\color{red}NA}$$ | 27.1 (CI:&nbsp;12.6%, 2024.8.0b0) | $${\color{red}NA}$$ | $${\color{red}NA}$$ |
-| llama3.2-1b | $${\color{red}NA}$$ | 4.1 (CI:&nbsp;5.5%, 2024.9.2) | 7.5 (CI:&nbsp;5.8%, 2024.9.2) | $${\color{red}NA}$$ |
-| mistral-v3 | $${\color{red}NA}$$ | 2.0 (CI:&nbsp;4.0%, 2024.8.0dev) | 3.8 (CI:&nbsp;4.2%, 2024.8.0b) | 10.3 (CI:&nbsp;4.6%, 2024.8.0b) |
-| gpt-4o | $${\color{red}NA}$$ | $${\color{red}NA}$$ | 87.5 (CI:&nbsp;7.2%, 2024.6.3) | 81.2 (CI:&nbsp;6.0%, 2024.6.3) |
-| gpt-3.5 | $${\color{red}NA}$$ | $${\color{red}NA}$$ | 75.0 (CI:&nbsp;9.5%, 2024.6.3) | 67.9 (CI:&nbsp;7.1%, 2024.6.3) |
+| gemini-2.0-flash | $${\color{green}95.9\char"25 \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ |  |  |  |
+| gemini-1.5-flash | $${\color{gray}93.9\char"25 \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{gray}98.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{gray}91.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${\color{gray}63.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.4, 2024.8.0b)}}}$$ |
+| gpt-4o-mini | $${\color{gray}93.9\char"25 \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{gray}98.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{gray}90.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 6.6, 2024.8.0b)}}}$$ | $${\color{gray}63.6\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.3, 2024.8.0b)}}}$$ |
+| claude-3-5-haiku | $${\color{gray}79.6\char"25 \space\color{gray}\tiny{\textsf{(CI: 11.3, 2025.2.0b)}}}$$ |  |  |  |
+| llama3.3-awq |  | $${\color{green}100.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ | $${\color{gray}86.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ |  |
+| claude-3-haiku |  | $${\color{gray}98.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ | $${\color{gray}88.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0b2)}}}$$ |  |
+| claude-3-5-sonnet |  | $${\color{gray}95.9\char"25 \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ |  |  |
+| llama3.3 |  | $${\color{gray}91.8\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ | $${\color{green}92.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ |  |
+| qwen2.5 |  | $${\color{gray}85.7\char"25 \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.9.2)}}}$$ | $${\color{gray}81.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ |  |
+| xlam-7b |  | $${\color{gray}85.7\char"25 \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.8.0b0)}}}$$ | $${\color{gray}51.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 11.0, 2024.9.0dev)}}}$$ |  |
+| llama3.1 |  | $${\color{gray}83.7\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.8.0b0)}}}$$ | $${\color{gray}66.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.4, 2024.9.0dev)}}}$$ | $${\color{gray}43.6\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.6, 2024.9.0dev)}}}$$ |
+| assist-llm |  | $${\color{gray}81.6\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0dev)}}}$$ | $${\color{gray}67.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.9.0dev)}}}$$ |  |
+| llama3.2-3b |  | $${\color{gray}81.6\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ | $${\color{gray}62.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.9.2)}}}$$ |  |
+| mistral-nemo |  | $${\color{gray}81.6\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  |
+| functionary-small-v2.5 |  | $${\color{gray}63.3\char"25 \space\color{gray}\tiny{\textsf{(CI: 13.5, 2024.8.0dev)}}}$$ | $${\color{gray}56.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.9, 2024.7.0)}}}$$ | $${\color{gray}37.6\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.4, 2024.6.3)}}}$$ |
+| assistant |  | $${\color{gray}63.3\char"25 \space\color{gray}\tiny{\textsf{(CI: 13.5, 2024.8.0dev)}}}$$ | $${\color{gray}37.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.6.3)}}}$$ | $${\color{green}98.8\char"25 \space\color{gray}\tiny{\textsf{(CI: 1.7, 2024.6.3)}}}$$ |
+| llama3-groq-tool-use |  | $${\color{gray}51.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 14.0, 2024.8.0b0)}}}$$ | $${\color{gray}20.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 8.8, 2024.8.0b)}}}$$ | $${\color{gray}11.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 4.9, 2024.8.0b)}}}$$ |
+| home-llm |  | $${\color{gray}34.7\char"25 \space\color{gray}\tiny{\textsf{(CI: 13.3, 2024.8.0dev)}}}$$ | $${\color{gray}45.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 10.9, 2024.6.3)}}}$$ | $${\color{gray}25.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 6.6, 2024.6.3)}}}$$ |
+| xlam-1b |  | $${\color{gray}27.1\char"25 \space\color{gray}\tiny{\textsf{(CI: 12.6, 2024.8.0b0)}}}$$ |  |  |
+| llama3.2-1b |  | $${\color{gray}4.1\char"25 \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.2)}}}$$ | $${\color{gray}7.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 5.8, 2024.9.2)}}}$$ |  |
+| mistral-v3 |  | $${\color{gray}2.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{gray}3.8\char"25 \space\color{gray}\tiny{\textsf{(CI: 4.2, 2024.8.0b)}}}$$ | $${\color{gray}10.3\char"25 \space\color{gray}\tiny{\textsf{(CI: 4.6, 2024.8.0b)}}}$$ |
+| gpt-4o |  |  | $${\color{gray}87.5\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${\color{gray}81.2\char"25 \space\color{gray}\tiny{\textsf{(CI: 6.0, 2024.6.3)}}}$$ |
+| gpt-3.5 |  |  | $${\color{gray}75.0\char"25 \space\color{gray}\tiny{\textsf{(CI: 9.5, 2024.6.3)}}}$$ | $${\color{gray}67.9\char"25 \space\color{gray}\tiny{\textsf{(CI: 7.1, 2024.6.3)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -95,34 +95,33 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #f4b400, #0f9d58, #4285f4, #ff6d01, #34a853, #0f9d58, #46bdc6, #4285f4, #1155cc, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #34a853, #46bdc6, #fbbc04, #4285f4"
+            plotColorPalette: "#f4b400, #f4b400, #0f9d58, #ff6d01, #34a853, #0f9d58, #46bdc6, #4285f4, #1155cc, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #34a853, #46bdc6, #fbbc04, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [assistant, gpt-4o-mini, gemini-1.5-flash, gemini-2.0-flash, claude-3-5-sonnet, claude-3-haiku, functionary-small-v2.5, mistral-v3, mistral-nemo, qwen2.5, llama3-groq-tool-use, llama3.1, llama3.2-3b, llama3.2-1b, xlam-7b, assist-llm, home-llm, xlam-1b, llama3.3, llama3.3-awq, .]
+  x-axis "Model" [assistant, gpt-4o-mini, gemini-1.5-flash, claude-3-5-sonnet, claude-3-haiku, functionary-small-v2.5, mistral-v3, mistral-nemo, qwen2.5, llama3-groq-tool-use, llama3.1, llama3.2-3b, llama3.2-1b, xlam-7b, assist-llm, home-llm, xlam-1b, llama3.3, llama3.3-awq, .]
   y-axis "Score" 1 --> 100
-  bar [63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 51.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 34.7, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.1, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.8, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
+  bar [63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 63.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 51.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 34.7, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 27.1, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.8, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
 ### assist
