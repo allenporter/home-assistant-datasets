@@ -199,7 +199,7 @@ def create_leaderboard_table(
                     text_parts.append("\\color{gray}")
                 text_parts.extend([
                     f"{best_record.good_percent_value()*100:0.1f}",
-                    "\\char\"25 \\space",  # % sign
+                    "\\% \\space",  # % sign
                     # Put the CI and dataset label in small gray text
                     "\\color{gray}\\tiny{\\textsf{",
                     f"(CI: {ci:0.1f}, {best_record.dataset_label})",
