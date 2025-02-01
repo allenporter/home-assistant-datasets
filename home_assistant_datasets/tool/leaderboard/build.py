@@ -209,7 +209,7 @@ def create_leaderboard_table(
                     text_parts.append("\\color{green}")
                 elif score >= 0.8:
                     text_parts.append("\\color{teal}")
-                elif score >= 0.8:
+                elif score >= 0.7:
                     text_parts.append("\\color{olive}")
                 else:
                     text_parts.append("\\color{gray}")

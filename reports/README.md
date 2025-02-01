@@ -4,7 +4,7 @@
 | gemini-2.0-flash | $${\color{lime}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ |  |  |  |
 | gemini-1.5-flash | $${\color{green}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{green}91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${\color{gray}63.0\\% \space\color{gray}\tiny{\textsf{(CI: 7.4, 2024.8.0b)}}}$$ |
 | gpt-4o-mini | $${\color{green}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{green}90.0\\% \space\color{gray}\tiny{\textsf{(CI: 6.6, 2024.8.0b)}}}$$ | $${\color{gray}63.6\\% \space\color{gray}\tiny{\textsf{(CI: 7.3, 2024.8.0b)}}}$$ |
-| claude-3-5-haiku | $${\color{gray}79.6\\% \space\color{gray}\tiny{\textsf{(CI: 11.3, 2025.2.0b)}}}$$ |  |  |  |
+| claude-3-5-haiku | $${\color{olive}79.6\\% \space\color{gray}\tiny{\textsf{(CI: 11.3, 2025.2.0b)}}}$$ |  |  |  |
 | llama3.3-awq |  | $${\color{lime}100.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ | $${\color{teal}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ |  |
 | claude-3-haiku |  | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ | $${\color{teal}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0b2)}}}$$ |  |
 | claude-3-5-sonnet |  | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ |  |  |
@@ -23,7 +23,7 @@
 | llama3.2-1b |  | $${\color{gray}4.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.2)}}}$$ | $${\color{gray}7.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2024.9.2)}}}$$ |  |
 | mistral-v3 |  | $${\color{gray}2.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{gray}3.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2024.8.0b)}}}$$ | $${\color{gray}10.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, 2024.8.0b)}}}$$ |
 | gpt-4o |  |  | $${\color{teal}87.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${\color{teal}81.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.0, 2024.6.3)}}}$$ |
-| gpt-3.5 |  |  | $${\color{gray}75.0\\% \space\color{gray}\tiny{\textsf{(CI: 9.5, 2024.6.3)}}}$$ | $${\color{gray}67.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.1, 2024.6.3)}}}$$ |
+| gpt-3.5 |  |  | $${\color{olive}75.0\\% \space\color{gray}\tiny{\textsf{(CI: 9.5, 2024.6.3)}}}$$ | $${\color{gray}67.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.1, 2024.6.3)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
