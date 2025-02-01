@@ -37,10 +37,13 @@ Implementation notes:
 
 ### assist-mini-stateless
 
-The `assist-mini` dataset run with the stateless assist mini API. The prompt
-does not contain the current state of the entities, but does provide the device
-names and the areas. There is a GetState tool that can be used however it does
-not return the current state.
+This runs the `assist-mini` dataset, but without entity state information available
+in the prompt. This is a dataset built to exercise the Home Assistant LLM API. The homes
+for this dataset were synthetically generated using gpt-3.5, and then simplified
+for exercising smaller LLMs. The use cases are not intented to be very tricky
+or complicated and aimed at a smaller context window. The number of devices/entities
+in each test is intentionally small (e.g. typically under 5 entities per test)
+to focus on tool calling capabilities rather than context retrieval.
 
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
