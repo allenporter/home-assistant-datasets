@@ -33,7 +33,7 @@ def pytest_generate_tests(metafunc: Any) -> None:
     """Generate test parameters for the evaluation from flags."""
     # Parameterize tests by the models under development
     models = metafunc.config.getoption("models").split(",")
-    metafunc.parametrize("model_id", models)
+    metafunc.parametrize("model_id", models, scope="module")
 
     output_dir = metafunc.config.getoption("model_output_dir")
 

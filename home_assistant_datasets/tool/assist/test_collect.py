@@ -11,6 +11,7 @@ import json
 
 import pytest
 import yaml
+from pyrate_limiter import Limiter
 
 from homeassistant.core import HomeAssistant, Context
 from homeassistant.config_entries import ConfigEntry
@@ -206,8 +207,10 @@ async def test_assist_actions(
         Awaitable[dict[str, Any]],
     ],
     caplog: pytest.LogCaptureFixture,
+    rate_limiter: Limiter,
 ) -> None:
     """Collects model responses for assist actions."""
+    rate_limiter.try_acquire('item')
 
     yaml.SafeDumper.add_multi_representer(
         enum.StrEnum,

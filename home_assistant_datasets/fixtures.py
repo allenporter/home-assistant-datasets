@@ -6,6 +6,7 @@ import os
 import pathlib
 from typing import Any, TextIO
 from unittest.mock import patch, mock_open
+from pyrate_limiter import Duration, Rate, Limiter, BucketFullException
 
 import pytest
 import pytest_socket
@@ -103,13 +104,24 @@ async def system_prompt_fixture() -> None:
     return None
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 async def model_config(model_id: str) -> ModelConfig:
     """Fixture to read the model config yaml."""
     try:
         return data_model.read_model(model_id)
     except Exception as err:
         pytest.exit(str(err))
+
+
+MAX_DELAY = 60 * 1000  # 1 minute
+
+@pytest.fixture(scope="module")
+async def rate_limiter(model_config: ModelConfig) -> Limiter | None:
+    """Fixture to read the model config yaml."""
+    if model_config.rpm is None:
+        return None
+    rate = Rate(model_config.rpm, Duration.MINUTE)
+    return Limiter(rate, max_delay=MAX_DELAY)
 
 
 @pytest.fixture

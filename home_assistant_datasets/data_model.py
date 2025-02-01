@@ -68,6 +68,9 @@ class ModelConfig:
     version: int | None = None
     """The version number of the config entry."""
 
+    rpm: int | None = None
+    """Requests per minute allowed for this model."""
+
 
 @dataclass
 class Models:
