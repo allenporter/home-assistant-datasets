@@ -7,6 +7,7 @@ This is a work log of major updates to the leaderboard.
 - Removed previously incorrect results for gemini-2.0-flash
 - New dataset `assist-mini-stateless` that does not contain device state in the prompt
 - gemini-1.5-flash for `assist-mini-stateless` scores 93.9%
+- gemini-2.0-flash for `assist-mini-stateless` scores 95.9%
 - gpt-4o-mini for `assist-mini-stateless` scores 93.9%
 - claude-3-5-haiku for `assist-mini-stateless` scores 79.6%
 

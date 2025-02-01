@@ -19,7 +19,7 @@
 | llama3-groq-tool-use | 20.0% (CI:&nbsp;8.8%, 2024.8.0b) | 51.0% (CI:&nbsp;14.0%, 2024.8.0b0) | 11.5% (CI:&nbsp;4.9%, 2024.8.0b) |  |
 | llama3.2-1b | 7.5% (CI:&nbsp;5.8%, 2024.9.2) | 4.1% (CI:&nbsp;5.5%, 2024.9.2) |  |  |
 | mistral-v3 | 3.8% (CI:&nbsp;4.2%, 2024.8.0b) | 2.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 10.3% (CI:&nbsp;4.6%, 2024.8.0b) |  |
-| gemini-2.0-flash |  | 93.9% (CI:&nbsp;6.7%, 2024.12.2) |  |  |
+| gemini-2.0-flash |  | 93.9% (CI:&nbsp;6.7%, 2024.12.2) |  | 95.9% (CI:&nbsp;5.5%, 2025.2.0b) |
 | xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |  |
 | claude-3-5-sonnet |  | 95.9% (CI:&nbsp;5.5%, 2024.9.0b2) |  |  |
 | mistral-nemo |  | 81.6% (CI:&nbsp;10.8%, 2024.9.2) |  |  |
@@ -209,17 +209,18 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #0f9d58, #d5a6bd, #4285f4"
+            plotColorPalette: "#f4b400, #0f9d58, #34a853, #d5a6bd, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini-stateless"
-  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, claude-3-5-haiku, .]
+  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, gemini-2.0-flash, claude-3-5-haiku, .]
   y-axis "Score" 1 --> 100
-  bar [93.9, 0.0, 0.0, 0.0]
-  bar [0.0, 93.9, 0.0, 0.0]
-  bar [0.0, 0.0, 79.6, 0.0]
-  bar [0.0, 0.0, 0.0, -1.0]
+  bar [93.9, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 93.9, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 95.9, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 79.6, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
 
