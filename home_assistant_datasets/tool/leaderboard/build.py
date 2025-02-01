@@ -193,7 +193,7 @@ def create_leaderboard_table(
                 text = f"{best_record.good_percent_value()*100:0.1f}%"
                 # Bold the best score
                 if model_id in best_dataset_scores[dataset]:
-                    text = "$\color{green}{" + text + "}$"
+                    text = "$${\color{green}" + text.replace("%", "\%") + "}$$"
                 text = text + f" (CI:&nbsp;{ci:0.1f}%, {best_record.dataset_label})"
                 row.append(text)
             else:
