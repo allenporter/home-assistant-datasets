@@ -9,10 +9,10 @@ _LOGGER = logging.getLogger(__name__)
 
 REPORT_DIR = "reports"
 DATASETS = [
-    "assist",
+    "assist-mini-stateless",
     "assist-mini",
+    "assist",
     "intents",
-    "assist-mini-stateless"
 ]
 IGNORE_REPORTS = {
     "reports/assist/2024.6.0dev-baseline-2024-05-27",

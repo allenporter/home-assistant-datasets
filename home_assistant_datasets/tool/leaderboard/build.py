@@ -139,6 +139,26 @@ def compute_best_scores(
     return {model_id: best_model_scores[model_id] for model_id in sorted_model_ids}
 
 
+def compute_best_dataset_scores(best_model_scores: dict[str, dict[str, ModelRecord]]) -> dict[str, set[str]]:
+    """Compute the models that scored highest on each dataset."""
+    best_dataset_scores = {}
+    for dataset in DATASETS:
+        max = 0
+        best: set[str] = set({})
+        for model in best_model_scores:
+            if (record := best_model_scores[model].get(dataset)) is None:
+                continue
+            value = record.good_percent_value()
+            if value > max:
+                max = value
+                best = {model}
+            elif value >= max:
+                best = best | {model}
+        best_dataset_scores[dataset] = best
+    return best_dataset_scores
+
+
+
 def create_leaderboard_table(
     best_model_scores: dict[str, dict[str, ModelRecord]]
 ) -> str:
@@ -149,13 +169,20 @@ def create_leaderboard_table(
         assert best_model_scores[first_model_id][dataset]
         num_samples = best_model_scores[first_model_id][dataset].total
         cols.append(f"{dataset} (n={num_samples})")
+
+    best_dataset_scores = compute_best_dataset_scores(best_model_scores)
+
     rows = []
     for model_id, dataset_scores in best_model_scores.items():
         row = [ model_id ]
         for dataset, best_record in dataset_scores.items():
             if best_record.good_percent_value() != 0:
                 ci = 1.96 * best_record.stddev*100
-                row.append(f"{best_record.good_percent_value()*100:0.1f}% (CI:&nbsp;{ci:0.1f}%, {best_record.dataset_label})")
+                text = f"{best_record.good_percent_value()*100:0.1f}% (CI:&nbsp;{ci:0.1f}%, {best_record.dataset_label})"
+                # Bold the best score
+                if model_id in best_dataset_scores[dataset]:
+                    text = f"**{text}**"
+                row.append(text)
             else:
                 row.append("")
         rows.append(row)
