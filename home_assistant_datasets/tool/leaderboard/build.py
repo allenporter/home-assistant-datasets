@@ -180,7 +180,15 @@ def create_leaderboard_table(
     for dataset in DATASETS:
         assert best_model_scores[first_model_id][dataset]
         num_samples = best_model_scores[first_model_id][dataset].total
-        cols.append(f"{dataset} (n={num_samples})")
+        text = [
+            dataset,
+            "$${\\color{gray}",
+            "\\small{\\textsf{",
+            f"(n={num_samples})",
+            "}}",  # end small text
+            "}$$",
+        ]
+        cols.append("".join(text))
 
     best_dataset_scores = compute_best_dataset_scores(best_model_scores)
 
