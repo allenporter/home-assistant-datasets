@@ -1,29 +1,29 @@
 # Home LLM Leaderboard
 | Model | assist-mini-stateless (n=49) | assist-mini (n=49) | assist (n=0) | intents (n=0) |
 | --- | --- | --- | --- | --- |
-| gemini-2.0-flash | **95.9% (CI:&nbsp;5.5%, 2025.2.0b)** | 93.9% (CI:&nbsp;6.7%, 2024.12.2) |  |  |
-| gpt-4o-mini | 93.9% (CI:&nbsp;6.7%, 2025.2.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 90.0% (CI:&nbsp;6.6%, 2024.8.0b) | 63.6% (CI:&nbsp;7.3%, 2024.8.0b) |
+| gemini-2.0-flash | $${\color{green}95.9% (CI:&nbsp;5.5%, 2025.2.0b)}$$ | 93.9% (CI:&nbsp;6.7%, 2024.12.2) |  |  |
 | gemini-1.5-flash | 93.9% (CI:&nbsp;6.7%, 2025.2.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 91.2% (CI:&nbsp;6.2%, 2024.6.3) | 63.0% (CI:&nbsp;7.4%, 2024.8.0b) |
+| gpt-4o-mini | 93.9% (CI:&nbsp;6.7%, 2025.2.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 90.0% (CI:&nbsp;6.6%, 2024.8.0b) | 63.6% (CI:&nbsp;7.3%, 2024.8.0b) |
 | claude-3-5-haiku | 79.6% (CI:&nbsp;11.3%, 2025.2.0b) |  |  |  |
-| llama3-groq-tool-use |  | 51.0% (CI:&nbsp;14.0%, 2024.8.0b0) | 20.0% (CI:&nbsp;8.8%, 2024.8.0b) | 11.5% (CI:&nbsp;4.9%, 2024.8.0b) |
-| llama3.1 |  | 83.7% (CI:&nbsp;10.3%, 2024.8.0b0) | 66.2% (CI:&nbsp;10.4%, 2024.9.0dev) | 43.6% (CI:&nbsp;7.6%, 2024.9.0dev) |
-| xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |  |
-| xlam-7b |  | 85.7% (CI:&nbsp;9.8%, 2024.8.0b0) | 51.2% (CI:&nbsp;11.0%, 2024.9.0dev) |  |
-| assistant |  | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 37.5% (CI:&nbsp;10.6%, 2024.6.3) | **98.8% (CI:&nbsp;1.7%, 2024.6.3)** |
-| functionary-small-v2.5 |  | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 56.2% (CI:&nbsp;10.9%, 2024.7.0) | 37.6% (CI:&nbsp;7.4%, 2024.6.3) |
-| home-llm |  | 34.7% (CI:&nbsp;13.3%, 2024.8.0dev) | 45.0% (CI:&nbsp;10.9%, 2024.6.3) | 25.5% (CI:&nbsp;6.6%, 2024.6.3) |
-| mistral-v3 |  | 2.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 3.8% (CI:&nbsp;4.2%, 2024.8.0b) | 10.3% (CI:&nbsp;4.6%, 2024.8.0b) |
-| claude-3-5-sonnet |  | 95.9% (CI:&nbsp;5.5%, 2024.9.0b2) |  |  |
+| llama3.3-awq |  | $${\color{green}100.0% (CI:&nbsp;0.0%, 2025.1.2)}$$ | 86.2% (CI:&nbsp;7.5%, 2025.1.2) |  |
 | claude-3-haiku |  | 98.0% (CI:&nbsp;4.0%, 2024.9.0b2) | 88.2% (CI:&nbsp;10.8%, 2024.9.0b2) |  |
+| claude-3-5-sonnet |  | 95.9% (CI:&nbsp;5.5%, 2024.9.0b2) |  |  |
+| llama3.3 |  | 91.8% (CI:&nbsp;7.7%, 2025.1.2) | $${\color{green}92.5% (CI:&nbsp;5.8%, 2025.1.2)}$$ |  |
+| qwen2.5 |  | 85.7% (CI:&nbsp;9.8%, 2024.9.2) | 81.2% (CI:&nbsp;8.6%, 2024.9.2) |  |
+| xlam-7b |  | 85.7% (CI:&nbsp;9.8%, 2024.8.0b0) | 51.2% (CI:&nbsp;11.0%, 2024.9.0dev) |  |
+| llama3.1 |  | 83.7% (CI:&nbsp;10.3%, 2024.8.0b0) | 66.2% (CI:&nbsp;10.4%, 2024.9.0dev) | 43.6% (CI:&nbsp;7.6%, 2024.9.0dev) |
 | assist-llm |  | 81.6% (CI:&nbsp;10.8%, 2024.9.0dev) | 67.5% (CI:&nbsp;10.3%, 2024.9.0dev) |  |
-| llama3.2-1b |  | 4.1% (CI:&nbsp;5.5%, 2024.9.2) | 7.5% (CI:&nbsp;5.8%, 2024.9.2) |  |
 | llama3.2-3b |  | 81.6% (CI:&nbsp;10.8%, 2024.9.2) | 62.5% (CI:&nbsp;10.6%, 2024.9.2) |  |
 | mistral-nemo |  | 81.6% (CI:&nbsp;10.8%, 2024.9.2) |  |  |
-| qwen2.5 |  | 85.7% (CI:&nbsp;9.8%, 2024.9.2) | 81.2% (CI:&nbsp;8.6%, 2024.9.2) |  |
-| llama3.3-awq |  | **100.0% (CI:&nbsp;0.0%, 2025.1.2)** | 86.2% (CI:&nbsp;7.5%, 2025.1.2) |  |
-| llama3.3 |  | 91.8% (CI:&nbsp;7.7%, 2025.1.2) | **92.5% (CI:&nbsp;5.8%, 2025.1.2)** |  |
-| gpt-3.5 |  |  | 75.0% (CI:&nbsp;9.5%, 2024.6.3) | 67.9% (CI:&nbsp;7.1%, 2024.6.3) |
+| functionary-small-v2.5 |  | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 56.2% (CI:&nbsp;10.9%, 2024.7.0) | 37.6% (CI:&nbsp;7.4%, 2024.6.3) |
+| assistant |  | 63.3% (CI:&nbsp;13.5%, 2024.8.0dev) | 37.5% (CI:&nbsp;10.6%, 2024.6.3) | $${\color{green}98.8% (CI:&nbsp;1.7%, 2024.6.3)}$$ |
+| llama3-groq-tool-use |  | 51.0% (CI:&nbsp;14.0%, 2024.8.0b0) | 20.0% (CI:&nbsp;8.8%, 2024.8.0b) | 11.5% (CI:&nbsp;4.9%, 2024.8.0b) |
+| home-llm |  | 34.7% (CI:&nbsp;13.3%, 2024.8.0dev) | 45.0% (CI:&nbsp;10.9%, 2024.6.3) | 25.5% (CI:&nbsp;6.6%, 2024.6.3) |
+| xlam-1b |  | 27.1% (CI:&nbsp;12.6%, 2024.8.0b0) |  |  |
+| llama3.2-1b |  | 4.1% (CI:&nbsp;5.5%, 2024.9.2) | 7.5% (CI:&nbsp;5.8%, 2024.9.2) |  |
+| mistral-v3 |  | 2.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 3.8% (CI:&nbsp;4.2%, 2024.8.0b) | 10.3% (CI:&nbsp;4.6%, 2024.8.0b) |
 | gpt-4o |  |  | 87.5% (CI:&nbsp;7.2%, 2024.6.3) | 81.2% (CI:&nbsp;6.0%, 2024.6.3) |
+| gpt-3.5 |  |  | 75.0% (CI:&nbsp;9.5%, 2024.6.3) | 67.9% (CI:&nbsp;7.1%, 2024.6.3) |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -57,7 +57,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #f4b400, #4285f4, #ea4335, #4285f4"
+            plotColorPalette: "#f4b400, #0f9d58, #4285f4, #ea4335, #4285f4"
 
 ---
 xychart-beta
@@ -95,7 +95,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#1155cc, #0f9d58, #f4b400, #4285f4, #d9ead3, #4285f4, #d5a6bd, #674ea7, #fbbc04, #34a853, #fbbc04, #34a853, #ea4335, #f4b400, #46bdc6, #0f9d58, #6aa84f, #ff6d01, #46bdc6, #ff6d01, #4285f4"
+            plotColorPalette: "#f4b400, #f4b400, #0f9d58, #4285f4, #ff6d01, #34a853, #0f9d58, #46bdc6, #4285f4, #1155cc, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #34a853, #46bdc6, #fbbc04, #4285f4"
 
 ---
 xychart-beta
@@ -149,7 +149,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#1155cc, #1155cc, #d5a6bd, #0f9d58, #f4b400, #4285f4, #d5a6bd, #674ea7, #34a853, #fbbc04, #34a853, #ea4335, #f4b400, #46bdc6, #0f9d58, #6aa84f, #46bdc6, #ff6d01, #4285f4"
+            plotColorPalette: "#f4b400, #d5a6bd, #1155cc, #f4b400, #0f9d58, #34a853, #0f9d58, #46bdc6, #1155cc, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #46bdc6, #fbbc04, #4285f4"
 
 ---
 xychart-beta
@@ -203,7 +203,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#1155cc, #1155cc, #d5a6bd, #0f9d58, #f4b400, #d5a6bd, #674ea7, #fbbc04, #34a853, #6aa84f, #4285f4"
+            plotColorPalette: "#f4b400, #d5a6bd, #1155cc, #f4b400, #0f9d58, #0f9d58, #46bdc6, #ea4335, #6aa84f, #fbbc04, #4285f4"
 
 ---
 xychart-beta

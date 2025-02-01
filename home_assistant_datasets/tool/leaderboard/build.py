@@ -130,10 +130,22 @@ def compute_best_scores(
                     records, key=ModelRecord.good_percent_value, reverse=True
                 )
                 best_model_scores[model_id][dataset] = records[0]
+
+    def score_sort_key(model_id: str) -> None:
+        """Sort by dataset scores in order."""
+        scores = []
+        for dataset in DATASETS:
+            record = best_model_scores[model_id].get(dataset)
+            if record:
+                scores.append(record.good_percent_value())
+            else:
+                scores.append(0)
+        return scores
+
     # Generate overall report sorted by the first dataset score
     sorted_model_ids = sorted(
         best_model_scores.keys(),
-        key=lambda x: best_model_scores[x][DATASETS[0]].good_percent_value(),
+        key=score_sort_key,
         reverse=True,
     )
     return {model_id: best_model_scores[model_id] for model_id in sorted_model_ids}
@@ -181,7 +193,7 @@ def create_leaderboard_table(
                 text = f"{best_record.good_percent_value()*100:0.1f}% (CI:&nbsp;{ci:0.1f}%, {best_record.dataset_label})"
                 # Bold the best score
                 if model_id in best_dataset_scores[dataset]:
-                    text = f"**{text}**"
+                    text = "$${\color{green}" + text + "}$$"
                 row.append(text)
             else:
                 row.append("")
