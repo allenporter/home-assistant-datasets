@@ -205,7 +205,7 @@ def create_leaderboard_table(
                 score = best_record.good_percent_value()
                 if model_id in best_dataset_scores[dataset]:
                     text_parts.append("\\color{lime}")
-                elif score > 0.9:
+                elif score >= 0.9:
                     text_parts.append("\\color{green}")
                 else:
                     text_parts.append("\\color{gray}")
