@@ -1,5 +1,5 @@
 # Home LLM Leaderboard
-| Model | assist-mini-stateless$${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini$${\color{gray}\small{\textsf{(n=0)}}}$$ | assist$${\color{gray}\small{\textsf{(n=0)}}}$$ | intents$${\color{gray}\small{\textsf{(n=0)}}}$$ |
+| Model | assist-mini-stateless $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=0)}}}$$ | assist $${\color{gray}\small{\textsf{(n=0)}}}$$ | intents $${\color{gray}\small{\textsf{(n=0)}}}$$ |
 | --- | --- | --- | --- | --- |
 | gemini-2.0-flash | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ |  |  |  |
 | gemini-1.5-flash | $${\color{gray}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{gray}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{gray}91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${\color{gray}63.0\\% \space\color{gray}\tiny{\textsf{(CI: 7.4, 2024.8.0b)}}}$$ |
