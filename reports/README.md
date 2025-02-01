@@ -1,9 +1,9 @@
 # Home LLM Leaderboard
-| Model | assist (n=49) | assist-mini (n=49) | intents (n=165) | assist-mini-stateless (n=49) |
+| Model | assist (n=80) | assist-mini (n=49) | intents (n=0) | assist-mini-stateless (n=0) |
 | --- | --- | --- | --- | --- |
-| gpt-4o-mini | 95.9% (CI:&nbsp;5.5%, 2025.2.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.6% (CI:&nbsp;7.3%, 2024.8.0b) | 89.8% (CI:&nbsp;8.5%, 2025.2.0b) |
-| gemini-1.5-flash | 93.9% (CI:&nbsp;6.7%, 2025.2.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.0% (CI:&nbsp;7.4%, 2024.8.0b) | 85.7% (CI:&nbsp;9.8%, 2025.2.0b) |
 | llama3.3 | 92.5% (CI:&nbsp;5.8%, 2025.1.2) | 91.8% (CI:&nbsp;7.7%, 2025.1.2) |  |  |
+| gemini-1.5-flash | 91.2% (CI:&nbsp;6.2%, 2024.6.3) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.0% (CI:&nbsp;7.4%, 2024.8.0b) | 93.9% (CI:&nbsp;6.7%, 2025.2.0b) |
+| gpt-4o-mini | 90.0% (CI:&nbsp;6.6%, 2024.8.0b) | 98.0% (CI:&nbsp;4.0%, 2024.8.0dev) | 63.6% (CI:&nbsp;7.3%, 2024.8.0b) | 98.0% (CI:&nbsp;4.0%, 2025.2.0b) |
 | claude-3-haiku | 88.2% (CI:&nbsp;10.8%, 2024.9.0b2) | 98.0% (CI:&nbsp;4.0%, 2024.9.0b2) |  |  |
 | gpt-4o | 87.5% (CI:&nbsp;7.2%, 2024.6.3) |  | 81.2% (CI:&nbsp;6.0%, 2024.6.3) |  |
 | llama3.3-awq | 86.2% (CI:&nbsp;7.5%, 2025.1.2) | 100.0% (CI:&nbsp;0.0%, 2025.1.2) |  |  |
@@ -58,7 +58,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #46bdc6, #fbbc04, #4285f4, #0f9d58, #ea4335, #674ea7, #fbbc04, #ff6d01, #f4b400, #d5a6bd, #6aa84f, #ea4335, #d9ead3, #1155cc, #4285f4, #f4b400, #34a853, #4285f4"
+            plotColorPalette: "#0f9d58, #46bdc6, #fbbc04, #f4b400, #0f9d58, #ea4335, #674ea7, #fbbc04, #ff6d01, #f4b400, #d5a6bd, #6aa84f, #ea4335, #d9ead3, #1155cc, #4285f4, #4285f4, #34a853, #4285f4"
 
 ---
 xychart-beta
@@ -68,8 +68,8 @@ xychart-beta
   bar [37.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 75.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 87.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 91.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 88.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -110,7 +110,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #4285f4, #0f9d58, #34a853, #46bdc6, #ea4335, #674ea7, #fbbc04, #1155cc, #ff6d01, #f4b400, #d5a6bd, #6aa84f, #ea4335, #d9ead3, #1155cc, #4285f4, #ff6d01, #f4b400, #34a853, #4285f4"
+            plotColorPalette: "#0f9d58, #f4b400, #0f9d58, #34a853, #46bdc6, #ea4335, #674ea7, #fbbc04, #1155cc, #ff6d01, #f4b400, #d5a6bd, #6aa84f, #ea4335, #d9ead3, #1155cc, #4285f4, #ff6d01, #4285f4, #34a853, #4285f4"
 
 ---
 xychart-beta
@@ -166,7 +166,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #46bdc6, #fbbc04, #4285f4, #0f9d58, #674ea7, #fbbc04, #f4b400, #d5a6bd, #4285f4, #4285f4"
+            plotColorPalette: "#0f9d58, #46bdc6, #fbbc04, #f4b400, #0f9d58, #674ea7, #fbbc04, #f4b400, #d5a6bd, #4285f4, #4285f4"
 
 ---
 xychart-beta
@@ -208,15 +208,15 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #0f9d58, #4285f4"
+            plotColorPalette: "#f4b400, #0f9d58, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini-stateless"
   x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, .]
   y-axis "Score" 1 --> 100
-  bar [89.8, 0.0, 0.0]
-  bar [0.0, 85.7, 0.0]
+  bar [98.0, 0.0, 0.0]
+  bar [0.0, 93.9, 0.0]
   bar [0.0, 0.0, -1.0]
 ```
 ## Models

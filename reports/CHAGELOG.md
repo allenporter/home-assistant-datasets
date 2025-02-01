@@ -2,9 +2,12 @@
 
 This is a work log of major updates to the leaderboard.
 
-## 2024-12-24
+## 2025-02-01
 
-- gemini-2.0-flash for `assist-mini` scores 93.9%
+- Removed previously incorrect results for gemini-2.0-flash
+- New dataset `assist-mini-stateless` that does not contain device state in the prompt
+- gemini-1.5-flash for `assist-mini-stateless` scores 93.9%
+- gpt-4o-mini for `assist-mini-stateless` scores 98.0%
 
 ## 2024-09-24
 
