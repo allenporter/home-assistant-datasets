@@ -1,54 +1,29 @@
-"""Collect data from the assistant tools for a conversation agent.
+"""Collect data from an automation creation evaluation.
 
-This will configure the local home assistant environment with a conversation
-agent a model configuration.
-
-This model configuration supports the assistant pipeline, gpt-4o, or gemini flash:
-```yaml
-models:
-- model_id: assistant
-  domain: homeassistant
-
-- model_id: gpt-4o
-  domain: openai_conversation
-  config_entry_data:
-    api_key: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  config_entry_options:
-    chat_model: gpt-4o
-    llm_hass_api: assist
-
-- model_id: gemini-1.5-flash
-  domain: google_generative_ai_conversation
-  config_entry_data:
-    api_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  config_entry_options:
-    chat_model: models/gemini-1.5-flash-latest
-    llm_hass_api: assist
-```
-
-You can collect data from the API using the command:
-```bash
-$ DATASET="home-assistant-datasets/datasets/assist/"
-$ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
-# Run without --dry_run to actually perform the collection (may send LLM RPCs)
-$ home-assistant-datasets assist_collect --models=gemini-1.5-flash --dataset=${FIXTURES} --model_output_dir=${OUTPUT_DIR} --dry_run
-```
-
-You need to have the synthetic home custom component installed with something like this:
-
-```bash
-$ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/"
-```
-
-See `eval` for creating offline evaluation reports.
+This is configured similarly to an assist dataset collection tool, however
+it uses tooling for creating automations. See the `collect` tool for usage
+details.
 
 Usage:
 ```
-usage: home-assistant-datasets assist collect [-h] [--dry_run] --models MODELS [--dataset DATASET] --model_output_dir MODEL_OUTPUT_DIR
-                                              [--categories CATEGORIES] [--collect-only] [-s] [--verbose | --verbosity N]
-                                              [test_path]
-home-assistant-datasets assist collect: error: the following arguments are required: --models, --model_output_dir
-```
+usage: home-assistant-datasets automation collect [-h] [--dry_run] --models MODELS [--dataset DATASET] --model_output_dir MODEL_OUTPUT_DIR
+                                                  [--collect-only] [-s] [--verbose | --verbosity N]
+                                                  [test_path]
+
+positional arguments:
+  test_path             A pytest pass through flag optional path for collection actions to perform or full test node.
+
+options:
+  -h, --help            show this help message and exit
+  --dry_run             Only validate the fixtures without actually collecting data.
+  --models MODELS       Specifies models to load from the models.yaml file
+  --dataset DATASET     Specifies the test dataset to load for evaluation
+  --model_output_dir MODEL_OUTPUT_DIR
+                        Specifies the directory where output data from the model is stored.
+  --collect-only        A pytest pass through flag to only collect the list of tests without actually running them.
+  -s                    A pytest pass through flag to show streaming test output.
+  --verbose, -v         A pytest pass through flag to increase verbosity.
+  --verbosity N         A pytest pass through flag to set verbosity. Default is 0```
 """
 
 import argparse
@@ -57,13 +32,16 @@ import logging
 import pytest
 import yaml
 
-from ..conftest import run_pytest_main
+from home_assistant_datasets.tool.conftest import run_pytest_main
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_DATASET = "datasets/assist"
+DEFAULT_DATASET = "datasets/automation"
+PLUGINS = [
+    "home_assistant_datasets.fixtures",
+]
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -92,11 +70,6 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         required=True,
     )
     args.add_argument(
-        "--categories",
-        type=str,
-        help="Limit evaluation tasks to a specific category",
-    )
-    args.add_argument(
         "--collect-only",
         action="store_true",
         help="A pytest pass through flag to only collect the list of tests without actually running them.",
@@ -112,7 +85,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         "test_path",
         help="A pytest pass through flag optional path for collection actions to perform or full test node.",
         type=str,
-        default="home_assistant_datasets/tool/assist/test_collect.py",
+        default="home_assistant_datasets/tool/automation/test_collect.py",
         nargs="?",
     )
     verbosity_group = args.add_mutually_exclusive_group()
@@ -144,7 +117,6 @@ def run(args: argparse.Namespace) -> int:
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
-        f"--categories={args.categories or ''}",
     ]
     if args.test_path:
         pytest_args.append(args.test_path)
@@ -152,4 +124,4 @@ def run(args: argparse.Namespace) -> int:
         pytest_args.append("--collect-only")
     if args.s:
         pytest_args.append("-s")
-    return run_pytest_main(pytest_args, "home_assistant_datasets/tool/assist")
+    return run_pytest_main(pytest_args, "home_assistant_datasets/tool/automation")

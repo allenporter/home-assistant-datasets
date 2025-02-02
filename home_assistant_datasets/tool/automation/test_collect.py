@@ -33,6 +33,16 @@ _LOGGER = logging.getLogger(__name__)
 TIMEOUT = 40
 MAX_TRIES = 3
 
+@pytest.fixture(name="system_prompt")
+async def system_prompt_fixture(eval_task: EvalTask) -> None:
+    """Fixture to provide the system prompt or None to use the default."""
+    return """
+Create a Home Assistant automation YAML configuration based on the following user reques. Please
+think step by step about what would make the automation correct, then reply with
+markdown and output a codeblock in yaml format.
+"""
+
+
 
 @pytest.mark.parametrize("expected_lingering_timers", [True])
 @pytest.mark.parametrize("expected_lingering_tasks", [True])
@@ -51,7 +61,7 @@ async def test_assist_actions(
     caplog: pytest.LogCaptureFixture,
     rate_limiter: Limiter,
 ) -> None:
-    """Collects model responses for assist actions."""
+    """Collects model responses for automation actions."""
     if rate_limiter:
         rate_limiter.try_acquire('item')
 
@@ -82,6 +92,16 @@ async def test_assist_actions(
             retryable = True
         await hass.async_block_till_done()
         _LOGGER.debug("Response: %s", response)
+
+
+    if not response.contains("```yaml"):
+        response = "Response did not contain ```yaml markdown: " + response
+    else:
+        regexp = re.compile(r"```yaml\s*(.*?)\s+```")
+        g = regexp.match(response)
+        if not g:
+            raise ValueError("Could not extract regexp")
+        response = g.group(0)
 
     updated_states = get_state()
     unexpected_states: dict[str, Any] | str
@@ -117,7 +137,3 @@ async def test_assist_actions(
     )
     _LOGGER.info(output)
     eval_record_writer.write(dataclasses.asdict(output))
-
-    # assert not [
-    #     record.levelname for record in caplog.records if record.levelname == "ERROR"
-    # ]

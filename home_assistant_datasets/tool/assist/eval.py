@@ -33,7 +33,7 @@ from mashumaro.exceptions import MissingField
 
 from homeassistant.components.conversation import trace
 
-from .data_model import ModelOutput
+from home_assistant_datasets.tool.data_model import ModelOutput
 from .eval_output import GOOD_LABEL, BAD_LABEL, create_writer, OutputType
 
 __all__ = []
