@@ -35,7 +35,7 @@ MAX_TRIES = 3
 
 
 @pytest.fixture(name="system_prompt")
-async def system_prompt_fixture(eval_task: EvalTask) -> None:
+async def system_prompt_fixture(eval_task: EvalTask) -> str:
     """Fixture to provide the system prompt or None to use the default."""
     return """
 Create a Home Assistant automation YAML configuration based on the following

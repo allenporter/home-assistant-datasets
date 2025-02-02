@@ -6,7 +6,7 @@ import os
 import pathlib
 from typing import Any, TextIO
 from unittest.mock import patch, mock_open
-from pyrate_limiter import Duration, Rate, Limiter, BucketFullException
+from pyrate_limiter import Duration, Rate, Limiter
 
 import pytest
 import pytest_socket
@@ -21,7 +21,12 @@ from custom_components import synthetic_home  # noqa: F401
 # TODO(#12): Support loading from the custom component or core development environment
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from home_assistant_datasets.data_model import ModelConfig, EntryConfig, DatasetCard, DATASET_CARD_FILE
+from home_assistant_datasets.data_model import (
+    ModelConfig,
+    EntryConfig,
+    DatasetCard,
+    DATASET_CARD_FILE,
+)
 
 from . import data_model
 
@@ -115,6 +120,7 @@ async def model_config(model_id: str) -> ModelConfig:
 
 MAX_DELAY = 60 * 1000  # 1 minute
 
+
 @pytest.fixture(scope="module")
 async def rate_limiter(model_config: ModelConfig) -> Limiter | None:
     """Fixture to read the model config yaml."""
@@ -142,7 +148,7 @@ async def mock_conversation_agent_config_entry(
     model_config: ModelConfig,
     system_prompt: str | None,
     prerequisites: list[EntryConfig],
-    dataset_card: DatasetCard
+    dataset_card: DatasetCard,
 ) -> MockConfigEntry | None:
     """Fixture to create a conversation agent config entry."""
     for entry in prerequisites:
@@ -158,10 +164,12 @@ async def mock_conversation_agent_config_entry(
 
     if model_config.domain == "homeassistant":
         return None
-    options = {}
+    options: dict[str, Any] = {}
     if model_config.config_entry_options:
         options.update(model_config.config_entry_options)
-    data = {**model_config.config_entry_data}
+    data: dict[str, Any] = {}
+    if model_config.config_entry_data:
+        data.update({**model_config.config_entry_data})
 
     # Override any config entr data from the dataset (e.g. changing LLM API)
     if dataset_card.config_entry_options:
