@@ -281,11 +281,29 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
         )
     return result
 
+def _configure_yaml() -> None:
+    """Configure pyyaml with some formatting options specific to our eval records."""
+
+    # Skip any output for unknown tags
+    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
+
+    # Make automation dumps look a little nicer in the output reports
+    def str_presenter(dumper, data):  # type: ignore[no-untyped-def]
+        """configures yaml for dumping multiline strings
+        Ref: https://stackoverflow.com/questions/8640959/how-can-i-control-what-scalar-form-pyyaml-uses-for-my-data
+        """
+        if data.count("\n") > 0:  # check for multiline string
+            return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+    yaml.add_representer(str, str_presenter)
+    yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
+
 
 def run_pytest_main(additional_args: list[str], directory: str) -> int:
     """Run pytest with the default set of arguments plus the additional args passed."""
-    # Skip any output for unknown tags
-    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
+
+    _configure_yaml()
 
     # nest_asyncio.apply()
     pytest_args = [
