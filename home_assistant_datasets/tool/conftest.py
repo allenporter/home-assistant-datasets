@@ -281,6 +281,7 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
         )
     return result
 
+
 def _configure_yaml() -> None:
     """Configure pyyaml with some formatting options specific to our eval records."""
 
