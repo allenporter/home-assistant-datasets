@@ -4,7 +4,7 @@ import pathlib
 
 import pytest
 
-from home_assistant_datasets.tool.assist import data_model
+from home_assistant_datasets.tool import data_model
 
 
 DATASET_PATH = pathlib.Path("datasets/assist-mini/")
