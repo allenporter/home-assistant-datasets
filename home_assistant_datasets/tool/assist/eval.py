@@ -105,9 +105,13 @@ def run(args: argparse.Namespace) -> int:
             )
         except (yaml.error.YAMLError, ValueError, MissingField) as err:
             if args.ignore_invalid:
-                _LOGGER.error("Unable to parse model output file: %s: %s", model_output_file, err)
+                _LOGGER.error(
+                    "Unable to parse model output file: %s: %s", model_output_file, err
+                )
                 continue
-            raise ValueError(f"Unable to parse model output file: {model_output_file}: {str(err)}")
+            raise ValueError(
+                f"Unable to parse model output file: {model_output_file}: {str(err)}"
+            )
 
         label = BAD_LABEL
         unexpected_states = output.context["unexpected_states"]

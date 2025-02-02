@@ -29,8 +29,6 @@ options:
 import argparse
 import logging
 
-import pytest
-import yaml
 
 from home_assistant_datasets.tool.conftest import run_pytest_main
 

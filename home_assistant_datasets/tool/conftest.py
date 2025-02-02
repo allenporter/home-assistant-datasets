@@ -6,14 +6,13 @@ import datetime
 from typing import Any
 from collections.abc import Generator, Callable, Awaitable
 import enum
-from typing import Any, cast
+from typing import cast
 
 import yaml
 import pytest
 from homeassistant.util import dt as dt_util
 from homeassistant.core import HomeAssistant, Context
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er, llm
 from homeassistant.components.conversation import trace
 
@@ -23,7 +22,6 @@ from home_assistant_datasets.tool.data_model import (
     EvalTask,
     generate_tasks,
     EntityState,
-    ModelOutput,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -36,6 +34,7 @@ IGNORE_FILES = {
     "_home.yaml",
     DATASET_CARD_FILE,
 }
+
 
 def pytest_addoption(parser: Any) -> None:
     """Pytest arguments passed from the `collect` action to the test."""

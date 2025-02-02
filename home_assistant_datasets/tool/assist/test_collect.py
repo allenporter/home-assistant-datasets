@@ -5,7 +5,7 @@ from collections.abc import Callable, Awaitable
 import logging
 import uuid
 import dataclasses
-from typing import Any, cast
+from typing import Any
 import enum
 import json
 
@@ -13,10 +13,9 @@ import pytest
 import yaml
 from pyrate_limiter import Limiter
 
-from homeassistant.core import HomeAssistant, Context
+from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import entity_registry as er, llm
 from homeassistant.components.conversation import trace
 
 from home_assistant_datasets.fixtures import ConversationAgent, EvalRecordWriter
@@ -53,7 +52,7 @@ async def test_assist_actions(
 ) -> None:
     """Collects model responses for assist actions."""
     if rate_limiter:
-        rate_limiter.try_acquire('item')
+        rate_limiter.try_acquire("item")
 
     yaml.SafeDumper.add_multi_representer(
         enum.StrEnum,

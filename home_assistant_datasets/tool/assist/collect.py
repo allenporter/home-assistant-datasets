@@ -54,8 +54,6 @@ home-assistant-datasets assist collect: error: the following arguments are requi
 import argparse
 import logging
 
-import pytest
-import yaml
 
 from ..conftest import run_pytest_main
 
