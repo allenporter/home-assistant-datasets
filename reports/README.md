@@ -4,12 +4,12 @@
 | gemini-2.0-flash | $${\color{lime}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ |  |  |  |
 | gemini-1.5-flash | $${\color{green}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{green}91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${\color{gray}63.0\\% \space\color{gray}\tiny{\textsf{(CI: 7.4, 2024.8.0b)}}}$$ |
 | gpt-4o-mini | $${\color{green}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{green}90.0\\% \space\color{gray}\tiny{\textsf{(CI: 6.6, 2024.8.0b)}}}$$ | $${\color{gray}63.6\\% \space\color{gray}\tiny{\textsf{(CI: 7.3, 2024.8.0b)}}}$$ |
+| qwen2.5 | $${\color{teal}83.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2025.2.0b)}}}$$ | $${\color{teal}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.9.2)}}}$$ | $${\color{teal}81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ |  |
 | claude-3-5-haiku | $${\color{olive}79.6\\% \space\color{gray}\tiny{\textsf{(CI: 11.3, 2025.2.0b)}}}$$ |  |  |  |
 | llama3.3-awq |  | $${\color{lime}100.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ | $${\color{teal}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ |  |
 | claude-3-haiku |  | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ | $${\color{teal}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0b2)}}}$$ |  |
 | claude-3-5-sonnet |  | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ |  |  |
 | llama3.3 |  | $${\color{green}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ | $${\color{lime}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ |  |
-| qwen2.5 |  | $${\color{teal}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.9.2)}}}$$ | $${\color{teal}81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ |  |
 | xlam-7b |  | $${\color{teal}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.8.0b0)}}}$$ | $${\color{gray}51.2\\% \space\color{gray}\tiny{\textsf{(CI: 11.0, 2024.9.0dev)}}}$$ |  |
 | llama3.1 |  | $${\color{teal}83.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.8.0b0)}}}$$ | $${\color{gray}66.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2024.9.0dev)}}}$$ | $${\color{gray}43.6\\% \space\color{gray}\tiny{\textsf{(CI: 7.6, 2024.9.0dev)}}}$$ |
 | assist-llm |  | $${\color{teal}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0dev)}}}$$ | $${\color{gray}67.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.9.0dev)}}}$$ |  |
@@ -60,18 +60,19 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #0f9d58, #4285f4, #ea4335, #4285f4"
+            plotColorPalette: "#f4b400, #0f9d58, #4285f4, #fbbc04, #ea4335, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini-stateless"
-  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, gemini-2.0-flash, claude-3-5-haiku, .]
+  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, gemini-2.0-flash, claude-3-5-haiku, qwen2.5, .]
   y-axis "Score" 1 --> 100
-  bar [93.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 93.9, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 95.9, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 79.6, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, -1.0]
+  bar [93.9, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 93.9, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 95.9, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 79.6, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 83.7, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
 ### assist-mini
@@ -98,7 +99,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #f4b400, #0f9d58, #ff6d01, #34a853, #0f9d58, #46bdc6, #4285f4, #1155cc, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #34a853, #46bdc6, #fbbc04, #4285f4"
+            plotColorPalette: "#f4b400, #f4b400, #0f9d58, #46bdc6, #ff6d01, #0f9d58, #46bdc6, #4285f4, #ea4335, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #34a853, #1155cc, #34a853, #4285f4"
 
 ---
 xychart-beta
@@ -151,7 +152,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #d5a6bd, #1155cc, #f4b400, #0f9d58, #34a853, #0f9d58, #46bdc6, #1155cc, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #46bdc6, #fbbc04, #4285f4"
+            plotColorPalette: "#f4b400, #d5a6bd, #1155cc, #f4b400, #0f9d58, #ff6d01, #0f9d58, #46bdc6, #ea4335, #ea4335, #6aa84f, #d9ead3, #ff6d01, #d5a6bd, #674ea7, #fbbc04, #1155cc, #34a853, #4285f4"
 
 ---
 xychart-beta
