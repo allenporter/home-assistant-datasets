@@ -134,14 +134,21 @@ def compute_best_scores(
 
     def score_sort_key(model_id: str) -> list[float]:
         """Sort by dataset scores in order."""
-        scores = []
-        for dataset in DATASETS:
-            record = best_model_scores[model_id].get(dataset)
-            if record:
-                scores.append(record.good_percent_value())
-            else:
-                scores.append(0)
-        return scores
+        records = [
+            best_model_scores[model_id].get(dataset)
+            for dataset in DATASETS
+        ]
+        # Sort by average across each benchmark
+        tot = sum(record.good_percent_value() for record in records if record.total > 0)
+        cnt = sum(1 for record in records if record.total > 0)
+        avg = tot / cnt
+        return [
+            avg,
+            *[
+                record.good_percent_value()
+                for record in records
+            ]
+        ]
 
     # Generate overall report sorted by the first dataset score
     sorted_model_ids = sorted(
