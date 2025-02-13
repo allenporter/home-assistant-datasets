@@ -23,6 +23,8 @@ from home_assistant_datasets import data_model
 from .config import (
     REPORT_DIR,
     DATASETS,
+    SCORED_DATASETS,
+    AVERAGE_SCORE,
     eval_reports,
 )
 from . import table, chart
@@ -62,7 +64,7 @@ class ModelRecord:
     dataset_label: str
     good: int
     total: int
-    good_percent: str
+    good_percent: str | None = None
 
     def good_percent_value(self) -> float:
         if not self.total:
@@ -114,40 +116,43 @@ def compute_best_scores(
     """Compute the highest score for each model and dataset, filling in zero values where needed."""
     best_model_scores: dict[str, dict[str, ModelRecord]] = {}
     for model_id in model_scores:
-        best_model_scores[model_id] = {}
+        dataset_records = {}
         for dataset in DATASETS:
             if dataset not in model_scores[model_id]:
-                best_model_scores[model_id][dataset] = ModelRecord(
+                dataset_records[dataset] = ModelRecord(
                     model_id=model_id,
                     dataset=dataset,
                     dataset_label="",
                     good=0,
                     total=0,
-                    good_percent="",
                 )
             else:
                 records = model_scores[model_id][dataset]
                 records = sorted(
                     records, key=ModelRecord.good_percent_value, reverse=True
                 )
-                best_model_scores[model_id][dataset] = records[0]
+                dataset_records[dataset] = records[0]
+
+        # Compute the average as a synthetic record
+        tot = sum(record.total for record in dataset_records.values() if record.total > 0)
+        good = sum(record.good for record in dataset_records.values() if record.total > 0)
+        cnt = sum(1 for record in records if record.total > 0)
+        avg_record = ModelRecord(
+            model_id, dataset=SCORED_DATASETS, dataset_label=SCORED_DATASETS, good=good, total=tot,
+        )
+        dataset_records[AVERAGE_SCORE] = avg_record
+        best_model_scores[model_id] = dataset_records
+
 
     def score_sort_key(model_id: str) -> list[float]:
         """Sort by dataset scores in order."""
         records = [
             best_model_scores[model_id].get(dataset)
-            for dataset in DATASETS
+            for dataset in SCORED_DATASETS
         ]
-        # Sort by average across each benchmark
-        tot = sum(record.good_percent_value() for record in records if record.total > 0)
-        cnt = sum(1 for record in records if record.total > 0)
-        avg = tot / cnt
         return [
-            avg,
-            *[
-                record.good_percent_value()
-                for record in records
-            ]
+            record.good_percent_value()
+            for record in records
         ]
 
     # Generate overall report sorted by the first dataset score
@@ -164,7 +169,7 @@ def compute_best_dataset_scores(
 ) -> dict[str, set[str]]:
     """Compute the models that scored highest on each dataset."""
     best_dataset_scores = {}
-    for dataset in DATASETS:
+    for dataset in SCORED_DATASETS:
         max = 0.0
         best: set[str] = set({})
         for model in best_model_scores:
@@ -186,7 +191,7 @@ def create_leaderboard_table(
     """Create leaderboard markdown table."""
     cols = ["Model"]
     first_model_id = next(iter(best_model_scores.keys()))
-    for dataset in DATASETS:
+    for dataset in SCORED_DATASETS:
         assert best_model_scores[first_model_id][dataset]
         num_samples = best_model_scores[first_model_id][dataset].total
         text = [

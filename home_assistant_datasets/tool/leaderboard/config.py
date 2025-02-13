@@ -14,6 +14,11 @@ DATASETS = [
     "assist",
     "intents",
 ]
+AVERAGE_SCORE = "avg"
+SCORED_DATASETS = [
+    AVERAGE_SCORE,
+    *DATASETS,
+]
 IGNORE_REPORTS = {
     "reports/assist/2024.6.0dev-baseline-2024-05-27",
     "reports/assist/2024.6.0dev-v1-2024-05-27",
