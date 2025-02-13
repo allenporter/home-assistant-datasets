@@ -214,12 +214,16 @@ def create_leaderboard_table(
                 score = best_record.good_percent_value()
                 if model_id in best_dataset_scores[dataset]:
                     text_parts.append("\\color{lime}")
-                elif score >= 0.9:
+                elif score >= 0.95:
                     text_parts.append("\\color{green}")
-                elif score >= 0.8:
+                elif score >= 0.9:
                     text_parts.append("\\color{teal}")
-                elif score >= 0.7:
+                elif score >= 0.8:
                     text_parts.append("\\color{olive}")
+                elif score >= 0.7:
+                    text_parts.append("\\color{greenyellow}")
+                elif score >= 0.6:
+                    text_parts.append("\\color{yellowgreen}")
                 else:
                     text_parts.append("\\color{gray}")
                 text_parts.extend(
