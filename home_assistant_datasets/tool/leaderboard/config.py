@@ -9,8 +9,8 @@ _LOGGER = logging.getLogger(__name__)
 
 REPORT_DIR = "reports"
 DATASETS = [
-    "assist-mini-stateless",
     "assist-mini",
+    "assist-mini-stateless",
     "assist",
     "intents",
 ]
