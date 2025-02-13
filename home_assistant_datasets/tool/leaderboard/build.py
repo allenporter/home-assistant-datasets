@@ -134,26 +134,28 @@ def compute_best_scores(
                 dataset_records[dataset] = records[0]
 
         # Compute the average as a synthetic record
-        tot = sum(record.total for record in dataset_records.values() if record.total > 0)
-        good = sum(record.good for record in dataset_records.values() if record.total > 0)
-        cnt = sum(1 for record in records if record.total > 0)
+        tot = sum(
+            record.total for record in dataset_records.values() if record.total > 0
+        )
+        good = sum(
+            record.good for record in dataset_records.values() if record.total > 0
+        )
         avg_record = ModelRecord(
-            model_id, dataset=SCORED_DATASETS, dataset_label=SCORED_DATASETS, good=good, total=tot,
+            model_id,
+            dataset=AVERAGE_SCORE,
+            dataset_label=AVERAGE_SCORE,
+            good=good,
+            total=tot,
         )
         dataset_records[AVERAGE_SCORE] = avg_record
         best_model_scores[model_id] = dataset_records
 
-
     def score_sort_key(model_id: str) -> list[float]:
         """Sort by dataset scores in order."""
         records = [
-            best_model_scores[model_id].get(dataset)
-            for dataset in SCORED_DATASETS
+            best_model_scores[model_id].get(dataset) for dataset in SCORED_DATASETS
         ]
-        return [
-            record.good_percent_value()
-            for record in records
-        ]
+        return [record.good_percent_value() if record else 0 for record in records]
 
     # Generate overall report sorted by the first dataset score
     sorted_model_ids = sorted(

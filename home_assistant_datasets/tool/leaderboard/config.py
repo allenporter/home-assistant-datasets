@@ -12,7 +12,6 @@ DATASETS = [
     "assist-mini",
     "assist-mini-stateless",
     "assist",
-    "intents",
 ]
 AVERAGE_SCORE = "avg"
 SCORED_DATASETS = [
