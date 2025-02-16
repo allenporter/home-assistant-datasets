@@ -9,9 +9,9 @@
 | llama3.3 | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ |  | $${\color{teal}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ | $${\color{teal}92.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, avg)}}}$$ |
 | llama3.3-awq | $${\color{lime}100.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ |  | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ | $${\color{teal}91.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, avg)}}}$$ |
 | gpt-4o | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ |  | $${\color{olive}87.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${\color{olive}89.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.2, avg)}}}$$ |
+| gpt-3.5 | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.4)}}}$$ |  | $${\color{olive}80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\color{olive}86.0\\% \space\color{gray}\tiny{\textsf{(CI: 6.0, avg)}}}$$ |
 | claude-3-5-haiku | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${\color{greenyellow}79.6\\% \space\color{gray}\tiny{\textsf{(CI: 11.3, 2025.2.0b)}}}$$ |  | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, avg)}}}$$ |
 | qwen2.5 | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.9.2)}}}$$ | $${\color{olive}83.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2025.2.0b)}}}$$ | $${\color{olive}81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ | $${\color{olive}83.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
-| gpt-3.5 | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.4)}}}$$ |  | $${\color{greenyellow}75.0\\% \space\color{gray}\tiny{\textsf{(CI: 9.5, 2024.6.3)}}}$$ | $${\color{olive}82.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.5, avg)}}}$$ |
 | mistral-nemo | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, avg)}}}$$ |
 | llama3.1 | $${\color{olive}83.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.8.0b0)}}}$$ |  | $${\color{yellowgreen}66.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2024.9.0dev)}}}$$ | $${\color{greenyellow}72.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
 | assist-llm | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0dev)}}}$$ |  | $${\color{yellowgreen}67.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.9.0dev)}}}$$ | $${\color{greenyellow}72.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
@@ -59,7 +59,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#fbbc04, #6aa84f, #46bdc6, #ea4335, #f4b400, #fbbc04, #4285f4, #1155cc, #0f9d58, #ea4335, #d5a6bd, #674ea7, #d5a6bd, #ff6d01, #d9ead3, #0f9d58, #1155cc, #f4b400, #4285f4, #34a853, #46bdc6, #34a853, #ff6d01, #4285f4"
+            plotColorPalette: "#fbbc04, #1155cc, #46bdc6, #ea4335, #f4b400, #fbbc04, #4285f4, #d5a6bd, #0f9d58, #ea4335, #d5a6bd, #674ea7, #6aa84f, #ff6d01, #d9ead3, #0f9d58, #1155cc, #f4b400, #4285f4, #34a853, #46bdc6, #34a853, #ff6d01, #4285f4"
 
 ---
 xychart-beta
@@ -117,7 +117,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#ea4335, #f4b400, #fbbc04, #1155cc, #d5a6bd, #4285f4"
+            plotColorPalette: "#ea4335, #f4b400, #fbbc04, #d5a6bd, #6aa84f, #4285f4"
 
 ---
 xychart-beta
@@ -156,7 +156,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#fbbc04, #6aa84f, #46bdc6, #ea4335, #f4b400, #4285f4, #0f9d58, #ea4335, #d5a6bd, #d5a6bd, #ff6d01, #d9ead3, #0f9d58, #1155cc, #f4b400, #4285f4, #34a853, #34a853, #ff6d01, #4285f4"
+            plotColorPalette: "#fbbc04, #1155cc, #46bdc6, #ea4335, #f4b400, #4285f4, #0f9d58, #ea4335, #d5a6bd, #6aa84f, #ff6d01, #d9ead3, #0f9d58, #1155cc, #f4b400, #4285f4, #34a853, #34a853, #ff6d01, #4285f4"
 
 ---
 xychart-beta
@@ -164,7 +164,7 @@ xychart-beta
   x-axis "Model" [assistant, gpt-3.5, gpt-4o, gpt-4o-mini, gemini-1.5-flash, claude-3-5-sonnet, claude-3-haiku, functionary-small-v2.5, mistral-v3, qwen2.5, llama3-groq-tool-use, llama3.1, llama3.2-3b, llama3.2-1b, xlam-7b, assist-llm, home-llm, llama3.3, llama3.3-awq, .]
   y-axis "Score" 1 --> 100
   bar [37.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 75.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 80.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 87.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 91.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
