@@ -11,10 +11,10 @@ options:
 """
 
 import argparse
+import concurrent.futures
 import logging
 import pathlib
 import subprocess
-
 
 from .config import REPORT_DIR, eval_reports
 
@@ -29,6 +29,7 @@ EVAL_CMD = [
     "eval",
     "--output_type=report",
 ]
+WORKERS = 5
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -45,7 +46,7 @@ def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
     report_dir = pathlib.Path(args.report_dir)
 
-    for eval_report in eval_reports(report_dir):
+    def build_report(eval_report: str) -> None:
         print(f"Generating report for outputs in {eval_report.directory}")
         cmds = EVAL_CMD + [f"--model_output_dir={eval_report.directory}"]
         _LOGGER.debug(cmds)
@@ -57,5 +58,17 @@ def run(args: argparse.Namespace) -> int:
         output_file = eval_report.report_file
         output_file.write_bytes(report_output)
         print(f"Writing {output_file}")
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as executor:
+        futures = {
+            executor.submit(build_report, eval_report)
+            for eval_report in eval_reports(report_dir)
+        }
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as exc:
+                print('%r generated an exception: %s' % (url, exc))
+
 
     return 0
