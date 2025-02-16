@@ -138,6 +138,7 @@ def run(args: argparse.Namespace) -> int:
     pytest_args = [
         "--verbosity",
         str(verbosity),
+        "--random-order-seed=42",
         # See flags defined in conftest.py
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
