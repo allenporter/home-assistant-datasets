@@ -283,15 +283,14 @@ def run(args: argparse.Namespace) -> int:
         "## Datasets",
     ]
 
-    # TODO: Group models based on a rank of # of parameters (cloud, local, etc)
     # Use a fix set of colors for the model
     model_colors = chart.color_map(best_model_scores.keys())
     # Generate a bar chart for each dataset
     for dataset in DATASETS:
         models = []
         scores = []
-        for model_id in ranked_model_ids:
-            best_record = best_model_scores[model_id][dataset]
+        for model_id, records in best_model_scores.items():
+            best_record = records[dataset]
             if best_record.good_percent_value() == 0:
                 continue
             models.append(model_id)
