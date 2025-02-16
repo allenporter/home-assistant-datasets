@@ -25,6 +25,7 @@ IGNORE_REPORTS = {
     "reports/assist/2024.6.0dev-v3-2024-05-31",
 }
 REPORT_FILE = "reports.yaml"
+CSV_FILE = "report.csv"
 
 
 @dataclass
@@ -37,6 +38,9 @@ class EvalReport:
     def report_file(self) -> pathlib.Path:
         return self.directory / REPORT_FILE
 
+    @property
+    def csv_file(self) -> pathlib.Path:
+        return self.directory / CSV_FILE
 
 def eval_reports(report_dir: pathlib.Path) -> Generator[EvalReport, None, None]:
     """Generate the list of eval reports."""

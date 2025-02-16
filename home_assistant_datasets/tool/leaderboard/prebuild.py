@@ -27,7 +27,6 @@ EVAL_CMD = [
     "home-assistant-datasets",
     "assist",
     "eval",
-    "--output_type=report",
 ]
 WORKERS = 5
 
@@ -46,18 +45,21 @@ def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
     report_dir = pathlib.Path(args.report_dir)
 
-    def build_report(eval_report: str) -> None:
-        print(f"Generating report for outputs in {eval_report.directory}")
-        cmds = EVAL_CMD + [f"--model_output_dir={eval_report.directory}"]
+    def write_eval_output(cmds: list[str], output_file: pathlib.Path) -> None:
         _LOGGER.debug(cmds)
         p = subprocess.Popen(cmds, stdout=subprocess.PIPE)
         (report_output, _) = p.communicate()
         if p.returncode:
             return p.returncode
-
-        output_file = eval_report.report_file
-        output_file.write_bytes(report_output)
         print(f"Writing {output_file}")
+        output_file.write_bytes(report_output)
+
+    def build_report(eval_report: str) -> None:
+        print(f"Generating report for outputs in {eval_report.directory}")
+        cmds = EVAL_CMD + ["--output_type=report", f"--model_output_dir={eval_report.directory}"]
+        write_eval_output(cmds, eval_report.report_file)
+        cmds = EVAL_CMD + ["--output_type=csv", f"--model_output_dir={eval_report.directory}"]
+        write_eval_output(cmds, eval_report.csv_file)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as executor:
         futures = {
