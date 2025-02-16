@@ -1,15 +1,15 @@
 # Home LLM Leaderboard
-| Model | assist-mini $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini-stateless $${\color{gray}\small{\textsf{(n=0)}}}$$ | assist $${\color{gray}\small{\textsf{(n=129)}}}$$ |
+| Model | assist-mini $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini-stateless $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist $${\color{gray}\small{\textsf{(n=129)}}}$$ |
 | --- | --- | --- | --- |
-| claude-3-5-sonnet | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ |  | $${\color{lime}96.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.2.4)}}}$$ | $${\color{lime}96.1\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
-| claude-3-haiku | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ |  | $${\color{olive}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0b2)}}}$$ | $${\color{teal}94.0\\% \space\color{gray}\tiny{\textsf{(CI: 5.1, avg)}}}$$ |
-| gemini-2.0-flash | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${\color{lime}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ |  | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, avg)}}}$$ |
+| claude-3-5-sonnet | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ | $${\color{lime}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.2.4)}}}$$ | $${\color{lime}96.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.2.4)}}}$$ | $${\color{lime}96.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
+| claude-3-haiku | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${\color{olive}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0b2)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
+| gemini-2.0-flash | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ |  | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, avg)}}}$$ |
 | gemini-1.5-flash | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{teal}91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${\color{teal}93.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, avg)}}}$$ |
 | gpt-4o-mini | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{teal}90.0\\% \space\color{gray}\tiny{\textsf{(CI: 6.6, 2024.8.0b)}}}$$ | $${\color{teal}93.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, avg)}}}$$ |
 | llama3.3 | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ |  | $${\color{teal}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ | $${\color{teal}92.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, avg)}}}$$ |
 | llama3.3-awq | $${\color{lime}100.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ |  | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ | $${\color{teal}91.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, avg)}}}$$ |
-| gpt-4o | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ |  | $${\color{olive}87.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${\color{olive}89.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.2, avg)}}}$$ |
-| gpt-3.5 | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.4)}}}$$ |  | $${\color{olive}80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\color{olive}86.0\\% \space\color{gray}\tiny{\textsf{(CI: 6.0, avg)}}}$$ |
+| gpt-4o | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${\color{olive}87.8\\% \space\color{gray}\tiny{\textsf{(CI: 9.2, 2025.2.4)}}}$$ | $${\color{olive}87.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${\color{olive}89.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, avg)}}}$$ |
+| gpt-3.5 | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.4)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${\color{olive}80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\color{olive}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, avg)}}}$$ |
 | claude-3-5-haiku | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${\color{greenyellow}79.6\\% \space\color{gray}\tiny{\textsf{(CI: 11.3, 2025.2.0b)}}}$$ |  | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, avg)}}}$$ |
 | qwen2.5 | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.9.2)}}}$$ | $${\color{olive}83.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2025.2.0b)}}}$$ | $${\color{olive}81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ | $${\color{olive}83.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
 | mistral-nemo | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, avg)}}}$$ |
@@ -117,19 +117,23 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#fbbc04, #ea4335, #f4b400, #d5a6bd, #6aa84f, #4285f4"
+            plotColorPalette: "#1155cc, #46bdc6, #fbbc04, #ea4335, #f4b400, #4285f4, #d5a6bd, #0f9d58, #6aa84f, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini-stateless"
-  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, gemini-2.0-flash, claude-3-5-haiku, qwen2.5, .]
+  x-axis "Model" [gpt-3.5, gpt-4o, gpt-4o-mini, gemini-1.5-flash, gemini-2.0-flash, claude-3-5-sonnet, claude-3-5-haiku, claude-3-haiku, qwen2.5, .]
   y-axis "Score" 1 --> 100
-  bar [93.9, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 93.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 95.9, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 79.6, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 83.7, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
+  bar [93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 87.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 79.6, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.9, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.7, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
 ### assist
