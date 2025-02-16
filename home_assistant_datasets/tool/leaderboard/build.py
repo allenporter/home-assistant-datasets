@@ -46,6 +46,8 @@ Implementation notes:
 - Temperature settings are based on the default values used in integrations.
 """
 
+TOP_N = 12
+
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
     """Get parsed passed in arguments."""
@@ -294,6 +296,8 @@ def run(args: argparse.Namespace) -> int:
                 continue
             models.append(model_id)
             scores.append(best_record.good_percent_value() * 100)
+            if len(models) >= TOP_N:
+                break
 
         # Add an empty value to give more space outside of the controls
         models.append(".")
