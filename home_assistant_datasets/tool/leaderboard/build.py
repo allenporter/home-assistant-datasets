@@ -193,7 +193,7 @@ def create_leaderboard_table(
     """Create leaderboard markdown table."""
     cols = ["Model"]
     first_model_id = next(iter(best_model_scores.keys()))
-    for dataset in SCORED_DATASETS:
+    for dataset in DATASETS:
         assert best_model_scores[first_model_id][dataset]
         num_samples = best_model_scores[first_model_id][dataset].total
         text = [

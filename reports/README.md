@@ -1,6 +1,6 @@
 # Home LLM Leaderboard
-| Model | avg $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini-stateless $${\color{gray}\small{\textsf{(n=0)}}}$$ | assist $${\color{gray}\small{\textsf{(n=0)}}}$$ |
-| --- | --- | --- | --- | --- |
+| Model | assist-mini $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini-stateless $${\color{gray}\small{\textsf{(n=0)}}}$$ | assist $${\color{gray}\small{\textsf{(n=0)}}}$$ |
+| --- | --- | --- | --- |
 | claude-3-5-sonnet | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ |  |  | $${\color{lime}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
 | gemini-2.0-flash |  | $${\color{lime}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ |  | $${\color{lime}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
 | claude-3-haiku | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ |  | $${\color{olive}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0b2)}}}$$ | $${\color{teal}94.0\\% \space\color{gray}\tiny{\textsf{(CI: 5.1, avg)}}}$$ |
