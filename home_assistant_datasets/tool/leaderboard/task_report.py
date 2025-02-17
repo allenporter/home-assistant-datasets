@@ -13,11 +13,8 @@ options:
 import argparse
 from collections import Counter
 import csv
-import concurrent.futures
 import logging
 import pathlib
-import subprocess
-import yaml
 
 from .config import REPORT_DIR, eval_reports
 
@@ -26,6 +23,7 @@ __all__ = []
 _LOGGER = logging.getLogger(__name__)
 
 TOP_N = 15
+
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
     """Get parsed passed in arguments."""
@@ -41,8 +39,8 @@ def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
     report_dir = pathlib.Path(args.report_dir)
 
-    total = Counter()
-    bad = Counter()
+    total = Counter[str]()
+    bad = Counter[str]()
 
     for eval_report in eval_reports(report_dir):
         with eval_report.csv_file.open() as fd:
@@ -50,20 +48,21 @@ def run(args: argparse.Namespace) -> int:
             for row in csvfile:
                 if not row or len(row) < 2:
                     continue
-                task = row[1] # + "-" + row[4]
-                total[task] +=1
+                task = row[1]  # + "-" + row[4]
+                total[task] += 1
                 if row[3] == "Bad":
                     bad[task] += 1
 
-    percent = Counter()
+    percent = Counter[str]()
     for task in bad.elements():
-        bad_count = bad.get(task)
+        bad_count = bad.get(task) or 0
         total_count = total.get(task)
-        percent[task] = 100 * bad_count / total_count
+        assert total_count is not None
+        percent[task] = int((100.0 * bad_count) / total_count)
 
-
-    for task, percent in percent.most_common(TOP_N):
-        bad_count = bad.get(task)
-        print(f"{task} - {bad_count} - {100-percent:0.2f}%")
+    for task, pct in percent.most_common(TOP_N):
+        bad_count = bad.get(task) or 0
+        assert bad_count is not None
+        print(f"{task} - {bad_count} - {100-pct}%")
 
     return 0

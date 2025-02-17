@@ -16,7 +16,7 @@ import logging
 import pathlib
 import subprocess
 
-from .config import REPORT_DIR, eval_reports
+from .config import REPORT_DIR, eval_reports, EvalReport
 
 __all__ = []
 
@@ -50,15 +50,21 @@ def run(args: argparse.Namespace) -> int:
         p = subprocess.Popen(cmds, stdout=subprocess.PIPE)
         (report_output, _) = p.communicate()
         if p.returncode:
-            return p.returncode
+            raise ValueError("Error writing eval output")
         print(f"Writing {output_file}")
         output_file.write_bytes(report_output)
 
-    def build_report(eval_report: str) -> None:
+    def build_report(eval_report: EvalReport) -> None:
         print(f"Generating report for outputs in {eval_report.directory}")
-        cmds = EVAL_CMD + ["--output_type=report", f"--model_output_dir={eval_report.directory}"]
+        cmds = EVAL_CMD + [
+            "--output_type=report",
+            f"--model_output_dir={eval_report.directory}",
+        ]
         write_eval_output(cmds, eval_report.report_file)
-        cmds = EVAL_CMD + ["--output_type=csv", f"--model_output_dir={eval_report.directory}"]
+        cmds = EVAL_CMD + [
+            "--output_type=csv",
+            f"--model_output_dir={eval_report.directory}",
+        ]
         write_eval_output(cmds, eval_report.csv_file)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as executor:
@@ -70,7 +76,6 @@ def run(args: argparse.Namespace) -> int:
             try:
                 future.result()
             except Exception as exc:
-                print('%r generated an exception: %s' % (url, exc))
-
+                print("Task generated an exception: %s" % exc)
 
     return 0
