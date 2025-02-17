@@ -53,10 +53,7 @@ def yaml_decode(stream: Any, shape_type: Type[T] | Any) -> T:
     return YAMLDecoder(shape_type, pre_decoder_func=_default_decoder).decode(stream)  # type: ignore[no-any-return]
 
 
-def _include_tag_constructor(
-    loader: yaml.SafeLoader, node: yaml.nodes.ScalarNode
-) -> Any:
-    """Load a file from the filesystem."""
+def _include_file(loader: yaml.SafeLoader, node: yaml.nodes.ScalarNode) -> Path:
     path = Path(node.value)
     if not path.is_absolute():
         loader_path = Path(loader.name)
@@ -71,9 +68,24 @@ def _include_tag_constructor(
 
     if not path.is_file():
         raise FileNotFoundError(f"File '{path}' is not a file {str(node.start_mark)}")
+    return path
 
+
+def _include_tag_constructor(
+    loader: yaml.SafeLoader, node: yaml.nodes.ScalarNode
+) -> Any:
+    """Load a file from the filesystem."""
+    path = _include_file(loader, node)
     with path.open() as include_file:
         return yaml.load(include_file, Loader=FastSafeLoader)
+
+
+def _include_text_tag_constructor(
+    loader: yaml.SafeLoader, node: yaml.nodes.ScalarNode
+) -> Any:
+    """Load a text file from the filesystem."""
+    path = _include_file(loader, node)
+    return path.read_text()
 
 
 _missing_secrets: set[str] = set({})
@@ -95,4 +107,5 @@ def _get_secret_constructor(
 
 # Register the custom tag constructors.
 FastSafeLoader.add_constructor("!include", _include_tag_constructor)
+FastSafeLoader.add_constructor("!include_text", _include_text_tag_constructor)
 FastSafeLoader.add_constructor("!secret", _get_secret_constructor)

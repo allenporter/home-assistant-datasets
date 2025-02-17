@@ -11,9 +11,10 @@ options:
 ```
 """
 
-from . import collect
+from . import collect, eval
 
 SUBCMDS = {
     "collect": collect,
+    "eval": eval,
 }
 __all__ = list(SUBCMDS)

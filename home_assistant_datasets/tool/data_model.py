@@ -12,9 +12,12 @@ import pathlib
 from slugify import slugify
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
-from mashumaro.codecs.yaml import yaml_decode
+
+# from mashumaro.codecs.yaml import yaml_decode
 from mashumaro.config import BaseConfig
 import yaml
+
+from home_assistant_datasets.yaml_loaders import yaml_decode
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -95,10 +98,21 @@ class EvalTask(DataClassYAMLMixin):
     ignore_changes: dict[str, list[str]] | None = None
     """The device state changes to ignored."""
 
+    task_num: int | None = None
+    """If running multiple times, the task number under test."""
+
     @property
     def task_id(self) -> str:
         """An identifier that labels this area summary evaluation task."""
-        return f"{self.record_id}-{make_slug(self.input_text)}"
+        # Ignore multi-line problem statements
+        text_parts = self.input_text.split("\n")
+        id_parts = [
+            self.record_id,
+            make_slug(text_parts[0]),
+        ]
+        if self.task_num is not None:
+            id_parts.append(str(self.task_num))
+        return "-".join(id_parts)
 
 
 def make_slug(text: str) -> str:
@@ -108,8 +122,7 @@ def make_slug(text: str) -> str:
 
 def read_record(filename: pathlib.Path) -> Record:
     """Read the dataset record"""
-    content = filename.read_text()
-    return yaml_decode(content, Record)
+    return yaml_decode(filename.open(), Record)
 
 
 def generate_tasks(
@@ -117,6 +130,7 @@ def generate_tasks(
     dataset_path: pathlib.Path,
     output_dir: pathlib.Path,
     categories: set[str],
+    count: int | None = None,
 ) -> Generator[EvalTask, None, None]:
     """Read and validate the dataset."""
     # Generate the record id based on the file path
@@ -140,8 +154,6 @@ def generate_tasks(
     for action in record.tests or ():
         if not action.sentences:
             raise ValueError("No sentences defined for the action")
-        # if not action.expect_changes:
-        #     raise ValueError("No expect_changes defined for the action")
 
         # Override any state data
         entities = synthetic_home_yaml.get("entities", [])
@@ -165,17 +177,28 @@ def generate_tasks(
         )
 
         for sentence in action.sentences:
-            # if "Turn off all the fans" in sentence:
-            #     assert False, yaml_contents
-            yield EvalTask(
-                output_dir=output_dir,
-                synthetic_home_yaml=yaml_contents,
-                record_id=record_id,
-                category=record.category,
-                input_text=sentence,
-                expect_changes=action.expect_changes,
-                ignore_changes=action.ignore_changes,
-            )
+            if count is None:
+                yield EvalTask(
+                    output_dir=output_dir,
+                    synthetic_home_yaml=yaml_contents,
+                    record_id=record_id,
+                    category=record.category,
+                    input_text=sentence,
+                    expect_changes=action.expect_changes,
+                    ignore_changes=action.ignore_changes,
+                )
+            else:
+                for i in range(0, count):
+                    yield EvalTask(
+                        output_dir=output_dir,
+                        synthetic_home_yaml=yaml_contents,
+                        record_id=record_id,
+                        category=record.category,
+                        input_text=sentence,
+                        expect_changes=action.expect_changes,
+                        ignore_changes=action.ignore_changes,
+                        task_num=i,
+                    )
 
 
 @dataclass

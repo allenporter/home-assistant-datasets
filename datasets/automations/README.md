@@ -22,9 +22,23 @@ $ DATASET_DIR=datasets/automations/
 $ synthetic-home create_inventory ${DATASET_DIR}/light_on_door/_home.yaml > ${DATASET_DIR}/light_on_door/_fixtures.yaml
 ```
 
-## Evaluation
+## Solutions
 
-See `/docs/eval.md` for details on how to setup the environment.
+You can run the baseline solutions in `datasets/automations/` against the test
+harness. This runs the tests to ensure the existing solutions are correct.
+
+```
+$ DATASET_DIR=datasets/automations/
+$ home-assistant-datasets automation eval ${DATASET_DIR}
+```
+
+## Scrape
+
+See `/docs/eval.md` for details on how to setup the eval environment.
+
+Below is an example of scraping solutions from a model defined in `models.yaml`.
+Note that a model may be defined in terms of any conversatio agent, including
+custom components.
 
 ```
 $ DATASET_DIR=datasets/automations/
@@ -32,3 +46,7 @@ $ MODELS=gemini-1.5-flash
 $ OUTPUT_DIR=reports/automations/2025.2.0b
 $ home-assistant-datasets automation collect --models=${MODELS} --model_output_dir=${OUTPUT_DIR} --dataset=${DATASET_DIR}
 ```
+
+## Evaluate
+
+...

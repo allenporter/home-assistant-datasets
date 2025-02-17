@@ -7,7 +7,7 @@ details.
 Usage:
 ```
 usage: home-assistant-datasets automation collect [-h] [--dry_run] --models MODELS [--dataset DATASET] --model_output_dir MODEL_OUTPUT_DIR
-                                                  [--collect-only] [-s] [--verbose | --verbosity N]
+                                                  [--collect-only] [-s] [--count N] [--verbose | --verbosity N]
                                                   [test_path]
 
 positional arguments:
@@ -22,13 +22,14 @@ options:
                         Specifies the directory where output data from the model is stored.
   --collect-only        A pytest pass through flag to only collect the list of tests without actually running them.
   -s                    A pytest pass through flag to show streaming test output.
+  --count N             The number of collections to perform.
   --verbose, -v         A pytest pass through flag to increase verbosity.
-  --verbosity N         A pytest pass through flag to set verbosity. Default is 0```
+  --verbosity N         A pytest pass through flag to set verbosity. Default is 0
+```
 """
 
 import argparse
 import logging
-
 
 from home_assistant_datasets.tool.conftest import run_pytest_main
 
@@ -40,6 +41,7 @@ DEFAULT_DATASET = "datasets/automation"
 PLUGINS = [
     "home_assistant_datasets.fixtures",
 ]
+DEFAULT_COUNT = 10
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -77,7 +79,14 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         action="store_true",
         help="A pytest pass through flag to show streaming test output.",
     )
-
+    args.add_argument(
+        "--count",
+        action="store",
+        type=int,
+        metavar="N",
+        dest="count",
+        help="The number of collections to perform.",
+    )
     # Flags consistent with pytest for pass through
     args.add_argument(
         "test_path",
@@ -102,20 +111,26 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         dest="verbosity",
         help="A pytest pass through flag to set verbosity. Default is 0",
     )
-    args.set_defaults(verbosity=0)
+    args.set_defaults(verbosity=0, count=DEFAULT_COUNT)
 
 
 def run(args: argparse.Namespace) -> int:
     verbosity = args.verbosity
 
     pytest_args = [
-        "--verbosity",
-        str(verbosity),
         # See flags defined in conftest.py
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
+        f"--count={args.count}",
     ]
+    if verbosity:
+        pytest_args.extend(
+            [
+                "--verbosity",
+                str(verbosity),
+            ]
+        )
     if args.test_path:
         pytest_args.append(args.test_path)
     if args.collect_only:

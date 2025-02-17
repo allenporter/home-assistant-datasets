@@ -32,6 +32,7 @@ PLUGINS = [
 IGNORE_FILES = {
     "_fixtures.yaml",
     "_home.yaml",
+    "solution.yaml",
     DATASET_CARD_FILE,
 }
 
@@ -42,6 +43,7 @@ def pytest_addoption(parser: Any) -> None:
     parser.addoption("--models")
     parser.addoption("--model_output_dir")
     parser.addoption("--categories")
+    parser.addoption("--count")
 
 
 def pytest_generate_tests(metafunc: Any) -> None:
@@ -76,6 +78,10 @@ def pytest_generate_tests(metafunc: Any) -> None:
 
     categories_str = metafunc.config.getoption("categories")
     categories = set(categories_str.split(",") if categories_str else {})
+    if count := metafunc.config.getoption("count"):
+        count = int(count)
+    else:
+        count = None
 
     output_path = pathlib.Path(output_dir)
 
@@ -85,7 +91,9 @@ def pytest_generate_tests(metafunc: Any) -> None:
 
         try:
             eval_tasks = list(
-                generate_tasks(record_path, dataset_path, output_path, categories)
+                generate_tasks(
+                    record_path, dataset_path, output_path, categories, count
+                )
             )
         except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(
@@ -282,7 +290,7 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
     return result
 
 
-def _configure_yaml() -> None:
+def configure_yaml() -> None:
     """Configure pyyaml with some formatting options specific to our eval records."""
 
     # Skip any output for unknown tags
@@ -304,7 +312,7 @@ def _configure_yaml() -> None:
 def run_pytest_main(additional_args: list[str], directory: str) -> int:
     """Run pytest with the default set of arguments plus the additional args passed."""
 
-    _configure_yaml()
+    configure_yaml()
 
     # nest_asyncio.apply()
     pytest_args = [

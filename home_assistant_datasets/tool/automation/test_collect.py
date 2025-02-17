@@ -30,23 +30,11 @@ MAX_TRIES = 3
 
 
 @pytest.fixture(name="system_prompt")
-async def system_prompt_fixture(eval_task: EvalTask) -> str:
+async def system_prompt_fixture() -> str:
     """Fixture to provide the system prompt or None to use the default."""
     return textwrap.dedent(
         """
-        Create a Home Assistant automation YAML configuration based on the following
-        user request.
-
-        An example automation such as "When Paulus arrives home and it is after sunset: Turn the lights on in the living room."
-        will be broken up into these parts:
-
-        (trigger)    When Paulus arrives home
-        (condition)  and it is after sunset:
-        (action)     Turn the lights on in the living room
-
-        The first part is the trigger of the automation rule. Triggers describe events that should trigger the automation rule. In this case, it is a person arriving home, which can be observed in Home Assistant using devices/sensors by observing the state of Paulus changing from not_home to home.
-        The second part is the condition. Conditions are optional tests that can limit an automation rule to only work in your specific use cases. A condition will test against the current state of the system. This includes the current time, devices, people and other things like the sun. In this case, we only want to act when the sun has set.
-        The third part is the action, which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.
+        Create a Home Assistant blueprint YAML configuration based on the user request.
 
         Please respond only with markdown that contains yaml. You can
         add comments inline with your step by step thinking. The response must start
