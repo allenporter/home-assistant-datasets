@@ -11,6 +11,11 @@ from homeassistant.helpers import entity_registry as er
 
 
 @pytest.fixture(autouse=True)
+def expected_lingering_tasks() -> bool:
+    """Fixtures to avoid tasks around store shutdown."""
+    return True
+
+@pytest.fixture(autouse=True)
 def expected_lingering_timers() -> bool:
     """Fixtures to avoid timers around store shutdown."""
     return True
