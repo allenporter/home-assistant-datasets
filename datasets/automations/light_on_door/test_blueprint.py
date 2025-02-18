@@ -4,6 +4,7 @@ import asyncio
 import datetime
 import pathlib
 from collections.abc import Callable, Generator
+from typing import Any
 
 import pytest
 
@@ -17,25 +18,21 @@ from home_assistant_datasets.tool.data_model import EntityState
 
 PATH = pathlib.Path(__file__).parent
 FIXTURES = PATH / "_fixtures.yaml"
-SOLUTION = PATH / "_solution.yaml"
+SOLUTION = PATH / "solution.yaml"
 DOOR_ENTITY = "binary_sensor.pantry_door"
 LIGHT_ENTITY = "light.pantry_light"
-AUTOMATION_CONFIG = {
-    "alias": "Pantry light door",
-    "use_blueprint": {
-        "path": str(SOLUTION),
-        "input": {
-            "door_sensor": DOOR_ENTITY,
-            "light_switch": {
-                "entity_id": [LIGHT_ENTITY],
-            },
-        },
-    },
-}
+
 WAIT_TIMEOUT_SEC = 5.0
 
 # The problem statement asks for a 5 minute timeout, so set 10 minutes to be generous
 LIGHT_TIMEOUT = datetime.timedelta(minutes=10)
+
+
+def generate_blueprint_paths() -> str:
+    """Generate theblueprint paths to use when testing."""
+    return [
+        str(SOLUTION)
+    ]
 
 
 @pytest.fixture
@@ -44,11 +41,29 @@ def synthetic_home_yaml() -> str:
     return FIXTURES.read_text()
 
 
+@pytest.fixture(
+    params=generate_blueprint_paths(),
+)
+async def automation_config(request) -> dict[str, any]:
+    return {
+        "alias": "Pantry light door",
+        "use_blueprint": {
+            "path": request.param,
+            "input": {
+                "door_sensor": DOOR_ENTITY,
+                "light_switch": {
+                    "entity_id": [LIGHT_ENTITY],
+                },
+            },
+        },
+    }
+
+
 @pytest.fixture(autouse=True)
-async def automation_fixture(hass: HomeAssistant) -> None:
+async def automation_fixture(hass: HomeAssistant, automation_config: dict[str, Any]) -> None:
     """Fixture to set up the blueprint."""
     assert await async_setup_component(
-        hass, "automation", {"automation": [AUTOMATION_CONFIG]}
+        hass, "automation", {"automation": [automation_config]}
     )
     await hass.async_block_till_done()
 
