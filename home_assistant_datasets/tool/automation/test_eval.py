@@ -1,11 +1,3 @@
-# Fixtures
-# get_state: Callable[[], dict[str, EntityState]],
-# verify_state: Callable[
-#     [EvalTask, dict[str, EntityState], dict[str, EntityState]],
-#     Awaitable[dict[str, Any]],
-# ],
-# caplog: pytest.LogCaptureFixture,
-
 # Extract response
 # regexp = re.compile(r"```yaml\s*(.*?)\s+```", re.DOTALL | re.MULTILINE)
 # m = regexp.match(response)
@@ -22,15 +14,6 @@
 
 # Get the states of entity before the automation
 # states = get_state()
-
-
-# Verify state after the automation runs
-# updated_states = get_state()
-# unexpected_states: dict[str, Any] | str
-# try:
-#     unexpected_states = await verify_state(eval_task, states, updated_states)
-# except ValueError as err:
-#     unexpected_states = f"Error verifying state: {err}"
 
 
 # Record the output with expected changes
