@@ -1,24 +1,21 @@
-"""Test for the light on door blueprint."""
+"""Test for the light on door blueprint.
+
+See ../README.md for instructions on how to evaluation solutions.
+"""
 
 import asyncio
 import datetime
-import pathlib
 from collections.abc import Callable, Generator
-from typing import Any
 
 import pytest
 
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.setup import async_setup_component
 from homeassistant.helpers.event import async_track_state_change_event
 
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from home_assistant_datasets.tool.data_model import EntityState
 
-PATH = pathlib.Path(__file__).parent
-FIXTURES = PATH / "_fixtures.yaml"
-SOLUTION = PATH / "solution.yaml"
 DOOR_ENTITY = "binary_sensor.pantry_door"
 LIGHT_ENTITY = "light.pantry_light"
 
@@ -28,27 +25,12 @@ WAIT_TIMEOUT_SEC = 5.0
 LIGHT_TIMEOUT = datetime.timedelta(minutes=10)
 
 
-def generate_blueprint_paths() -> str:
-    """Generate theblueprint paths to use when testing."""
-    return [
-        str(SOLUTION)
-    ]
-
-
 @pytest.fixture
-def synthetic_home_yaml() -> str:
-    """Fixture to load synthetic home entities."""
-    return FIXTURES.read_text()
-
-
-@pytest.fixture(
-    params=generate_blueprint_paths(),
-)
-async def automation_config(request) -> dict[str, any]:
+async def automation_config(blueprint_path: str) -> dict[str, any]:
     return {
         "alias": "Pantry light door",
         "use_blueprint": {
-            "path": request.param,
+            "path": blueprint_path,
             "input": {
                 "door_sensor": DOOR_ENTITY,
                 "light_switch": {
@@ -57,15 +39,6 @@ async def automation_config(request) -> dict[str, any]:
             },
         },
     }
-
-
-@pytest.fixture(autouse=True)
-async def automation_fixture(hass: HomeAssistant, automation_config: dict[str, Any]) -> None:
-    """Fixture to set up the blueprint."""
-    assert await async_setup_component(
-        hass, "automation", {"automation": [automation_config]}
-    )
-    await hass.async_block_till_done()
 
 
 @pytest.fixture(name="light_state_change")
@@ -95,23 +68,16 @@ async def test_door_open(
 
     assert not light_state_change.is_set()
 
-    # Open the door
+    # Open the door and wait for the light to turn on
     hass.states.async_set(DOOR_ENTITY, "on")
-
-    # Wait for the light to turn on
     try:
         async with asyncio.timeout(WAIT_TIMEOUT_SEC):
             await light_state_change.wait()
     except TimeoutError as err:
         raise TimeoutError("Timeout waiting for light to turn on") from err
 
-    # Verify the automation has turned the light on
     expected_states = {**states, DOOR_ENTITY: "on", LIGHT_ENTITY: "on"}
     assert get_state() == expected_states
-
-    # Yield to the automation to let it set up the idle timeout or turn off trigger.
-    await asyncio.sleep(0.01)
-    light_state_change.clear()
 
 
 async def test_door_open_close(
@@ -126,17 +92,14 @@ async def test_door_open_close(
 
     assert not light_state_change.is_set()
 
-    # Open the door
+    # Open the door and wait for the light to turn on
     hass.states.async_set(DOOR_ENTITY, "on")
-
-    # Wait for the light to turn on
     try:
         async with asyncio.timeout(WAIT_TIMEOUT_SEC):
             await light_state_change.wait()
     except TimeoutError as err:
         raise TimeoutError("Timeout waiting for light to turn on") from err
 
-    # Verify the automation has turned the light on
     expected_states = {**states, DOOR_ENTITY: "on", LIGHT_ENTITY: "on"}
     assert get_state() == expected_states
 
@@ -158,7 +121,6 @@ async def test_door_open_close(
     except TimeoutError as err:
         raise TimeoutError("Timeout waiting for light to turn off") from err
 
-    # Verify the light has turned off
     expected_states = {**states, DOOR_ENTITY: "off", LIGHT_ENTITY: "off"}
     assert get_state() == expected_states
 
@@ -175,17 +137,14 @@ async def test_light_timeout(
 
     assert not light_state_change.is_set()
 
-    # Open the door
+    # Open the door and wait for the light to turn on
     hass.states.async_set(DOOR_ENTITY, "on")
-
-    # Wait for the light to turn on
     try:
         async with asyncio.timeout(WAIT_TIMEOUT_SEC):
             await light_state_change.wait()
     except TimeoutError as err:
         raise TimeoutError("Timeout waiting for light to turn on") from err
 
-    # Verify the automation has turned the light on
     expected_states = {**states, DOOR_ENTITY: "on", LIGHT_ENTITY: "on"}
     assert get_state() == expected_states
 

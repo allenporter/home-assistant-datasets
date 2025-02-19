@@ -1,8 +1,10 @@
 """Common librarys for collecting model outputs for evaluation."""
 
+from dataclasses import dataclass, field
 from typing import Any
 import pathlib
-from dataclasses import dataclass, field
+
+from slugify import slugify
 import yaml
 
 from . import yaml_loaders
@@ -11,6 +13,12 @@ from . import yaml_loaders
 MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
 DATASET_CARD_FILE = "dataset_card.yaml"
 DATASET_CARD_FILES = list(pathlib.Path("datasets").glob(f"**/{DATASET_CARD_FILE}"))
+DATASET_TASK_IGNORE_FILES = {
+    "_fixtures.yaml",
+    "_home.yaml",
+    "solution.yaml",
+    DATASET_CARD_FILE,
+}
 
 
 @dataclass(kw_only=True)
@@ -34,6 +42,7 @@ class DatasetCard:
 
     config_entry_options: dict[str, Any] | None = field(default=None)
     """Additional config entry options to include in model entry configs for this dataset."""
+
 
 @dataclass
 class EntryConfig:
@@ -137,3 +146,34 @@ def read_dataset_cards() -> list[DatasetCard]:
     for dataset_card in DATASET_CARD_FILES:
         cards.append(read_dataset_card(dataset_card))
     return cards
+
+
+def _make_slug(text: str) -> str:
+    """Shorthand slugify command"""
+    return slugify(text, separator="_")
+
+
+def read_dataset_files(dataset_path: pathlib.Path) -> dict[str, pathlib.Path]:
+    """Generate the list of dataset files for the given path."""
+
+    dataset_card = read_dataset_card(dataset_path / DATASET_CARD_FILE)
+    if dataset_card.path:
+        # The dataset card points to files in another directory
+        dataset_path = pathlib.Path(dataset_card.path)
+
+    def record_id(filename: pathlib.Path) -> str:
+        return _make_slug(str(filename.relative_to(dataset_path))[:-5])
+
+    # Tests are parameterized by the files that contain device actions. Ignore
+    # fixtures and load those separately below.
+    dataset_files = {
+        record_id(filename): filename
+        for filename in dataset_path.glob("**/*.yaml")
+        if filename.name not in DATASET_TASK_IGNORE_FILES
+    }
+    if not dataset_files:
+        raise ValueError(
+            f"Could not find any dataset files in path: {str(dataset_path)}"
+        )
+
+    return dataset_files

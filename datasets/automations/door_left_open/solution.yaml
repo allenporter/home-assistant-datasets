@@ -1,0 +1,39 @@
+---
+blueprint:
+  name: Door open alert
+  description: >
+    Sound an alarm on the media player when the door has been left open
+    for some amount of time.
+  domain: automation
+  input:
+    door_sensor:
+      name: Door Sensor
+      selector:
+        entity:
+          domain: binary_sensor
+          multiple: false
+    alert_media:
+      name: Alert media
+      selector:
+        media:
+    open_duration:
+      name: Door open duration
+      description: How long the door is open before an alert fires
+      default: 300
+      selector:
+        duration:
+
+mode: single
+max_exceeded: silent
+
+trigger:
+  - alias: Door opened
+    platform: state
+    entity_id: !input door_sensor
+    to: "on"
+    for: !input open_duration
+    id: door-open
+action:
+  - alias: Play alert media
+    service: media_player.play_media
+    data: !input alert_media

@@ -16,7 +16,9 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import entity_registry as er, llm
 from homeassistant.components.conversation import trace
 
-from home_assistant_datasets.data_model import DATASET_CARD_FILE, read_dataset_card
+from home_assistant_datasets.data_model import (
+    read_dataset_files,
+)
 
 from home_assistant_datasets.tool.data_model import (
     EvalTask,
@@ -29,12 +31,6 @@ _LOGGER = logging.getLogger(__name__)
 PLUGINS = [
     "home_assistant_datasets.fixtures",
 ]
-IGNORE_FILES = {
-    "_fixtures.yaml",
-    "_home.yaml",
-    "solution.yaml",
-    DATASET_CARD_FILE,
-}
 
 
 def pytest_addoption(parser: Any) -> None:
@@ -60,21 +56,9 @@ def pytest_generate_tests(metafunc: Any) -> None:
         raise ValueError("No dataset path specified")
     metafunc.parametrize("dataset", [dataset], scope="module")
 
-    dataset_path = pathlib.Path(dataset)
-    dataset_card = read_dataset_card(dataset_path / DATASET_CARD_FILE)
-    if dataset_card.path:
-        # The dataset card points to files in another directory
-        dataset_path = pathlib.Path(dataset_card.path)
-
     # Tests are parameterized by the files that contain device actions. Ignore
     # fixtures and load those separately below.
-    dataset_files = [
-        str(filename)
-        for filename in dataset_path.glob("**/*.yaml")
-        if filename.name not in IGNORE_FILES
-    ]
-    if not dataset_files:
-        raise ValueError(f"Could not find any dataset files in path: {dataset}")
+    dataset_files = read_dataset_files(pathlib.Path(dataset))
 
     categories_str = metafunc.config.getoption("categories")
     categories = set(categories_str.split(",") if categories_str else {})
@@ -86,14 +70,11 @@ def pytest_generate_tests(metafunc: Any) -> None:
     output_path = pathlib.Path(output_dir)
 
     tasks = []
-    for record_filename in dataset_files:
-        record_path = pathlib.Path(record_filename)
+    for record_id, record_path in dataset_files.items():
 
         try:
             eval_tasks = list(
-                generate_tasks(
-                    record_path, dataset_path, output_path, categories, count
-                )
+                generate_tasks(record_id, record_path, output_path, categories, count)
             )
         except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(

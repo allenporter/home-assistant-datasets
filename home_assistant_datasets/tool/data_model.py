@@ -126,18 +126,13 @@ def read_record(filename: pathlib.Path) -> Record:
 
 
 def generate_tasks(
+    record_id: str,
     record_path: pathlib.Path,
-    dataset_path: pathlib.Path,
     output_dir: pathlib.Path,
     categories: set[str],
     count: int | None = None,
 ) -> Generator[EvalTask, None, None]:
     """Read and validate the dataset."""
-    # Generate the record id based on the file path
-    relpath = record_path.relative_to(dataset_path)
-    assert relpath.name.endswith(".yaml")
-    record_id = make_slug(str(relpath)[:-5])
-
     # Find the fixtures for this directory. States will be overridden
     # below.
     fixture_path = record_path.parent / "_fixtures.yaml"

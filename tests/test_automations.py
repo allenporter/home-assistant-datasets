@@ -4,34 +4,21 @@ import pathlib
 
 import pytest
 
-from home_assistant_datasets.tool import data_model
-
 
 DATASET_PATH = pathlib.Path("datasets/automations/")
-IGNORE_FILES = {
-    "_fixtures.yaml",
-    "_home.yaml",
-    "dataset_card.yaml",
-}
-TEST_FILES = [
-    filename
-    for filename in DATASET_PATH.glob("**/*.yaml")
-    if filename.name not in IGNORE_FILES
+IGNORE_FILES = {"__pycache__"}
+PROBLEM_DIRS = [
+    child
+    for child in DATASET_PATH.iterdir()
+    if child.is_dir() and child.name not in IGNORE_FILES
 ]
 
 
 @pytest.mark.parametrize(
-    ("filename"), TEST_FILES, ids=(str(filename) for filename in TEST_FILES)
+    ("filename"), PROBLEM_DIRS, ids=(str(filename) for filename in PROBLEM_DIRS)
 )
-def test_eval_tasks(filename: pathlib.Path) -> None:
+def test_required_files(filename: pathlib.Path) -> None:
     """Test the format of the record files."""
-    eval_tasks = list(
-        data_model.generate_tasks(
-            filename, DATASET_PATH, pathlib.Path("/dev/null"), {"example"}
-        )
-    )
-
-    for eval_task in eval_tasks:
-        assert eval_task.output_dir
-        assert eval_task.input_text
-        assert eval_task.category
+    assert (filename / "DESCRIPTION.md").is_file()
+    assert (filename / "_fixtures.yaml").is_file()
+    assert (filename / "solution.yaml").is_file()
