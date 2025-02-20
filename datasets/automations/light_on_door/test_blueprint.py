@@ -161,6 +161,6 @@ async def test_light_timeout(
     except TimeoutError as err:
         raise TimeoutError("Timeout waiting for light to turn off") from err
 
-    # Verify the light has turned off
-    expected_states = {**states, DOOR_ENTITY: "off", LIGHT_ENTITY: "off"}
+    # Verify the light has turned off even though the door is still open
+    expected_states = {**states, DOOR_ENTITY: "on", LIGHT_ENTITY: "off"}
     assert get_state() == expected_states
