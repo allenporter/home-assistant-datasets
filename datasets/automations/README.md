@@ -58,9 +58,15 @@ $ home-assistant-datasets automation eval --model_output_dir=${OUTPUT_DIR} ${DAT
 
 ## Creating new Problems
 
+You may create a new problem in the benchmark by writing a description, writing a solution
+and test for it, then hooking it into the eval system.
+
 1. Write a `DESCRIPTION.md` that describes the high level problem, documents required inputs,
    and gives some example use cases.
-2. Pick an existing home to use from `devices-v3` and copy to `_home.yaml`.
-3. Create the `_fixtures.yaml` with the `create-inventory` command above.
-4. Write the unit tests `test_blueprint.py`.
-5. Write the `solution.yaml` and verify that it works with `test_blueprint.py`.
+2. Create a yaml file for the eval task, e.g. like `light_on_door/light_on_door.yaml`. This yaml file describes the problem by including the `DESCRIPTION.md` as a sentence,
+3. Create the `_fixtures.yaml` either manually or with the `create-inventory` command above. You can pick an existing home to use from `devices-v3` and copy to `_home.yaml` to use as input.
+4. Create the `solution.yaml` that takes the inputs described in `DESCRIPTION.md`.
+5. Verify the solution works with a `test_blueprint.py` running the eval command above under "Solutions".
+
+You can then collect predictions from models as shown above for the problem.
+TODO: We need to update the collect tool to allow scraping a single problem.
