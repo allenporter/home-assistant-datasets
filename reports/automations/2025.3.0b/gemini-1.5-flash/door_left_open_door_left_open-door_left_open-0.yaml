@@ -1,5 +1,5 @@
 ---
-uuid: 908682d3-26b3-4b4b-a009-a44467092956
+uuid: dc9b2585-98a4-4d59-8774-090d0d2a3bad
 task_id: door_left_open_door_left_open-door_left_open-0
 category: binary_sensor
 task:
@@ -31,59 +31,58 @@ task:
     The automation should play the selected media when the door has been open for the specified duration.
 response: |-
   ```yaml
+  alias: Door Left Open Alert
+  description: Plays an alert when a door is left open for a specified duration.
+  use_blueprint:
+    path: blueprint.yaml
+    input:
+      door_sensor: sensor.garage_door
+      alert_media:
+        media_player: media_player.living_room_speaker
+        media_content_id: your_alert_sound.mp3 # Replace with your alert sound
+      open_duration: "00:30:00"
+
   blueprint:
     name: Door Left Open Alert
-    description: Plays an alert when a door is left open for a specified duration.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: The binary sensor representing the door.
+        description: The door sensor to monitor.
         selector:
           entity:
             domain: binary_sensor
             device_class: door
       alert_media:
         name: Alert Media
-        description: The media player and media to play as an alert.
+        description: The media player and media to play the alert.
         selector:
           media:
-            type: media-player
+            type: media_player
       open_duration:
         name: Open Duration
         description: The duration the door must be open before triggering the alert.
         selector:
           duration:
-            default: "00:30:00"
+            default: 00:05:00
   mode: restart
-  variables:
-    door_is_open: "{{ is_state(inputs.door_sensor.value, 'on') }}"
   trigger:
     - platform: state
-      entity_id: !input door_sensor
+      entity_id: input.door_sensor
       from: "off"
       to: "on"
   condition:
     - condition: state
-      entity_id: !input door_sensor
+      entity_id: input.door_sensor
       state: "on"
+      for: "{{ input.open_duration }}"
   action:
-    - wait_for_trigger:
-        platform: time
-        seconds: "{{ (inputs.open_duration.value | as_timestamp) }}"
-    - choose:
-        - conditions:
-            - condition: state
-              entity_id: !input door_sensor
-              state: "on"
-          sequence:
-            - service: media_player.play_media
-              target:
-                entity_id: !input alert_media.entity_id
-              data:
-                media_content_id: !input alert_media.media_content_id
-                media_content_type: !input alert_media.media_content_type
-        - default: []
+    - service: media_player.play_media
+      target:
+        entity_id: "{{ input.alert_media.media_player }}"
+      data:
+        media_content_id: "{{ input.alert_media.media_content_id }}"
+        media_content_type: music # Adjust if needed
 
   ```
 context:
@@ -117,7 +116,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMFDEYYS4F71R2KD9FVVHAEC
+        id: 01JMKFFJYZYXBVHKWGW5WPAH80
         parent_id: null
         user_id: null
       conversation_id: null
@@ -131,7 +130,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 07:33:13. Today's date is 2025-02-19.
+          Current time is 21:25:28. Today's date is 2025-02-20.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -171,60 +170,62 @@ context:
         agent_id: conversation.mock_title
         content: |-
           ```yaml
+          alias: Door Left Open Alert
+          description: Plays an alert when a door is left open for a specified duration.
+          use_blueprint:
+            path: blueprint.yaml
+            input:
+              door_sensor: sensor.garage_door
+              alert_media:
+                media_player: media_player.living_room_speaker
+                media_content_id: your_alert_sound.mp3 # Replace with your alert sound
+              open_duration: "00:30:00"
+
           blueprint:
             name: Door Left Open Alert
-            description: Plays an alert when a door is left open for a specified duration.
             domain: automation
             input:
               door_sensor:
                 name: Door Sensor
-                description: The binary sensor representing the door.
+                description: The door sensor to monitor.
                 selector:
                   entity:
                     domain: binary_sensor
                     device_class: door
               alert_media:
                 name: Alert Media
-                description: The media player and media to play as an alert.
+                description: The media player and media to play the alert.
                 selector:
                   media:
-                    type: media-player
+                    type: media_player
               open_duration:
                 name: Open Duration
                 description: The duration the door must be open before triggering the alert.
                 selector:
                   duration:
-                    default: "00:30:00"
+                    default: 00:05:00
           mode: restart
-          variables:
-            door_is_open: "{{ is_state(inputs.door_sensor.value, 'on') }}"
           trigger:
             - platform: state
-              entity_id: !input door_sensor
+              entity_id: input.door_sensor
               from: "off"
               to: "on"
           condition:
             - condition: state
-              entity_id: !input door_sensor
+              entity_id: input.door_sensor
               state: "on"
+              for: "{{ input.open_duration }}"
           action:
-            - wait_for_trigger:
-                platform: time
-                seconds: "{{ (inputs.open_duration.value | as_timestamp) }}"
-            - choose:
-                - conditions:
-                    - condition: state
-                      entity_id: !input door_sensor
-                      state: "on"
-                  sequence:
-                    - service: media_player.play_media
-                      target:
-                        entity_id: !input alert_media.entity_id
-                      data:
-                        media_content_id: !input alert_media.media_content_id
-                        media_content_type: !input alert_media.media_content_type
-                - default: []
+            - service: media_player.play_media
+              target:
+                entity_id: "{{ input.alert_media.media_player }}"
+              data:
+                media_content_id: "{{ input.alert_media.media_content_id }}"
+                media_content_type: music # Adjust if needed
 
           ```
       tools: null
   tries: 0
+eval_result:
+  result: false
+  message: Automation enttiy id automation.pantry_light_door syntax likely not valid
