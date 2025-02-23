@@ -13,6 +13,8 @@ $ cat /tmp/report.yaml
 import io
 from dataclasses import dataclass, fields
 
+import pytest
+
 from home_assistant_datasets.tool.data_model import EvalMetric
 from home_assistant_datasets.tool.eval_report import (
     create_writer,
@@ -20,6 +22,7 @@ from home_assistant_datasets.tool.eval_report import (
     GOOD_LABEL,
     BAD_LABEL,
 )
+from .conftest import TestEvalMetric
 
 
 def test_eval_report(success: bool, eval_metric: EvalMetric) -> None:
@@ -29,11 +32,20 @@ def test_eval_report(success: bool, eval_metric: EvalMetric) -> None:
     assert success
 
 
-@dataclass(kw_only=True)
-class TestEvalMetric(EvalMetric):
-    """Test EvalMetric for the eval report."""
-
-    some_value: float | None = None
+@pytest.mark.parametrize(
+    "exc",
+    [
+        None,
+        ValueError("This is a test"),
+        TimeoutError("This is a test"),
+        TypeError("This is a test"),
+        AssertionError("This is a test"),
+    ]
+)
+def test_exception_repr(success: bool, exc: Exception | None) -> None:
+    """Test used for exercising the eval report."""
+    if not success and exc is not None:
+        raise exc
 
 
 def test_csv_report_writer() -> None:
@@ -44,8 +56,8 @@ def test_csv_report_writer() -> None:
     writer.row(TestEvalMetric(uuid="1234", task_id="task-id", model_id="model_id", some_value="val", label="Good"))
     writer.finish()
 
-    assert buf.getvalue() == """model_id,label,some_value
-"model_id","Good","val"
+    assert buf.getvalue() == """task_id,model_id,label,some_value,details
+"task-id","model_id","Good","val",""
 """
 
 

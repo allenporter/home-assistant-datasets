@@ -17,7 +17,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.setup import async_setup_component
 
 from home_assistant_datasets.tool.data_model import EvalMetric, ModelOutput
-from home_assistant_datasets.tool.eval_report import EvalReport
+from home_assistant_datasets.tool.eval_report import EvalReport, exception_repr
 
 
 FIXTURES = "_fixtures.yaml"
@@ -32,7 +32,7 @@ class AutomationEvalMetric(EvalMetric):
     """EvalMetric with additional information for automation evaluation."""
 
     details: str | None = None
-    """Path to the blueprint file."""
+    """Details about the test failure."""
 
 
 # pytest context variables used during testing
@@ -61,7 +61,7 @@ def pytest_runtest_makereport(item: Any, call: Any):
         report.eval_metric = item.config.stash.get(eval_metric_stash_key, None)
         assert report.eval_metric is not None, "EvalMetric not set"
         if report.failed:
-            report.eval_metric.details = report.longreprtext
+            report.eval_metric.details = exception_repr(report.longreprtext)
 
 
 def pytest_generate_tests(metafunc: Any) -> None:

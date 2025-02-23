@@ -96,6 +96,18 @@ class EvalReport:
             writer.row(eval_metric)
 
 
+def exception_repr(longreprtext: str) -> str:
+    """Return the exception message from the longreprtext."""
+    lines = longreprtext.split("\n")
+    excs: list[str] = []
+    for line in lines:
+        if line.startswith("E   "):
+            excs.append(line[4:].lstrip())
+    if excs:
+        return excs[-1]
+    return longreprtext
+
+
 class WriterBase:
     """Base class for eval output."""
 
@@ -120,8 +132,10 @@ class YamlWriter(WriterBase):
 
     def row(self, item: EvalMetric) -> None:
         """Dump the record in yaml format."""
+        record = dataclasses.asdict(item)
+        non_empty = {k: v for k, v in record.items() if v is not None}
         print(
-            yaml.dump(dataclasses.asdict(item), sort_keys=False, explicit_start=True),
+            yaml.dump(non_empty, sort_keys=False, explicit_start=True),
             file=self._fd,
         )
 
@@ -145,7 +159,8 @@ class CsvWriter(WriterBase):
         vals = []
         item_row = dataclasses.asdict(item)
         for col in self._cols:
-            val = str(item_row[col])
+            raw_value = item_row[col]
+            val = str(raw_value) if raw_value is not None else ""
             val = val.replace('"', "'")
             vals.append(f'"{val}"')
         print(",".join(vals), file=self._fd)
