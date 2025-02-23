@@ -12,6 +12,12 @@ DATASETS = [
     "assist-mini",
     "assist-mini-stateless",
     "assist",
+    "automations",
+]
+DATASETS_FOR_AVG = [
+    "assist-mini",
+    "assist-mini-stateless",
+    "assist",
 ]
 AVERAGE_SCORE = "avg"
 SCORED_DATASETS = [
@@ -41,6 +47,7 @@ class EvalReport:
     @property
     def csv_file(self) -> pathlib.Path:
         return self.directory / CSV_FILE
+
 
 def eval_reports(report_dir: pathlib.Path) -> Generator[EvalReport, None, None]:
     """Generate the list of eval reports."""

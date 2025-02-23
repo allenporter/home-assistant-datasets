@@ -25,6 +25,7 @@ from .config import (
     DATASETS,
     SCORED_DATASETS,
     AVERAGE_SCORE,
+    DATASETS_FOR_AVG,
     eval_reports,
 )
 from . import table, chart
@@ -137,10 +138,14 @@ def compute_best_scores(
 
         # Compute the average as a synthetic record
         tot = sum(
-            record.total for record in dataset_records.values() if record.total > 0
+            record.total
+            for record in dataset_records.values()
+            if record.total > 0 and record.dataset in DATASETS_FOR_AVG
         )
         good = sum(
-            record.good for record in dataset_records.values() if record.total > 0
+            record.good
+            for record in dataset_records.values()
+            if record.total > 0 and record.dataset in DATASETS_FOR_AVG
         )
         avg_record = ModelRecord(
             model_id,
