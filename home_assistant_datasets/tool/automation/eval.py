@@ -45,6 +45,16 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="Specifies the model output directory from `collect`.",
     )
     args.add_argument(
+        "--report_dir",
+        type=str,
+        help="Specifies the directory where the report will be written, or defaults to --model_output_dir.",
+    )
+    args.add_argument(
+        "--model_id",
+        type=str,
+        help="Specifies the model under test.",
+    )
+    args.add_argument(
         "--collect-only",
         action="store_true",
         help="A pytest pass through flag to only collect the list of tests without actually running them.",
@@ -96,6 +106,8 @@ def run(args: argparse.Namespace) -> int:
                 str(verbosity),
             ]
         )
+    if args.test_path:
+        pytest_args.append(args.test_path)
     if args.model_output_dir:
         pytest_args.extend(
             [
@@ -103,14 +115,25 @@ def run(args: argparse.Namespace) -> int:
                 args.model_output_dir,
             ]
         )
+    if args.report_dir:
+        pytest_args.extend(
+            [
+                "--report_dir",
+                args.report_dir,
+            ]
+        )
+    if args.model_id:
+        pytest_args.extend(
+            [
+                "--model_id",
+                args.model_id,
+            ]
+        )
 
-    if args.test_path:
-        pytest_args.append(args.test_path)
     if args.collect_only:
         pytest_args.append("--collect-only")
     if args.s:
         pytest_args.append("-s")
-
     configure_yaml()
 
     retcode = pytest.main(

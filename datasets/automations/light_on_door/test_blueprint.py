@@ -43,10 +43,9 @@ async def automation_config(blueprint_path: str) -> dict[str, any]:
 
 @pytest.fixture(name="light_state_change")
 async def light_event_fixture(
-    hass: HomeAssistant, automation: bool
+    hass: HomeAssistant,
 ) -> Generator[asyncio.Event]:
     """A fixture for an event that fires when the light state changes."""
-    assert automation, "Automation failed to setup"
     event = asyncio.Event()
 
     @callback

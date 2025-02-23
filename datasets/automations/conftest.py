@@ -39,16 +39,35 @@ class AutomationEvalMetric(EvalMetric):
 eval_metric_stash_key = pytest.StashKey[AutomationEvalMetric]()
 
 
-def pytest_addoption(parser: Any) -> None:
+def pytest_addoption(parser):
     """Pytest arguments passed from the `eval` action to the test."""
-    parser.addoption("--model_output_dir")
+    parser.addoption(
+        "--model_output_dir",
+        action="store",
+        default=None,
+        help="Specifies the model output directory from `collect`.",
+    )
+    parser.addoption(
+        "--report_dir",
+        action="store",
+        default=None,
+        help="Specifies the directory where the report will be written, or defaults to --model_output_dir.",
+    )
+    parser.addoption(
+        "--model_id",
+        action="store",
+        default=None,
+        help="Specifies the model under test.",
+    )
 
 
 def pytest_configure(config):
     """Register a plugin that generates the results of the eval."""
-    model_output_dir = config.getoption("model_output_dir")
-    if model_output_dir is not None:
-        report = EvalReport(pathlib.Path(model_output_dir), AutomationEvalMetric)
+    report_dir = config.getoption("report_dir")
+    if report_dir is None:
+        report_dir = config.getoption("model_output_dir")
+    if report_dir is not None:
+        report = EvalReport(pathlib.Path(report_dir), AutomationEvalMetric)
         config.pluginmanager.register(report)
 
 
@@ -59,8 +78,7 @@ def pytest_runtest_makereport(item: Any, call: Any):
     report = outcome.get_result()
     if report.when == "call":
         report.eval_metric = item.config.stash.get(eval_metric_stash_key, None)
-        assert report.eval_metric is not None, "EvalMetric not set"
-        if report.failed:
+        if report.eval_metric is not None and report.failed:
             report.eval_metric.details = exception_repr(report.longreprtext)
 
 
@@ -76,6 +94,7 @@ def pytest_generate_tests(metafunc: Any) -> None:
     # the predictions from the model output.
     if model_output_dir is None:
         metafunc.parametrize("model_output_file", [None], ids=[SOLUTION])
+        metafunc.parametrize("model_id", [None], ids=["solution"])
         return
 
     model_output_path = pathlib.Path(model_output_dir)
@@ -85,6 +104,9 @@ def pytest_generate_tests(metafunc: Any) -> None:
         report_files = model.glob("*.yaml")
         tasks.extend([str(report_file) for report_file in report_files])
     metafunc.parametrize("model_output_file", [pytest.param(task) for task in tasks])
+
+    model_id = metafunc.config.getoption("model_id")
+    metafunc.parametrize("model_id", [pytest.param(model_id)])
 
 
 @pytest.fixture(name="test_path")
@@ -163,11 +185,23 @@ async def model_output_fixture(model_output_file: str | None) -> ModelOutput | N
 
 
 @pytest.fixture(autouse=True)
+def limit_by_model_id_fixture(
+    model_id: str | None, model_output: ModelOutput | None, restore_tz: Any,
+) -> None:
+    """Fixture to skip tests that are not for the specified model."""
+    if model_id is None or model_output is None:
+        return
+    if model_output.model_id != model_id:
+        pytest.skip("skipped on this model_id: {}".format(model_id))
+
+
+@pytest.fixture(autouse=True)
 def eval_metric(
     pytestconfig: Any, model_output: ModelOutput | None, model_output_file: str | None
-) -> AutomationEvalMetric:
+) -> AutomationEvalMetric | None:
     """Fixture for the EvalMetric with details about this specific task for reporting."""
     if model_output_file is None or model_output is None:
+        yield None
         return
     eval_metric = AutomationEvalMetric(
         uuid=model_output.uuid,

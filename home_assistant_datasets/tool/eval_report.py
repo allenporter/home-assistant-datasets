@@ -104,7 +104,7 @@ def exception_repr(longreprtext: str) -> str:
         if line.startswith("E   "):
             excs.append(line[4:].lstrip())
     if excs:
-        return excs[-1]
+        return ",".join(excs[-2:])
     return longreprtext
 
 
