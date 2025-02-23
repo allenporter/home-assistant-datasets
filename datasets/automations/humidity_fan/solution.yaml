@@ -1,0 +1,68 @@
+---
+blueprint:
+  name: Pause the vacuum
+  description: >
+    Pause the vacuum when a phone call is received. This blueprint takes a
+    binary sensor that represents a phone call and a vacuum entity to pause.
+  domain: automation
+  input:
+    humidity_sensor:
+      name: Humidity sensor
+      description: The humidty sensor used to control the fan
+      selector:
+        entity:
+          domain: binary_sensor
+          multiple: false
+    humidity_level:
+      name: Humidity Level
+      description: The relative humidity level to trigger the fan.
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+    fan_entity:
+      name: Fan
+      description: The fan to control
+      selector:
+        entity:
+          domain: fan
+          multiple: false
+
+mode: single
+max_exceeded: silent
+
+triggers:
+  - alias: Humidity level reached
+    platform: numeric_state
+    entity_id: !input humidity_sensor
+    above: !input humidity_level
+    id: humidity-level-reached
+  - alias: Humidity level dropped
+    platform: numeric_state
+    entity_id: !input humidity_sensor
+    below: !input humidity_level
+    id: humidity-level-dropped
+actions:
+  - if:
+      - condition: trigger
+        id: humidity-level-reached
+      - condition: state
+        entity_id: !input fan_entity
+        state: "off"
+    then:
+      - alias: Turn on the fan
+        service: fan.turn_on
+        target:
+          entity_id: !input fan_entity
+  - if:
+      - condition: trigger
+        id: humidity-level-dropped
+      - condition: state
+        entity_id: !input fan_entity
+        state: "on"
+    then:
+      - alias: Turn on the fan
+        service: fan.turn_off
+        target:
+          entity_id: !input fan_entity

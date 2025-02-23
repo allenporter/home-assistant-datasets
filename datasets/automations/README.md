@@ -55,3 +55,12 @@ test cases. In the future you will be able to validate solutions like this:
 ```
 $ home-assistant-datasets automation eval --model_output_dir=${OUTPUT_DIR} ${DATASET_DIR}
 ```
+
+## Creating new Problems
+
+1. Write a `DESCRIPTION.md` that describes the high level problem, documents required inputs,
+   and gives some example use cases.
+2. Pick an existing home to use from `devices-v3` and copy to `_home.yaml`.
+3. Create the `_fixtures.yaml` with the `create-inventory` command above.
+4. Write the unit tests `test_blueprint.py`.
+5. Write the `solution.yaml` and verify that it works with `test_blueprint.py`.
