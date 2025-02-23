@@ -198,9 +198,44 @@ def generate_tasks(
 
 @dataclass
 class ModelOutput(DataClassYAMLMixin):
+    """The prediction result of a model."""
+
     uuid: str
+    """A unique id assigned to this prediction."""
+
     task_id: str
+    """An identifier for the task in the dataset."""
+
     category: str
+    """A label used for slicing model predictions."""
+
     task: dict[str, Any]
+    """Details about the original task for easier inspection of model predictions."""
+
     response: str
+    """The model prediction."""
+
     context: dict[str, Any]
+    """Additional context about the prediction run, e.g. internal model call details."""
+
+
+@dataclass
+class EvalMetric(DataClassYAMLMixin):
+    """Used for pointwise computation based metrics, comparing predictions to groundtruth.
+
+    This currently supports a success or failure rating for a single task.
+    Model performance on a dataset can be understood by aggregating ratings
+    across all tasks.
+    """
+
+    uuid: str
+    """The unique identifier for the model output/prediction."""
+
+    task_id: str
+    """An identifier for the task in the dataset."""
+
+    success: bool | None = None
+    """A pointwise computation based success or failure."""
+
+    context: dict[str, Any] = field(default_factory=dict)
+    """Additional context/detail from runtime of evaluating the prediction."""
