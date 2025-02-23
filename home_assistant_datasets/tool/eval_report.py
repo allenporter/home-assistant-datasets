@@ -21,6 +21,7 @@ BAD_LABEL = "Bad"
 REPORT_FILE = "reports.yaml"
 REPORT_DETAIL_FILE = "report.csv"
 IGNORE_CSV_COLS = {"uuid", "context"}
+SUMMARY_KEYS = {"model_id", "task_id"}
 
 
 class OutputType(enum.StrEnum):
@@ -30,8 +31,9 @@ class OutputType(enum.StrEnum):
 
 
 DEFAULT_REPORTS = [
-    ("reports.yaml", OutputType.REPORT),
-    ("report.csv", OutputType.CSV),
+    ("reports.yaml", OutputType.REPORT, "model_id"),
+    ("reports-by-task.yaml", OutputType.REPORT, "task_id"),
+    ("report.csv", OutputType.CSV, None),
 ]
 
 
@@ -49,13 +51,13 @@ class EvalReport:
     @pytest.hookimpl(trylast=True)
     def pytest_sessionstart(self, session: Any) -> None:
         """Invoked at the start of the session."""
-        for report_file, output_type in DEFAULT_REPORTS:
+        for report_file, output_type, summary_key in DEFAULT_REPORTS:
             file_path = self._model_output_dir / report_file
             _LOGGER.debug("Creating report file: %s", file_path)
             self._file_paths.append(file_path)
             fd = file_path.open("w")
             self._fd.append(fd)
-            writer = create_writer(output_type, self._cls, fd)
+            writer = create_writer(output_type, self._cls, fd, summary_key)
             writer.start()
             self._writers.append(writer)
 
@@ -169,38 +171,43 @@ class CsvWriter(WriterBase):
 class ReportWriter(WriterBase):
     """Handles creation of an eval report."""
 
-    def __init__(self, fd: io.TextIOBase) -> None:
+    def __init__(self, fd: io.TextIOBase, summary_key: str) -> None:
         """Initialize ReportWriter."""
         self._fd = fd
-        self.model_totals: dict[str, int] = {}
-        self.model_good: dict[str, int] = {}
+        self.summary_key = summary_key
+        self.totals: dict[str, int] = {}
+        self.good: dict[str, int] = {}
 
     def row(self, item: EvalMetric) -> None:
         """Handle a report row collecting the # of good labels for each model."""
-        model_id = item.model_id
-        if model_id not in self.model_totals:
-            self.model_totals[model_id] = 0
-            self.model_good[model_id] = 0
-        self.model_totals[model_id] += 1
+        key = getattr(item, self.summary_key)
+        if key not in self.totals:
+            self.totals[key] = 0
+            self.good[key] = 0
+        self.totals[key] += 1
         if item.label == GOOD_LABEL:
-            self.model_good[model_id] += 1
+            self.good[key] += 1
 
     def finish(self) -> None:
         """Print the report summary"""
+        sorted_keys = sorted(self.totals.keys())
         items = [
             {
-                "model_id": model_id,
-                "good_percent": f"{100*(self.model_good[model_id] / total):0.1f}%",
-                "good": self.model_good[model_id],
-                "total": total,
+                self.summary_key: key,
+                "good_percent": f"{100*(self.good[key] / self.totals[key]):0.1f}%",
+                "good": self.good[key],
+                "total": self.totals[key],
             }
-            for model_id, total in self.model_totals.items()
+            for key in sorted_keys
         ]
         print(yaml.dump(items, sort_keys=False, explicit_start=True), file=self._fd)
 
 
 def create_writer(
-    output_type: OutputType, cls: type[EvalMetric], fd: io.TextIOBase | None = None
+    output_type: OutputType,
+    cls: type[EvalMetric],
+    fd: io.TextIOBase | None = None,
+    summary_key: str | None = None,
 ) -> WriterBase:
     """Create a writer for the output type."""
     if fd is None:
@@ -214,5 +221,7 @@ def create_writer(
     if output_type == OutputType.YAML:
         return YamlWriter(fd)
     if output_type == OutputType.REPORT:
-        return ReportWriter(fd)
+        if summary_key is None:
+            summary_key = "model_id"
+        return ReportWriter(fd, summary_key)
     raise ValueError(f"Unknown output type: {output_type}")

@@ -14,7 +14,9 @@ from homeassistant.helpers.event import async_track_state_change_event
 
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
+from home_assistant_datasets.blueprint import BlueprintContentStatus, BlueprintContent
 from home_assistant_datasets.tool.data_model import EntityState
+
 
 DOOR_ENTITY = "binary_sensor.pantry_door"
 LIGHT_ENTITY = "light.pantry_light"
@@ -26,11 +28,11 @@ LIGHT_TIMEOUT = datetime.timedelta(minutes=10)
 
 
 @pytest.fixture
-async def automation_config(blueprint_path: str) -> dict[str, any]:
+async def automation_config(blueprint_content: BlueprintContent) -> dict[str, any]:
     return {
         "alias": "Pantry light door",
         "use_blueprint": {
-            "path": blueprint_path,
+            "path": blueprint_content.filename,
             "input": {
                 "door_sensor": DOOR_ENTITY,
                 "light_switch": {
@@ -59,12 +61,12 @@ async def light_event_fixture(
 
 async def test_door_open(
     hass: HomeAssistant,
-    automation: bool,
+    automation: BlueprintContentStatus,
     get_state: Callable[[], dict[str, EntityState]],
     light_state_change: asyncio.Event,
 ) -> None:
     """Test the light is controlled by opening the door."""
-    assert automation, "Automation failed to setup"
+    automation.assert_valid()
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(LIGHT_ENTITY) == "off"
@@ -85,12 +87,12 @@ async def test_door_open(
 
 async def test_door_open_close(
     hass: HomeAssistant,
-    automation: bool,
+    automation: BlueprintContentStatus,
     get_state: Callable[[], dict[str, EntityState]],
     light_state_change: asyncio.Event,
 ) -> None:
     """Test the light is controlled by opening and closing the door."""
-    assert automation, "Automation failed to setup"
+    automation.assert_valid()
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(LIGHT_ENTITY) == "off"
@@ -132,12 +134,12 @@ async def test_door_open_close(
 
 async def test_light_timeout(
     hass: HomeAssistant,
-    automation: bool,
+    automation: BlueprintContentStatus,
     get_state: Callable[[], dict[str, EntityState]],
     light_state_change: asyncio.Event,
 ) -> None:
     """Test the light is controlled by opening and closing the door."""
-    assert automation, "Automation failed to setup"
+    automation.assert_valid()
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(LIGHT_ENTITY) == "off"

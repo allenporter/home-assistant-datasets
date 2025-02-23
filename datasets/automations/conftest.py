@@ -4,8 +4,6 @@ import datetime
 from dataclasses import dataclass
 from collections.abc import Generator, Callable
 import pathlib
-import re
-import tempfile
 from slugify import slugify
 from typing import Any
 
@@ -18,13 +16,16 @@ from homeassistant.setup import async_setup_component
 
 from home_assistant_datasets.tool.data_model import EvalMetric, ModelOutput
 from home_assistant_datasets.tool.eval_report import EvalReport, exception_repr
+from home_assistant_datasets.blueprint import (
+    VALID_BLUEPRINT,
+    BlueprintContent,
+    BlueprintContentStatus,
+    extract_blueprint_content,
+)
 
 
 FIXTURES = "_fixtures.yaml"
 SOLUTION = "solution.yaml"
-
-# Regular expression to extract yaml/blueprint from the model output.
-YAML_RESPONSE = re.compile(r".*```yaml\s*(.*?)\s+```.*", re.DOTALL | re.MULTILINE)
 
 
 @dataclass
@@ -186,7 +187,9 @@ async def model_output_fixture(model_output_file: str | None) -> ModelOutput | N
 
 @pytest.fixture(autouse=True)
 def limit_by_model_id_fixture(
-    model_id: str | None, model_output: ModelOutput | None, restore_tz: Any,
+    model_id: str | None,
+    model_output: ModelOutput | None,
+    restore_tz: Any,
 ) -> None:
     """Fixture to skip tests that are not for the specified model."""
     if model_id is None or model_output is None:
@@ -214,42 +217,43 @@ def eval_metric(
     del pytestconfig.stash[eval_metric_stash_key]
 
 
-@pytest.fixture(name="model_output_blueprint_file")
+@pytest.fixture(name="model_output_blueprint")
 async def blueprint_yaml_fixture(
     model_output: ModelOutput | None,
-) -> Generator[str | None]:
+) -> Generator[BlueprintContent | None]:
     """Fixture to produce the yaml"""
     if model_output is None:
         yield None
         return
 
-    m = YAML_RESPONSE.match(model_output.response)
-    if not m or (match_text := m.group(1)) is None:
-        raise ValueError(f"Could not extract YAML from model response: {m}")
-
-    with tempfile.NamedTemporaryFile("w", suffix=".yaml", delete_on_close=False) as tf:
-        filename = tf.name
-        tf.write(match_text)
-        tf.close()
-        yield filename
+    with extract_blueprint_content(model_output.response) as content:
+        yield content
 
 
-@pytest.fixture(name="blueprint_path")
-def blueprint_path_fixture(
-    solution_path: pathlib.Path, model_output_blueprint_file: str | None
-) -> str:
+@pytest.fixture(name="blueprint_content")
+def blueprint_content_fixture(
+    solution_path: pathlib.Path, model_output_blueprint: BlueprintContent | None
+) -> BlueprintContent:
     """Fixture with the name of the blueprint file to load."""
-    if model_output_blueprint_file is None:
-        return solution_path
-    return model_output_blueprint_file
+    if model_output_blueprint is None:
+        # We're running against the solution, not a scraped model output
+        return BlueprintContent(
+            status=VALID_BLUEPRINT,
+            filename=str(solution_path),
+            yaml_content=solution_path.read_text(),
+        )
+    return model_output_blueprint
 
 
 @pytest.fixture(name="automation")
 async def automation_fixture(
     hass: HomeAssistant,
+    blueprint_content: BlueprintContent,
     automation_config: dict[str, Any],
-) -> bool:
+) -> BlueprintContentStatus:
     """Fixture to set up the blueprint, returns false if the automation seems invalid."""
+    if not blueprint_content.status.valid:
+        return blueprint_content.status
     assert await async_setup_component(
         hass, "automation", {"automation": [automation_config]}
     )
@@ -261,5 +265,7 @@ async def automation_fixture(
     states = hass.states.get(entity_id)
     assert states
     if states.state == "unavailable":
-        return False
-    return True
+        return BlueprintContentStatus(
+            valid=False, error_details="Unable to load automation."
+        )
+    return VALID_BLUEPRINT

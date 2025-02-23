@@ -14,8 +14,8 @@ from homeassistant.helpers.event import async_track_state_change_event
 
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
+from home_assistant_datasets.blueprint import BlueprintContentStatus, BlueprintContent
 from home_assistant_datasets.tool.data_model import EntityState
-
 
 DOOR_ENTITY = "binary_sensor.entry_door"
 MEDIA_PLAYER_ENTITY = "media_player.smart_speaker"
@@ -27,11 +27,11 @@ OPEN_DURATION = datetime.timedelta(minutes=15)
 
 
 @pytest.fixture
-async def automation_config(blueprint_path: str) -> dict[str, any]:
+async def automation_config(blueprint_content: BlueprintContent) -> dict[str, any]:
     return {
         "alias": "Door left open",
         "use_blueprint": {
-            "path": blueprint_path,
+            "path": blueprint_content.filename,
             "input": {
                 "door_sensor": DOOR_ENTITY,
                 "alert_media": {
@@ -64,12 +64,12 @@ async def media_player_state_changet_fixture(
 
 async def test_door_open_plays_media(
     hass: HomeAssistant,
-    automation: bool,
+    automation: BlueprintContentStatus,
     get_state: Callable[[], dict[str, EntityState]],
     media_player_state_change: asyncio.Event,
 ) -> None:
     """Test the media is played when the door is left open."""
-    assert automation, "Automation failed to setup"
+    automation.assert_valid()
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(MEDIA_PLAYER_ENTITY) == "off"
