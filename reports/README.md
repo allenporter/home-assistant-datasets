@@ -181,7 +181,7 @@ for a specific set of devices. The benchmark contains a event that should
 trigger the automation, and an expected end state.
 
 More information:
-- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/automation
+- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/automations
 
 ```mermaid
 ---
