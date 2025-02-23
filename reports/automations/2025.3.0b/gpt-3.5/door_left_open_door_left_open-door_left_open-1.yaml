@@ -1,5 +1,5 @@
 ---
-uuid: d29fbdbe-98ca-4bf5-89c3-3652373a308b
+uuid: 2812888c-9aea-4332-ac3e-b8394e2ebf43
 task_id: door_left_open_door_left_open-door_left_open-1
 model_id: null
 category: binary_sensor
@@ -30,7 +30,46 @@ task:
     | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
 
     The automation should play the selected media when the door has been open for the specified duration.
-response: Error talking to OpenAI
+response: |-
+  ```yaml
+  blueprint:
+    name: Door Left Open Alert
+    description: Play an alert on the speaker when the door is left open for a specified duration.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: A binary sensor entity for the door that triggers the alert.
+        selector:
+          entity:
+            domain: binary_sensor
+      alert_media:
+        name: Alert Media Player
+        description: Select the media player to play the alert message.
+        selector:
+          target:
+            entity:
+              domain: media_player
+      open_duration:
+        name: Open Duration
+        description: Select the time duration before playing the alert.
+        selector:
+          duration: {}
+
+  trigger:
+    platform: state
+    entity_id: !input door_sensor
+    to: 'on'
+    for: !input open_duration
+
+  action:
+    service: media_player.play_media
+    target:
+      entity_id: !input alert_media
+    data:
+      media_content_id: 'ALERT_SOUND_URL' # Replace this with the actual URL or media ID for your alert sound
+      media_content_type: 'music'
+  ```
 context:
   conversation_trace:
   - event_type: async_process
@@ -62,7 +101,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMSVPQ1GAMTGNJ94MTDK35RV
+        id: 01JMTAC4P7T98H8GW6NBYZ5VH3
         parent_id: null
         user_id: null
       conversation_id: null
@@ -76,7 +115,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 08:54:31. Today's date is 2025-02-23.
+          Current time is 13:10:53. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -112,5 +151,47 @@ context:
           | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
 
           The automation should play the selected media when the door has been open for the specified duration.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Door Left Open Alert
+            description: Play an alert on the speaker when the door is left open for a specified duration.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: A binary sensor entity for the door that triggers the alert.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              alert_media:
+                name: Alert Media Player
+                description: Select the media player to play the alert message.
+                selector:
+                  target:
+                    entity:
+                      domain: media_player
+              open_duration:
+                name: Open Duration
+                description: Select the time duration before playing the alert.
+                selector:
+                  duration: {}
+
+          trigger:
+            platform: state
+            entity_id: !input door_sensor
+            to: 'on'
+            for: !input open_duration
+
+          action:
+            service: media_player.play_media
+            target:
+              entity_id: !input alert_media
+            data:
+              media_content_id: 'ALERT_SOUND_URL' # Replace this with the actual URL or media ID for your alert sound
+              media_content_type: 'music'
+          ```
       tools: null
   tries: 0

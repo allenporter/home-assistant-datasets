@@ -1,5 +1,5 @@
 ---
-uuid: bdc636fc-9750-4232-b857-444ebf71f92e
+uuid: 93dcc104-518f-4ea1-ab76-7d299fa45f0b
 task_id: door_left_open_door_left_open-door_left_open-0
 model_id: null
 category: binary_sensor
@@ -30,7 +30,46 @@ task:
     | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
 
     The automation should play the selected media when the door has been open for the specified duration.
-response: Error talking to OpenAI
+response: |-
+  ```yaml
+  blueprint:
+    name: Door Left Open Alert
+    description: Play an alert on the speaker when the door is left open for a specific duration.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: "Select the binary sensor for the door that triggers the alert."
+        selector:
+          entity:
+            domain: binary_sensor
+      alert_media:
+        name: Alert Media Player
+        description: "Select the media player entity to play the alert sound/message."
+        selector:
+          target:
+            entity:
+              domain: media_player
+      open_duration:
+        name: Open Duration
+        description: "Select the duration after which the alert should be triggered."
+        selector:
+          duration: {}
+    source_url: https://github.com/my-hass/blueprints/door_left_open_alert.yaml
+
+  trigger:
+    platform: state
+    entity_id: !input door_sensor
+    to: 'on'
+    for: !input open_duration
+
+  action:
+    service: media_player.play_media
+    data:
+      entity_id: !input alert_media
+      media_content_id: "http://path_to_your_alert_media_file"
+      media_content_type: 'audio/mp3'
+  ```
 context:
   conversation_trace:
   - event_type: async_process
@@ -62,7 +101,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMSVPPN29HEAFPPXCJ4PHVEF
+        id: 01JMTAC2Q39A677SWAXGEBBQ2A
         parent_id: null
         user_id: null
       conversation_id: null
@@ -76,7 +115,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 08:54:31. Today's date is 2025-02-23.
+          Current time is 13:10:51. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -112,5 +151,47 @@ context:
           | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
 
           The automation should play the selected media when the door has been open for the specified duration.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Door Left Open Alert
+            description: Play an alert on the speaker when the door is left open for a specific duration.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: "Select the binary sensor for the door that triggers the alert."
+                selector:
+                  entity:
+                    domain: binary_sensor
+              alert_media:
+                name: Alert Media Player
+                description: "Select the media player entity to play the alert sound/message."
+                selector:
+                  target:
+                    entity:
+                      domain: media_player
+              open_duration:
+                name: Open Duration
+                description: "Select the duration after which the alert should be triggered."
+                selector:
+                  duration: {}
+            source_url: https://github.com/my-hass/blueprints/door_left_open_alert.yaml
+
+          trigger:
+            platform: state
+            entity_id: !input door_sensor
+            to: 'on'
+            for: !input open_duration
+
+          action:
+            service: media_player.play_media
+            data:
+              entity_id: !input alert_media
+              media_content_id: "http://path_to_your_alert_media_file"
+              media_content_type: 'audio/mp3'
+          ```
       tools: null
   tries: 0

@@ -1,5 +1,5 @@
 ---
-uuid: 3204017e-0d19-48d3-ae2b-56740853c8d3
+uuid: c7b987bd-7bb0-4629-9621-54e9dce52853
 task_id: light_on_door_light_on_door-light_on_door-1
 model_id: null
 category: binary_sensor
@@ -28,9 +28,31 @@ task:
 
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
-response: 'Sorry, I had a problem talking to Anthropic: Error code: 400 - {''type'':
-  ''error'', ''error'': {''type'': ''invalid_request_error'', ''message'': ''max_tokens:
-  8000 > 4096, which is the maximum allowed number of output tokens for claude-3-haiku-20240307''}}'
+response: "```yaml\nblueprint:\n  name: Light on door\n  description: Turn on a light\
+  \ when the door opens\n  domain: automation\n  input:\n    door_sensor:\n      name:\
+  \ Door sensor\n      description: Binary sensor that detects when the door opens\n\
+  \      selector:\n        entity:\n          domain: binary_sensor\n    light_switch:\n\
+  \      name: Light to control\n      description: Light entity to turn on when the\
+  \ door opens\n      selector:\n        entity:\n          domain: light\n\n  # This\
+  \ automation turns on the light when the door opens\n  trigger:\n    platform: state\n\
+  \    entity_id: !input door_sensor\n    to: 'open'\n\n  action:\n    - service:\
+  \ light.turn_on\n      target:\n        entity_id: !input light_switch\n\n  # This\
+  \ automation turns off the light when the door closes or after a timeout\n  trigger:\n\
+  \    - platform: state\n      entity_id: !input door_sensor\n      to: 'closed'\n\
+  \    - platform: time\n      after: '00:02:00'\n      \n  action:\n    - service:\
+  \ light.turn_off\n      target:\n        entity_id: !input light_switch\n```\n\n\
+  This blueprint defines an automation that turns on a light when a door opens, and\
+  \ turns it off when the door closes or after a 2 minute timeout.\n\nThe blueprint\
+  \ takes two inputs:\n- `door_sensor`: A binary sensor that detects when the door\
+  \ opens and closes.\n- `light_switch`: One or more light entities to control.\n\n\
+  The first trigger listens for the `door_sensor` to change to the `open` state, and\
+  \ when that happens, it turns on the `light_switch` entities.\n\nThe second trigger\
+  \ listens for the `door_sensor` to change to the `closed` state, or for 2 minutes\
+  \ to elapse after the door was opened. When either of those conditions are met,\
+  \ it turns off the `light_switch` entities.\n\nThis blueprint provides a flexible\
+  \ way to automate turning on a light when a door opens, and turning it off when\
+  \ the door closes or after a timeout, without having to write the entire automation\
+  \ from scratch."
 context:
   conversation_trace:
   - event_type: async_process
@@ -60,7 +82,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMSVN78Y10EEY8495H3TZET7
+        id: 01JMTAF54R10EEY8495H3TZET7
         parent_id: null
         user_id: null
       conversation_id: null
@@ -71,7 +93,7 @@ context:
   - event_type: agent_detail
     data:
       system: |-
-        Current time is 08:53:42. Today's date is 2025-02-23.
+        Current time is 13:12:32. Today's date is 2025-02-23.
 
         Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -105,4 +127,35 @@ context:
 
           The automation should trigger when the door opens, and turn the light on. The
           light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        content:
+        - type: text
+          text: "```yaml\nblueprint:\n  name: Light on door\n  description: Turn on\
+            \ a light when the door opens\n  domain: automation\n  input:\n    door_sensor:\n\
+            \      name: Door sensor\n      description: Binary sensor that detects\
+            \ when the door opens\n      selector:\n        entity:\n          domain:\
+            \ binary_sensor\n    light_switch:\n      name: Light to control\n   \
+            \   description: Light entity to turn on when the door opens\n      selector:\n\
+            \        entity:\n          domain: light\n\n  # This automation turns\
+            \ on the light when the door opens\n  trigger:\n    platform: state\n\
+            \    entity_id: !input door_sensor\n    to: 'open'\n\n  action:\n    -\
+            \ service: light.turn_on\n      target:\n        entity_id: !input light_switch\n\
+            \n  # This automation turns off the light when the door closes or after\
+            \ a timeout\n  trigger:\n    - platform: state\n      entity_id: !input\
+            \ door_sensor\n      to: 'closed'\n    - platform: time\n      after:\
+            \ '00:02:00'\n      \n  action:\n    - service: light.turn_off\n     \
+            \ target:\n        entity_id: !input light_switch\n```\n\nThis blueprint\
+            \ defines an automation that turns on a light when a door opens, and turns\
+            \ it off when the door closes or after a 2 minute timeout.\n\nThe blueprint\
+            \ takes two inputs:\n- `door_sensor`: A binary sensor that detects when\
+            \ the door opens and closes.\n- `light_switch`: One or more light entities\
+            \ to control.\n\nThe first trigger listens for the `door_sensor` to change\
+            \ to the `open` state, and when that happens, it turns on the `light_switch`\
+            \ entities.\n\nThe second trigger listens for the `door_sensor` to change\
+            \ to the `closed` state, or for 2 minutes to elapse after the door was\
+            \ opened. When either of those conditions are met, it turns off the `light_switch`\
+            \ entities.\n\nThis blueprint provides a flexible way to automate turning\
+            \ on a light when a door opens, and turning it off when the door closes\
+            \ or after a timeout, without having to write the entire automation from\
+            \ scratch."
   tries: 0

@@ -1,5 +1,5 @@
 ---
-uuid: 40c480ae-b575-41f3-8f02-752689a5a26b
+uuid: e09a3278-c374-402d-b8be-edc912276eec
 task_id: door_left_open_door_left_open-door_left_open-4
 model_id: null
 category: binary_sensor
@@ -30,7 +30,46 @@ task:
     | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
 
     The automation should play the selected media when the door has been open for the specified duration.
-response: Error talking to OpenAI
+response: |-
+  ```yaml
+  blueprint:
+    name: Door Left Open Alert
+    description: Play an alert on the speaker when a door is left open for a specified duration.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: The binary sensor representing the door.
+        selector:
+          entity:
+            domain: binary_sensor
+      alert_media:
+        name: Alert Media Player
+        description: The media player to play the alert.
+        selector:
+          target:
+            entity:
+              domain: media_player
+      open_duration:
+        name: Open Duration
+        description: The duration before playing the alert.
+        selector:
+          duration: {}
+
+  trigger:
+    platform: state
+    entity_id: !input door_sensor
+    to: 'on'
+    for: !input open_duration
+
+  action:
+    service: media_player.play_media
+    target:
+      entity_id: !input alert_media
+    data:
+      media_content_id: 'http://url_to_your_audio_file/alert.mp3'
+      media_content_type: music
+  ```
 context:
   conversation_trace:
   - event_type: async_process
@@ -62,7 +101,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMSVPR1AJQSZGRKEWF44SEED
+        id: 01JMTACBHMSQYFH9S47MKHT146
         parent_id: null
         user_id: null
       conversation_id: null
@@ -76,7 +115,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 08:54:32. Today's date is 2025-02-23.
+          Current time is 13:11:00. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -112,5 +151,47 @@ context:
           | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
 
           The automation should play the selected media when the door has been open for the specified duration.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Door Left Open Alert
+            description: Play an alert on the speaker when a door is left open for a specified duration.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: The binary sensor representing the door.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              alert_media:
+                name: Alert Media Player
+                description: The media player to play the alert.
+                selector:
+                  target:
+                    entity:
+                      domain: media_player
+              open_duration:
+                name: Open Duration
+                description: The duration before playing the alert.
+                selector:
+                  duration: {}
+
+          trigger:
+            platform: state
+            entity_id: !input door_sensor
+            to: 'on'
+            for: !input open_duration
+
+          action:
+            service: media_player.play_media
+            target:
+              entity_id: !input alert_media
+            data:
+              media_content_id: 'http://url_to_your_audio_file/alert.mp3'
+              media_content_type: music
+          ```
       tools: null
   tries: 0

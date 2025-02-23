@@ -1,5 +1,5 @@
 ---
-uuid: d33cd8c4-670c-4d32-88d4-efa9d4905b56
+uuid: eb23faf7-1298-4f6a-b80c-79db53414234
 task_id: light_on_door_light_on_door-light_on_door-3
 model_id: null
 category: binary_sensor
@@ -28,7 +28,20 @@ task:
 
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
-response: Error talking to OpenAI
+response: "```yaml\nblueprint:\n  name: Turn on Light on Door\n  description: Turn\
+  \ on a light when the door opens and turn it off after door closes or timeout.\n\
+  \  domain: automation\n  input:\n    door_sensor:\n      name: Door Sensor\n   \
+  \   description: The binary sensor that triggers the automation\n      selector:\n\
+  \        entity:\n          domain: binary_sensor\n    light_switch:\n      name:\
+  \ Light Switch\n      description: The light entity to turn on or off\n      selector:\n\
+  \        entity:\n          domain: light\n\ntrigger:\n  platform: state\n  entity_id:\
+  \ !input door_sensor\n  from: 'off'\n  to: 'on'\n\naction:\n  - variables:\n   \
+  \   light_entity: !input light_switch\n  - service: light.turn_on\n    target:\n\
+  \      entity_id: !input light_switch\n\nmode: single\n\nvariables:\n  timer_duration:\
+  \ \"00:02:00\"\n\ncleanup:\n  alias: Turn off light\n  mode: parallel\n  action:\n\
+  \    - wait_for_trigger:\n        platform: state\n        entity_id: !input door_sensor\n\
+  \        to: 'off'\n    - delay: \"{{ timer_duration }}\"\n    - service: light.turn_off\n\
+  \      target:\n        entity_id: !input light_switch\n```  "
 context:
   conversation_trace:
   - event_type: async_process
@@ -58,7 +71,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMSVPP0P3QW6MBT8DFRH59Y3
+        id: 01JMTABYS6BCXRYEG0S9Q9F8AA
         parent_id: null
         user_id: null
       conversation_id: null
@@ -72,7 +85,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 08:54:30. Today's date is 2025-02-23.
+          Current time is 13:10:47. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -106,5 +119,23 @@ context:
 
           The automation should trigger when the door opens, and turn the light on. The
           light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: "```yaml\nblueprint:\n  name: Turn on Light on Door\n  description:\
+          \ Turn on a light when the door opens and turn it off after door closes\
+          \ or timeout.\n  domain: automation\n  input:\n    door_sensor:\n      name:\
+          \ Door Sensor\n      description: The binary sensor that triggers the automation\n\
+          \      selector:\n        entity:\n          domain: binary_sensor\n   \
+          \ light_switch:\n      name: Light Switch\n      description: The light\
+          \ entity to turn on or off\n      selector:\n        entity:\n         \
+          \ domain: light\n\ntrigger:\n  platform: state\n  entity_id: !input door_sensor\n\
+          \  from: 'off'\n  to: 'on'\n\naction:\n  - variables:\n      light_entity:\
+          \ !input light_switch\n  - service: light.turn_on\n    target:\n      entity_id:\
+          \ !input light_switch\n\nmode: single\n\nvariables:\n  timer_duration: \"\
+          00:02:00\"\n\ncleanup:\n  alias: Turn off light\n  mode: parallel\n  action:\n\
+          \    - wait_for_trigger:\n        platform: state\n        entity_id: !input\
+          \ door_sensor\n        to: 'off'\n    - delay: \"{{ timer_duration }}\"\n\
+          \    - service: light.turn_off\n      target:\n        entity_id: !input\
+          \ light_switch\n```  "
       tools: null
   tries: 0

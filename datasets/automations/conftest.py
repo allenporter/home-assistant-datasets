@@ -79,8 +79,19 @@ def pytest_runtest_makereport(item: Any, call: Any):
     report = outcome.get_result()
     if report.when == "call":
         report.eval_metric = item.config.stash.get(eval_metric_stash_key, None)
-        if report.eval_metric is not None and report.failed:
-            report.eval_metric.details = exception_repr(report.longreprtext)
+        if report.eval_metric is not None:
+            # We can use the path and test name as the task id since it is more
+            # descriptive than the original problem name used as a task.
+            # For a nodeid like:
+            #  datasets/automations/light_on_door/test_blueprint.py::test_light_timeout[..../]
+            # We want a task id of `light_on_door-test_light_timeout`
+            node_parts = report.nodeid.split("::")
+            path_parts = node_parts[0].split("/")
+            report.eval_metric.task_id = "-".join(
+                [path_parts[-2], node_parts[-1].split("[")[0]]
+            )
+            if report.failed:
+                report.eval_metric.details = exception_repr(report.longreprtext)
 
 
 def pytest_generate_tests(metafunc: Any) -> None:
@@ -200,7 +211,9 @@ def limit_by_model_id_fixture(
 
 @pytest.fixture(autouse=True)
 def eval_metric(
-    pytestconfig: Any, model_output: ModelOutput | None, model_output_file: str | None
+    pytestconfig: Any,
+    model_output: ModelOutput | None,
+    model_output_file: str | None,
 ) -> AutomationEvalMetric | None:
     """Fixture for the EvalMetric with details about this specific task for reporting."""
     if model_output_file is None or model_output is None:
