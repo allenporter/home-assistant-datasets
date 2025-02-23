@@ -18,9 +18,21 @@ _LOGGER = logging.getLogger(__name__)
 
 GOOD_LABEL = "Good"
 BAD_LABEL = "Bad"
-REPORT_FILE = "report.yaml"
+REPORT_FILE = "reports.yaml"
 REPORT_DETAIL_FILE = "report.csv"
 IGNORE_CSV_COLS = {"uuid", "task_id", "context"}
+
+
+class OutputType(enum.StrEnum):
+    CSV = "csv"
+    YAML = "yaml"
+    REPORT = "report"
+
+
+DEFAULT_REPORTS = [
+    ("reports.yaml", OutputType.REPORT),
+    ("report.csv", OutputType.CSV),
+]
 
 
 class EvalReport:
@@ -28,28 +40,37 @@ class EvalReport:
 
     def __init__(self, model_output_dir: pathlib.Path) -> None:
         """Initialize report."""
-        self._report_file = model_output_dir / REPORT_FILE
-        self._eval_metrics: list[EvalMetric] = []
+        self._model_output_dir = model_output_dir
+        self._writers: list[WriterBase] = []
+        self._file_paths: list[str] = []
+        self._fd: list[io.TextIOBase] | None = []
+
+
+    @pytest.hookimpl(trylast=True)
+    def pytest_sessionstart(self, session: Any) -> None:
+        """Invoked at the start of the session."""
+        for report_file, output_type in DEFAULT_REPORTS:
+            self._file_paths.append(self._model_output_dir / report_file)
+            self._fd.append(self._file_paths[-1].open("w"))
+            self._writers.append(create_writer(output_type, EvalMetric, self._fd[-1]))
 
     @pytest.hookimpl(trylast=True)
     def pytest_sessionfinish(self, session: Any) -> None:
         """Invoked when all tests in the session have completed."""
         _LOGGER.debug("pytest_sessionfinish")
-        report_doc = {
-            "results": [
-                dataclasses.asdict(eval_metric) for eval_metric in self._eval_metrics
-            ]
-        }
-        report_doc_content = yaml.dump(report_doc, sort_keys=False, explicit_start=True)
-        self._report_file.write_text(report_doc_content)
+        for writer in self._writers:
+            writer.finish()
+        for fd in self._fd:
+            fd.close()
 
     @pytest.hookimpl(trylast=True)
     def pytest_terminal_summary(self, terminalreporter: Any) -> None:
         _LOGGER.debug("pytest_terminal_summary")
-        terminalreporter.write_sep(
-            "-",
-            f"Generated eval report: {str(self._report_file)}",
-        )
+        for report_file in self._file_paths:
+            terminalreporter.write_sep(
+                "-",
+                f"Generated eval report: {str(report_file)}",
+            )
 
     @pytest.hookimpl(trylast=True)
     def pytest_runtest_logreport(self, report: Any) -> None:
@@ -64,16 +85,11 @@ class EvalReport:
             )
 
         # Record the test failure in the eval metric
-        eval_metric.success = report.passed
+        eval_metric.label = GOOD_LABEL if report.passed else BAD_LABEL
 
-        # Append to the results used when generating the final report
-        self._eval_metrics.append(eval_metric)
+        for writer in self._writers:
+            writer.row(eval_metric)
 
-
-class OutputType(enum.StrEnum):
-    CSV = "csv"
-    YAML = "yaml"
-    REPORT = "report"
 
 
 class WriterBase:

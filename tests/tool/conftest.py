@@ -43,7 +43,7 @@ def consume_success_fixture(success: Any) -> None:
     pass
 
 
-@pytest.fixture(name="eval_metric")
+@pytest.fixture(name="eval_metric", autouse=True)
 def eval_metric_fixture(pytestconfig: Any) -> EvalMetric:
     """Add details to the eval reports."""
     eval_metric = EvalMetric(uuid="1234", task_id="task-id", model_id="model_id")
