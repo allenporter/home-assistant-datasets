@@ -2,6 +2,7 @@
 
 import pytest
 import pathlib
+from typing import Any
 
 from syrupy import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension

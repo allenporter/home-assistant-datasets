@@ -8,13 +8,15 @@ import pytest
 from home_assistant_datasets.tool.data_model import EvalMetric
 from home_assistant_datasets.tool.eval_report import EvalReport
 
+eval_metric_stash_key = pytest.StashKey[EvalMetric]()
+
 
 def pytest_addoption(parser: Any) -> None:
     """Pytest arguments passed from the `eval` action to the test."""
-    parser.addoption("--model_output_dir")
+    parser.addoption("--model_output_dir", default=None)
 
 
-def pytest_configure(config):
+def pytest_configure(config: Any) -> None:
     """Register a plugin that generates the results of the eval."""
     model_output_dir = config.getoption("model_output_dir")
     if model_output_dir is not None:
@@ -28,14 +30,18 @@ def pytest_generate_tests(metafunc: Any) -> None:
     This will add a mode that causes test_eval_report to have a failing test
     case that will make the report more useful.
     """
-    model_output_dir = metafunc.config.getoption("model_output_dir")
+    model_output_dir = metafunc.config.getoption("--model_output_dir")
     values = [True]
     if model_output_dir is not None:
         values.append(False)
     metafunc.parametrize("success", values)
 
 
-eval_metric_stash_key = pytest.StashKey[EvalMetric]()
+@pytest.fixture(autouse=True)
+def consume_success_fixture(success: Any) -> None:
+    """Consume the success value."""
+    pass
+
 
 
 @pytest.fixture(name="eval_metric")
