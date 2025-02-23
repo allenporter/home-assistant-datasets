@@ -245,15 +245,15 @@ async def blueprint_yaml_fixture(
 
 @pytest.fixture(name="blueprint_content")
 def blueprint_content_fixture(
-    solution_path: pathlib.Path, model_output_blueprint: BlueprintContent | None
+    solution_path: str, model_output_blueprint: BlueprintContent | None
 ) -> BlueprintContent:
     """Fixture with the name of the blueprint file to load."""
     if model_output_blueprint is None:
         # We're running against the solution, not a scraped model output
         return BlueprintContent(
             status=VALID_BLUEPRINT,
-            filename=str(solution_path),
-            yaml_content=solution_path.read_text(),
+            filename=solution_path,
+            yaml_content=pathlib.Path(solution_path).read_text(),
         )
     return model_output_blueprint
 
