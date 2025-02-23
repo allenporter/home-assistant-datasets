@@ -1,8 +1,12 @@
 """Fixtures for exercising automation solutions."""
 
 import datetime
+from dataclasses import dataclass
 from collections.abc import Generator, Callable
 import pathlib
+import re
+import tempfile
+from slugify import slugify
 from typing import Any
 
 import pytest
@@ -12,9 +16,75 @@ from homeassistant.util import dt as dt_util
 from homeassistant.helpers import entity_registry as er
 from homeassistant.setup import async_setup_component
 
+from home_assistant_datasets.tool.data_model import EvalMetric, ModelOutput
+from home_assistant_datasets.tool.eval_report import EvalReport
+
 
 FIXTURES = "_fixtures.yaml"
 SOLUTION = "solution.yaml"
+
+# Regular expression to extract yaml/blueprint from the model output.
+YAML_RESPONSE = re.compile(r".*```yaml\s*(.*?)\s+```.*", re.DOTALL | re.MULTILINE)
+
+
+@dataclass
+class AutomationEvalMetric(EvalMetric):
+    """EvalMetric with additional information for automation evaluation."""
+
+    details: str | None = None
+    """Path to the blueprint file."""
+
+
+# pytest context variables used during testing
+eval_metric_stash_key = pytest.StashKey[AutomationEvalMetric]()
+
+
+def pytest_addoption(parser: Any) -> None:
+    """Pytest arguments passed from the `eval` action to the test."""
+    parser.addoption("--model_output_dir")
+
+
+def pytest_configure(config):
+    """Register a plugin that generates the results of the eval."""
+    model_output_dir = config.getoption("model_output_dir")
+    if model_output_dir is not None:
+        report = EvalReport(pathlib.Path(model_output_dir), AutomationEvalMetric)
+        config.pluginmanager.register(report)
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item: Any, call: Any):
+    """Attach additional fixture data to the report."""
+    outcome = yield
+    report = outcome.get_result()
+    if report.when == "call":
+        report.eval_metric = item.config.stash.get(eval_metric_stash_key, None)
+        assert report.eval_metric is not None, "EvalMetric not set"
+        if report.failed:
+            report.eval_metric.details = report.longreprtext
+
+
+def pytest_generate_tests(metafunc: Any) -> None:
+    """Generate test parameters for the evaluation from flags.
+
+    The model output dir is the directory where prior model predictions
+    are stored, which are input for computing evaluation metrics.
+    """
+    # Parameterize tests by the models under development
+    model_output_dir = metafunc.config.getoption("model_output_dir")
+    # We're either in the mode of running the groundtruth solution or
+    # the predictions from the model output.
+    if model_output_dir is None:
+        metafunc.parametrize("model_output_file", [None], ids=[SOLUTION])
+        return
+
+    model_output_path = pathlib.Path(model_output_dir)
+    models = model_output_path.glob("*")
+    tasks = []
+    for model in models:
+        report_files = model.glob("*.yaml")
+        tasks.extend([str(report_file) for report_file in report_files])
+    metafunc.parametrize("model_output_file", [pytest.param(task) for task in tasks])
 
 
 @pytest.fixture(name="test_path")
@@ -41,13 +111,16 @@ def expected_lingering_timers() -> bool:
     return True
 
 
+# TODO: This needs to be really fixed
 @pytest.fixture(autouse=True)
-def restore_tz() -> Generator[None, None, None]:
+def restore_tz(hass: HomeAssistant) -> Generator[None, None, None]:
     """Fix Home Assistant teardown happening too soon."""
+    dt_util.set_default_time_zone(datetime.UTC)
     yield
     dt_util.set_default_time_zone(datetime.UTC)
 
 
+# TODO: Move to a common fixture location
 @pytest.fixture(name="get_state")
 def get_state_fixture(
     hass: HomeAssistant,
@@ -68,26 +141,91 @@ def get_state_fixture(
     return func
 
 
-def generate_blueprint_paths() -> str:
-    """Generate theblueprint paths to use when testing."""
-    return [str(SOLUTION)]
-
-
-@pytest.fixture(
-    name="blueprint_path",
-    params=generate_blueprint_paths(),
-)
-def blueprint_path_fixture(test_path: pathlib.Path, request) -> str:
+@pytest.fixture(name="solution_path")
+def solution_path_fixture(test_path: pathlib.Path) -> str:
     """Fixture with the name of the blueprint file to load."""
-    return str(test_path / request.param)
+    return str(test_path / SOLUTION)
+
+
+@pytest.fixture(name="model_output")
+async def model_output_fixture(model_output_file: str | None) -> ModelOutput | None:
+    """Fixture that produces the scaped model output record."""
+    if model_output_file is None:
+        return None
+    model_output_path = pathlib.Path(model_output_file)
+    model_output = ModelOutput.from_yaml(model_output_path.read_text())
+    if model_output.model_id is None:
+        # Infer the model id from the output path. The model file path historically
+        # has been reports/{dataset}/{model_id}/{task_id}.yaml. Going forward the
+        # model id will be stored in the model output file to make it more explicit.
+        model_output.model_id = model_output_path.parent.name
+    return model_output
 
 
 @pytest.fixture(autouse=True)
+def eval_metric(
+    pytestconfig: Any, model_output: ModelOutput | None, model_output_file: str | None
+) -> AutomationEvalMetric:
+    """Fixture for the EvalMetric with details about this specific task for reporting."""
+    if model_output_file is None or model_output is None:
+        return
+    eval_metric = AutomationEvalMetric(
+        uuid=model_output.uuid,
+        task_id=model_output.task_id,
+        model_id=model_output.model_id,
+        context={},
+    )
+    pytestconfig.stash[eval_metric_stash_key] = eval_metric
+    yield pytestconfig.stash[eval_metric_stash_key]
+    del pytestconfig.stash[eval_metric_stash_key]
+
+
+@pytest.fixture(name="model_output_blueprint_file")
+async def blueprint_yaml_fixture(
+    model_output: ModelOutput | None,
+) -> Generator[str | None]:
+    """Fixture to produce the yaml"""
+    if model_output is None:
+        yield None
+        return
+
+    m = YAML_RESPONSE.match(model_output.response)
+    if not m or (match_text := m.group(1)) is None:
+        raise ValueError(f"Could not extract YAML from model response: {m}")
+
+    with tempfile.NamedTemporaryFile("w", suffix=".yaml", delete_on_close=False) as tf:
+        filename = tf.name
+        tf.write(match_text)
+        tf.close()
+        yield filename
+
+
+@pytest.fixture(name="blueprint_path")
+def blueprint_path_fixture(
+    solution_path: pathlib.Path, model_output_blueprint_file: str | None
+) -> str:
+    """Fixture with the name of the blueprint file to load."""
+    if model_output_blueprint_file is None:
+        return solution_path
+    return model_output_blueprint_file
+
+
+@pytest.fixture(name="automation")
 async def automation_fixture(
-    hass: HomeAssistant, automation_config: dict[str, Any]
-) -> None:
-    """Fixture to set up the blueprint."""
+    hass: HomeAssistant,
+    automation_config: dict[str, Any],
+) -> bool:
+    """Fixture to set up the blueprint, returns false if the automation seems invalid."""
     assert await async_setup_component(
         hass, "automation", {"automation": [automation_config]}
     )
     await hass.async_block_till_done()
+
+    # Verify the automation is loaded
+    slug = slugify(automation_config["alias"], separator="_")
+    entity_id = f"automation.{slug}"
+    states = hass.states.get(entity_id)
+    assert states
+    if states.state == "unavailable":
+        return False
+    return True

@@ -42,9 +42,11 @@ async def automation_config(blueprint_path: str) -> dict[str, any]:
 
 
 @pytest.fixture(name="light_state_change")
-async def light_event_fixture(hass: HomeAssistant) -> Generator[asyncio.Event]:
+async def light_event_fixture(
+    hass: HomeAssistant, automation: bool
+) -> Generator[asyncio.Event]:
     """A fixture for an event that fires when the light state changes."""
-
+    assert automation, "Automation failed to setup"
     event = asyncio.Event()
 
     @callback
@@ -58,10 +60,12 @@ async def light_event_fixture(hass: HomeAssistant) -> Generator[asyncio.Event]:
 
 async def test_door_open(
     hass: HomeAssistant,
+    automation: bool,
     get_state: Callable[[], dict[str, EntityState]],
     light_state_change: asyncio.Event,
 ) -> None:
     """Test the light is controlled by opening the door."""
+    assert automation, "Automation failed to setup"
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(LIGHT_ENTITY) == "off"
@@ -82,10 +86,12 @@ async def test_door_open(
 
 async def test_door_open_close(
     hass: HomeAssistant,
+    automation: bool,
     get_state: Callable[[], dict[str, EntityState]],
     light_state_change: asyncio.Event,
 ) -> None:
     """Test the light is controlled by opening and closing the door."""
+    assert automation, "Automation failed to setup"
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(LIGHT_ENTITY) == "off"
@@ -127,10 +133,12 @@ async def test_door_open_close(
 
 async def test_light_timeout(
     hass: HomeAssistant,
+    automation: bool,
     get_state: Callable[[], dict[str, EntityState]],
     light_state_change: asyncio.Event,
 ) -> None:
     """Test the light is controlled by opening and closing the door."""
+    assert automation, "Automation failed to setup"
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(LIGHT_ENTITY) == "off"

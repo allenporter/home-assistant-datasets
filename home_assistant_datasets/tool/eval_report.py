@@ -20,7 +20,7 @@ GOOD_LABEL = "Good"
 BAD_LABEL = "Bad"
 REPORT_FILE = "reports.yaml"
 REPORT_DETAIL_FILE = "report.csv"
-IGNORE_CSV_COLS = {"uuid", "task_id", "context"}
+IGNORE_CSV_COLS = {"uuid", "context"}
 
 
 class OutputType(enum.StrEnum):
@@ -38,21 +38,26 @@ DEFAULT_REPORTS = [
 class EvalReport:
     """Class for wriing the summarized eval metric results."""
 
-    def __init__(self, model_output_dir: pathlib.Path) -> None:
+    def __init__(self, model_output_dir: pathlib.Path, cls: type[EvalMetric]) -> None:
         """Initialize report."""
         self._model_output_dir = model_output_dir
+        self._cls = cls
         self._writers: list[WriterBase] = []
-        self._file_paths: list[str] = []
-        self._fd: list[io.TextIOBase] | None = []
-
+        self._file_paths: list[pathlib.Path] = []
+        self._fd: list[io.TextIOBase] = []
 
     @pytest.hookimpl(trylast=True)
     def pytest_sessionstart(self, session: Any) -> None:
         """Invoked at the start of the session."""
         for report_file, output_type in DEFAULT_REPORTS:
-            self._file_paths.append(self._model_output_dir / report_file)
-            self._fd.append(self._file_paths[-1].open("w"))
-            self._writers.append(create_writer(output_type, EvalMetric, self._fd[-1]))
+            file_path = self._model_output_dir / report_file
+            _LOGGER.debug("Creating report file: %s", file_path)
+            self._file_paths.append(file_path)
+            fd = file_path.open("w")
+            self._fd.append(fd)
+            writer = create_writer(output_type, self._cls, fd)
+            writer.start()
+            self._writers.append(writer)
 
     @pytest.hookimpl(trylast=True)
     def pytest_sessionfinish(self, session: Any) -> None:
@@ -89,7 +94,6 @@ class EvalReport:
 
         for writer in self._writers:
             writer.row(eval_metric)
-
 
 
 class WriterBase:
@@ -181,7 +185,7 @@ class ReportWriter(WriterBase):
 
 
 def create_writer(
-    output_type: OutputType, cls: EvalMetric, fd: io.TextIOBase | None = None
+    output_type: OutputType, cls: type[EvalMetric], fd: io.TextIOBase | None = None
 ) -> WriterBase:
     """Create a writer for the output type."""
     if fd is None:
@@ -189,11 +193,7 @@ def create_writer(
         assert fd is not None
     if output_type == OutputType.CSV:
         return CsvWriter(
-            [
-                f.name
-                for f in dataclasses.fields(cls)
-                if f.name not in IGNORE_CSV_COLS
-            ],
+            [f.name for f in dataclasses.fields(cls) if f.name not in IGNORE_CSV_COLS],
             fd,
         )
     if output_type == OutputType.YAML:

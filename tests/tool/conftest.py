@@ -20,7 +20,7 @@ def pytest_configure(config: Any) -> None:
     """Register a plugin that generates the results of the eval."""
     model_output_dir = config.getoption("model_output_dir")
     if model_output_dir is not None:
-        report = EvalReport(pathlib.Path(model_output_dir))
+        report = EvalReport(pathlib.Path(model_output_dir), EvalMetric)
         config.pluginmanager.register(report)
 
 

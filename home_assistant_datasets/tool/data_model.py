@@ -196,7 +196,7 @@ def generate_tasks(
                     )
 
 
-@dataclass
+@dataclass(kw_only=True)
 class ModelOutput(DataClassYAMLMixin):
     """The prediction result of a model."""
 
@@ -205,6 +205,9 @@ class ModelOutput(DataClassYAMLMixin):
 
     task_id: str
     """An identifier for the task in the dataset."""
+
+    model_id: str | None = None
+    """The model identifier used to generate the prediction."""
 
     category: str
     """A label used for slicing model predictions."""

@@ -60,7 +60,7 @@ class AssistEvalMetric(EvalMetric):
     text: str
     response: str
     tool_call: dict[str, Any] | None
-    entity_diff: dict[str, Any] | None
+    entity_diff: dict[str, Any] | str | None
 
 
 def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:

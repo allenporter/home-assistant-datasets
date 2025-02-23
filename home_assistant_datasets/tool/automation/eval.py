@@ -40,6 +40,11 @@ PLUGINS = [
 def create_arguments(args: argparse.ArgumentParser) -> None:
     """Get parsed passed in arguments."""
     args.add_argument(
+        "--model_output_dir",
+        type=str,
+        help="Specifies the model output directory from `collect`.",
+    )
+    args.add_argument(
         "--collect-only",
         action="store_true",
         help="A pytest pass through flag to only collect the list of tests without actually running them.",
@@ -91,6 +96,14 @@ def run(args: argparse.Namespace) -> int:
                 str(verbosity),
             ]
         )
+    if args.model_output_dir:
+        pytest_args.extend(
+            [
+                "--model_output_dir",
+                args.model_output_dir,
+            ]
+        )
+
     if args.test_path:
         pytest_args.append(args.test_path)
     if args.collect_only:

@@ -64,10 +64,12 @@ async def media_player_state_changet_fixture(
 
 async def test_door_open_plays_media(
     hass: HomeAssistant,
+    automation: bool,
     get_state: Callable[[], dict[str, EntityState]],
     media_player_state_change: asyncio.Event,
 ) -> None:
     """Test the media is played when the door is left open."""
+    assert automation, "Automation failed to setup"
     states = get_state()
     assert states.get(DOOR_ENTITY) == "off"
     assert states.get(MEDIA_PLAYER_ENTITY) == "off"

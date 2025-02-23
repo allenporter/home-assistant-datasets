@@ -43,8 +43,8 @@ custom components.
 ```
 $ DATASET_DIR=datasets/automations/
 $ MODELS=gemini-1.5-flash
-$ OUTPUT_DIR=reports/automations/2025.2.0b
-$ home-assistant-datasets automation collect --models=${MODELS} --model_output_dir=${OUTPUT_DIR} --dataset=${DATASET_DIR} --count=10
+$ OUTPUT_DIR=reports/automations/2025.3.0b
+$ home-assistant-datasets automation collect --models=${MODELS} --model_output_dir=${OUTPUT_DIR} --dataset=${DATASET_DIR} --count=5
 ```
 
 ## Evaluate
@@ -53,5 +53,5 @@ Now that the model has generated output, you can run them against the solution
 test cases. In the future you will be able to validate solutions like this:
 
 ```
-$ home-assistant-datasets automation eval ${DATASET_DIR} --report_dir=${OUTPUT_DIR}
+$ home-assistant-datasets automation eval --model_output_dir=${OUTPUT_DIR} ${DATASET_DIR}
 ```
