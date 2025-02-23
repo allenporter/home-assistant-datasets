@@ -43,11 +43,10 @@ def consume_success_fixture(success: Any) -> None:
     pass
 
 
-
 @pytest.fixture(name="eval_metric")
 def eval_metric_fixture(pytestconfig: Any) -> EvalMetric:
     """Add details to the eval reports."""
-    eval_metric = EvalMetric(uuid="1234", task_id="task-id",)
+    eval_metric = EvalMetric(uuid="1234", task_id="task-id", model_id="model_id")
     pytestconfig.stash[eval_metric_stash_key] = eval_metric
     yield eval_metric
     del pytestconfig.stash[eval_metric_stash_key]
@@ -55,7 +54,7 @@ def eval_metric_fixture(pytestconfig: Any) -> EvalMetric:
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item: Any, call: Any):
-    """Attatch additonal fixture data to the report."""
+    """Attach additional fixture data to the report."""
     outcome = yield
     report = outcome.get_result()
     if report.when == "call":

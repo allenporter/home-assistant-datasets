@@ -234,8 +234,11 @@ class EvalMetric(DataClassYAMLMixin):
     task_id: str
     """An identifier for the task in the dataset."""
 
-    success: bool | None = None
-    """A pointwise computation based success or failure."""
+    model_id: str
+    """The model identifier used to generate the prediction."""
+
+    label: str | None = None
+    """The groundtruth label for the task, can be 'GOOD' or 'BAD' when computation."""
 
     context: dict[str, Any] = field(default_factory=dict)
     """Additional context/detail from runtime of evaluating the prediction."""

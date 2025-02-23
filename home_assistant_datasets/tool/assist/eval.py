@@ -23,6 +23,7 @@ options:
 """
 
 import argparse
+from dataclasses import dataclass
 import logging
 import pathlib
 from typing import Any
@@ -33,12 +34,33 @@ from mashumaro.exceptions import MissingField
 
 from homeassistant.components.conversation import trace
 
-from home_assistant_datasets.tool.data_model import ModelOutput
-from .eval_output import GOOD_LABEL, BAD_LABEL, create_writer, OutputType
+from home_assistant_datasets.tool.data_model import ModelOutput, EvalMetric
+from home_assistant_datasets.tool.eval_report import (
+    GOOD_LABEL,
+    BAD_LABEL,
+    create_writer,
+    OutputType,
+)
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
+
+
+SKIP_COLUMNS = ["uuid"]
+
+
+@dataclass(kw_only=True)
+class AssistEvalMetric(EvalMetric):
+    """Eval Metric for the assist dataset."""
+
+    category: str
+    task_prefix: str
+    label: str
+    text: str
+    response: str
+    tool_call: dict[str, Any] | None
+    entity_diff: dict[str, Any] | None
 
 
 def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -91,7 +113,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
 def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
     model_outputs = pathlib.Path(args.model_output_dir)
-    writer = create_writer(args.output_type)
+    writer = create_writer(args.output_type, AssistEvalMetric)
     writer.start()
     for model_output_file in model_outputs.glob("*/**/*.yaml"):
         stem = model_output_file.relative_to(model_outputs)
@@ -123,18 +145,18 @@ def run(args: argparse.Namespace) -> int:
                     f"Incorrect expected states logic in {model_output_file}? Response said Sorry but no unexpected states: {output.task_id}"
                 )
         writer.row(
-            {
-                "model_id": model_id,
-                "category": output.category,
-                "task_prefix": task_prefix,
-                "label": label,
-                "text": output.task["input_text"],
-                "response": output.response,
-                "tool_call": find_llm_call(
-                    output.context.get("conversation_trace", {})
-                ),
-                "entity_diff": writer.diff(unexpected_states),
-            }
+            AssistEvalMetric(
+                uuid=output.uuid,
+                task_id=output.task_id,
+                model_id=model_id,
+                category=output.category,
+                task_prefix=task_prefix,
+                label=label,
+                text=output.task["input_text"],
+                response=output.response,
+                tool_call=find_llm_call(output.context.get("conversation_trace", {})),
+                entity_diff=writer.diff(unexpected_states),
+            )
         )
 
     writer.finish()
