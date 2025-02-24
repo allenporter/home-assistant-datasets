@@ -1,8 +1,8 @@
 ---
-uuid: dc3aa920-dcd2-418b-9c17-de50fe31f224
+uuid: c14b951f-0e56-4168-9f25-f6d3205435bc
 task_id: door_left_open_door_left_open-door_left_open-3
 model_id: null
-category: binary_sensor
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -39,7 +39,7 @@ response: |-
     input:
       door_sensor:
         name: Door Sensor
-        description: The door sensor to monitor.
+        description: Select a binary sensor for the door.
         selector:
           entity:
             domain: binary_sensor
@@ -49,27 +49,29 @@ response: |-
         selector:
           media: {}
       open_duration:
-        name: Open Duration
-        description: Duration the door must be open before triggering the alert.
-        default: '00:05:00'  # Default to 5 minutes
+        name: Time Duration
+        description: Duration to wait before triggering the alert.
         selector:
           duration: {}
 
   trigger:
-    - platform: state
+    platform: state
+    entity_id: !input door_sensor
+    to: 'on'  # Trigger when door is open
+
+  condition:
+    - condition: state
       entity_id: !input door_sensor
-      to: 'on'
-      for: !input open_duration  # Trigger when the door has been open for the specified duration
+      state: 'on'
+      for: !input open_duration  # Condition to check if door is still open after specified duration
 
   action:
     - service: media_player.play_media
       target:
         entity_id: !input alert_media
       data:
-        media_content_id: "alert_sound"  # Here, you might want to replace 'alert_sound' with the actual sound/media ID you want to play.
-        media_content_type: "audio/mp3"  # Replace with the correct media type based on the media content
-
-  mode: single
+        media_content_id: "your_media_content_id"  # Placeholder for the media content to play
+        media_content_type: "sound"  # Specify the type of media to be played
   ```
 context:
   conversation_trace:
@@ -102,7 +104,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMSVPDPZ8MS81K6HZJKFR46S
+        id: 01JMTPC6CE3BVGRBHRPDNAEKAN
         parent_id: null
         user_id: null
       conversation_id: null
@@ -116,7 +118,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 08:54:22. Today's date is 2025-02-23.
+          Current time is 16:40:38. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -163,7 +165,7 @@ context:
             input:
               door_sensor:
                 name: Door Sensor
-                description: The door sensor to monitor.
+                description: Select a binary sensor for the door.
                 selector:
                   entity:
                     domain: binary_sensor
@@ -173,27 +175,29 @@ context:
                 selector:
                   media: {}
               open_duration:
-                name: Open Duration
-                description: Duration the door must be open before triggering the alert.
-                default: '00:05:00'  # Default to 5 minutes
+                name: Time Duration
+                description: Duration to wait before triggering the alert.
                 selector:
                   duration: {}
 
           trigger:
-            - platform: state
+            platform: state
+            entity_id: !input door_sensor
+            to: 'on'  # Trigger when door is open
+
+          condition:
+            - condition: state
               entity_id: !input door_sensor
-              to: 'on'
-              for: !input open_duration  # Trigger when the door has been open for the specified duration
+              state: 'on'
+              for: !input open_duration  # Condition to check if door is still open after specified duration
 
           action:
             - service: media_player.play_media
               target:
                 entity_id: !input alert_media
               data:
-                media_content_id: "alert_sound"  # Here, you might want to replace 'alert_sound' with the actual sound/media ID you want to play.
-                media_content_type: "audio/mp3"  # Replace with the correct media type based on the media content
-
-          mode: single
+                media_content_id: "your_media_content_id"  # Placeholder for the media content to play
+                media_content_type: "sound"  # Specify the type of media to be played
           ```
       tools: null
   tries: 0

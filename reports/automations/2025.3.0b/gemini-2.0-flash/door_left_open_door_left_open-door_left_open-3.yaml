@@ -1,7 +1,8 @@
 ---
-uuid: c9a9d7f0-08da-41c2-b181-f04b0f8dea5e
+uuid: a2269ad0-4e4d-4ffa-94d2-37cdc6831b6a
 task_id: door_left_open_door_left_open-door_left_open-3
-category: binary_sensor
+model_id: null
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -42,7 +43,7 @@ response: |-
         selector:
           entity:
             domain: binary_sensor
-            device_class: door # Suggest the use of a door class sensor
+            device_class: door
       alert_media:
         name: Alert Media
         description: The media player and media to play.
@@ -52,25 +53,29 @@ response: |-
         name: Open Duration
         description: The amount of time the door must be open before playing the alert.
         selector:
-          duration: {}
+          duration:
+            enable_slider: true
+            enable_text: true
 
-  # Automation Metadata
+  # Automation metadata
   mode: restart
   max_exceeded: silent
 
+  # Automation trigger
   trigger:
     - platform: state
       entity_id: !input door_sensor
-      to: "on" # Or "open", depending on your sensor state
+      to: "on" # or 'open', depending on the binary_sensor's state values
       for: !input open_duration
 
+  # Automation actions
   action:
     - service: media_player.play_media
       data:
-        media_content_id: !input alert_media
-        media_content_type: music # Adjust to your media type.
+        media_content_id: !input alert_media.media_content_id
+        media_content_type: !input alert_media.media_content_type
       target:
-        entity_id: !input alert_media
+        entity_id: !input alert_media.entity_id
   ```
 context:
   conversation_trace:
@@ -103,7 +108,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMKFST2Z5W2GVS3DFBV22NTW
+        id: 01JMTNDMVDW55SMT1T8MHKN2RX
         parent_id: null
         user_id: null
       conversation_id: null
@@ -117,7 +122,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:31:03. Today's date is 2025-02-20.
+          Current time is 16:23:57. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -168,7 +173,7 @@ context:
                 selector:
                   entity:
                     domain: binary_sensor
-                    device_class: door # Suggest the use of a door class sensor
+                    device_class: door
               alert_media:
                 name: Alert Media
                 description: The media player and media to play.
@@ -178,28 +183,29 @@ context:
                 name: Open Duration
                 description: The amount of time the door must be open before playing the alert.
                 selector:
-                  duration: {}
+                  duration:
+                    enable_slider: true
+                    enable_text: true
 
-          # Automation Metadata
+          # Automation metadata
           mode: restart
           max_exceeded: silent
 
+          # Automation trigger
           trigger:
             - platform: state
               entity_id: !input door_sensor
-              to: "on" # Or "open", depending on your sensor state
+              to: "on" # or 'open', depending on the binary_sensor's state values
               for: !input open_duration
 
+          # Automation actions
           action:
             - service: media_player.play_media
               data:
-                media_content_id: !input alert_media
-                media_content_type: music # Adjust to your media type.
+                media_content_id: !input alert_media.media_content_id
+                media_content_type: !input alert_media.media_content_type
               target:
-                entity_id: !input alert_media
+                entity_id: !input alert_media.entity_id
           ```
       tools: null
   tries: 0
-eval_result:
-  result: false
-  message: Automation enttiy id automation.pantry_light_door syntax likely not valid

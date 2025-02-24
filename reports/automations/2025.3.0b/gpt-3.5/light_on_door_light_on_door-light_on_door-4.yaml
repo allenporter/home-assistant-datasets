@@ -1,8 +1,8 @@
 ---
-uuid: fe0f8159-aa6f-478c-bfdd-e361f3fe2a7e
+uuid: 2be20dc4-d288-432a-bc91-77a0df5b9266
 task_id: light_on_door_light_on_door-light_on_door-4
 model_id: null
-category: binary_sensor
+category: light
 task:
   input_text: |
     # Light on door
@@ -34,40 +34,58 @@ response: |-
     name: Light on Door
     description: Turn on a light when the door opens and turn it off when the door closes or after a timeout.
     domain: automation
-    input:
-      door_sensor:
-        name: Door Sensor
-        description: The binary sensor that triggers the automation.
-        selector:
-          entity:
-            domain: binary_sensor
-      light_switch:
-        name: Light Switch
-        description: The light entity to turn on or off when the automation triggers.
-        selector:
+    source_url: https://github.com/home-assistant/core
+
+  input:
+    door_sensor:
+      name: Door Sensor
+      description: "The binary sensor that triggers the automation."
+      selector:
+        entity:
+          domain: binary_sensor
+
+    light_switch:
+      name: Light Switch
+      description: "The light entity to turn on/off."
+      selector:
+        target:
           entity:
             domain: light
+
+  mode: restart
 
   trigger:
     platform: state
     entity_id: !input door_sensor
-    from: 'off'
-    to: 'on'
-
-  variables:
-    timeout: "{{ 2 * 60 }}"  # 2 minutes timeout in seconds
+    to: "on"
 
   action:
-    - service: light.turn_on
-      target: !input light_switch
-
-    - wait_for_trigger:
-        platform: state
-        entity_id: !input door_sensor
-        to: 'off'
-      timeout: "{{ timeout }}"
-      continue_on_timeout: true
-
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: !input door_sensor
+              state: "off"
+          sequence:
+            - service: light.turn_off
+              target: !input light_switch
+        - conditions:
+            - condition: state
+              entity_id: !input door_sensor
+              state: "on"
+            - condition: template
+              value_template: "{{ not is_state(input_datetime.timer, 'idle') }}"
+          sequence:
+            - service: light.turn_on
+              target: !input light_switch
+            - service: input_datetime.set_datetime
+              target:
+                entity_id: input_datetime.timer
+              data:
+                timestamp: "{{ as_timestamp(now()) + 120 }}"
+    - delay: "00:02:00"
+    - condition: state
+      entity_id: !input door_sensor
+      state: "off"
     - service: light.turn_off
       target: !input light_switch
   ```
@@ -100,7 +118,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMTAC0VC8ZASV7071SJV98W9
+        id: 01JMTP9TQVP1QPFZ3DWBY3M6NP
         parent_id: null
         user_id: null
       conversation_id: null
@@ -114,7 +132,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 13:10:49. Today's date is 2025-02-23.
+          Current time is 16:39:21. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -156,40 +174,58 @@ context:
             name: Light on Door
             description: Turn on a light when the door opens and turn it off when the door closes or after a timeout.
             domain: automation
-            input:
-              door_sensor:
-                name: Door Sensor
-                description: The binary sensor that triggers the automation.
-                selector:
-                  entity:
-                    domain: binary_sensor
-              light_switch:
-                name: Light Switch
-                description: The light entity to turn on or off when the automation triggers.
-                selector:
+            source_url: https://github.com/home-assistant/core
+
+          input:
+            door_sensor:
+              name: Door Sensor
+              description: "The binary sensor that triggers the automation."
+              selector:
+                entity:
+                  domain: binary_sensor
+
+            light_switch:
+              name: Light Switch
+              description: "The light entity to turn on/off."
+              selector:
+                target:
                   entity:
                     domain: light
+
+          mode: restart
 
           trigger:
             platform: state
             entity_id: !input door_sensor
-            from: 'off'
-            to: 'on'
-
-          variables:
-            timeout: "{{ 2 * 60 }}"  # 2 minutes timeout in seconds
+            to: "on"
 
           action:
-            - service: light.turn_on
-              target: !input light_switch
-
-            - wait_for_trigger:
-                platform: state
-                entity_id: !input door_sensor
-                to: 'off'
-              timeout: "{{ timeout }}"
-              continue_on_timeout: true
-
+            - choose:
+                - conditions:
+                    - condition: state
+                      entity_id: !input door_sensor
+                      state: "off"
+                  sequence:
+                    - service: light.turn_off
+                      target: !input light_switch
+                - conditions:
+                    - condition: state
+                      entity_id: !input door_sensor
+                      state: "on"
+                    - condition: template
+                      value_template: "{{ not is_state(input_datetime.timer, 'idle') }}"
+                  sequence:
+                    - service: light.turn_on
+                      target: !input light_switch
+                    - service: input_datetime.set_datetime
+                      target:
+                        entity_id: input_datetime.timer
+                      data:
+                        timestamp: "{{ as_timestamp(now()) + 120 }}"
+            - delay: "00:02:00"
+            - condition: state
+              entity_id: !input door_sensor
+              state: "off"
             - service: light.turn_off
               target: !input light_switch
           ```

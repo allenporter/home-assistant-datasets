@@ -84,7 +84,7 @@ class EvalTask(DataClassYAMLMixin):
     """The synthetic home content to load."""
 
     record_id: str
-    """Identifier for the synethetic home task."""
+    """Identifier for the synthetic home task."""
 
     category: str
     """Category used to describe the evaluation task when reporting"""

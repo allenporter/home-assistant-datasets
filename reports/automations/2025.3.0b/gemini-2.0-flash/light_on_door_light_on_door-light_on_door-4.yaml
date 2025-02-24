@@ -1,7 +1,8 @@
 ---
-uuid: 4ff69d0f-e7f8-4607-9f49-4c86987c5ef9
+uuid: 86a2a0ea-0b41-4653-a5c2-ca450908a833
 task_id: light_on_door_light_on_door-light_on_door-4
-category: binary_sensor
+model_id: null
+category: light
 task:
   input_text: |
     # Light on door
@@ -31,12 +32,12 @@ response: |-
   ```yaml
   blueprint:
     name: Light on Door
-    description: Turn on a light when a door opens, and off when it closes or after a timeout.
+    description: Turn on a light when a door opens, and turn it off when the door closes or after a timeout.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: The binary sensor that indicates the door's open/closed state.
+        description: The binary sensor that indicates the door's state.
         selector:
           entity:
             domain: binary_sensor
@@ -49,29 +50,26 @@ response: |-
             entity:
               domain: light
 
-  # Triggers: When the door opens
+  # Automation Triggers
   trigger:
     - platform: state
       entity_id: !input door_sensor
       to: "on"
+      from: "off"
 
-  # Actions: Turn on the light, then wait for the door to close or a timeout
+  # Automation Actions
   action:
     - service: light.turn_on
       target: !input light_switch
-      # Turn on the light
-
     - wait_for_trigger:
         - platform: state
           entity_id: !input door_sensor
           to: "off"
+          from: "on"
       timeout:
         minutes: 2
-      # Wait for door to close or timeout
-
     - service: light.turn_off
       target: !input light_switch
-      # Turn off the light
   ```
 context:
   conversation_trace:
@@ -102,7 +100,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMKFR1F6P6BWXATJG78PNCPX
+        id: 01JMTNBX4E0Z7FQPK6P3G3GS8N
         parent_id: null
         user_id: null
       conversation_id: null
@@ -116,7 +114,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:30:05. Today's date is 2025-02-20.
+          Current time is 16:23:00. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -156,12 +154,12 @@ context:
           ```yaml
           blueprint:
             name: Light on Door
-            description: Turn on a light when a door opens, and off when it closes or after a timeout.
+            description: Turn on a light when a door opens, and turn it off when the door closes or after a timeout.
             domain: automation
             input:
               door_sensor:
                 name: Door Sensor
-                description: The binary sensor that indicates the door's open/closed state.
+                description: The binary sensor that indicates the door's state.
                 selector:
                   entity:
                     domain: binary_sensor
@@ -174,31 +172,26 @@ context:
                     entity:
                       domain: light
 
-          # Triggers: When the door opens
+          # Automation Triggers
           trigger:
             - platform: state
               entity_id: !input door_sensor
               to: "on"
+              from: "off"
 
-          # Actions: Turn on the light, then wait for the door to close or a timeout
+          # Automation Actions
           action:
             - service: light.turn_on
               target: !input light_switch
-              # Turn on the light
-
             - wait_for_trigger:
                 - platform: state
                   entity_id: !input door_sensor
                   to: "off"
+                  from: "on"
               timeout:
                 minutes: 2
-              # Wait for door to close or timeout
-
             - service: light.turn_off
               target: !input light_switch
-              # Turn off the light
           ```
       tools: null
   tries: 0
-eval_result:
-  result: true

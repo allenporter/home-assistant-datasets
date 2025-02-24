@@ -1,7 +1,8 @@
 ---
-uuid: ef068f19-e514-4fa6-a861-45728a1b2f96
+uuid: 58d8efb3-8172-44f0-8ead-630b75eff96a
 task_id: light_on_door_light_on_door-light_on_door-3
-category: binary_sensor
+model_id: null
+category: light
 task:
   input_text: |
     # Light on door
@@ -31,44 +32,53 @@ response: |-
   ```yaml
   blueprint:
     name: Light on Door Open
-    description: Turn on a light when a door opens and turn it off when the door closes or after 2 minutes.
+    description: >
+      Turn on a light when the door opens and turn it off when the door closes or after a 2-minute timeout.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: A binary sensor that represents the door. It triggers the automation when opened.
+        description: The binary sensor for the door (should be 'on' when open).
         selector:
           entity:
             domain: binary_sensor
       light_switch:
-        name: Light
-        description: One or more light entities to turn on or off.
+        name: Light Switch
+        description: The light to turn on or off when the door opens or closes.
         selector:
           target:
             entity:
               domain: light
 
-  mode: restart
-
   trigger:
     - platform: state
       entity_id: !input door_sensor
-      from: 'off'
       to: 'on'
 
   action:
     - service: light.turn_on
       target: !input light_switch
-
     - wait_for_trigger:
         - platform: state
           entity_id: !input door_sensor
-          from: 'on'
           to: 'off'
-      timeout: '00:02:00'
-
+      timeout:
+        minutes: 2
     - service: light.turn_off
       target: !input light_switch
+
+  mode: restart
+  ```
+
+  ### Explanation:
+  1. **Blueprint Header:** This section includes the blueprint's name and description, helping users understand its purpose.
+  2. **Domain & Input:** Defines the inputs needed by the blueprint - a `binary_sensor` for the door and a `light` entity to control.
+  3. **Trigger:** The trigger is set to activate when the `door_sensor` state changes to `on`, indicating the door is open.
+  4. **Action:**
+     - The action starts by turning the light on using the `light.turn_on` service.
+     - It then waits for one of two conditions: the door closing (sensor state to 'off') or a timeout of 2 minutes.
+     - Finally, the `light.turn_off` service is called to turn off the light.
+  5. **Mode:** Set to `restart`, ensuring the automation restarts if the conditions change while it's already in progress. This is important in case the door opens again during the wait period.
   ```
 context:
   conversation_trace:
@@ -99,7 +109,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMKFJM8ACWQ1C89ZF0FQXP53
+        id: 01JMTPEEDNEAQG0NT6ES4FXQWG
         parent_id: null
         user_id: null
       conversation_id: null
@@ -113,7 +123,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:27:08. Today's date is 2025-02-20.
+          Current time is 16:41:52. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -153,46 +163,53 @@ context:
           ```yaml
           blueprint:
             name: Light on Door Open
-            description: Turn on a light when a door opens and turn it off when the door closes or after 2 minutes.
+            description: >
+              Turn on a light when the door opens and turn it off when the door closes or after a 2-minute timeout.
             domain: automation
             input:
               door_sensor:
                 name: Door Sensor
-                description: A binary sensor that represents the door. It triggers the automation when opened.
+                description: The binary sensor for the door (should be 'on' when open).
                 selector:
                   entity:
                     domain: binary_sensor
               light_switch:
-                name: Light
-                description: One or more light entities to turn on or off.
+                name: Light Switch
+                description: The light to turn on or off when the door opens or closes.
                 selector:
                   target:
                     entity:
                       domain: light
 
-          mode: restart
-
           trigger:
             - platform: state
               entity_id: !input door_sensor
-              from: 'off'
               to: 'on'
 
           action:
             - service: light.turn_on
               target: !input light_switch
-
             - wait_for_trigger:
                 - platform: state
                   entity_id: !input door_sensor
-                  from: 'on'
                   to: 'off'
-              timeout: '00:02:00'
-
+              timeout:
+                minutes: 2
             - service: light.turn_off
               target: !input light_switch
+
+          mode: restart
+          ```
+
+          ### Explanation:
+          1. **Blueprint Header:** This section includes the blueprint's name and description, helping users understand its purpose.
+          2. **Domain & Input:** Defines the inputs needed by the blueprint - a `binary_sensor` for the door and a `light` entity to control.
+          3. **Trigger:** The trigger is set to activate when the `door_sensor` state changes to `on`, indicating the door is open.
+          4. **Action:**
+             - The action starts by turning the light on using the `light.turn_on` service.
+             - It then waits for one of two conditions: the door closing (sensor state to 'off') or a timeout of 2 minutes.
+             - Finally, the `light.turn_off` service is called to turn off the light.
+          5. **Mode:** Set to `restart`, ensuring the automation restarts if the conditions change while it's already in progress. This is important in case the door opens again during the wait period.
           ```
       tools: null
   tries: 0
-eval_result:
-  result: true

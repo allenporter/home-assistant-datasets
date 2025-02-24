@@ -1,8 +1,8 @@
 ---
-uuid: 704f4884-cf78-4743-b052-e59b497de20e
+uuid: 1e472569-f176-4c3c-a65f-32e4cd19e1f3
 task_id: door_left_open_door_left_open-door_left_open-4
 model_id: null
-category: binary_sensor
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -34,25 +34,25 @@ response: |-
   ```yaml
   blueprint:
     name: Door Left Open Alert
-    description: Plays an alert when a door has been left open for too long.
+    description: Play an alert on a media player when a door has been left open for a specified duration.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: The door sensor that will trigger the alert.
+        description: The binary sensor for the door.
         selector:
           entity:
             domain: binary_sensor
       alert_media:
         name: Alert Media
-        description: The media that will be played when the door is left open.
+        description: The media player and media id to play the alert on.
         selector:
           media:
       open_duration:
         name: Open Duration
         description: The amount of time the door can be open before the alert is played.
         selector:
-          duration:
+          duration: {}
 
   trigger:
     platform: state
@@ -70,29 +70,30 @@ response: |-
         entity_id: !input door_sensor
         to: 'closed'
         timeout: !input open_duration
-    - service: media_player.play_media
-      target:
-        entity_id: !input alert_media
-      data:
-        media_content_id: alert_sound
-        media_content_type: audio
+    - if:
+        - condition: state
+          entity_id: !input door_sensor
+          state: 'open'
+      then:
+        - service: media_player.play_media
+          target: !input alert_media
+          data:
+            media_content_id: alert
+            media_content_type: music
 
+  mode: queued
   ```
 
-  Explanation:
+  This blueprint creates an automation that listens for the door sensor to go into the "open" state. Once it detects the door has been open for the specified duration, it will play the selected media alert on the specified media player.
 
-  1. The blueprint defines the input parameters for the automation:
-     - `door_sensor`: A binary sensor entity that represents the door.
-     - `alert_media`: The media player entity that will play the alert.
-     - `open_duration`: The amount of time the door can be open before the alert is played.
+  The key steps are:
 
-  2. The trigger listens for the door sensor to change to the "open" state.
-
-  3. The condition ensures the automation only runs during the day (between 00:00:00 and 23:59:59).
-
-  4. The action first waits for the door to be closed or the `open_duration` timeout to expire. If the door is still open after the timeout, the selected media is played on the alert media player.
-
-  This blueprint can be used to create automations that alert the user when a door has been left open for too long, helping to prevent energy waste and potential security issues.
+  1. Define the blueprint inputs: door sensor, alert media, and open duration.
+  2. Set up the trigger to listen for the door sensor going into the "open" state.
+  3. Add a condition to only run the automation between 00:00:00 and 23:59:59.
+  4. Use the `wait_for_trigger` action to wait for the specified open duration.
+  5. Check if the door is still open after the wait, and if so, play the alert media.
+  6. Set the mode to `queued` to ensure the automation can run multiple times without conflicting.
 context:
   conversation_trace:
   - event_type: async_process
@@ -124,7 +125,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMTAG8R0SQYFH9S47MKHT146
+        id: 01JMTN8153DZE1CG0B4GFXCZE6
         parent_id: null
         user_id: null
       conversation_id: null
@@ -135,7 +136,7 @@ context:
   - event_type: agent_detail
     data:
       system: |-
-        Current time is 13:13:09. Today's date is 2025-02-23.
+        Current time is 16:20:53. Today's date is 2025-02-23.
 
         Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -178,25 +179,25 @@ context:
             ```yaml
             blueprint:
               name: Door Left Open Alert
-              description: Plays an alert when a door has been left open for too long.
+              description: Play an alert on a media player when a door has been left open for a specified duration.
               domain: automation
               input:
                 door_sensor:
                   name: Door Sensor
-                  description: The door sensor that will trigger the alert.
+                  description: The binary sensor for the door.
                   selector:
                     entity:
                       domain: binary_sensor
                 alert_media:
                   name: Alert Media
-                  description: The media that will be played when the door is left open.
+                  description: The media player and media id to play the alert on.
                   selector:
                     media:
                 open_duration:
                   name: Open Duration
                   description: The amount of time the door can be open before the alert is played.
                   selector:
-                    duration:
+                    duration: {}
 
             trigger:
               platform: state
@@ -214,27 +215,28 @@ context:
                   entity_id: !input door_sensor
                   to: 'closed'
                   timeout: !input open_duration
-              - service: media_player.play_media
-                target:
-                  entity_id: !input alert_media
-                data:
-                  media_content_id: alert_sound
-                  media_content_type: audio
+              - if:
+                  - condition: state
+                    entity_id: !input door_sensor
+                    state: 'open'
+                then:
+                  - service: media_player.play_media
+                    target: !input alert_media
+                    data:
+                      media_content_id: alert
+                      media_content_type: music
 
+            mode: queued
             ```
 
-            Explanation:
+            This blueprint creates an automation that listens for the door sensor to go into the "open" state. Once it detects the door has been open for the specified duration, it will play the selected media alert on the specified media player.
 
-            1. The blueprint defines the input parameters for the automation:
-               - `door_sensor`: A binary sensor entity that represents the door.
-               - `alert_media`: The media player entity that will play the alert.
-               - `open_duration`: The amount of time the door can be open before the alert is played.
+            The key steps are:
 
-            2. The trigger listens for the door sensor to change to the "open" state.
-
-            3. The condition ensures the automation only runs during the day (between 00:00:00 and 23:59:59).
-
-            4. The action first waits for the door to be closed or the `open_duration` timeout to expire. If the door is still open after the timeout, the selected media is played on the alert media player.
-
-            This blueprint can be used to create automations that alert the user when a door has been left open for too long, helping to prevent energy waste and potential security issues.
+            1. Define the blueprint inputs: door sensor, alert media, and open duration.
+            2. Set up the trigger to listen for the door sensor going into the "open" state.
+            3. Add a condition to only run the automation between 00:00:00 and 23:59:59.
+            4. Use the `wait_for_trigger` action to wait for the specified open duration.
+            5. Check if the door is still open after the wait, and if so, play the alert media.
+            6. Set the mode to `queued` to ensure the automation can run multiple times without conflicting.
   tries: 0

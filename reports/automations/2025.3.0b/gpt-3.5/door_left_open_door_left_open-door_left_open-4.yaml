@@ -1,8 +1,8 @@
 ---
-uuid: e09a3278-c374-402d-b8be-edc912276eec
+uuid: d1868f3d-9196-4d0d-b928-66c2361f1812
 task_id: door_left_open_door_left_open-door_left_open-4
 model_id: null
-category: binary_sensor
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -34,27 +34,33 @@ response: |-
   ```yaml
   blueprint:
     name: Door Left Open Alert
-    description: Play an alert on the speaker when a door is left open for a specified duration.
+    description: Play an alert on the speaker when the door is left open for a specified duration.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: The binary sensor representing the door.
+        description: Select the door sensor to monitor.
         selector:
           entity:
             domain: binary_sensor
       alert_media:
-        name: Alert Media Player
-        description: The media player to play the alert.
+        name: Alert Media
+        description: Select the media player and media ID for the alert.
         selector:
           target:
             entity:
               domain: media_player
+          media:
+            description: Select the media to play as the alert.
       open_duration:
         name: Open Duration
-        description: The duration before playing the alert.
+        description: Select the duration before playing the alert.
+        default: 00:05:00
         selector:
           duration: {}
+    source_url: https://github.com/your/repository
+
+  mode: single
 
   trigger:
     platform: state
@@ -67,8 +73,13 @@ response: |-
     target:
       entity_id: !input alert_media
     data:
-      media_content_id: 'http://url_to_your_audio_file/alert.mp3'
+      media_content_id: !input alert_media.media
       media_content_type: music
+
+  automation:
+    alias: "Door Left Open Alert"
+    mode: restart
+    max: 10
   ```
 context:
   conversation_trace:
@@ -101,7 +112,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMTACBHMSQYFH9S47MKHT146
+        id: 01JMTPA60W22EX1P31WF342266
         parent_id: null
         user_id: null
       conversation_id: null
@@ -115,7 +126,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 13:11:00. Today's date is 2025-02-23.
+          Current time is 16:39:32. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -157,27 +168,33 @@ context:
           ```yaml
           blueprint:
             name: Door Left Open Alert
-            description: Play an alert on the speaker when a door is left open for a specified duration.
+            description: Play an alert on the speaker when the door is left open for a specified duration.
             domain: automation
             input:
               door_sensor:
                 name: Door Sensor
-                description: The binary sensor representing the door.
+                description: Select the door sensor to monitor.
                 selector:
                   entity:
                     domain: binary_sensor
               alert_media:
-                name: Alert Media Player
-                description: The media player to play the alert.
+                name: Alert Media
+                description: Select the media player and media ID for the alert.
                 selector:
                   target:
                     entity:
                       domain: media_player
+                  media:
+                    description: Select the media to play as the alert.
               open_duration:
                 name: Open Duration
-                description: The duration before playing the alert.
+                description: Select the duration before playing the alert.
+                default: 00:05:00
                 selector:
                   duration: {}
+            source_url: https://github.com/your/repository
+
+          mode: single
 
           trigger:
             platform: state
@@ -190,8 +207,13 @@ context:
             target:
               entity_id: !input alert_media
             data:
-              media_content_id: 'http://url_to_your_audio_file/alert.mp3'
+              media_content_id: !input alert_media.media
               media_content_type: music
+
+          automation:
+            alias: "Door Left Open Alert"
+            mode: restart
+            max: 10
           ```
       tools: null
   tries: 0

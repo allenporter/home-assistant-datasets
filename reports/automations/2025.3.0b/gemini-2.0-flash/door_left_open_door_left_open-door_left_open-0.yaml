@@ -1,7 +1,8 @@
 ---
-uuid: c0aac7b9-af8d-49d3-9d02-2717b337889c
+uuid: 3254ae9d-396c-4e2a-89c5-a3a09c19d5ce
 task_id: door_left_open_door_left_open-door_left_open-0
-category: binary_sensor
+model_id: null
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -38,35 +39,33 @@ response: |-
     input:
       door_sensor:
         name: Door Sensor
-        description: The door sensor to monitor.
+        description: The binary sensor representing the door.
         selector:
           entity:
             domain: binary_sensor
-            device_class: door
+            device_class: door # Suggest appropriate device class
       alert_media:
         name: Alert Media
-        description: The media to play when the door is left open.
+        description: The media to play when the door has been open for too long.
         selector:
           media: {}
       open_duration:
         name: Open Duration
-        description: The amount of time the door must be open before playing the alert.
+        description: The amount of time the door must be open before the alert is played.
         selector:
           duration: {}
 
-  # Automation Metadata
+  # Automation
   mode: restart
-  max_exceeded: silent
-
   trigger:
     - platform: state
       entity_id: !input door_sensor
-      to: "on"
+      to: "on" # Door is open
       for: !input open_duration
-
   action:
     - service: media_player.play_media
-      target: !input alert_media
+      target:
+        entity_id: "{{ alert_media.entity_id }}"
       data:
         media_content_id: "{{ alert_media.media_content_id }}"
         media_content_type: "{{ alert_media.media_content_type }}"
@@ -102,7 +101,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMKFSH3JTSC8NGG9W1V51Q0A
+        id: 01JMTNDBS6MM66Z77VZ4PYT69G
         parent_id: null
         user_id: null
       conversation_id: null
@@ -116,7 +115,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:30:54. Today's date is 2025-02-20.
+          Current time is 16:23:48. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -163,41 +162,36 @@ context:
             input:
               door_sensor:
                 name: Door Sensor
-                description: The door sensor to monitor.
+                description: The binary sensor representing the door.
                 selector:
                   entity:
                     domain: binary_sensor
-                    device_class: door
+                    device_class: door # Suggest appropriate device class
               alert_media:
                 name: Alert Media
-                description: The media to play when the door is left open.
+                description: The media to play when the door has been open for too long.
                 selector:
                   media: {}
               open_duration:
                 name: Open Duration
-                description: The amount of time the door must be open before playing the alert.
+                description: The amount of time the door must be open before the alert is played.
                 selector:
                   duration: {}
 
-          # Automation Metadata
+          # Automation
           mode: restart
-          max_exceeded: silent
-
           trigger:
             - platform: state
               entity_id: !input door_sensor
-              to: "on"
+              to: "on" # Door is open
               for: !input open_duration
-
           action:
             - service: media_player.play_media
-              target: !input alert_media
+              target:
+                entity_id: "{{ alert_media.entity_id }}"
               data:
                 media_content_id: "{{ alert_media.media_content_id }}"
                 media_content_type: "{{ alert_media.media_content_type }}"
           ```
       tools: null
   tries: 0
-eval_result:
-  result: false
-  message: Automation enttiy id automation.pantry_light_door syntax likely not valid

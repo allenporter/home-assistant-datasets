@@ -102,6 +102,8 @@ def pytest_generate_tests(metafunc: Any) -> None:
     """
     # Parameterize tests by the models under development
     model_output_dir = metafunc.config.getoption("model_output_dir")
+    model_id = metafunc.config.getoption("model_id")
+
     # We're either in the mode of running the groundtruth solution or
     # the predictions from the model output.
     if model_output_dir is None:
@@ -109,12 +111,20 @@ def pytest_generate_tests(metafunc: Any) -> None:
         metafunc.parametrize("model_id", [None], ids=["solution"])
         return
 
+    # Convert 'light_on_door.test_blueprint' to 'light_on_door'
+    task_id_prefix = metafunc.module.__name__.split(".")[0]
+
     model_output_path = pathlib.Path(model_output_dir)
     models = model_output_path.glob("*")
+
+    # Limit the models to the one under test
     tasks = []
     for model in models:
-        report_files = model.glob("*.yaml")
+        if model_id is not None and model_id != model.name:
+            continue
+        report_files = model.glob(f"{task_id_prefix}*.yaml")
         tasks.extend([str(report_file) for report_file in report_files])
+
     metafunc.parametrize("model_output_file", [pytest.param(task) for task in tasks])
 
     model_id = metafunc.config.getoption("model_id")
@@ -194,19 +204,6 @@ async def model_output_fixture(model_output_file: str | None) -> ModelOutput | N
         # model id will be stored in the model output file to make it more explicit.
         model_output.model_id = model_output_path.parent.name
     return model_output
-
-
-@pytest.fixture(autouse=True)
-def limit_by_model_id_fixture(
-    model_id: str | None,
-    model_output: ModelOutput | None,
-    restore_tz: Any,
-) -> None:
-    """Fixture to skip tests that are not for the specified model."""
-    if model_id is None or model_output is None:
-        return
-    if model_output.model_id != model_id:
-        pytest.skip("skipped on this model_id: {}".format(model_id))
 
 
 @pytest.fixture(autouse=True)

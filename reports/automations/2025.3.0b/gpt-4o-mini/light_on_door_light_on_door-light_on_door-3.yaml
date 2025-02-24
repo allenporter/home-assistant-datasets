@@ -1,8 +1,8 @@
 ---
-uuid: 150cd341-981f-4d96-9f65-022d1f8651fa
+uuid: ab0a95b2-66a7-46bd-81cd-5919a1f26df4
 task_id: light_on_door_light_on_door-light_on_door-3
 model_id: null
-category: binary_sensor
+category: light
 task:
   input_text: |
     # Light on door
@@ -31,13 +31,13 @@ task:
 response: |-
   ```yaml
   blueprint:
-    name: Light on Door Open
-    description: Turn on a light when the door opens.
+    name: Light on door
+    description: Turn on a light when the door opens and turn it off when the door closes or after a timeout.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: The binary sensor that triggers the automation when the door opens.
+        description: A binary sensor that triggers when the door opens.
         selector:
           entity:
             domain: binary_sensor
@@ -52,19 +52,33 @@ response: |-
   trigger:
     - platform: state
       entity_id: !input door_sensor
-      from: 'off'  # Door is closed
-      to: 'on'     # Door is opened
+      to: 'on'  # Trigger when the door is opened
 
   action:
     - service: light.turn_on
       target: !input light_switch
+    - wait_for_trigger:
+        - platform: state
+          entity_id: !input door_sensor
+          to: 'off'  # Wait for the door to close
+        - platform: time
+          at: "{{ now().add(minutes=2) }}"  # Also wait for 2 minutes
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: !input door_sensor
+              state: 'off'  # If the door closed
+          sequence:
+            - service: light.turn_off
+              target: !input light_switch
+        - conditions:
+            - condition: template
+              value_template: "{{ now() >= (state_attr('automation.light_on_door', 'last_triggered') | default(0) | int + 120) }}"
+          sequence:
+            - service: light.turn_off
+              target: !input light_switch
 
-    - delay: '00:02:00'  # Wait for 2 minutes
-
-    - service: light.turn_off
-      target: !input light_switch
-
-  mode: single  # Ensures the automation runs only once at a time
+  mode: single  # Ensure that the automation runs only once at a time
   ```
 context:
   conversation_trace:
@@ -95,7 +109,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMSVNTSPCWQ1C89ZF0FQXP53
+        id: 01JMTPBDFRKB9M77PKKMDVG0T7
         parent_id: null
         user_id: null
       conversation_id: null
@@ -109,7 +123,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 08:54:02. Today's date is 2025-02-23.
+          Current time is 16:40:13. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -148,13 +162,13 @@ context:
         content: |-
           ```yaml
           blueprint:
-            name: Light on Door Open
-            description: Turn on a light when the door opens.
+            name: Light on door
+            description: Turn on a light when the door opens and turn it off when the door closes or after a timeout.
             domain: automation
             input:
               door_sensor:
                 name: Door Sensor
-                description: The binary sensor that triggers the automation when the door opens.
+                description: A binary sensor that triggers when the door opens.
                 selector:
                   entity:
                     domain: binary_sensor
@@ -169,19 +183,33 @@ context:
           trigger:
             - platform: state
               entity_id: !input door_sensor
-              from: 'off'  # Door is closed
-              to: 'on'     # Door is opened
+              to: 'on'  # Trigger when the door is opened
 
           action:
             - service: light.turn_on
               target: !input light_switch
+            - wait_for_trigger:
+                - platform: state
+                  entity_id: !input door_sensor
+                  to: 'off'  # Wait for the door to close
+                - platform: time
+                  at: "{{ now().add(minutes=2) }}"  # Also wait for 2 minutes
+            - choose:
+                - conditions:
+                    - condition: state
+                      entity_id: !input door_sensor
+                      state: 'off'  # If the door closed
+                  sequence:
+                    - service: light.turn_off
+                      target: !input light_switch
+                - conditions:
+                    - condition: template
+                      value_template: "{{ now() >= (state_attr('automation.light_on_door', 'last_triggered') | default(0) | int + 120) }}"
+                  sequence:
+                    - service: light.turn_off
+                      target: !input light_switch
 
-            - delay: '00:02:00'  # Wait for 2 minutes
-
-            - service: light.turn_off
-              target: !input light_switch
-
-          mode: single  # Ensures the automation runs only once at a time
+          mode: single  # Ensure that the automation runs only once at a time
           ```
       tools: null
   tries: 0

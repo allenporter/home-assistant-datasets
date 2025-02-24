@@ -22,6 +22,11 @@ HUMIDITY_SENSOR_ENTITY = "sensor.bathroom_exhaust_fan_humidity"
 FAN_TARGET_LEVEL = 65
 
 WAIT_TIMEOUT_SEC = 5.0
+BLUEPRINT_INPUT = {
+    "fan_entity": FAN_ENTITY,
+    "humidity_sensor": HUMIDITY_SENSOR_ENTITY,
+    "humidity_level": FAN_TARGET_LEVEL,
+}
 
 
 @pytest.fixture
@@ -30,13 +35,14 @@ async def automation_config(blueprint_content: BlueprintContent) -> dict[str, an
         "alias": "Vacuum Pause during phone call",
         "use_blueprint": {
             "path": blueprint_content.filename,
-            "input": {
-                "fan_entity": FAN_ENTITY,
-                "humidity_sensor": HUMIDITY_SENSOR_ENTITY,
-                "humidity_level": FAN_TARGET_LEVEL,
-            },
+            "input": BLUEPRINT_INPUT,
         },
     }
+
+
+async def test_blueprint_inputs(blueprint_content: BlueprintContent) -> None:
+    """Test the blueprint inputs."""
+    blueprint_content.validate_inputs_present(BLUEPRINT_INPUT.keys())
 
 
 @pytest.fixture(name="fan_state_changed")
@@ -82,7 +88,6 @@ async def test_fan_triggered_on(
 
     expected_states = {**states, FAN_ENTITY: "on", HUMIDITY_SENSOR_ENTITY: "75"}
     assert get_state() == expected_states
-
 
 
 async def test_fan_triggered_off(

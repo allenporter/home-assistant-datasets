@@ -1,7 +1,8 @@
 ---
-uuid: 30680f4a-0419-4267-9b11-c83299f6e915
+uuid: aab54954-2701-4a2e-b7e3-472f8085dafe
 task_id: door_left_open_door_left_open-door_left_open-0
-category: binary_sensor
+model_id: null
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -34,7 +35,6 @@ response: |-
 
   ```yaml
   # This blueprint creates an automation to play an alert on a speaker when a door is left open for a specified duration.
-
   blueprint:
     name: "Door Left Open Alert"
     description: "Play an alert on a speaker when a door is left open for too long."
@@ -59,14 +59,15 @@ response: |-
         selector:
           duration:
 
-  # Define the triggers for the automation
+  # Define the triggers, conditions, and actions for the automation
   trigger:
     - platform: state
       entity_id: !input door_sensor
       to: "on"
       for: !input open_duration
 
-  # Define the action to be taken when the trigger conditions are met
+  condition: []
+
   action:
     - service: media_player.play_media
       target:
@@ -74,41 +75,39 @@ response: |-
       data:
         media_content_id: !input alert_media
         media_content_type: music
-
-  # Add a condition to check if the door is still open when the alert is about to play
-  condition:
+    # Add a delay to prevent the alert from playing repeatedly
+    - delay: "00:01:00"
+    # Check if the door is still open after the delay
     - condition: state
       entity_id: !input door_sensor
       state: "on"
+    # If the door is still open, play the alert again
+    - service: media_player.play_media
+      target:
+        entity_id: !input alert_media
+      data:
+        media_content_id: !input alert_media
+        media_content_type: music
 
-  # Add a mode to prevent the automation from running multiple times while the door is open
+  # Add a mode to prevent multiple instances of this automation from running simultaneously
   mode: single
-
-  # Add some error handling and logging
-  error_handling:
-    retry:
-      max_retry: 2
-      delay: 5
-
-  # Add a comment to explain the blueprint
-  comment: >
-    This blueprint creates an automation that monitors a specified door sensor.
-    If the door is left open for the specified duration, it will play an alert
-    on the selected media player. The automation runs in single mode to prevent
-    multiple alerts while the door remains open.
   ```
 
-  This blueprint configuration addresses all the requirements you specified:
+  This blueprint creates an automation that will play an alert on a specified speaker when a door is left open for a set duration. Here's a breakdown of the configuration:
 
-  1. It accepts three inputs: `door_sensor`, `alert_media`, and `open_duration`, with the correct selector types.
+  1. The blueprint inputs are defined as requested: `door_sensor`, `alert_media`, and `open_duration`.
+
   2. The trigger is set to activate when the door sensor state changes to "on" (open) and remains in that state for the specified duration.
-  3. The action plays the selected media on the chosen media player when the trigger conditions are met.
-  4. A condition is added to ensure the door is still open when the alert is about to play, preventing false alarms if the door was closed just before the duration expired.
-  5. The automation runs in single mode to prevent multiple alerts while the door remains open.
-  6. Error handling is included to retry the action if it fails.
-  7. Comments are added to explain the purpose and functionality of the blueprint.
 
-  This blueprint can be easily customized for various use cases, such as monitoring different doors and using different speakers or alert sounds.
+  3. The action section does the following:
+     - Plays the selected media on the chosen media player.
+     - Adds a 1-minute delay to prevent the alert from playing repeatedly.
+     - Checks if the door is still open after the delay.
+     - If the door is still open, it plays the alert again.
+
+  4. The automation mode is set to "single" to prevent multiple instances from running simultaneously.
+
+  This blueprint allows users to easily create automations for different doors and speakers, addressing the example use cases mentioned. Users can customize the door sensor, alert sound, media player, and the duration before the alert is triggered.
 context:
   conversation_trace:
   - event_type: async_process
@@ -140,7 +139,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMKFP5TE8S42TYHBGDZV7X5W
+        id: 01JMTN1EWKFB2310KKVFACTJAA
         parent_id: null
         user_id: null
       conversation_id: null
@@ -151,7 +150,7 @@ context:
   - event_type: agent_detail
     data:
       system: |-
-        Current time is 21:29:04. Today's date is 2025-02-20.
+        Current time is 16:17:18. Today's date is 2025-02-23.
 
         Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -195,7 +194,6 @@ context:
 
             ```yaml
             # This blueprint creates an automation to play an alert on a speaker when a door is left open for a specified duration.
-
             blueprint:
               name: "Door Left Open Alert"
               description: "Play an alert on a speaker when a door is left open for too long."
@@ -220,14 +218,15 @@ context:
                   selector:
                     duration:
 
-            # Define the triggers for the automation
+            # Define the triggers, conditions, and actions for the automation
             trigger:
               - platform: state
                 entity_id: !input door_sensor
                 to: "on"
                 for: !input open_duration
 
-            # Define the action to be taken when the trigger conditions are met
+            condition: []
+
             action:
               - service: media_player.play_media
                 target:
@@ -235,42 +234,37 @@ context:
                 data:
                   media_content_id: !input alert_media
                   media_content_type: music
-
-            # Add a condition to check if the door is still open when the alert is about to play
-            condition:
+              # Add a delay to prevent the alert from playing repeatedly
+              - delay: "00:01:00"
+              # Check if the door is still open after the delay
               - condition: state
                 entity_id: !input door_sensor
                 state: "on"
+              # If the door is still open, play the alert again
+              - service: media_player.play_media
+                target:
+                  entity_id: !input alert_media
+                data:
+                  media_content_id: !input alert_media
+                  media_content_type: music
 
-            # Add a mode to prevent the automation from running multiple times while the door is open
+            # Add a mode to prevent multiple instances of this automation from running simultaneously
             mode: single
-
-            # Add some error handling and logging
-            error_handling:
-              retry:
-                max_retry: 2
-                delay: 5
-
-            # Add a comment to explain the blueprint
-            comment: >
-              This blueprint creates an automation that monitors a specified door sensor.
-              If the door is left open for the specified duration, it will play an alert
-              on the selected media player. The automation runs in single mode to prevent
-              multiple alerts while the door remains open.
             ```
 
-            This blueprint configuration addresses all the requirements you specified:
+            This blueprint creates an automation that will play an alert on a specified speaker when a door is left open for a set duration. Here's a breakdown of the configuration:
 
-            1. It accepts three inputs: `door_sensor`, `alert_media`, and `open_duration`, with the correct selector types.
+            1. The blueprint inputs are defined as requested: `door_sensor`, `alert_media`, and `open_duration`.
+
             2. The trigger is set to activate when the door sensor state changes to "on" (open) and remains in that state for the specified duration.
-            3. The action plays the selected media on the chosen media player when the trigger conditions are met.
-            4. A condition is added to ensure the door is still open when the alert is about to play, preventing false alarms if the door was closed just before the duration expired.
-            5. The automation runs in single mode to prevent multiple alerts while the door remains open.
-            6. Error handling is included to retry the action if it fails.
-            7. Comments are added to explain the purpose and functionality of the blueprint.
 
-            This blueprint can be easily customized for various use cases, such as monitoring different doors and using different speakers or alert sounds.
+            3. The action section does the following:
+               - Plays the selected media on the chosen media player.
+               - Adds a 1-minute delay to prevent the alert from playing repeatedly.
+               - Checks if the door is still open after the delay.
+               - If the door is still open, it plays the alert again.
+
+            4. The automation mode is set to "single" to prevent multiple instances from running simultaneously.
+
+            This blueprint allows users to easily create automations for different doors and speakers, addressing the example use cases mentioned. Users can customize the door sensor, alert sound, media player, and the duration before the alert is triggered.
   tries: 0
-eval_result:
-  result: false
-  message: Automation enttiy id automation.pantry_light_door syntax likely not valid

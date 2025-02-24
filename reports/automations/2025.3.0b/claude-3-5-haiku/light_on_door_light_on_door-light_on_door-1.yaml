@@ -1,8 +1,8 @@
 ---
-uuid: db90f417-2ee2-43e6-86e3-dcdabc0b405c
+uuid: 44429956-8000-4759-8de6-758227dc26a3
 task_id: light_on_door_light_on_door-light_on_door-1
 model_id: null
-category: binary_sensor
+category: light
 task:
   input_text: |
     # Light on door
@@ -28,24 +28,23 @@ task:
 
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
-response: "```yaml\n# Blueprint for turning on a light when a door opens\nblueprint:\n\
-  \  name: Door Light Trigger\n  description: Automatically turn on a light when a\
-  \ door opens and turn it off after closing or timeout\n  domain: automation\n  input:\n\
-  \    door_sensor:\n      name: Door Sensor\n      description: Binary sensor that\
-  \ detects door open/close state\n      selector:\n        entity:\n          domain:\
-  \ binary_sensor\n    \n    light_switch:\n      name: Light to Control\n      description:\
-  \ Light entity(ies) to turn on when door opens\n      selector:\n        target:\n\
-  \          entity:\n            domain: light\n\n# Automation configuration\ntrigger:\n\
-  \  - platform: state\n    entity_id: !input door_sensor\n    from: 'off'\n    to:\
-  \ 'on'\n\naction:\n  # Turn on light when door opens\n  - service: light.turn_on\n\
-  \    target: !input light_switch\n\n  # Start timer to turn off light\n  - service:\
-  \ timer.start\n    data:\n      duration: '00:02:00'\n    target:\n      entity_id:\
-  \ timer.door_light_timeout\n\n# Condition to ensure light is turned off when door\
-  \ closes or timer expires\ncondition:\n  - condition: or\n    conditions:\n    \
-  \  - condition: state\n        entity_id: !input door_sensor\n        state: 'off'\n\
-  \      - condition: template\n        value_template: \"{{ (timer.door_light_timeout.state\
-  \ == 'idle') }}\"\n\n# Final action to turn off light\nfinalize:\n  - service: light.turn_off\n\
-  \    target: !input light_switch\n\nmode: single\nmax_exceeded: silent\n```"
+response: "```yaml\n# Home Assistant Blueprint: Turn on Light When Door Opens\nblueprint:\n\
+  \  name: \"Door Open Light Trigger\"\n  description: \"Automatically turn on a light\
+  \ when a door opens and turn it off when closed or after a timeout\"\n  domain:\
+  \ automation\n  \n  # Define inputs for flexibility\n  input:\n    door_sensor:\n\
+  \      name: Door Sensor \n      description: \"Binary sensor to detect door state\"\
+  \n      selector:\n        entity:\n          domain: binary_sensor\n    \n    light_switch:\n\
+  \      name: Light to Control\n      description: \"Light entity to turn on/off\"\
+  \n      selector:\n        target:\n          entity:\n            domain: light\n\
+  \n# Automation configuration  \ntrigger:\n  # Trigger when door sensor changes to\
+  \ 'on' (open)\n  - platform: state\n    entity_id: !input door_sensor\n    to: 'on'\n\
+  \ncondition: []\n\naction:\n  # Turn on the specified light\n  - service: light.turn_on\n\
+  \    target: !input light_switch\n  \n  # Start a timer to turn off the light after\
+  \ 2 minutes or when door closes\n  - wait_for_trigger:\n      - platform: state\n\
+  \        entity_id: !input door_sensor\n        to: 'off'\n    timeout: \n     \
+  \ minutes: 2\n    continue_on_timeout: true\n\n  # Turn off the light after wait\
+  \ is complete\n  - service: light.turn_off\n    target: !input light_switch\n\n\
+  mode: single\n```"
 context:
   conversation_trace:
   - event_type: async_process
@@ -75,7 +74,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMSVQ1JEK282VPCVBS1TG2RN
+        id: 01JMTMVFXY10EEY8495H3TZET7
         parent_id: null
         user_id: null
       conversation_id: null
@@ -86,7 +85,7 @@ context:
   - event_type: agent_detail
     data:
       system: |-
-        Current time is 08:54:42. Today's date is 2025-02-23.
+        Current time is 16:14:02. Today's date is 2025-02-23.
 
         Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -123,25 +122,23 @@ context:
       - role: assistant
         content:
         - type: text
-          text: "```yaml\n# Blueprint for turning on a light when a door opens\nblueprint:\n\
-            \  name: Door Light Trigger\n  description: Automatically turn on a light\
-            \ when a door opens and turn it off after closing or timeout\n  domain:\
-            \ automation\n  input:\n    door_sensor:\n      name: Door Sensor\n  \
-            \    description: Binary sensor that detects door open/close state\n \
-            \     selector:\n        entity:\n          domain: binary_sensor\n  \
-            \  \n    light_switch:\n      name: Light to Control\n      description:\
-            \ Light entity(ies) to turn on when door opens\n      selector:\n    \
-            \    target:\n          entity:\n            domain: light\n\n# Automation\
-            \ configuration\ntrigger:\n  - platform: state\n    entity_id: !input\
-            \ door_sensor\n    from: 'off'\n    to: 'on'\n\naction:\n  # Turn on light\
-            \ when door opens\n  - service: light.turn_on\n    target: !input light_switch\n\
-            \n  # Start timer to turn off light\n  - service: timer.start\n    data:\n\
-            \      duration: '00:02:00'\n    target:\n      entity_id: timer.door_light_timeout\n\
-            \n# Condition to ensure light is turned off when door closes or timer\
-            \ expires\ncondition:\n  - condition: or\n    conditions:\n      - condition:\
-            \ state\n        entity_id: !input door_sensor\n        state: 'off'\n\
-            \      - condition: template\n        value_template: \"{{ (timer.door_light_timeout.state\
-            \ == 'idle') }}\"\n\n# Final action to turn off light\nfinalize:\n  -\
-            \ service: light.turn_off\n    target: !input light_switch\n\nmode: single\n\
-            max_exceeded: silent\n```"
+          text: "```yaml\n# Home Assistant Blueprint: Turn on Light When Door Opens\n\
+            blueprint:\n  name: \"Door Open Light Trigger\"\n  description: \"Automatically\
+            \ turn on a light when a door opens and turn it off when closed or after\
+            \ a timeout\"\n  domain: automation\n  \n  # Define inputs for flexibility\n\
+            \  input:\n    door_sensor:\n      name: Door Sensor \n      description:\
+            \ \"Binary sensor to detect door state\"\n      selector:\n        entity:\n\
+            \          domain: binary_sensor\n    \n    light_switch:\n      name:\
+            \ Light to Control\n      description: \"Light entity to turn on/off\"\
+            \n      selector:\n        target:\n          entity:\n            domain:\
+            \ light\n\n# Automation configuration  \ntrigger:\n  # Trigger when door\
+            \ sensor changes to 'on' (open)\n  - platform: state\n    entity_id: !input\
+            \ door_sensor\n    to: 'on'\n\ncondition: []\n\naction:\n  # Turn on the\
+            \ specified light\n  - service: light.turn_on\n    target: !input light_switch\n\
+            \  \n  # Start a timer to turn off the light after 2 minutes or when door\
+            \ closes\n  - wait_for_trigger:\n      - platform: state\n        entity_id:\
+            \ !input door_sensor\n        to: 'off'\n    timeout: \n      minutes:\
+            \ 2\n    continue_on_timeout: true\n\n  # Turn off the light after wait\
+            \ is complete\n  - service: light.turn_off\n    target: !input light_switch\n\
+            \nmode: single\n```"
   tries: 0

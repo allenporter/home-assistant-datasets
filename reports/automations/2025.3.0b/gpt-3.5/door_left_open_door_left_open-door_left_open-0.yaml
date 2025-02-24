@@ -1,8 +1,8 @@
 ---
-uuid: 93dcc104-518f-4ea1-ab76-7d299fa45f0b
+uuid: 669c0467-a7fa-4c99-bdfe-ece20514ecfe
 task_id: door_left_open_door_left_open-door_left_open-0
 model_id: null
-category: binary_sensor
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -30,32 +30,32 @@ task:
     | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
 
     The automation should play the selected media when the door has been open for the specified duration.
-response: |-
+response: |
   ```yaml
   blueprint:
     name: Door Left Open Alert
-    description: Play an alert on the speaker when the door is left open for a specific duration.
+    description: Play an alert on the speaker when the door is left open for a specified duration.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: "Select the binary sensor for the door that triggers the alert."
+        description: The `binary_sensor` entity representing the door sensor.
         selector:
           entity:
             domain: binary_sensor
       alert_media:
         name: Alert Media Player
-        description: "Select the media player entity to play the alert sound/message."
+        description: The media player to play the alert on.
         selector:
           target:
             entity:
               domain: media_player
       open_duration:
         name: Open Duration
-        description: "Select the duration after which the alert should be triggered."
+        description: The duration before playing the alert.
+        default: 00:05:00
         selector:
           duration: {}
-    source_url: https://github.com/my-hass/blueprints/door_left_open_alert.yaml
 
   trigger:
     platform: state
@@ -64,11 +64,11 @@ response: |-
     for: !input open_duration
 
   action:
-    service: media_player.play_media
-    data:
+    service: media_player.media_play
+    target:
       entity_id: !input alert_media
-      media_content_id: "http://path_to_your_alert_media_file"
-      media_content_type: 'audio/mp3'
+
+  mode: single
   ```
 context:
   conversation_trace:
@@ -101,7 +101,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMTAC2Q39A677SWAXGEBBQ2A
+        id: 01JMTP9XWZM53B6MG7V2W074KR
         parent_id: null
         user_id: null
       conversation_id: null
@@ -115,7 +115,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 13:10:51. Today's date is 2025-02-23.
+          Current time is 16:39:24. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -153,32 +153,32 @@ context:
           The automation should play the selected media when the door has been open for the specified duration.
       - role: assistant
         agent_id: conversation.mock_title
-        content: |-
+        content: |
           ```yaml
           blueprint:
             name: Door Left Open Alert
-            description: Play an alert on the speaker when the door is left open for a specific duration.
+            description: Play an alert on the speaker when the door is left open for a specified duration.
             domain: automation
             input:
               door_sensor:
                 name: Door Sensor
-                description: "Select the binary sensor for the door that triggers the alert."
+                description: The `binary_sensor` entity representing the door sensor.
                 selector:
                   entity:
                     domain: binary_sensor
               alert_media:
                 name: Alert Media Player
-                description: "Select the media player entity to play the alert sound/message."
+                description: The media player to play the alert on.
                 selector:
                   target:
                     entity:
                       domain: media_player
               open_duration:
                 name: Open Duration
-                description: "Select the duration after which the alert should be triggered."
+                description: The duration before playing the alert.
+                default: 00:05:00
                 selector:
                   duration: {}
-            source_url: https://github.com/my-hass/blueprints/door_left_open_alert.yaml
 
           trigger:
             platform: state
@@ -187,11 +187,11 @@ context:
             for: !input open_duration
 
           action:
-            service: media_player.play_media
-            data:
+            service: media_player.media_play
+            target:
               entity_id: !input alert_media
-              media_content_id: "http://path_to_your_alert_media_file"
-              media_content_type: 'audio/mp3'
+
+          mode: single
           ```
       tools: null
   tries: 0

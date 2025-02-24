@@ -1,7 +1,8 @@
 ---
-uuid: 58d77ae4-6e8e-4687-932f-ecfc7928c8eb
+uuid: f868b40e-4e8f-4851-8f72-232b2e24d18d
 task_id: door_left_open_door_left_open-door_left_open-4
-category: binary_sensor
+model_id: null
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -45,7 +46,7 @@ response: |-
             device_class: door
       alert_media:
         name: Alert Media
-        description: The media player and media to play when the door is left open.
+        description: The media to play when the door is left open.
         selector:
           media: {}
       open_duration:
@@ -55,22 +56,24 @@ response: |-
           duration: {}
 
   # Automation Metadata
-  mode: single
+  mode: restart
   max_exceeded: silent
 
+  # Automation Trigger
   trigger:
     - platform: state
       entity_id: !input door_sensor
       to: "on"
       for: !input open_duration
 
+  # Automation Actions
   action:
     - service: media_player.play_media
       data:
         media_content_id: !input alert_media
-        media_content_type: music # set to music for broad compatibility
+        media_content_type: music
       target:
-        entity_id: "{{ state_attr(alert_media, 'entity_id') }}"
+        entity_id: !input alert_media # Assuming alert_media is the entity ID of the media player
   ```
 context:
   conversation_trace:
@@ -103,7 +106,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMKFSX4FRA5DTGYBQR5H4JK5
+        id: 01JMTNDR4QTN314X7J5MGZ1AFE
         parent_id: null
         user_id: null
       conversation_id: null
@@ -117,7 +120,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:31:06. Today's date is 2025-02-20.
+          Current time is 16:24:00. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -171,7 +174,7 @@ context:
                     device_class: door
               alert_media:
                 name: Alert Media
-                description: The media player and media to play when the door is left open.
+                description: The media to play when the door is left open.
                 selector:
                   media: {}
               open_duration:
@@ -181,24 +184,24 @@ context:
                   duration: {}
 
           # Automation Metadata
-          mode: single
+          mode: restart
           max_exceeded: silent
 
+          # Automation Trigger
           trigger:
             - platform: state
               entity_id: !input door_sensor
               to: "on"
               for: !input open_duration
 
+          # Automation Actions
           action:
             - service: media_player.play_media
               data:
                 media_content_id: !input alert_media
-                media_content_type: music # set to music for broad compatibility
+                media_content_type: music
               target:
-                entity_id: "{{ state_attr(alert_media, 'entity_id') }}"
+                entity_id: !input alert_media # Assuming alert_media is the entity ID of the media player
           ```
       tools: null
   tries: 0
-eval_result:
-  result: true

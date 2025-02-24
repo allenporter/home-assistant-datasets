@@ -1,8 +1,8 @@
 ---
-uuid: a433d23b-136b-46fd-ad04-d86d161a21fe
+uuid: 17190e22-cdd6-4617-8954-01357d25ea8c
 task_id: door_left_open_door_left_open-door_left_open-1
 model_id: null
-category: binary_sensor
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -34,7 +34,7 @@ response: |-
   ```yaml
   blueprint:
     name: Door Left Open Alert
-    description: Play an alert on the speaker when the door is left open for a specified duration.
+    description: Alert when a door is left open for a specified duration
     domain: automation
     input:
       door_sensor:
@@ -45,36 +45,28 @@ response: |-
             domain: binary_sensor
       alert_media:
         name: Alert Media
-        description: Select the media to play when the door is left open.
+        description: Select the media entity and media ID for the alert.
         selector:
           media: {}
       open_duration:
         name: Open Duration
-        description: Duration to wait before playing the alert.
+        description: Duration the door must be open before the alert is triggered.
         selector:
-          duration: {}
+          duration:
 
   trigger:
     - platform: state
       entity_id: !input door_sensor
-      to: 'on'  # Trigger when the door is open
-
-  condition:
-    - condition: state
-      entity_id: !input door_sensor
-      state: 'on'  # Ensure the door is still open
+      to: "on"
+      for: !input open_duration
 
   action:
-    - delay: !input open_duration  # Wait for the specified duration
-    - condition: state
-      entity_id: !input door_sensor
-      state: 'on'  # Check again if the door is still open after the delay
     - service: media_player.play_media
       target:
         entity_id: !input alert_media
       data:
-        media_content_id: 'Your media content ID'  # Placeholder for actual media content id
-        media_content_type: 'music'  # Adjust the media type if needed
+        media_content_id: "Your Media ID Here"  # Specify the media content ID here
+        media_content_type: "audio/mp3"  # Change this according to your media type
 
   mode: single
   ```
@@ -109,7 +101,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMSVP6A45JFR55GY1BFD398T
+        id: 01JMTPBRW89R4V628F5K27MCX3
         parent_id: null
         user_id: null
       conversation_id: null
@@ -123,7 +115,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 08:54:14. Today's date is 2025-02-23.
+          Current time is 16:40:24. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -165,7 +157,7 @@ context:
           ```yaml
           blueprint:
             name: Door Left Open Alert
-            description: Play an alert on the speaker when the door is left open for a specified duration.
+            description: Alert when a door is left open for a specified duration
             domain: automation
             input:
               door_sensor:
@@ -176,36 +168,28 @@ context:
                     domain: binary_sensor
               alert_media:
                 name: Alert Media
-                description: Select the media to play when the door is left open.
+                description: Select the media entity and media ID for the alert.
                 selector:
                   media: {}
               open_duration:
                 name: Open Duration
-                description: Duration to wait before playing the alert.
+                description: Duration the door must be open before the alert is triggered.
                 selector:
-                  duration: {}
+                  duration:
 
           trigger:
             - platform: state
               entity_id: !input door_sensor
-              to: 'on'  # Trigger when the door is open
-
-          condition:
-            - condition: state
-              entity_id: !input door_sensor
-              state: 'on'  # Ensure the door is still open
+              to: "on"
+              for: !input open_duration
 
           action:
-            - delay: !input open_duration  # Wait for the specified duration
-            - condition: state
-              entity_id: !input door_sensor
-              state: 'on'  # Check again if the door is still open after the delay
             - service: media_player.play_media
               target:
                 entity_id: !input alert_media
               data:
-                media_content_id: 'Your media content ID'  # Placeholder for actual media content id
-                media_content_type: 'music'  # Adjust the media type if needed
+                media_content_id: "Your Media ID Here"  # Specify the media content ID here
+                media_content_type: "audio/mp3"  # Change this according to your media type
 
           mode: single
           ```

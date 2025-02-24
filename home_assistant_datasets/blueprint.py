@@ -10,6 +10,8 @@ from dataclasses import dataclass
 import tempfile
 from typing import Generator
 
+import yaml
+
 
 # Regular expression to extract yaml/blueprint from the model output.
 YAML_RESPONSE = re.compile(r".*```yaml\s*(.*?)\s+```.*", re.DOTALL | re.MULTILINE)
@@ -45,6 +47,23 @@ class BlueprintContent:
 
     yaml_content: str | None
     """YAML content extracted from the model output."""
+
+    def validate_inputs_present(self, expected_inputs: list[str]) -> None:
+        """Assert that the specified inputs of the blueprint are present."""
+        try:
+            doc = yaml.load(
+                self.yaml_content, Loader=yaml.BaseLoader
+            )  # Ignore constructors
+        except yaml.YAMLError as err:
+            err_str = str(err).replace("\n", " ")
+            assert False, f"Blueprint was not valid yaml: {err_str}"
+
+        blueprint = doc.get("blueprint")
+        assert blueprint, "Blueprint yaml did not contain 'blueprint:' key"
+        input = blueprint.get("input")
+        assert input
+        for key in expected_inputs:
+            assert key in input, f"Required input '{key}' missing from blueprint"
 
 
 @contextmanager

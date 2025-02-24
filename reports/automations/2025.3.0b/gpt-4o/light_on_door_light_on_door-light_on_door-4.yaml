@@ -1,7 +1,8 @@
 ---
-uuid: 507418fe-52d9-4d2d-a6a0-7ea22ea1bd89
+uuid: 45337999-2562-41b9-aa4e-388bd322bd6f
 task_id: light_on_door_light_on_door-light_on_door-4
-category: binary_sensor
+model_id: null
+category: light
 task:
   input_text: |
     # Light on door
@@ -31,43 +32,50 @@ response: |-
   ```yaml
   blueprint:
     name: Light on Door Open
-    description: Turn on a light when a door opens and turn off when door closes or after 2 minutes.
+    description: Turn on a light when a door opens and turn it off when it closes or after 2 minutes.
     domain: automation
     input:
       door_sensor:
         name: Door Sensor
-        description: A binary_sensor that triggers the automation to start.
+        description: A binary sensor that triggers the automation to start.
         selector:
           entity:
             domain: binary_sensor
       light_switch:
         name: Light Switch
-        description: One or more light entity targets to turn on or off.
+        description: One or more light entity targets to turn on or off when the automation fires.
         selector:
           target:
             entity:
               domain: light
+
+  mode: restart  # Ensures the automation handles door toggling quickly
 
   trigger:
     - platform: state
       entity_id: !input door_sensor
       from: 'off'
       to: 'on'
+      # Trigger when the door opens
 
   action:
     - service: light.turn_on
       target: !input light_switch
+      # Turn on the light(s)
 
     - wait_for_trigger:
         - platform: state
           entity_id: !input door_sensor
           from: 'on'
           to: 'off'
+      # Wait for the door to close
 
-      timeout: '00:02:00'
+    - delay: '00:02:00'
+      # Wait for 2 minutes before turning off the light if door stays open
 
     - service: light.turn_off
       target: !input light_switch
+      # Turn off the light(s) when the door closes or after 2 minutes
   ```
 context:
   conversation_trace:
@@ -98,7 +106,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMKFJQFPX2F99YGXJXP2HQ34
+        id: 01JMTPETRF6DTR1V0WMP1RPTCG
         parent_id: null
         user_id: null
       conversation_id: null
@@ -112,7 +120,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:27:11. Today's date is 2025-02-20.
+          Current time is 16:42:04. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -152,45 +160,50 @@ context:
           ```yaml
           blueprint:
             name: Light on Door Open
-            description: Turn on a light when a door opens and turn off when door closes or after 2 minutes.
+            description: Turn on a light when a door opens and turn it off when it closes or after 2 minutes.
             domain: automation
             input:
               door_sensor:
                 name: Door Sensor
-                description: A binary_sensor that triggers the automation to start.
+                description: A binary sensor that triggers the automation to start.
                 selector:
                   entity:
                     domain: binary_sensor
               light_switch:
                 name: Light Switch
-                description: One or more light entity targets to turn on or off.
+                description: One or more light entity targets to turn on or off when the automation fires.
                 selector:
                   target:
                     entity:
                       domain: light
+
+          mode: restart  # Ensures the automation handles door toggling quickly
 
           trigger:
             - platform: state
               entity_id: !input door_sensor
               from: 'off'
               to: 'on'
+              # Trigger when the door opens
 
           action:
             - service: light.turn_on
               target: !input light_switch
+              # Turn on the light(s)
 
             - wait_for_trigger:
                 - platform: state
                   entity_id: !input door_sensor
                   from: 'on'
                   to: 'off'
+              # Wait for the door to close
 
-              timeout: '00:02:00'
+            - delay: '00:02:00'
+              # Wait for 2 minutes before turning off the light if door stays open
 
             - service: light.turn_off
               target: !input light_switch
+              # Turn off the light(s) when the door closes or after 2 minutes
           ```
       tools: null
   tries: 0
-eval_result:
-  result: true

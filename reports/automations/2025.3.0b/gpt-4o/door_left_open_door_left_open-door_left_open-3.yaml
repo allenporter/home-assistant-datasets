@@ -1,7 +1,8 @@
 ---
-uuid: 52110635-97c1-4486-b463-18dbbd34b2f1
+uuid: 3f7ae593-aeb1-4d92-a17a-964385de1872
 task_id: door_left_open_door_left_open-door_left_open-3
-category: binary_sensor
+model_id: null
+category: media_player
 task:
   input_text: |
     # Door left open
@@ -30,31 +31,31 @@ task:
 
     The automation should play the selected media when the door has been open for the specified duration.
 response: "```yaml\nblueprint:\n  name: Door Left Open Alert\n  description: Play\
-  \ an alert on the speaker when the door is left open for a specified duration.\n\
-  \  domain: automation\n  input:\n    door_sensor:\n      name: Door Sensor\n   \
-  \   description: A binary sensor entity for the door that is the target of the automation.\n\
+  \ an alert on a speaker if a door is left open for a specified duration.\n  domain:\
+  \ automation\n  input:\n    door_sensor:\n      name: Door Sensor\n      description:\
+  \ A binary_sensor entity for the door sensor that is the target of the automation.\n\
   \      selector:\n        entity:\n          domain: binary_sensor\n    alert_media:\n\
-  \      name: Alert Media\n      description: Media player and media id to be played\
-  \ as an alert.\n      selector:\n        media:\n    open_duration:\n      name:\
-  \ Open Duration\n      description: The amount of time the door is left open before\
-  \ triggering the alert.\n      selector:\n        duration:\n\ntrigger:\n  # The\
-  \ automation triggers when the selected door is open\n  - platform: state\n    entity_id:\
-  \ !input door_sensor\n    from: 'off'\n    to: 'on'\n    for: !input open_duration\n\
-  \naction:\n  # Play the alert on the selected media\n  - service: media_player.play_media\n\
-  \    target:\n      entity_id: !input alert_media.entity_id\n    data:\n      media_content_id:\
-  \ !input alert_media.media_id\n      media_content_type: 'music'\n\nmode: restart\n\
-  ```\n\n### Explanation\n- **Blueprint Information**: Include metadata, such as `name`\
-  \ and `description` to describe the purpose of the blueprint.\n  \n- **Inputs**:\
-  \ Define three inputs:\n  - `door_sensor` for selecting a binary sensor representing\
-  \ the door.\n  - `alert_media` for selecting a media player and specific media to\
-  \ be played as an alert.\n  - `open_duration` allows the user to set a duration\
-  \ threshold for how long the door must be open before triggering the alert.\n  \n\
-  - **Trigger**: The automation starts with a state trigger that monitors when the\
-  \ door (`binary_sensor`) transitions to an 'on' state (open) for the specified `open_duration`.\n\
-  \  \n- **Action**: When triggered, the action uses the `media_player.play_media`\
-  \ service to play the selected alert on the configured media player.\n\n- **Mode**:\
-  \ Set to `restart` to handle consecutive triggers when the door remains open.\n\
-  ```"
+  \      name: Alert Media\n      description: The media entity where the alert will\
+  \ be played.\n      selector:\n        target:\n          entity:\n            domain:\
+  \ media_player\n    open_duration:\n      name: Open Duration\n      description:\
+  \ The duration the door is left open before the alert is played.\n      selector:\n\
+  \        duration:\n\ntrigger:\n  - platform: state\n    entity_id: !input door_sensor\n\
+  \    from: 'off'\n    to: 'on'\n    for: !input open_duration\n\naction:\n  - service:\
+  \ media_player.play_media\n    target: !input alert_media\n    data:\n      media_content_id:\
+  \ \"http://example.com/path/to/alert_sound.mp3\" # Replace with the actual media\
+  \ URL or ID\n      media_content_type: \"music\" # The content type may vary depending\
+  \ on the media type used\n\nmode: single\n```\n\n### Explanation:\n- **Blueprint\
+  \ Definition**: The blueprint is defined with a name and description, indicating\
+  \ its purpose is to alert users when a door is left open.\n- **Inputs**: \n  - `door_sensor`:\
+  \ Accepts a binary sensor entity which will indicate the state of the door.\n  -\
+  \ `alert_media`: Accepts a media player target where the alert will be played.\n\
+  \  - `open_duration`: Accepts a duration indicating how long the door should be\
+  \ left open before triggering the alert.\n- **Trigger**: Detected when the `door_sensor`\
+  \ state changes from 'off' (closed) to 'on' (open) and stays open for the specified\
+  \ `open_duration`.\n- **Action**: Uses the `media_player.play_media` service to\
+  \ play the alert on the specified `alert_media`. The media URL or content ID should\
+  \ be customized to play the desired sound.\n- **Mode**: Set to `single` to ensure\
+  \ the action does not trigger multiple times simultaneously."
 context:
   conversation_trace:
   - event_type: async_process
@@ -86,7 +87,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JMKFK44V8MS81K6HZJKFR46S
+        id: 01JMTPFRYC88BW8G12D16WG7H7
         parent_id: null
         user_id: null
       conversation_id: null
@@ -100,7 +101,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:27:24. Today's date is 2025-02-20.
+          Current time is 16:42:35. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -139,35 +140,33 @@ context:
       - role: assistant
         agent_id: conversation.mock_title
         content: "```yaml\nblueprint:\n  name: Door Left Open Alert\n  description:\
-          \ Play an alert on the speaker when the door is left open for a specified\
-          \ duration.\n  domain: automation\n  input:\n    door_sensor:\n      name:\
-          \ Door Sensor\n      description: A binary sensor entity for the door that\
-          \ is the target of the automation.\n      selector:\n        entity:\n \
-          \         domain: binary_sensor\n    alert_media:\n      name: Alert Media\n\
-          \      description: Media player and media id to be played as an alert.\n\
-          \      selector:\n        media:\n    open_duration:\n      name: Open Duration\n\
-          \      description: The amount of time the door is left open before triggering\
-          \ the alert.\n      selector:\n        duration:\n\ntrigger:\n  # The automation\
-          \ triggers when the selected door is open\n  - platform: state\n    entity_id:\
-          \ !input door_sensor\n    from: 'off'\n    to: 'on'\n    for: !input open_duration\n\
-          \naction:\n  # Play the alert on the selected media\n  - service: media_player.play_media\n\
-          \    target:\n      entity_id: !input alert_media.entity_id\n    data:\n\
-          \      media_content_id: !input alert_media.media_id\n      media_content_type:\
-          \ 'music'\n\nmode: restart\n```\n\n### Explanation\n- **Blueprint Information**:\
-          \ Include metadata, such as `name` and `description` to describe the purpose\
-          \ of the blueprint.\n  \n- **Inputs**: Define three inputs:\n  - `door_sensor`\
-          \ for selecting a binary sensor representing the door.\n  - `alert_media`\
-          \ for selecting a media player and specific media to be played as an alert.\n\
-          \  - `open_duration` allows the user to set a duration threshold for how\
-          \ long the door must be open before triggering the alert.\n  \n- **Trigger**:\
-          \ The automation starts with a state trigger that monitors when the door\
-          \ (`binary_sensor`) transitions to an 'on' state (open) for the specified\
-          \ `open_duration`.\n  \n- **Action**: When triggered, the action uses the\
-          \ `media_player.play_media` service to play the selected alert on the configured\
-          \ media player.\n\n- **Mode**: Set to `restart` to handle consecutive triggers\
-          \ when the door remains open.\n```"
+          \ Play an alert on a speaker if a door is left open for a specified duration.\n\
+          \  domain: automation\n  input:\n    door_sensor:\n      name: Door Sensor\n\
+          \      description: A binary_sensor entity for the door sensor that is the\
+          \ target of the automation.\n      selector:\n        entity:\n        \
+          \  domain: binary_sensor\n    alert_media:\n      name: Alert Media\n  \
+          \    description: The media entity where the alert will be played.\n   \
+          \   selector:\n        target:\n          entity:\n            domain: media_player\n\
+          \    open_duration:\n      name: Open Duration\n      description: The duration\
+          \ the door is left open before the alert is played.\n      selector:\n \
+          \       duration:\n\ntrigger:\n  - platform: state\n    entity_id: !input\
+          \ door_sensor\n    from: 'off'\n    to: 'on'\n    for: !input open_duration\n\
+          \naction:\n  - service: media_player.play_media\n    target: !input alert_media\n\
+          \    data:\n      media_content_id: \"http://example.com/path/to/alert_sound.mp3\"\
+          \ # Replace with the actual media URL or ID\n      media_content_type: \"\
+          music\" # The content type may vary depending on the media type used\n\n\
+          mode: single\n```\n\n### Explanation:\n- **Blueprint Definition**: The blueprint\
+          \ is defined with a name and description, indicating its purpose is to alert\
+          \ users when a door is left open.\n- **Inputs**: \n  - `door_sensor`: Accepts\
+          \ a binary sensor entity which will indicate the state of the door.\n  -\
+          \ `alert_media`: Accepts a media player target where the alert will be played.\n\
+          \  - `open_duration`: Accepts a duration indicating how long the door should\
+          \ be left open before triggering the alert.\n- **Trigger**: Detected when\
+          \ the `door_sensor` state changes from 'off' (closed) to 'on' (open) and\
+          \ stays open for the specified `open_duration`.\n- **Action**: Uses the\
+          \ `media_player.play_media` service to play the alert on the specified `alert_media`.\
+          \ The media URL or content ID should be customized to play the desired sound.\n\
+          - **Mode**: Set to `single` to ensure the action does not trigger multiple\
+          \ times simultaneously."
       tools: null
   tries: 0
-eval_result:
-  result: false
-  message: Automation enttiy id automation.pantry_light_door syntax likely not valid

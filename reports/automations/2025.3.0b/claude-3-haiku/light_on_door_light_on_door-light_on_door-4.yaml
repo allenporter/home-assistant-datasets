@@ -1,8 +1,8 @@
 ---
-uuid: 12247c1d-93c0-4d67-a5cc-063caf7deee4
+uuid: 6e1dd050-0d66-41a3-a42d-6f8109d2aee0
 task_id: light_on_door_light_on_door-light_on_door-4
 model_id: null
-category: binary_sensor
+category: light
 task:
   input_text: |
     # Light on door
@@ -28,56 +28,26 @@ task:
 
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
-response: |-
-  ```yaml
-  blueprint:
-    name: Turn on light when door opens
-    description: Turn on a light when a door is opened and turn it off after a timeout or when the door is closed.
-    domain: automation
-    input:
-      door_sensor:
-        name: Door Sensor
-        description: Binary sensor that detects when the door is opened/closed
-        selector:
-          entity:
-            domain: binary_sensor
-      light_switch:
-        name: Light
-        description: Light entity(ies) to turn on/off
-        selector:
-          target:
-            entity:
-              domain: light
-
-  trigger:
-    - platform: state
-      entity_id: !input door_sensor
-      to: 'open'
-
-  action:
-    - service: light.turn_on
-      target:
-        entity_id: !input light_switch
-
-    - wait_for_trigger:
-        - platform: state
-          entity_id: !input door_sensor
-          to: 'closed'
-        - platform: time
-          minutes: 2
-
-    - service: light.turn_off
-      target:
-        entity_id: !input light_switch
-  ```
-
-  The blueprint takes two inputs: `door_sensor` and `light_switch`. The `door_sensor` is a binary sensor that detects when the door is opened or closed. The `light_switch` is the light entity(ies) to turn on or off.
-
-  The automation triggers when the `door_sensor` changes to the 'open' state. It then turns on the `light_switch`.
-
-  The automation then waits for either the `door_sensor` to change to the 'closed' state, or for 2 minutes to pass. Once one of these conditions is met, the automation turns off the `light_switch`.
-
-  This allows the light to be turned on when the door opens, and turned off either when the door closes or after a 2 minute timeout.
+response: "```yaml\nblueprint:\n  name: Light on door\n  description: Turn on a light\
+  \ when a door opens\n  domain: automation\n  input:\n    door_sensor:\n      name:\
+  \ Door sensor\n      description: Binary sensor that triggers when the door opens\n\
+  \      selector:\n        entity:\n          domain: binary_sensor\n    light_switch:\n\
+  \      name: Light\n      description: Light(s) to turn on when the door opens\n\
+  \      selector:\n        entity:\n          domain: light\n  \ntrigger:\n  platform:\
+  \ state\n  entity_id: \n    - binary_sensor.{{ door_sensor }}\n  to: 'open'\n  \n\
+  action:\n  - service: light.turn_on\n    target:\n      entity_id: \n        - {{\
+  \ light_switch }}\n        \n  - delay:\n      minutes: 2\n      \n  - service:\
+  \ light.turn_off\n    target:\n      entity_id:\n        - {{ light_switch }}\n\
+  ```\n\n## Step by Step Explanation:\n\n1. The blueprint defines two inputs: `door_sensor`\
+  \ and `light_switch`. The `door_sensor` is a binary sensor that triggers the automation\
+  \ when the door opens. The `light_switch` is one or more light entities that will\
+  \ be turned on when the door opens.\n\n2. The `trigger` section listens for the\
+  \ `door_sensor` to change state to `open`. This will trigger the automation.\n\n\
+  3. The `action` section first turns on the `light_switch` entities. \n\n4. After\
+  \ a 2 minute delay, the automation turns off the `light_switch` entities. This ensures\
+  \ the light stays on for 2 minutes after the door closes.\n\nThis blueprint can\
+  \ be used to automate turning on a light when a door opens, and turning it off after\
+  \ a set duration."
 context:
   conversation_trace:
   - event_type: async_process
@@ -107,7 +77,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMTAFJ3N8ZASV7071SJV98W9
+        id: 01JMTN7C3G73NK2D5NH6N6JGMT
         parent_id: null
         user_id: null
       conversation_id: null
@@ -118,7 +88,7 @@ context:
   - event_type: agent_detail
     data:
       system: |-
-        Current time is 13:12:45. Today's date is 2025-02-23.
+        Current time is 16:20:31. Today's date is 2025-02-23.
 
         Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -155,54 +125,26 @@ context:
       - role: assistant
         content:
         - type: text
-          text: |-
-            ```yaml
-            blueprint:
-              name: Turn on light when door opens
-              description: Turn on a light when a door is opened and turn it off after a timeout or when the door is closed.
-              domain: automation
-              input:
-                door_sensor:
-                  name: Door Sensor
-                  description: Binary sensor that detects when the door is opened/closed
-                  selector:
-                    entity:
-                      domain: binary_sensor
-                light_switch:
-                  name: Light
-                  description: Light entity(ies) to turn on/off
-                  selector:
-                    target:
-                      entity:
-                        domain: light
-
-            trigger:
-              - platform: state
-                entity_id: !input door_sensor
-                to: 'open'
-
-            action:
-              - service: light.turn_on
-                target:
-                  entity_id: !input light_switch
-
-              - wait_for_trigger:
-                  - platform: state
-                    entity_id: !input door_sensor
-                    to: 'closed'
-                  - platform: time
-                    minutes: 2
-
-              - service: light.turn_off
-                target:
-                  entity_id: !input light_switch
-            ```
-
-            The blueprint takes two inputs: `door_sensor` and `light_switch`. The `door_sensor` is a binary sensor that detects when the door is opened or closed. The `light_switch` is the light entity(ies) to turn on or off.
-
-            The automation triggers when the `door_sensor` changes to the 'open' state. It then turns on the `light_switch`.
-
-            The automation then waits for either the `door_sensor` to change to the 'closed' state, or for 2 minutes to pass. Once one of these conditions is met, the automation turns off the `light_switch`.
-
-            This allows the light to be turned on when the door opens, and turned off either when the door closes or after a 2 minute timeout.
+          text: "```yaml\nblueprint:\n  name: Light on door\n  description: Turn on\
+            \ a light when a door opens\n  domain: automation\n  input:\n    door_sensor:\n\
+            \      name: Door sensor\n      description: Binary sensor that triggers\
+            \ when the door opens\n      selector:\n        entity:\n          domain:\
+            \ binary_sensor\n    light_switch:\n      name: Light\n      description:\
+            \ Light(s) to turn on when the door opens\n      selector:\n        entity:\n\
+            \          domain: light\n  \ntrigger:\n  platform: state\n  entity_id:\
+            \ \n    - binary_sensor.{{ door_sensor }}\n  to: 'open'\n  \naction:\n\
+            \  - service: light.turn_on\n    target:\n      entity_id: \n        -\
+            \ {{ light_switch }}\n        \n  - delay:\n      minutes: 2\n      \n\
+            \  - service: light.turn_off\n    target:\n      entity_id:\n        -\
+            \ {{ light_switch }}\n```\n\n## Step by Step Explanation:\n\n1. The blueprint\
+            \ defines two inputs: `door_sensor` and `light_switch`. The `door_sensor`\
+            \ is a binary sensor that triggers the automation when the door opens.\
+            \ The `light_switch` is one or more light entities that will be turned\
+            \ on when the door opens.\n\n2. The `trigger` section listens for the\
+            \ `door_sensor` to change state to `open`. This will trigger the automation.\n\
+            \n3. The `action` section first turns on the `light_switch` entities.\
+            \ \n\n4. After a 2 minute delay, the automation turns off the `light_switch`\
+            \ entities. This ensures the light stays on for 2 minutes after the door\
+            \ closes.\n\nThis blueprint can be used to automate turning on a light\
+            \ when a door opens, and turning it off after a set duration."
   tries: 0

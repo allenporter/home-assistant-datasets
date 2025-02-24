@@ -1,8 +1,8 @@
 ---
-uuid: 6108d08a-8754-4e44-bd04-9f85013a4aa5
+uuid: e946df37-6930-46fd-9e9d-6378bd01ee1a
 task_id: light_on_door_light_on_door-light_on_door-4
 model_id: null
-category: binary_sensor
+category: light
 task:
   input_text: |
     # Light on door
@@ -28,24 +28,26 @@ task:
 
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
-response: "```yaml\n# Door Light Activation Blueprint\n# Turns on a light when a door\
-  \ opens and manages light timeout\n\nblueprint:\n  name: Door Light Activation\n\
-  \  description: Automatically turn on a light when a door opens and manage light\
-  \ timeout\n  domain: automation\n  \n  # Define input parameters for door sensor\
-  \ and light\n  input:\n    door_sensor:\n      name: Door Sensor\n      description:\
-  \ Binary sensor that detects door state\n      selector:\n        entity:\n    \
-  \      domain: binary_sensor\n    \n    light_switch:\n      name: Light Target\n\
-  \      description: Light(s) to control when door opens\n      selector:\n     \
-  \   target:\n          entity:\n            domain: light\n\n# Automation triggers\
-  \ and actions\ntrigger:\n  # Trigger when door opens (changes from closed to open)\n\
-  \  - platform: state\n    entity_id: !input door_sensor\n    from: 'off'\n    to:\
-  \ 'on'\n\naction:\n  # Turn on the light when door opens\n  - service: light.turn_on\n\
-  \    target: !input light_switch\n  \n  # Create a timeout to turn off the light\n\
-  \  - wait_for_trigger:\n      # Wait for door to close or 2 minute timeout\n   \
-  \   - platform: state\n        entity_id: !input door_sensor\n        to: 'off'\n\
-  \      - platform: time_pattern\n        minutes: '/2'\n  \n  # Turn off light after\
-  \ trigger or timeout\n  - service: light.turn_off\n    target: !input light_switch\n\
-  \nmode: single  # Prevent multiple simultaneous executions\n```"
+response: "```yaml\nblueprint:\n  name: Door Open Light Automation\n  description:\
+  \ Turn on a light when a door opens, with automatic timeout\n  domain: automation\n\
+  \  input:\n    door_sensor:\n      name: Door Sensor\n      description: Binary\
+  \ sensor that detects door open/closed state\n      selector:\n        entity:\n\
+  \          domain: binary_sensor\n    \n    light_switch:\n      name: Light(s)\
+  \ to Control\n      description: Light entity or group to turn on when door opens\n\
+  \      selector:\n        target:\n          entity:\n            domain: light\n\
+  \ntrigger:\n  - platform: state\n    entity_id: !input door_sensor\n    from: 'off'\n\
+  \    to: 'on'\n\naction:\n  # Turn on the specified light(s) when door opens\n \
+  \ - service: light.turn_on\n    target: !input light_switch\n\n  # Start a 2-minute\
+  \ timeout timer to turn off the light\n  - service: timer.start\n    target:\n \
+  \     entity_id: timer.door_light_timeout\n    data:\n      duration: '00:02:00'\n\
+  \n# Optional timer to automatically turn off light\ntimer:\n  door_light_timeout:\n\
+  \    name: Door Light Timeout\n\n# Additional actions to turn off light\nvariables:\n\
+  \  door_sensor: !input door_sensor\n  light_switch: !input light_switch\n\n# Combine\
+  \ conditions for turning off light\nmode: restart\nmax_exceeded: silent\n\n# Turn\
+  \ off light when door closes or timer expires\ntrigger:\n  - platform: state\n \
+  \   entity_id: !input door_sensor\n    to: 'off'\n  \n  - platform: event\n    event_type:\
+  \ timer.finished\n    event_data:\n      entity_id: timer.door_light_timeout\n\n\
+  action:\n  - service: light.turn_off\n    target: !input light_switch\n```"
 context:
   conversation_trace:
   - event_type: async_process
@@ -75,7 +77,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMSVQMY5HSBNX2JFVHXBTHJH
+        id: 01JMTMW4KZ8ZASV7071SJV98W9
         parent_id: null
         user_id: null
       conversation_id: null
@@ -86,7 +88,7 @@ context:
   - event_type: agent_detail
     data:
       system: |-
-        Current time is 08:55:02. Today's date is 2025-02-23.
+        Current time is 16:14:23. Today's date is 2025-02-23.
 
         Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -123,25 +125,27 @@ context:
       - role: assistant
         content:
         - type: text
-          text: "```yaml\n# Door Light Activation Blueprint\n# Turns on a light when\
-            \ a door opens and manages light timeout\n\nblueprint:\n  name: Door Light\
-            \ Activation\n  description: Automatically turn on a light when a door\
-            \ opens and manage light timeout\n  domain: automation\n  \n  # Define\
-            \ input parameters for door sensor and light\n  input:\n    door_sensor:\n\
-            \      name: Door Sensor\n      description: Binary sensor that detects\
-            \ door state\n      selector:\n        entity:\n          domain: binary_sensor\n\
-            \    \n    light_switch:\n      name: Light Target\n      description:\
-            \ Light(s) to control when door opens\n      selector:\n        target:\n\
-            \          entity:\n            domain: light\n\n# Automation triggers\
-            \ and actions\ntrigger:\n  # Trigger when door opens (changes from closed\
-            \ to open)\n  - platform: state\n    entity_id: !input door_sensor\n \
-            \   from: 'off'\n    to: 'on'\n\naction:\n  # Turn on the light when door\
+          text: "```yaml\nblueprint:\n  name: Door Open Light Automation\n  description:\
+            \ Turn on a light when a door opens, with automatic timeout\n  domain:\
+            \ automation\n  input:\n    door_sensor:\n      name: Door Sensor\n  \
+            \    description: Binary sensor that detects door open/closed state\n\
+            \      selector:\n        entity:\n          domain: binary_sensor\n \
+            \   \n    light_switch:\n      name: Light(s) to Control\n      description:\
+            \ Light entity or group to turn on when door opens\n      selector:\n\
+            \        target:\n          entity:\n            domain: light\n\ntrigger:\n\
+            \  - platform: state\n    entity_id: !input door_sensor\n    from: 'off'\n\
+            \    to: 'on'\n\naction:\n  # Turn on the specified light(s) when door\
             \ opens\n  - service: light.turn_on\n    target: !input light_switch\n\
-            \  \n  # Create a timeout to turn off the light\n  - wait_for_trigger:\n\
-            \      # Wait for door to close or 2 minute timeout\n      - platform:\
-            \ state\n        entity_id: !input door_sensor\n        to: 'off'\n  \
-            \    - platform: time_pattern\n        minutes: '/2'\n  \n  # Turn off\
-            \ light after trigger or timeout\n  - service: light.turn_off\n    target:\
-            \ !input light_switch\n\nmode: single  # Prevent multiple simultaneous\
-            \ executions\n```"
+            \n  # Start a 2-minute timeout timer to turn off the light\n  - service:\
+            \ timer.start\n    target:\n      entity_id: timer.door_light_timeout\n\
+            \    data:\n      duration: '00:02:00'\n\n# Optional timer to automatically\
+            \ turn off light\ntimer:\n  door_light_timeout:\n    name: Door Light\
+            \ Timeout\n\n# Additional actions to turn off light\nvariables:\n  door_sensor:\
+            \ !input door_sensor\n  light_switch: !input light_switch\n\n# Combine\
+            \ conditions for turning off light\nmode: restart\nmax_exceeded: silent\n\
+            \n# Turn off light when door closes or timer expires\ntrigger:\n  - platform:\
+            \ state\n    entity_id: !input door_sensor\n    to: 'off'\n  \n  - platform:\
+            \ event\n    event_type: timer.finished\n    event_data:\n      entity_id:\
+            \ timer.door_light_timeout\n\naction:\n  - service: light.turn_off\n \
+            \   target: !input light_switch\n```"
   tries: 0

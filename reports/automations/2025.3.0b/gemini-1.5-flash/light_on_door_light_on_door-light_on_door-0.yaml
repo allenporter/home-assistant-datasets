@@ -1,7 +1,8 @@
 ---
-uuid: 4ba57cf1-c7ed-4228-b44d-45452cd6db14
+uuid: 24a5e861-8eed-42fc-a3c9-a066706187ee
 task_id: light_on_door_light_on_door-light_on_door-0
-category: binary_sensor
+model_id: null
+category: light
 task:
   input_text: |
     # Light on door
@@ -29,27 +30,56 @@ task:
     light should be shut off when the door closes or after a 2 minute timeout.
 response: |-
   ```yaml
+  alias: Light on Door
+  description: Turn on a light when a door opens, and off when it closes or after a timeout.
+  use_blueprint:
+    path: blueprint.yaml
+  input:
+    door_sensor:
+      name: Door Sensor
+      description: The binary sensor that triggers the automation.
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: door
+    light_switch:
+      name: Light Switch
+      description: The light to turn on/off.
+      selector:
+        target:
+          entity:
+            domain: light
+            multiple: true
+
   blueprint:
-    name: Light on Door
-    description: Turn on a light when a door opens, and off when it closes or after a timeout.
+    name: Light on Door Blueprint
     domain: automation
     input:
       door_sensor:
-        name: Door Sensor
         description: The binary sensor that triggers the automation.
         selector:
           entity:
             domain: binary_sensor
             device_class: door
       light_switch:
-        name: Light Switch
-        description: The light(s) to turn on/off.
+        description: The light to turn on/off.
         selector:
-          entity:
-            domain: light
-            multiple: true
+          target:
+            entity:
+              domain: light
+              multiple: true
+      timeout:
+        name: Timeout
+        description: Timeout in minutes before the light turns off.
+        default: 2
+        selector:
+          number:
+            min: 1
+            unit_of_measurement: "minutes"
+
     variables:
-      timeout: 120 # 2 minutes in seconds
+      timeout_seconds: "{{ input.timeout * 60 }}"
+
 
     mode: single
 
@@ -61,22 +91,14 @@ response: |-
 
     action:
     - service: light.turn_on
-      target:
-        entity_id: !input light_switch
-    - choose:
-      - conditions:
-        - condition: state
-          entity_id: !input door_sensor
-          state: 'off'
-        sequence:
-        - service: light.turn_off
-          target:
-            entity_id: !input light_switch
-      - default:
-        - delay: !template "{{ states('sensor.uptime') | int * 1000 }}" # Workaround for no time-based cancel in single mode.
-        - service: light.turn_off
-          target:
-            entity_id: !input light_switch
+      target: !input light_switch
+    - delay: !lambda 'states.time.now() + timedelta(minutes=input.timeout)'
+    - service: light.turn_off
+      target: !input light_switch
+      condition:
+        condition: state
+        entity_id: !input door_sensor
+        state: 'off'
 
   ```
 context:
@@ -108,7 +130,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JMKFEFDXZEAR56YXGXJ1GT4D
+        id: 01JMTN9HW3M4102RMCJ3YNAEG8
         parent_id: null
         user_id: null
       conversation_id: null
@@ -122,7 +144,7 @@ context:
       - role: system
         agent_id: conversation.mock_title
         content: |-
-          Current time is 21:24:52. Today's date is 2025-02-20.
+          Current time is 16:21:43. Today's date is 2025-02-23.
 
           Create a Home Assistant blueprint YAML configuration based on the user request.
 
@@ -160,27 +182,56 @@ context:
         agent_id: conversation.mock_title
         content: |-
           ```yaml
+          alias: Light on Door
+          description: Turn on a light when a door opens, and off when it closes or after a timeout.
+          use_blueprint:
+            path: blueprint.yaml
+          input:
+            door_sensor:
+              name: Door Sensor
+              description: The binary sensor that triggers the automation.
+              selector:
+                entity:
+                  domain: binary_sensor
+                  device_class: door
+            light_switch:
+              name: Light Switch
+              description: The light to turn on/off.
+              selector:
+                target:
+                  entity:
+                    domain: light
+                    multiple: true
+
           blueprint:
-            name: Light on Door
-            description: Turn on a light when a door opens, and off when it closes or after a timeout.
+            name: Light on Door Blueprint
             domain: automation
             input:
               door_sensor:
-                name: Door Sensor
                 description: The binary sensor that triggers the automation.
                 selector:
                   entity:
                     domain: binary_sensor
                     device_class: door
               light_switch:
-                name: Light Switch
-                description: The light(s) to turn on/off.
+                description: The light to turn on/off.
                 selector:
-                  entity:
-                    domain: light
-                    multiple: true
+                  target:
+                    entity:
+                      domain: light
+                      multiple: true
+              timeout:
+                name: Timeout
+                description: Timeout in minutes before the light turns off.
+                default: 2
+                selector:
+                  number:
+                    min: 1
+                    unit_of_measurement: "minutes"
+
             variables:
-              timeout: 120 # 2 minutes in seconds
+              timeout_seconds: "{{ input.timeout * 60 }}"
+
 
             mode: single
 
@@ -192,26 +243,15 @@ context:
 
             action:
             - service: light.turn_on
-              target:
-                entity_id: !input light_switch
-            - choose:
-              - conditions:
-                - condition: state
-                  entity_id: !input door_sensor
-                  state: 'off'
-                sequence:
-                - service: light.turn_off
-                  target:
-                    entity_id: !input light_switch
-              - default:
-                - delay: !template "{{ states('sensor.uptime') | int * 1000 }}" # Workaround for no time-based cancel in single mode.
-                - service: light.turn_off
-                  target:
-                    entity_id: !input light_switch
+              target: !input light_switch
+            - delay: !lambda 'states.time.now() + timedelta(minutes=input.timeout)'
+            - service: light.turn_off
+              target: !input light_switch
+              condition:
+                condition: state
+                entity_id: !input door_sensor
+                state: 'off'
 
           ```
       tools: null
   tries: 0
-eval_result:
-  result: false
-  message: Automation enttiy id automation.pantry_light_door syntax likely not valid

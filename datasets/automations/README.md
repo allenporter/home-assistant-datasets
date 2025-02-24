@@ -66,7 +66,8 @@ and test for it, then hooking it into the eval system.
 2. Create a yaml file for the eval task, e.g. like `light_on_door/light_on_door.yaml`. This yaml file describes the problem by including the `DESCRIPTION.md` as a sentence,
 3. Create the `_fixtures.yaml` either manually or with the `create-inventory` command above. You can pick an existing home to use from `devices-v3` and copy to `_home.yaml` to use as input.
 4. Create the `solution.yaml` that takes the inputs described in `DESCRIPTION.md`.
-5. Verify the solution works with a `test_blueprint.py` running the eval command above under "Solutions".
+5. Create an empty `__init__.py` to allow tests to run.
+6. Verify the solution works with a `test_blueprint.py` running the eval command above under "Solutions".
 
 You can then collect predictions from models as shown above for the problem.
 TODO: We need to update the collect tool to allow scraping a single problem.

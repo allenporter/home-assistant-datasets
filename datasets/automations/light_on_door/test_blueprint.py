@@ -25,6 +25,12 @@ WAIT_TIMEOUT_SEC = 5.0
 
 # The problem statement asks for a 5 minute timeout, so set 10 minutes to be generous
 LIGHT_TIMEOUT = datetime.timedelta(minutes=10)
+BLUEPRINT_INPUT = {
+    "door_sensor": DOOR_ENTITY,
+    "light_switch": {
+        "entity_id": [LIGHT_ENTITY],
+    },
+}
 
 
 @pytest.fixture
@@ -33,12 +39,7 @@ async def automation_config(blueprint_content: BlueprintContent) -> dict[str, an
         "alias": "Pantry light door",
         "use_blueprint": {
             "path": blueprint_content.filename,
-            "input": {
-                "door_sensor": DOOR_ENTITY,
-                "light_switch": {
-                    "entity_id": [LIGHT_ENTITY],
-                },
-            },
+            "input": BLUEPRINT_INPUT,
         },
     }
 
@@ -57,6 +58,11 @@ async def light_event_fixture(
     unsub = async_track_state_change_event(hass, LIGHT_ENTITY, state_changed)
     yield event
     unsub()
+
+
+async def test_blueprint_inputs(blueprint_content: BlueprintContent) -> None:
+    """Test the blueprint inputs."""
+    blueprint_content.validate_inputs_present(BLUEPRINT_INPUT.keys())
 
 
 async def test_door_open(
