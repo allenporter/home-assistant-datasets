@@ -50,6 +50,8 @@ class BlueprintContent:
 
     def validate_inputs_present(self, expected_inputs: list[str]) -> None:
         """Assert that the specified inputs of the blueprint are present."""
+        if self.yaml_content is None:
+            raise AssertionError("Blueprint content is not available")
         try:
             doc = yaml.load(
                 self.yaml_content, Loader=yaml.BaseLoader
