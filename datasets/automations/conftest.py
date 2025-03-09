@@ -128,7 +128,9 @@ def pytest_generate_tests(metafunc: Any) -> None:
     metafunc.parametrize("model_output_file", [pytest.param(task) for task in tasks])
 
     model_id = metafunc.config.getoption("model_id")
-    metafunc.parametrize("model_id", [pytest.param(model_id)])
+    if model_id:
+
+        metafunc.parametrize("model_id", [pytest.param(model_id)])
 
 
 @pytest.fixture(name="test_path")
