@@ -62,6 +62,7 @@ __all__ = []
 _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_DATASET = "datasets/assist"
+DEFAULT_COUNT = 1
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -129,7 +130,16 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         dest="verbosity",
         help="A pytest pass through flag to set verbosity. Default is 0",
     )
-    args.set_defaults(verbosity=0)
+    args.add_argument(
+        "--count",
+        action="store",
+        type=int,
+        metavar="N",
+        dest="count",
+        help="The number of collections to perform.",
+    )
+
+    args.set_defaults(verbosity=0, count=DEFAULT_COUNT)
 
 
 def run(args: argparse.Namespace) -> int:
@@ -144,6 +154,7 @@ def run(args: argparse.Namespace) -> int:
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
         f"--categories={args.categories or ''}",
+        f"--count={args.count}",
     ]
     if args.test_path:
         pytest_args.append(args.test_path)
