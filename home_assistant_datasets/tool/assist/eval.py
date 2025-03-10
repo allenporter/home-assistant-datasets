@@ -8,6 +8,9 @@ $ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
 $ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR}
 ```
 
+Usage:
+
+```
 usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR]
                                            --output_type {csv,yaml,report}
                                            [--ignore_invalid | --no-ignore_invalid]
