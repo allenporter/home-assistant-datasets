@@ -57,19 +57,17 @@ def run(args: argparse.Namespace) -> int:
     def build_report(eval_report: EvalReport) -> None:
         print(f"Generating report for outputs in {eval_report.directory}")
         if eval_report.directory.parent.name == 'automations':
-            # TODO: Implement
-            ...
-        else:
-            cmds = EVAL_CMD + [
-                "--output_type=report",
-                f"--model_output_dir={eval_report.directory}",
-            ]
-            write_eval_output(cmds, eval_report.report_file)
-            cmds = EVAL_CMD + [
-                "--output_type=csv",
-                f"--model_output_dir={eval_report.directory}",
-            ]
-            write_eval_output(cmds, eval_report.csv_file)
+            continue
+        cmds = EVAL_CMD + [
+            "--output_type=report",
+            f"--model_output_dir={eval_report.directory}",
+        ]
+        write_eval_output(cmds, eval_report.report_file)
+        cmds = EVAL_CMD + [
+            "--output_type=csv",
+            f"--model_output_dir={eval_report.directory}",
+        ]
+        write_eval_output(cmds, eval_report.csv_file)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as executor:
         futures = {
