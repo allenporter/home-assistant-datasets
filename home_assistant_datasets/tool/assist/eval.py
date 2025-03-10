@@ -9,8 +9,11 @@ $ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR}
 ```
 
 Usage:
+
 ```
-usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR] [--output_type {csv,yaml,report}]
+usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR]
+                                           --output_type {csv,yaml,report}
+                                           [--ignore_invalid | --no-ignore_invalid]
 
 options:
   -h, --help            show this help message and exit
@@ -18,8 +21,8 @@ options:
                         Specifies the model output directory from `collect`.
   --output_type {csv,yaml,report}
                         Specifies the output type.
-```
-
+  --ignore_invalid, --no-ignore_invalid
+                        Ignore empty or invalid eval results from in progress evals.
 """
 
 import argparse
@@ -70,7 +73,8 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
             event
             for event in trace_events
             if event["event_type"]
-            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")  # type: ignore[attr-defined]
+            # type: ignore[attr-defined]
+            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
         ),
         None,
     )
@@ -154,7 +158,8 @@ def run(args: argparse.Namespace) -> int:
                 label=label,
                 text=output.task["input_text"],
                 response=output.response,
-                tool_call=find_llm_call(output.context.get("conversation_trace", {})),
+                tool_call=find_llm_call(
+                    output.context.get("conversation_trace", {})),
                 entity_diff=writer.diff(unexpected_states),
             )
         )
