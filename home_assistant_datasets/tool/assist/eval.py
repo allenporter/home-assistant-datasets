@@ -70,7 +70,8 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
             event
             for event in trace_events
             if event["event_type"]
-            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")  # type: ignore[attr-defined]
+            # type: ignore[attr-defined]
+            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
         ),
         None,
     )
@@ -115,7 +116,7 @@ def run(args: argparse.Namespace) -> int:
     model_outputs = pathlib.Path(args.model_output_dir)
     writer = create_writer(args.output_type, AssistEvalMetric)
     writer.start()
-    for model_output_file in model_outputs.glob("*/**/*.yaml"):
+    for model_output_file in sorted(model_outputs.glob("*/**/*.yaml")):
         stem = model_output_file.relative_to(model_outputs)
         filename = model_output_file.name[:-5]  # strip .yaml
         model_id = str(list(stem.parents)[0])
@@ -154,7 +155,8 @@ def run(args: argparse.Namespace) -> int:
                 label=label,
                 text=output.task["input_text"],
                 response=output.response,
-                tool_call=find_llm_call(output.context.get("conversation_trace", {})),
+                tool_call=find_llm_call(
+                    output.context.get("conversation_trace", {})),
                 entity_diff=writer.diff(unexpected_states),
             )
         )
