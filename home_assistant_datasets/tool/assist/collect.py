@@ -174,7 +174,7 @@ def run(args: argparse.Namespace) -> int:
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
         f"--categories={args.categories or ''}",
-        f"--count={args.count}",
+        f"--count={args.count or ''}",
     ]
     if args.test_path:
         pytest_args.append(args.test_path)

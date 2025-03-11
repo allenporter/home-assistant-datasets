@@ -63,10 +63,7 @@ def pytest_generate_tests(metafunc: Any) -> None:
     categories_str = metafunc.config.getoption("categories")
     categories = set(categories_str.split(",") if categories_str else {})
     if count := metafunc.config.getoption("count"):
-        if count == 'None':
-            count = None
-        else:
-            count = int(count)
+        count = int(count)
     else:
         count = None
 
