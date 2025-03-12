@@ -42,13 +42,34 @@ $ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/"
 
 See `eval` for creating offline evaluation reports.
 
-Usage:
-```
-usage: home-assistant-datasets assist collect [-h] [--dry_run] --models MODELS [--dataset DATASET] --model_output_dir MODEL_OUTPUT_DIR
-                                              [--categories CATEGORIES] [--collect-only] [-s] [--verbose | --verbosity N]
+usage: home-assistant-datasets assist collect [-h] [--dry_run] --models MODELS
+                                              [--dataset DATASET]
+                                              --model_output_dir MODEL_OUTPUT_DIR
+                                              [--categories CATEGORIES]
+                                              [--collect-only] [-s] [--verbose |
+                                              --verbosity N] [--count N]
                                               [test_path]
-home-assistant-datasets assist collect: error: the following arguments are required: --models, --model_output_dir
-```
+
+positional arguments:
+  test_path             A pytest pass through flag optional path for collection actions
+                        to perform or full test node.
+
+options:
+  -h, --help            show this help message and exit
+  --dry_run             Only validate the fixtures without actually collecting data.
+  --models MODELS       Specifies models to load from the models.yaml file
+  --dataset DATASET     Specifies the test dataset to load for evaluation
+  --model_output_dir MODEL_OUTPUT_DIR
+                        Specifies the directory where output data from the model is
+                        stored.
+  --categories CATEGORIES
+                        Limit evaluation tasks to a specific category
+  --collect-only        A pytest pass through flag to only collect the list of tests
+                        without actually running them.
+  -s                    A pytest pass through flag to show streaming test output.
+  --verbose, -v         A pytest pass through flag to increase verbosity.
+  --verbosity N         A pytest pass through flag to set verbosity. Default is 0
+  --count N             The number of collections to perform.```
 """
 
 import argparse
@@ -129,6 +150,15 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         dest="verbosity",
         help="A pytest pass through flag to set verbosity. Default is 0",
     )
+    args.add_argument(
+        "--count",
+        action="store",
+        type=int,
+        metavar="N",
+        dest="count",
+        help="The number of collections to perform.",
+    )
+
     args.set_defaults(verbosity=0)
 
 
@@ -145,6 +175,8 @@ def run(args: argparse.Namespace) -> int:
         f"--model_output_dir={args.model_output_dir or ''}",
         f"--categories={args.categories or ''}",
     ]
+    if args.count:
+        pytest_args.append(f"--count={args.count}")
     if args.test_path:
         pytest_args.append(args.test_path)
     if args.collect_only:
