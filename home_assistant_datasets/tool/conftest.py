@@ -74,8 +74,7 @@ def pytest_generate_tests(metafunc: Any) -> None:
 
         try:
             eval_tasks = list(
-                generate_tasks(record_id, record_path,
-                               output_path, categories, count)
+                generate_tasks(record_id, record_path, output_path, categories, count)
             )
         except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(
@@ -276,8 +275,7 @@ def configure_yaml() -> None:
     """Configure pyyaml with some formatting options specific to our eval records."""
 
     # Skip any output for unknown tags
-    # type: ignore[method-assign]
-    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""
+    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
 
     # Make automation dumps look a little nicer in the output reports
     def str_presenter(dumper, data):  # type: ignore[no-untyped-def]
