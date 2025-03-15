@@ -8,17 +8,17 @@ from collections.abc import Generator
 _LOGGER = logging.getLogger(__name__)
 
 REPORT_DIR = "reports"
-DATASETS = [
+ASSIST_FAMILY_DATASETS = [
+    "assist",
     "assist-mini",
     "assist-mini-stateless",
-    "assist",
+]
+DATASETS = [
+    *ASSIST_FAMILY_DATASETS,
     "automations",
 ]
-DATASETS_FOR_AVG = [
-    "assist-mini",
-    "assist-mini-stateless",
-    "assist",
-]
+DATASETS_FOR_AVG = ASSIST_FAMILY_DATASETS
+
 AVERAGE_SCORE = "avg"
 SCORED_DATASETS = [
     AVERAGE_SCORE,
@@ -51,7 +51,7 @@ class EvalReport:
 
 def eval_reports(report_dir: pathlib.Path) -> Generator[EvalReport, None, None]:
     """Generate the list of eval reports."""
-    for dataset in DATASETS:
+    for dataset in ASSIST_FAMILY_DATASETS:
         dataset_dir = report_dir / dataset
         for filename in dataset_dir.iterdir():
             if not filename.is_dir():
