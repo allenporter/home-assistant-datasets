@@ -70,8 +70,7 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
             event
             for event in trace_events
             if event["event_type"]
-            # type: ignore[attr-defined]
-            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
+            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")  # type: ignore[attr-defined]
         ),
         None,
     )
