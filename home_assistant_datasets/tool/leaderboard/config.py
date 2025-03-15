@@ -49,9 +49,9 @@ class EvalReport:
         return self.directory / CSV_FILE
 
 
-def eval_reports(report_dir: pathlib.Path) -> Generator[EvalReport, None, None]:
+def eval_reports(report_dir: pathlib.Path, datasets: list[str]) -> Generator[EvalReport, None, None]:
     """Generate the list of eval reports."""
-    for dataset in ASSIST_FAMILY_DATASETS:
+    for dataset in datasets:
         dataset_dir = report_dir / dataset
         for filename in dataset_dir.iterdir():
             if not filename.is_dir():

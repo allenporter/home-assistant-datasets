@@ -88,7 +88,7 @@ def parse_model_reports(
 ) -> dict[str, dict[str, list[ModelRecord]]]:
     """Read the model report files and parse into a map by model and dataset."""
     model_scores: dict[str, dict[str, list[ModelRecord]]] = {}
-    for eval_report in eval_reports(report_dir):
+    for eval_report in eval_reports(report_dir, DATASETS):
         report_file = eval_report.report_file
         if not report_file.exists():
             raise ValueError(
