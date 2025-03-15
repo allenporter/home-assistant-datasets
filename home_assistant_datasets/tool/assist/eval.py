@@ -119,7 +119,7 @@ def run(args: argparse.Namespace) -> int:
     model_outputs = pathlib.Path(args.model_output_dir)
     writer = create_writer(args.output_type, AssistEvalMetric)
     writer.start()
-    for model_output_file in model_outputs.glob("*/**/*.yaml"):
+    for model_output_file in sorted(model_outputs.glob("*/**/*.yaml")):
         stem = model_output_file.relative_to(model_outputs)
         filename = model_output_file.name[:-5]  # strip .yaml
         model_id = str(list(stem.parents)[0])
