@@ -56,8 +56,6 @@ def run(args: argparse.Namespace) -> int:
 
     def build_report(eval_report: EvalReport) -> None:
         print(f"Generating report for outputs in {eval_report.directory}")
-        if eval_report.directory.parent.name == 'automations':
-            return
         cmds = EVAL_CMD + [
             "--output_type=report",
             f"--model_output_dir={eval_report.directory}",
