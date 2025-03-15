@@ -16,7 +16,7 @@ import csv
 import logging
 import pathlib
 
-from .config import REPORT_DIR, eval_reports
+from .config import REPORT_DIR, eval_reports, DATASETS
 
 __all__ = []
 
@@ -42,7 +42,7 @@ def run(args: argparse.Namespace) -> int:
     total = Counter[str]()
     bad = Counter[str]()
 
-    for eval_report in eval_reports(report_dir):
+    for eval_report in eval_reports(report_dir, datasets=DATASETS):
         with eval_report.csv_file.open() as fd:
             csvfile = csv.reader(fd)
             for row in csvfile:
