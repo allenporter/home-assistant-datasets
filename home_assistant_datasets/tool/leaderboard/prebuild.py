@@ -16,7 +16,7 @@ import logging
 import pathlib
 import subprocess
 
-from .config import REPORT_DIR, eval_reports, EvalReport
+from .config import REPORT_DIR, eval_reports, EvalReport, ASSIST_FAMILY_DATASETS
 
 __all__ = []
 
@@ -70,7 +70,7 @@ def run(args: argparse.Namespace) -> int:
     with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as executor:
         futures = {
             executor.submit(build_report, eval_report)
-            for eval_report in eval_reports(report_dir)
+            for eval_report in eval_reports(report_dir, datasets=ASSIST_FAMILY_DATASETS)
         }
         for future in concurrent.futures.as_completed(futures):
             try:
