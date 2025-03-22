@@ -262,7 +262,7 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
                     for tool in v
                 ]
             data[k] = v
-        values = {
+        values: dict[str, Any] = {
             "event_type": str(trace_event["event_type"]),
             "data": data,
         }

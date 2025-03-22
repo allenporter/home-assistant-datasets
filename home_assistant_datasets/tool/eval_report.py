@@ -176,7 +176,7 @@ class DurationStats:
 
     def __init__(self) -> None:
         """Initialize DurationStats."""
-        self.durations = []
+        self.durations: list[float] = []
 
     def append(self, duration: float) -> None:
         """Append a duration."""
@@ -198,8 +198,7 @@ class DurationStats:
         """Return the maximum duration."""
         return max(self.durations)
 
-
-    def summary_data(self) -> dict[str, str]:
+    def summary_data(self) -> dict[str, Any]:
         """Return summary data."""
         return {
             "duration_ms": {
