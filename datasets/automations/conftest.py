@@ -22,6 +22,7 @@ from home_assistant_datasets.blueprint import (
     BlueprintContentStatus,
     extract_blueprint_content,
 )
+from home_assistant_datasets.tool.conftest import find_token_stats
 
 
 FIXTURES = "_fixtures.yaml"
@@ -127,11 +128,6 @@ def pytest_generate_tests(metafunc: Any) -> None:
 
     metafunc.parametrize("model_output_file", [pytest.param(task) for task in tasks])
 
-    model_id = metafunc.config.getoption("model_id")
-    if model_id:
-
-        metafunc.parametrize("model_id", [pytest.param(model_id)])
-
 
 @pytest.fixture(name="test_path")
 def test_path_fixture(request):
@@ -193,13 +189,6 @@ def solution_path_fixture(test_path: pathlib.Path) -> str:
     return str(test_path / SOLUTION)
 
 
-@pytest.fixture(autouse=True)
-async def model_id_consume_fixture(model_id: str | None) -> None:
-    """Consume the model_id argument."""
-    pass
-
-
-
 @pytest.fixture(name="model_output")
 async def model_output_fixture(model_output_file: str | None) -> ModelOutput | None:
     """Fixture that produces the scaped model output record."""
@@ -230,6 +219,8 @@ def eval_metric(
         task_id=model_output.task_id,
         model_id=model_output.model_id,
         context={},
+        token_stats=find_token_stats(model_output.context.get("conversation_trace", {})),
+        duration_ms=model_output.context.get("duration_ms"),
     )
     pytestconfig.stash[eval_metric_stash_key] = eval_metric
     yield pytestconfig.stash[eval_metric_stash_key]
