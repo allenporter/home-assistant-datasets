@@ -193,6 +193,13 @@ def solution_path_fixture(test_path: pathlib.Path) -> str:
     return str(test_path / SOLUTION)
 
 
+@pytest.fixture(autouse=True)
+async def model_id_consume_fixture(model_id: str | None) -> None:
+    """Consume the model_id argument."""
+    pass
+
+
+
 @pytest.fixture(name="model_output")
 async def model_output_fixture(model_output_file: str | None) -> ModelOutput | None:
     """Fixture that produces the scaped model output record."""

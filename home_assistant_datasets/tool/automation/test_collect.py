@@ -1,11 +1,12 @@
 """An evaluation for calling Device Actions, expected to be used to evaluate intents."""
 
-import textwrap
 import asyncio
+import dataclasses
+import datetime
+import json
 import logging
 import uuid
-import dataclasses
-import json
+import textwrap
 
 import pytest
 from pyrate_limiter import Limiter
@@ -65,11 +66,14 @@ async def test_assist_actions(
     tries = 0
     response = ""
     retryable = True
+    duration: datetime.timedelta | None = None
     while tries < MAX_TRIES and retryable:
         retryable = False
         try:
             async with asyncio.timeout(TIMEOUT):
+                start = datetime.datetime.now()
                 response = await agent.async_process(hass, text)
+                duration = datetime.datetime.now() - start
         except (HomeAssistantError, TypeError, json.JSONDecodeError) as err:
             response = str(err)
         except (TimeoutError, asyncio.CancelledError):
@@ -83,6 +87,9 @@ async def test_assist_actions(
     conversation_trace = []
     if (traces := trace.async_get_traces()) and (last_trace := traces[-1]):
         conversation_trace = dump_conversation_trace(last_trace)
+    extra_context = {}
+    if duration:
+        extra_context["duration_ms"] = duration / datetime.timedelta(milliseconds=1)
 
     output = ModelOutput(
         uuid=str(uuid.uuid4()),  # Unique based on the model evaluated
@@ -95,6 +102,7 @@ async def test_assist_actions(
         context={
             "conversation_trace": conversation_trace,
             "tries": tries,
+            **extra_context,
         },
     )
     _LOGGER.info(output)
