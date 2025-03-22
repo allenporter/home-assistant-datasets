@@ -23,7 +23,7 @@ GOOD_LABEL = "Good"
 BAD_LABEL = "Bad"
 REPORT_FILE = "reports.yaml"
 REPORT_DETAIL_FILE = "report.csv"
-IGNORE_CSV_COLS = {"uuid", "context", "stats"}
+IGNORE_CSV_COLS = {"uuid", "context", "token_stats", "duration_ms"}
 SUMMARY_KEYS = {"model_id", "task_id"}
 
 
@@ -171,6 +171,46 @@ class CsvWriter(WriterBase):
         print(",".join(vals), file=self._fd)
 
 
+class DurationStats:
+    """Class for duration statistics."""
+
+    def __init__(self) -> None:
+        """Initialize DurationStats."""
+        self.durations = []
+
+    def append(self, duration: float) -> None:
+        """Append a duration."""
+        self.durations.append(duration)
+
+    def total(self) -> float:
+        """Return the total duration."""
+        return sum(self.durations)
+
+    def average(self) -> float:
+        """Return the average duration."""
+        return sum(self.durations) / len(self.durations)
+
+    def min(self) -> float:
+        """Return the minimum duration."""
+        return min(self.durations)
+
+    def max(self) -> float:
+        """Return the maximum duration."""
+        return max(self.durations)
+
+
+    def summary_data(self) -> dict[str, str]:
+        """Return summary data."""
+        return {
+            "duration_ms": {
+                "total": round(self.total(), 2),
+                "avg": round(self.average(), 2),
+                "min": round(self.min(), 2),
+                "max": round(self.max(), 2),
+            }
+        }
+
+
 class ReportWriter(WriterBase):
     """Handles creation of an eval report."""
 
@@ -180,7 +220,8 @@ class ReportWriter(WriterBase):
         self.summary_key = summary_key
         self.totals: dict[str, int] = {}
         self.good: dict[str, int] = {}
-        self.stats: dict[str, TokenStatsBank] = {}
+        self.token_stats: dict[str, TokenStatsBank] = {}
+        self.duration_stats: dict[str, DurationStats] = {}
 
     def row(self, item: EvalMetric) -> None:
         """Handle a report row collecting the # of good labels for each model."""
@@ -191,10 +232,14 @@ class ReportWriter(WriterBase):
         self.totals[key] += 1
         if item.label == GOOD_LABEL:
             self.good[key] += 1
-        if item.stats:
-            if key not in self.stats:
-                self.stats[key] = TokenStatsBank()
-            self.stats[key].append(item.stats)
+        if item.token_stats:
+            if key not in self.token_stats:
+                self.token_stats[key] = TokenStatsBank()
+            self.token_stats[key].append(item.token_stats)
+        if item.duration_ms is not None:
+            if key not in self.duration_stats:
+                self.duration_stats[key] = DurationStats()
+            self.duration_stats[key].append(item.duration_ms)
 
     def finish(self) -> None:
         """Print the report summary"""
@@ -208,8 +253,10 @@ class ReportWriter(WriterBase):
                 "good": self.good[key],
                 "total": self.totals[key],
             }
-            if stats := self.stats.get(key):
-                data.update(stats.summary_data())
+            if token_stats := self.token_stats.get(key):
+                data.update(token_stats.summary_data())
+            if duration_stats := self.duration_stats.get(key):
+                data.update(duration_stats.summary_data())
             items.append(data)
         print(yaml.dump(items, sort_keys=False, explicit_start=True), file=self._fd)
 
