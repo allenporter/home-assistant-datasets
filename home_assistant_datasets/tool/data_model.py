@@ -6,6 +6,7 @@ output of parsing the yaml files.
 
 import logging
 from typing import Any
+import dataclasses
 from dataclasses import dataclass, field
 from collections.abc import Generator
 import pathlib
@@ -222,6 +223,66 @@ class ModelOutput(DataClassYAMLMixin):
     """Additional context about the prediction run, e.g. internal model call details."""
 
 
+@dataclass(frozen=True, kw_only=True)
+class TokenStats:
+    """Class for token stats."""
+
+    input_tokens: int | float
+    cached_input_tokens: int | float
+    output_tokens: int | float
+
+    n_count: int = 1
+    """Total raw number of requests, which may be more than number of tasks."""
+
+
+class TokenStatsBank:
+    """Class for wriing the summarized eval metric results."""
+
+    def __init__(self) -> None:
+        """Initialize report."""
+        self.stats: list[TokenStats] = []
+
+    def append(self, stats: TokenStats) -> None:
+        """Append a token stats record."""
+        self.stats.append(stats)
+
+    def summary_data(self) -> dict[str, Any]:
+        """Return a summary of the token stats as a dictionary."""
+        return {
+            "token_avg": dataclasses.asdict(self.avg()),
+            "token_sum": dataclasses.asdict(self.sum()),
+            "token_input_cache_ratio": round(
+                sum(s.cached_input_tokens for s in self.stats)
+                / sum(s.input_tokens for s in self.stats),
+                2,
+            ),
+        }
+
+    def avg(self) -> TokenStats:
+        """Average the number of tokens across tasks."""
+        return TokenStats(
+            input_tokens=round(
+                sum(s.input_tokens for s in self.stats) / len(self.stats), 2
+            ),
+            cached_input_tokens=round(
+                sum(s.cached_input_tokens for s in self.stats) / len(self.stats), 2
+            ),
+            output_tokens=round(
+                sum(s.output_tokens for s in self.stats) / len(self.stats), 2
+            ),
+            n_count=sum(s.n_count for s in self.stats),
+        )
+
+    def sum(self) -> TokenStats:
+        """Sum the token stats across tasks."""
+        return TokenStats(
+            input_tokens=sum(s.input_tokens for s in self.stats),
+            cached_input_tokens=sum(s.cached_input_tokens for s in self.stats),
+            output_tokens=sum(s.output_tokens for s in self.stats),
+            n_count=len(self.stats),
+        )
+
+
 @dataclass
 class EvalMetric(DataClassYAMLMixin):
     """Used for pointwise computation based metrics, comparing predictions to groundtruth.
@@ -245,3 +306,5 @@ class EvalMetric(DataClassYAMLMixin):
 
     context: dict[str, Any] = field(default_factory=dict)
     """Additional context/detail from runtime of evaluating the prediction."""
+
+    stats: TokenStats | None = None

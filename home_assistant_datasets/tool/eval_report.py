@@ -11,7 +11,10 @@ from typing import Any
 import pytest
 import yaml
 
-from home_assistant_datasets.tool.data_model import EvalMetric
+from home_assistant_datasets.tool.data_model import (
+    EvalMetric,
+    TokenStatsBank,
+)
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -20,7 +23,7 @@ GOOD_LABEL = "Good"
 BAD_LABEL = "Bad"
 REPORT_FILE = "reports.yaml"
 REPORT_DETAIL_FILE = "report.csv"
-IGNORE_CSV_COLS = {"uuid", "context"}
+IGNORE_CSV_COLS = {"uuid", "context", "stats"}
 SUMMARY_KEYS = {"model_id", "task_id"}
 
 
@@ -177,6 +180,7 @@ class ReportWriter(WriterBase):
         self.summary_key = summary_key
         self.totals: dict[str, int] = {}
         self.good: dict[str, int] = {}
+        self.stats: dict[str, TokenStatsBank] = {}
 
     def row(self, item: EvalMetric) -> None:
         """Handle a report row collecting the # of good labels for each model."""
@@ -187,19 +191,26 @@ class ReportWriter(WriterBase):
         self.totals[key] += 1
         if item.label == GOOD_LABEL:
             self.good[key] += 1
+        if item.stats:
+            if key not in self.stats:
+                self.stats[key] = TokenStatsBank()
+            self.stats[key].append(item.stats)
 
     def finish(self) -> None:
         """Print the report summary"""
         sorted_keys = sorted(self.totals.keys())
-        items = [
-            {
+
+        items = []
+        for key in sorted_keys:
+            data = {
                 self.summary_key: key,
                 "good_percent": f"{100*(self.good[key] / self.totals[key]):0.1f}%",
                 "good": self.good[key],
                 "total": self.totals[key],
             }
-            for key in sorted_keys
-        ]
+            if stats := self.stats.get(key):
+                data.update(stats.summary_data())
+            items.append(data)
         print(yaml.dump(items, sort_keys=False, explicit_start=True), file=self._fd)
 
 
