@@ -2,12 +2,13 @@
 
 import asyncio
 from collections.abc import Callable, Awaitable
-import logging
-import uuid
+import datetime
 import dataclasses
-from typing import Any
 import enum
 import json
+import logging
+from typing import Any
+import uuid
 
 import pytest
 import yaml
@@ -67,11 +68,14 @@ async def test_assist_actions(
     tries = 0
     response = ""
     retryable = True
+    duration: datetime.timedelta | None = None
     while tries < MAX_TRIES and retryable:
         retryable = False
         try:
             async with asyncio.timeout(TIMEOUT):
+                start = datetime.datetime.now()
                 response = await agent.async_process(hass, text)
+                duration = datetime.datetime.now() - start
         except (HomeAssistantError, TypeError, json.JSONDecodeError) as err:
             response = str(err)
         except (TimeoutError, asyncio.CancelledError):
@@ -93,6 +97,10 @@ async def test_assist_actions(
     if (traces := trace.async_get_traces()) and (last_trace := traces[-1]):
         conversation_trace = dump_conversation_trace(last_trace)
 
+    extra_context = {}
+    if duration:
+        extra_context["duration_ms"] = duration / datetime.timedelta(milliseconds=1)
+
     output = ModelOutput(
         uuid=str(uuid.uuid4()),  # Unique based on the model evaluated
         task_id=eval_task.task_id,
@@ -112,6 +120,7 @@ async def test_assist_actions(
             # "state": states,
             # "updated_states": updated_states,
             "tries": tries,
+            **extra_context,
         },
     )
     _LOGGER.info(output)

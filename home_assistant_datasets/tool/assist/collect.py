@@ -121,6 +121,11 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="A pytest pass through flag to only collect the list of tests without actually running them.",
     )
     args.add_argument(
+        "--disable-random",
+        action="store_true",
+        help="Disable randomized ordering of tests, useful for testing prompt caching.",
+    )
+    args.add_argument(
         "-s",
         action="store_true",
         help="A pytest pass through flag to show streaming test output.",
@@ -168,13 +173,14 @@ def run(args: argparse.Namespace) -> int:
     pytest_args = [
         "--verbosity",
         str(verbosity),
-        "--random-order-seed=42",
         # See flags defined in conftest.py
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
         f"--categories={args.categories or ''}",
     ]
+    if not args.disable_random:
+        pytest_args.append("--random-order-seed=42")
     if args.count:
         pytest_args.append(f"--count={args.count}")
     if args.test_path:

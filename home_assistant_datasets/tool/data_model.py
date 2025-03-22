@@ -307,4 +307,8 @@ class EvalMetric(DataClassYAMLMixin):
     context: dict[str, Any] = field(default_factory=dict)
     """Additional context/detail from runtime of evaluating the prediction."""
 
-    stats: TokenStats | None = None
+    token_stats: TokenStats | None = None
+    """Token statistics for the model output."""
+
+    duration_ms: float | None = None
+    """The duration in milliseconds for the model to generate the prediction."""

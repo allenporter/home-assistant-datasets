@@ -187,7 +187,8 @@ def run(args: argparse.Namespace) -> int:
                 response=output.response,
                 tool_call=find_llm_call(output.context.get("conversation_trace", {})),
                 entity_diff=writer.diff(unexpected_states),
-                stats=find_stats(output.context.get("conversation_trace", {})),
+                token_stats=find_stats(output.context.get("conversation_trace", {})),
+                duration_ms=output.context.get("duration_ms"),
             )
         )
 

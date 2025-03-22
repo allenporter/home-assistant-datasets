@@ -262,12 +262,13 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
                     for tool in v
                 ]
             data[k] = v
-        result.append(
-            {
-                "event_type": str(trace_event["event_type"]),
-                "data": data,
-            }
-        )
+        values: dict[str, Any] = {
+            "event_type": str(trace_event["event_type"]),
+            "data": data,
+        }
+        if ts_str := trace_event.get("timestamp"):
+            values["timestamp"] = datetime.datetime.fromisoformat(ts_str)
+        result.append(values)
     return result
 
 
