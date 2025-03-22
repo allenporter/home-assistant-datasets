@@ -37,13 +37,17 @@ from mashumaro.exceptions import MissingField
 
 from homeassistant.components.conversation import trace
 
-from home_assistant_datasets.tool.data_model import ModelOutput, EvalMetric
+from home_assistant_datasets.tool.data_model import (
+    ModelOutput,
+    EvalMetric,
+    TokenStatsBank,
+    TokenStats,
+)
 from home_assistant_datasets.tool.eval_report import (
     GOOD_LABEL,
     BAD_LABEL,
     create_writer,
     OutputType,
-    TokenStats,
 )
 
 __all__ = []
@@ -91,24 +95,24 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
 
 def find_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:
     """Gets the agent detail that contains conversation agent statistics."""
-    data = next(
-        iter(
-            event
-            for event in trace_events
-            if event["event_type"] == trace.ConversationTraceEventType.AGENT_DETAIL
-            and "stats" in event["data"]
-        ),
-        None,
+    stats_data = list(
+        stats
+        for event in trace_events
+        if event["event_type"] == trace.ConversationTraceEventType.AGENT_DETAIL
+        and (stats := event["data"].get("stats")) is not None
     )
-    if data is None:
+    if not stats_data:
         return None
-
-    stats = data["data"]["stats"]
-    return TokenStats(
-        input_tokens=stats.get("input_tokens", 0),
-        cached_input_tokens=stats.get("cached_input_tokens", 0),
-        output_tokens=stats.get("output_tokens", 0),
-    )
+    bank = TokenStatsBank()
+    for stats in stats_data:
+        bank.append(
+            TokenStats(
+                input_tokens=stats.get("input_tokens", 0),
+                cached_input_tokens=stats.get("cached_input_tokens", 0),
+                output_tokens=stats.get("output_tokens", 0),
+            )
+        )
+    return bank.sum()
 
 
 def yaml_decoder(data: EncodedData) -> Any:

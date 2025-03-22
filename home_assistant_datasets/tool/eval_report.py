@@ -11,7 +11,10 @@ from typing import Any
 import pytest
 import yaml
 
-from home_assistant_datasets.tool.data_model import EvalMetric, TokenStats
+from home_assistant_datasets.tool.data_model import (
+    EvalMetric,
+    TokenStatsBank,
+)
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -108,52 +111,6 @@ def exception_repr(longreprtext: str) -> str:
     if excs:
         return ",".join(excs[-2:])
     return longreprtext
-
-
-class TokenStatsBank:
-    """Class for wriing the summarized eval metric results."""
-
-    def __init__(self) -> None:
-        """Initialize report."""
-        self.stats: list[TokenStats] = []
-
-    def append(self, stats: TokenStats) -> None:
-        """Append a token stats record."""
-        self.stats.append(stats)
-
-    def summary_data(self) -> dict[str, Any]:
-        """Return a summary of the token stats."""
-        return {
-            "token_avg": dataclasses.asdict(self.avg()),
-            "token_sum": dataclasses.asdict(self.sum()),
-            "token_input_cache_ratio": round(
-                sum(s.cached_input_tokens for s in self.stats)
-                / sum(s.input_tokens for s in self.stats),
-                2,
-            ),
-        }
-
-    def avg(self) -> TokenStats:
-        """Sum the token stats."""
-        return TokenStats(
-            input_tokens=round(
-                sum(s.input_tokens for s in self.stats) / len(self.stats), 2
-            ),
-            cached_input_tokens=round(
-                sum(s.cached_input_tokens for s in self.stats) / len(self.stats), 2
-            ),
-            output_tokens=round(
-                sum(s.output_tokens for s in self.stats) / len(self.stats), 2
-            ),
-        )
-
-    def sum(self) -> TokenStats:
-        """Sum the token stats."""
-        return TokenStats(
-            input_tokens=sum(s.input_tokens for s in self.stats),
-            cached_input_tokens=sum(s.cached_input_tokens for s in self.stats),
-            output_tokens=sum(s.output_tokens for s in self.stats),
-        )
 
 
 class WriterBase:
