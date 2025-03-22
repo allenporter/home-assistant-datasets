@@ -222,6 +222,15 @@ class ModelOutput(DataClassYAMLMixin):
     """Additional context about the prediction run, e.g. internal model call details."""
 
 
+@dataclass(frozen=True, kw_only=True)
+class TokenStats:
+    """Class for token stats."""
+
+    input_tokens: int | float
+    cached_input_tokens: int | float
+    output_tokens: int | float
+
+
 @dataclass
 class EvalMetric(DataClassYAMLMixin):
     """Used for pointwise computation based metrics, comparing predictions to groundtruth.
@@ -245,3 +254,5 @@ class EvalMetric(DataClassYAMLMixin):
 
     context: dict[str, Any] = field(default_factory=dict)
     """Additional context/detail from runtime of evaluating the prediction."""
+
+    stats: TokenStats | None = None

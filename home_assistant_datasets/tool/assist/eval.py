@@ -43,6 +43,7 @@ from home_assistant_datasets.tool.eval_report import (
     BAD_LABEL,
     create_writer,
     OutputType,
+    TokenStats,
 )
 
 __all__ = []
@@ -86,6 +87,28 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
         "tool_name": data.get("tool_name"),
         "tool_args": data.get("tool_args"),
     }
+
+
+def find_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:
+    """Gets the agent detail that contains conversation agent statistics."""
+    data = next(
+        iter(
+            event
+            for event in trace_events
+            if event["event_type"] == trace.ConversationTraceEventType.AGENT_DETAIL
+            and "stats" in event["data"]
+        ),
+        None,
+    )
+    if data is None:
+        return None
+
+    stats = data["data"]["stats"]
+    return TokenStats(
+        input_tokens=stats.get("input_tokens", 0),
+        cached_input_tokens=stats.get("cached_input_tokens", 0),
+        output_tokens=stats.get("output_tokens", 0),
+    )
 
 
 def yaml_decoder(data: EncodedData) -> Any:
@@ -158,9 +181,9 @@ def run(args: argparse.Namespace) -> int:
                 label=label,
                 text=output.task["input_text"],
                 response=output.response,
-                tool_call=find_llm_call(
-                    output.context.get("conversation_trace", {})),
+                tool_call=find_llm_call(output.context.get("conversation_trace", {})),
                 entity_diff=writer.diff(unexpected_states),
+                stats=find_stats(output.context.get("conversation_trace", {})),
             )
         )
 

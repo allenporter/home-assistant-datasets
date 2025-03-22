@@ -11,7 +11,7 @@ from typing import Any
 import pytest
 import yaml
 
-from home_assistant_datasets.tool.data_model import EvalMetric
+from home_assistant_datasets.tool.data_model import EvalMetric, TokenStats
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ GOOD_LABEL = "Good"
 BAD_LABEL = "Bad"
 REPORT_FILE = "reports.yaml"
 REPORT_DETAIL_FILE = "report.csv"
-IGNORE_CSV_COLS = {"uuid", "context"}
+IGNORE_CSV_COLS = {"uuid", "context", "stats"}
 SUMMARY_KEYS = {"model_id", "task_id"}
 
 
@@ -110,6 +110,52 @@ def exception_repr(longreprtext: str) -> str:
     return longreprtext
 
 
+class TokenStatsBank:
+    """Class for wriing the summarized eval metric results."""
+
+    def __init__(self) -> None:
+        """Initialize report."""
+        self.stats: list[TokenStats] = []
+
+    def append(self, stats: TokenStats) -> None:
+        """Append a token stats record."""
+        self.stats.append(stats)
+
+    def summary_data(self) -> dict[str, Any]:
+        """Return a summary of the token stats."""
+        return {
+            "token_avg": dataclasses.asdict(self.avg()),
+            "token_sum": dataclasses.asdict(self.sum()),
+            "token_input_cache_ratio": round(
+                sum(s.cached_input_tokens for s in self.stats)
+                / sum(s.input_tokens for s in self.stats),
+                2,
+            ),
+        }
+
+    def avg(self) -> TokenStats:
+        """Sum the token stats."""
+        return TokenStats(
+            input_tokens=round(
+                sum(s.input_tokens for s in self.stats) / len(self.stats), 2
+            ),
+            cached_input_tokens=round(
+                sum(s.cached_input_tokens for s in self.stats) / len(self.stats), 2
+            ),
+            output_tokens=round(
+                sum(s.output_tokens for s in self.stats) / len(self.stats), 2
+            ),
+        )
+
+    def sum(self) -> TokenStats:
+        """Sum the token stats."""
+        return TokenStats(
+            input_tokens=sum(s.input_tokens for s in self.stats),
+            cached_input_tokens=sum(s.cached_input_tokens for s in self.stats),
+            output_tokens=sum(s.output_tokens for s in self.stats),
+        )
+
+
 class WriterBase:
     """Base class for eval output."""
 
@@ -177,6 +223,7 @@ class ReportWriter(WriterBase):
         self.summary_key = summary_key
         self.totals: dict[str, int] = {}
         self.good: dict[str, int] = {}
+        self.stats: dict[str, TokenStatsBank] = {}
 
     def row(self, item: EvalMetric) -> None:
         """Handle a report row collecting the # of good labels for each model."""
@@ -187,19 +234,26 @@ class ReportWriter(WriterBase):
         self.totals[key] += 1
         if item.label == GOOD_LABEL:
             self.good[key] += 1
+        if item.stats:
+            if key not in self.stats:
+                self.stats[key] = TokenStatsBank()
+            self.stats[key].append(item.stats)
 
     def finish(self) -> None:
         """Print the report summary"""
         sorted_keys = sorted(self.totals.keys())
-        items = [
-            {
+
+        items = []
+        for key in sorted_keys:
+            data = {
                 self.summary_key: key,
                 "good_percent": f"{100*(self.good[key] / self.totals[key]):0.1f}%",
                 "good": self.good[key],
                 "total": self.totals[key],
             }
-            for key in sorted_keys
-        ]
+            if stats := self.stats.get(key):
+                data.update(stats.summary_data())
+            items.append(data)
         print(yaml.dump(items, sort_keys=False, explicit_start=True), file=self._fd)
 
 
