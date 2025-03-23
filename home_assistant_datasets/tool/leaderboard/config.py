@@ -11,7 +11,6 @@ REPORT_DIR = "reports"
 ASSIST_FAMILY_DATASETS = [
     "assist",
     "assist-mini",
-    "assist-mini-stateless",
 ]
 DATASETS = [
     *ASSIST_FAMILY_DATASETS,
