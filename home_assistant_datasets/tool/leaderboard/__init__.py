@@ -1,7 +1,7 @@
 """Leaderboard subcommand.
 
 ```
-usage: home-assistant-datasets leaderboard [-h] {prebuild,build} ...
+usage: home-assistant-datasets leaderboard [-h] {build} ...
 
 positional arguments:
   {build}  Sub Action
