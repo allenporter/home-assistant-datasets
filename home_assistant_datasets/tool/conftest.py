@@ -274,6 +274,28 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
     return result
 
 
+def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Gets the llm call from the conversation trace."""
+    tool_call = next(
+        iter(
+            event
+            for event in trace_events
+            if event["event_type"]
+            # type: ignore[attr-defined]
+            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
+        ),
+        None,
+    )
+    if tool_call is None:
+        return None
+
+    data = tool_call["data"]
+    return {
+        "tool_name": data.get("tool_name"),
+        "tool_args": data.get("tool_args"),
+    }
+
+
 def find_token_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:
     """Gets the agent detail that contains conversation agent statistics."""
     stats_data = list(

@@ -167,6 +167,7 @@ class CsvWriter(WriterBase):
             raw_value = item_row[col]
             val = str(raw_value) if raw_value is not None else ""
             val = val.replace('"', "'")
+            val = val.replace("\n", "\\n")
             vals.append(f'"{val}"')
         print(",".join(vals), file=self._fd)
 

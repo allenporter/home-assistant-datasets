@@ -142,30 +142,19 @@ $ MODEL=llama3.1
 $ home-assistant-datasets assist collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
 
-If you don't know the homeassistnat version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
+If you don't know the homeassistant version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
 
 See `home-assistant-datasets assist collect --help` for options to control pytest.
 
 ## Evaluation
 
-Once you have collected data from the model, you can perform a manual or offline
-evaluation of the results in the model output directoyr.
+Once you have collected data from the model, you can automatically evaluate the results:
 
 ```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=report
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} ${DATASET_DIR}
 ```
 
-You can export the results into a spreadsheet or perform other analysis. In this example, the assistnat pipeline successfully handled around 51% of queries.
-
-```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > ${OUTPUT_DIR}/report.csv
-$ wc -l report.csv
-113 report.csv
-$ grep Good report.csv | wc -l
-58
-$ python -c "print(58/113)"
-0.5132743362831859
-```
+You can see the output reports created in `${OUTPUT_DIR}`.
 
 See [Annotations](../../script/README.md) for details on how to systematically
 run human annotations of the output. You can review the outputs manually if the

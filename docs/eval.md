@@ -52,13 +52,13 @@ Review `models.yaml` and use an existing model or configure an additional
 model. Here is an example of addint an additional ollama model:
 
 ```yaml
-  - model_id: llama3.1
-    domain: ollama
-    config_entry_data:
-      url: !secret ollama_url
-      model: llama3.1:latest
-    config_entry_options:
-      llm_hass_api: assist
+- model_id: llama3.1
+  domain: ollama
+  config_entry_data:
+    url: !secret ollama_url
+    model: llama3.1:latest
+  config_entry_options:
+    llm_hass_api: assist
 ```
 
 ### Scape
@@ -80,11 +80,11 @@ If you don't know the homeassistnat version, you can run `uv pip freeze | grep "
 
 ### Evaluate
 
-You can score the outputs by running the `eval` command. This report includes
+You then need to score the outputs by running the `eval` command. This report includes
 a list of the wins and losses for manual inspection.
 
 ```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > ${OUTPUT_DIR}/report.csv
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} ${DATASET}
 ```
 
 ### Leaderboard
@@ -93,7 +93,6 @@ The leaderboard is generated from all of the model eval results checked into
 the repo. You can update with these commands:
 
 ```bash
-$ home-assistant-datasets leaderboard prebuild
 $ home-assistant-datasets leaderboard build
 ```
 

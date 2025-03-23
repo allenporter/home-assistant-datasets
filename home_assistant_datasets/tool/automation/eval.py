@@ -6,17 +6,23 @@ details.
 
 Usage:
 ```
-usage: home-assistant-datasets automation eval [-h] [--collect-only] [-s] [--verbose | --verbosity N] [test_path]
+usage: home-assistant-datasets automation eval [-h] [--model_output_dir MODEL_OUTPUT_DIR] [--report_dir REPORT_DIR] [--collect-only] [-s]
+                                               [--verbose | --verbosity N]
+                                               [test_path]
 
 positional arguments:
-  test_path       A pytest pass through flag optional path for collection actions to perform or full test node.
+  test_path             A pytest pass through flag that is the directory containing the dataset to evaluate.
 
 options:
-  -h, --help      show this help message and exit
-  --collect-only  A pytest pass through flag to only collect the list of tests without actually running them.
-  -s              A pytest pass through flag to show streaming test output.
-  --verbose, -v   A pytest pass through flag to increase verbosity.
-  --verbosity N   A pytest pass through flag to set verbosity. Default is 0
+  -h, --help            show this help message and exit
+  --model_output_dir MODEL_OUTPUT_DIR
+                        Specifies the model output directory from `collect`.
+  --report_dir REPORT_DIR
+                        Specifies the directory where the report will be written, or defaults to --model_output_dir.
+  --collect-only        A pytest pass through flag to only collect the list of tests without actually running them.
+  -s                    A pytest pass through flag to show streaming test output.
+  --verbose, -v         A pytest pass through flag to increase verbosity.
+  --verbosity N         A pytest pass through flag to set verbosity. Default is 0
 ```
 """
 
@@ -31,7 +37,6 @@ __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_DATASET = "datasets/automation"
 PLUGINS = [
     "home_assistant_datasets.fixtures",
 ]
