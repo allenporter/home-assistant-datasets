@@ -1,44 +1,6 @@
 """Collect data from the assistant tools for a conversation agent.
 
-This will configure the local home assistant environment with a conversation
-agent a model configuration.
-
-This model configuration supports the assistant pipeline, gpt-4o, or gemini flash:
-```yaml
-models:
-- model_id: assistant
-  domain: homeassistant
-
-- model_id: gpt-4o
-  domain: openai_conversation
-  config_entry_data:
-    api_key: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  config_entry_options:
-    chat_model: gpt-4o
-    llm_hass_api: assist
-
-- model_id: gemini-1.5-flash
-  domain: google_generative_ai_conversation
-  config_entry_data:
-    api_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  config_entry_options:
-    chat_model: models/gemini-1.5-flash-latest
-    llm_hass_api: assist
-```
-
-You can collect data from the API using the command:
-```bash
-$ DATASET="home-assistant-datasets/datasets/assist/"
-$ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
-# Run without --dry_run to actually perform the collection (may send LLM RPCs)
-$ home-assistant-datasets assist collect --models=gemini-1.5-flash --dataset=${FIXTURES} --model_output_dir=${OUTPUT_DIR} --dry_run
-```
-
-You need to have the synthetic home custom component installed with something like this:
-
-```bash
-$ export PYTHONPATH="${PYTHONPATH}:${PWD}/../home-assistant-synthetic-home/"
-```
+See docs/eval.md for a user guide.
 
 ```
 usage: home-assistant-datasets assist collect [-h] [--dry_run] --models MODELS [--dataset DATASET] --model_output_dir MODEL_OUTPUT_DIR
@@ -71,7 +33,7 @@ import argparse
 import logging
 
 
-from ..conftest import run_pytest_main
+from home_assistant_datasets.tool.fixtures.conftest import run_pytest_main
 
 __all__ = []
 
@@ -111,19 +73,17 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="Limit evaluation tasks to a specific category",
     )
     args.add_argument(
-        "--collect-only",
-        action="store_true",
-        help="A pytest pass through flag to only collect the list of tests without actually running them.",
-    )
-    args.add_argument(
         "--disable-random",
         action="store_true",
         help="Disable randomized ordering of tests, useful for testing prompt caching.",
     )
     args.add_argument(
-        "-s",
-        action="store_true",
-        help="A pytest pass through flag to show streaming test output.",
+        "--count",
+        action="store",
+        type=int,
+        metavar="N",
+        dest="count",
+        help="The number of collections to perform.",
     )
 
     # Flags consistent with pytest for pass through
@@ -131,7 +91,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         "test_path",
         help="A pytest pass through flag optional path for collection actions to perform or full test node.",
         type=str,
-        default="home_assistant_datasets/tool/assist/test_collect.py",
+        default="home_assistant_datasets/tool/assist/collect_tests/test_collect.py",
         nargs="?",
     )
     verbosity_group = args.add_mutually_exclusive_group()
@@ -151,14 +111,15 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="A pytest pass through flag to set verbosity. Default is 0",
     )
     args.add_argument(
-        "--count",
-        action="store",
-        type=int,
-        metavar="N",
-        dest="count",
-        help="The number of collections to perform.",
+        "-s",
+        action="store_true",
+        help="A pytest pass through flag to show streaming test output.",
     )
-
+    args.add_argument(
+        "--collect-only",
+        action="store_true",
+        help="A pytest pass through flag to only collect the list of tests without actually running them.",
+    )
     args.set_defaults(verbosity=0)
 
 

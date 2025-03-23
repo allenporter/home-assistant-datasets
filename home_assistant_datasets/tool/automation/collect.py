@@ -31,16 +31,13 @@ options:
 import argparse
 import logging
 
-from home_assistant_datasets.tool.conftest import run_pytest_main
+from home_assistant_datasets.tool.fixtures.conftest import run_pytest_main
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_DATASET = "datasets/automation"
-PLUGINS = [
-    "home_assistant_datasets.fixtures",
-]
+DEFAULT_DATASET = "datasets/automations"
 DEFAULT_COUNT = 10
 
 

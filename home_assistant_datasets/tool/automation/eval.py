@@ -31,12 +31,13 @@ import logging
 
 import pytest
 
-from home_assistant_datasets.tool.conftest import configure_yaml
+from home_assistant_datasets.tool.fixtures.conftest import configure_yaml
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
+DEFAULT_DATASET = "datasets/automations"
 PLUGINS = [
     "home_assistant_datasets.fixtures",
 ]
@@ -48,6 +49,13 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         "--model_output_dir",
         type=str,
         help="Specifies the model output directory from `collect`.",
+    )
+    args.add_argument(
+        "--dataset",
+        type=str,
+        help="Specifies the test dataset to load for evaluation",
+        default=DEFAULT_DATASET,
+        required=True,
     )
     args.add_argument(
         "--report_dir",
@@ -70,7 +78,6 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         "test_path",
         help="A pytest pass through flag that is the directory containing the dataset to evaluate.",
         type=str,
-        default="home_assistant_datasets/tool/automation/test_collect.py",
         nargs="?",
     )
     verbosity_group = args.add_mutually_exclusive_group()
@@ -127,6 +134,9 @@ def run(args: argparse.Namespace) -> int:
         pytest_args.append("--collect-only")
     if args.s:
         pytest_args.append("-s")
+    # The dataset path contains tests
+    pytest_args.append(args.dataset)
+
     configure_yaml()
 
     retcode = pytest.main(

@@ -15,7 +15,10 @@ from home_assistant_datasets.tool.eval_report import (
     EvalReport,
     exception_repr,
 )
-from home_assistant_datasets.tool.conftest import find_token_stats, find_llm_call
+from home_assistant_datasets.tool.fixtures.conftest import (
+    find_token_stats,
+    find_llm_call,
+)
 
 
 @dataclass(kw_only=True)
@@ -24,7 +27,6 @@ class AssistEvalMetric(EvalMetric):
 
     category: str
     task_prefix: str
-    label: str
     text: str
     response: str
     tool_call: dict[str, Any] | None
@@ -35,7 +37,7 @@ class AssistEvalMetric(EvalMetric):
 eval_metric_stash_key = pytest.StashKey[AssistEvalMetric]()
 
 
-def pytest_addoption(parser):
+def pytest_addoption(parser) -> None:  # type: ignore[no-untyped-def]
     """Pytest arguments passed from the `eval` action to the test."""
     parser.addoption(
         "--model_output_dir",
@@ -57,7 +59,7 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_configure(config):
+def pytest_configure(config) -> None:  # type: ignore[no-untyped-def]
     """Register a plugin that generates the results of the eval."""
     report_dir = config.getoption("report_dir")
     if report_dir is None:
@@ -68,7 +70,7 @@ def pytest_configure(config):
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item: Any, call: Any):
+def pytest_runtest_makereport(item: Any, call: Any) -> Generator[None, Any, None]:
     """Attach additional fixture data to the report."""
     outcome = yield
     report = outcome.get_result()
@@ -89,7 +91,7 @@ def pytest_runtest_makereport(item: Any, call: Any):
             if report.failed:
                 report.eval_metric.details = exception_repr(report.longreprtext)
             else:
-                report.eval_metric.details = "ABC"
+                report.eval_metric.details = ""
 
 
 def pytest_generate_tests(metafunc: Any) -> None:
@@ -145,13 +147,7 @@ async def model_output_fixture(model_output_file: str | None) -> ModelOutput | N
     if model_output_file is None:
         return None
     model_output_path = pathlib.Path(model_output_file)
-    model_output = ModelOutput.from_yaml(model_output_path.read_text())
-    if model_output.model_id is None:
-        # Infer the model id from the output path. The model file path historically
-        # has been reports/{dataset}/{model_id}/{task_id}.yaml. Going forward the
-        # model id will be stored in the model output file to make it more explicit.
-        model_output.model_id = model_output_path.parent.name
-    return model_output
+    return ModelOutput.from_yaml(model_output_path.read_text())
 
 
 @pytest.fixture(autouse=True)
@@ -159,7 +155,7 @@ def eval_metric(
     pytestconfig: Any,
     model_output: ModelOutput | None,
     model_output_file: str | None,
-) -> AssistEvalMetric | None:
+) -> Generator[AssistEvalMetric | None]:
     """Fixture for the EvalMetric with details about this specific task for reporting."""
     if model_output_file is None or model_output is None:
         yield None
@@ -170,7 +166,10 @@ def eval_metric(
     eval_metric = AssistEvalMetric(
         uuid=model_output.uuid,
         task_id=model_output.task_id,
-        model_id=model_output.model_id,
+        # Infer the model id from the output path. The model file path historically
+        # has been reports/{dataset}/{model_id}/{task_id}.yaml. Going forward the
+        # model id will be stored in the model output file to make it more explicit.
+        model_id=model_output.model_id or pathlib.Path(model_output_file).parent.name,
         category=model_output.category,
         task_prefix=task_prefix,
         text=model_output.task["input_text"],

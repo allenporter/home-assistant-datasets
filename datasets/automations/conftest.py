@@ -22,7 +22,7 @@ from home_assistant_datasets.blueprint import (
     BlueprintContentStatus,
     extract_blueprint_content,
 )
-from home_assistant_datasets.tool.conftest import find_token_stats
+from home_assistant_datasets.tool.fixtures.conftest import find_token_stats
 
 
 FIXTURES = "_fixtures.yaml"
@@ -219,7 +219,9 @@ def eval_metric(
         task_id=model_output.task_id,
         model_id=model_output.model_id,
         context={},
-        token_stats=find_token_stats(model_output.context.get("conversation_trace", {})),
+        token_stats=find_token_stats(
+            model_output.context.get("conversation_trace", {})
+        ),
         duration_ms=model_output.context.get("duration_ms"),
     )
     pytestconfig.stash[eval_metric_stash_key] = eval_metric
