@@ -222,14 +222,13 @@ def create_leaderboard_table(
         for dataset, best_record in dataset_scores.items():
             if best_record.good_percent_value() != 0:
                 ci = 1.96 * best_record.stddev * 100
-                text_parts = []
-                score = best_record.good_percent_value()
                 text_parts = [
                     "$${",
                 ]
+                score = best_record.good_percent_value()
                 score_str = f"{score*100:0.1f}"
                 if model_id in best_dataset_scores[dataset]:
-                    score_str = f"*{score_str}*"
+                    score_str = "\\textbf{" + score_str + "}"
                 text_parts.extend(
                     [
                         score_str,
