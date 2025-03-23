@@ -40,8 +40,6 @@ from homeassistant.components.conversation import trace
 from home_assistant_datasets.tool.data_model import (
     ModelOutput,
     EvalMetric,
-    TokenStatsBank,
-    TokenStats,
 )
 from home_assistant_datasets.tool.eval_report import (
     GOOD_LABEL,
@@ -166,7 +164,9 @@ def run(args: argparse.Namespace) -> int:
                 response=output.response,
                 tool_call=find_llm_call(output.context.get("conversation_trace", {})),
                 entity_diff=writer.diff(unexpected_states),
-                token_stats=find_token_stats(output.context.get("conversation_trace", {})),
+                token_stats=find_token_stats(
+                    output.context.get("conversation_trace", {})
+                ),
                 duration_ms=output.context.get("duration_ms"),
             )
         )
