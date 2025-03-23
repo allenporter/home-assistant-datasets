@@ -50,11 +50,6 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="Specifies the directory where the report will be written, or defaults to --model_output_dir.",
     )
     args.add_argument(
-        "--model_id",
-        type=str,
-        help="Specifies the model under test.",
-    )
-    args.add_argument(
         "--collect-only",
         action="store_true",
         help="A pytest pass through flag to only collect the list of tests without actually running them.",
@@ -68,7 +63,7 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
     # Flags consistent with pytest for pass through
     args.add_argument(
         "test_path",
-        help="A pytest pass through flag optional path for collection actions to perform or full test node.",
+        help="A pytest pass through flag that is the directory containing the dataset to evaluate.",
         type=str,
         default="home_assistant_datasets/tool/automation/test_collect.py",
         nargs="?",
@@ -120,13 +115,6 @@ def run(args: argparse.Namespace) -> int:
             [
                 "--report_dir",
                 args.report_dir,
-            ]
-        )
-    if args.model_id:
-        pytest_args.extend(
-            [
-                "--model_id",
-                args.model_id,
             ]
         )
 

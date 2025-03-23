@@ -26,6 +26,8 @@ from home_assistant_datasets.tool.data_model import (
     EntityState,
 )
 
+from .data_model import TokenStats, TokenStatsBank
+
 _LOGGER = logging.getLogger(__name__)
 
 PLUGINS = [
@@ -270,6 +272,28 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
             values["timestamp"] = datetime.datetime.fromisoformat(ts_str)
         result.append(values)
     return result
+
+
+def find_token_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:
+    """Gets the agent detail that contains conversation agent statistics."""
+    stats_data = list(
+        stats
+        for event in trace_events
+        if event["event_type"] == trace.ConversationTraceEventType.AGENT_DETAIL
+        and (stats := event["data"].get("stats")) is not None
+    )
+    if not stats_data:
+        return None
+    bank = TokenStatsBank()
+    for stats in stats_data:
+        bank.append(
+            TokenStats(
+                input_tokens=stats.get("input_tokens", 0),
+                cached_input_tokens=stats.get("cached_input_tokens", 0),
+                output_tokens=stats.get("output_tokens", 0),
+            )
+        )
+    return bank.sum()
 
 
 def configure_yaml() -> None:
