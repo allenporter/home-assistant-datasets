@@ -29,7 +29,7 @@ import logging
 import pytest
 
 
-from home_assistant_datasets.tool.fixtures.conftest import configure_yaml
+from home_assistant_datasets.tool.fixtures import configure_yaml
 
 __all__ = []
 

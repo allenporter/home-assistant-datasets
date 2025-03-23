@@ -33,7 +33,7 @@ _LOGGER = logging.getLogger(__name__)
 
 PLUGINS = [
     "home_assistant_datasets.fixtures",
-    "home_assistant_datasets.tool.fixtures.conftest",
+    "home_assistant_datasets.tool.fixtures",
 ]
 
 

@@ -22,8 +22,7 @@ from home_assistant_datasets.blueprint import (
     BlueprintContentStatus,
     extract_blueprint_content,
 )
-from home_assistant_datasets.tool.fixtures.conftest import find_token_stats
-
+from home_assistant_datasets.tool.fixtures import find_token_stats
 
 FIXTURES = "_fixtures.yaml"
 SOLUTION = "solution.yaml"

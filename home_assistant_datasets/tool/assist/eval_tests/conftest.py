@@ -15,7 +15,7 @@ from home_assistant_datasets.tool.eval_report import (
     EvalReport,
     exception_repr,
 )
-from home_assistant_datasets.tool.fixtures.conftest import (
+from home_assistant_datasets.tool.fixtures import (
     find_token_stats,
     find_llm_call,
 )

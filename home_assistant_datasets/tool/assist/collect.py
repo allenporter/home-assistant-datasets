@@ -33,7 +33,7 @@ import argparse
 import logging
 
 
-from home_assistant_datasets.tool.fixtures.conftest import run_pytest_main
+from home_assistant_datasets.tool.fixtures import run_pytest_main
 
 __all__ = []
 

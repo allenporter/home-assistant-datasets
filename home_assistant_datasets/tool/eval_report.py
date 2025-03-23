@@ -54,6 +54,11 @@ class EvalReport:
     @pytest.hookimpl(trylast=True)
     def pytest_sessionstart(self, session: Any) -> None:
         """Invoked at the start of the session."""
+        if not self._model_output_dir.exists():
+            raise ValueError(
+                f"Model output directory does not exist: {self._model_output_dir}"
+            )
+
         for report_file, output_type, summary_key in DEFAULT_REPORTS:
             file_path = self._model_output_dir / report_file
             _LOGGER.debug("Creating report file: %s", file_path)
