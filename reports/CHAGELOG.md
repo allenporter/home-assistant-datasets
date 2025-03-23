@@ -2,6 +2,10 @@
 
 This is a work log of major updates to the leaderboard.
 
+## 2025-03-22
+
+- Removing `assist-mini-stateless` which will be the default in April release
+
 ## 2025-02-01
 
 - Removed previously incorrect results for gemini-2.0-flash

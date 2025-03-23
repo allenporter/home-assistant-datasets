@@ -1,34 +1,34 @@
 # Home LLM Leaderboard
-| Model | assist $${\color{gray}\small{\textsf{(n=0)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=49)}}}$$ | assist-mini-stateless $${\color{gray}\small{\textsf{(n=49)}}}$$ | automations $${\color{gray}\small{\textsf{(n=60)}}}$$ |
-| --- | --- | --- | --- | --- |
-| claude-3-5-sonnet |  | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ | $${\color{lime}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.2.4)}}}$$ | $${\color{lime}81.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.0b)}}}$$ | $${\color{lime}96.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, avg)}}}$$ |
-| qwq | $${\color{lime}96.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.3.3)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.3.3)}}}$$ |  |  | $${\color{green}96.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
-| claude-3-haiku | $${\color{olive}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0b2)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${\color{gray}41.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.3.0b)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
-| gemini-1.5-flash | $${\color{teal}91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{gray}30.0\\% \space\color{gray}\tiny{\textsf{(CI: 11.6, 2025.3.0b)}}}$$ | $${\color{teal}93.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, avg)}}}$$ |
-| qwen2.5-32b | $${\color{teal}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.3.3)}}}$$ | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.3.3)}}}$$ |  |  | $${\color{teal}93.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
-| gpt-4o-mini | $${\color{teal}90.0\\% \space\color{gray}\tiny{\textsf{(CI: 6.6, 2024.8.0b)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.0b)}}}$$ | $${\color{gray}50.0\\% \space\color{gray}\tiny{\textsf{(CI: 12.7, 2025.3.0b)}}}$$ | $${\color{teal}93.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, avg)}}}$$ |
-| llama3.3 | $${\color{teal}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ |  |  | $${\color{teal}92.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, avg)}}}$$ |
-| llama3.3-awq | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ | $${\color{lime}100.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ |  |  | $${\color{teal}91.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, avg)}}}$$ |
-| gpt-4o | $${\color{olive}87.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${\color{olive}87.8\\% \space\color{gray}\tiny{\textsf{(CI: 9.2, 2025.2.4)}}}$$ | $${\color{greenyellow}78.3\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2025.3.0b)}}}$$ | $${\color{olive}89.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, avg)}}}$$ |
-| gpt-3.5 | $${\color{olive}80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.4)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${\color{gray}53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.3.0b)}}}$$ | $${\color{olive}88.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, avg)}}}$$ |
-| gemma3-27b | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.3.3)}}}$$ |  |  |  | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, avg)}}}$$ |
-| claude-3-5-haiku |  | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${\color{greenyellow}79.6\\% \space\color{gray}\tiny{\textsf{(CI: 11.3, 2025.2.0b)}}}$$ | $${\color{yellowgreen}63.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.2, 2025.3.0b)}}}$$ | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, avg)}}}$$ |
-| qwen2.5 | $${\color{olive}81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.9.2)}}}$$ | $${\color{olive}83.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2025.2.0b)}}}$$ |  | $${\color{olive}83.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
-| mistral-nemo |  | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, avg)}}}$$ |
-| qwen2.5-14b | $${\color{greenyellow}78.8\\% \space\color{gray}\tiny{\textsf{(CI: 9.0, 2025.3.3)}}}$$ | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.3)}}}$$ |  |  | $${\color{olive}81.4\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, avg)}}}$$ |
-| gemini-2.0-flash | $${\color{yellowgreen}63.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.5, 2025.2.4)}}}$$ | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.2.0b)}}}$$ | $${\color{yellowgreen}68.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.8, 2025.3.0b)}}}$$ | $${\color{olive}80.3\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, avg)}}}$$ |
-| assist-llm | $${\color{yellowgreen}67.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.9.0dev)}}}$$ | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0dev)}}}$$ |  |  | $${\color{greenyellow}72.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
-| llama3.1 | $${\color{yellowgreen}66.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2024.9.0dev)}}}$$ | $${\color{olive}83.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.8.0b0)}}}$$ |  |  | $${\color{greenyellow}72.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
-| llama3.2-3b | $${\color{yellowgreen}62.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.9.2)}}}$$ | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${\color{yellowgreen}69.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.9, avg)}}}$$ |
-| xlam-7b | $${\color{gray}51.2\\% \space\color{gray}\tiny{\textsf{(CI: 11.0, 2024.9.0dev)}}}$$ | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.8.0b0)}}}$$ |  |  | $${\color{yellowgreen}64.3\\% \space\color{gray}\tiny{\textsf{(CI: 8.3, avg)}}}$$ |
-| gemma3-4b | $${\color{yellowgreen}63.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.5, 2025.3.3)}}}$$ |  |  |  | $${\color{yellowgreen}63.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.5, avg)}}}$$ |
-| functionary-small-v2.5 | $${\color{gray}56.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.9, 2024.7.0)}}}$$ | $${\color{yellowgreen}63.3\\% \space\color{gray}\tiny{\textsf{(CI: 13.5, 2024.8.0dev)}}}$$ |  |  | $${\color{gray}58.9\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, avg)}}}$$ |
-| assistant | $${\color{gray}37.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.6.3)}}}$$ | $${\color{yellowgreen}63.3\\% \space\color{gray}\tiny{\textsf{(CI: 13.5, 2024.8.0dev)}}}$$ |  |  | $${\color{gray}47.3\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, avg)}}}$$ |
-| home-llm | $${\color{gray}45.0\\% \space\color{gray}\tiny{\textsf{(CI: 10.9, 2024.6.3)}}}$$ | $${\color{gray}34.7\\% \space\color{gray}\tiny{\textsf{(CI: 13.3, 2024.8.0dev)}}}$$ |  |  | $${\color{gray}41.1\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, avg)}}}$$ |
-| llama3-groq-tool-use | $${\color{gray}20.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2024.8.0b)}}}$$ | $${\color{gray}51.0\\% \space\color{gray}\tiny{\textsf{(CI: 14.0, 2024.8.0b0)}}}$$ |  |  | $${\color{gray}31.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.0, avg)}}}$$ |
-| xlam-1b |  | $${\color{gray}27.1\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2024.8.0b0)}}}$$ |  |  | $${\color{gray}27.1\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, avg)}}}$$ |
-| llama3.2-1b | $${\color{gray}7.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2024.9.2)}}}$$ | $${\color{gray}4.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.2)}}}$$ |  |  | $${\color{gray}6.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
-| mistral-v3 | $${\color{gray}3.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2024.8.0b)}}}$$ | $${\color{gray}2.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ |  |  | $${\color{gray}3.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
+| Model | assist $${\color{gray}\small{\textsf{(n=53)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=49)}}}$$ | automations $${\color{gray}\small{\textsf{(n=60)}}}$$ |
+| --- | --- | --- | --- |
+| claude-3-haiku | $${\color{green}96.2\\% \space\color{gray}\tiny{\textsf{(CI: 5.1, 2025.4.0b)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ | $${\color{gray}41.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.3.0b)}}}$$ | $${\color{lime}97.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, avg)}}}$$ |
+| qwq | $${\color{lime}96.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.3.3)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.3.3)}}}$$ |  | $${\color{green}96.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
+| claude-3-5-sonnet |  | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ | $${\color{lime}81.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.0b)}}}$$ | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
+| gpt-4o-mini | $${\color{teal}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.1, 2025.4.0b)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{gray}50.0\\% \space\color{gray}\tiny{\textsf{(CI: 12.7, 2025.3.0b)}}}$$ | $${\color{green}95.1\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
+| qwen2.5-32b | $${\color{teal}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.3.3)}}}$$ | $${\color{green}95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.3.3)}}}$$ |  | $${\color{teal}93.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
+| gemini-1.5-flash | $${\color{teal}91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${\color{green}98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${\color{gray}30.0\\% \space\color{gray}\tiny{\textsf{(CI: 11.6, 2025.3.0b)}}}$$ | $${\color{teal}93.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
+| llama3.3 | $${\color{teal}92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ |  | $${\color{teal}92.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, avg)}}}$$ |
+| claude-3-5-haiku |  | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${\color{yellowgreen}63.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.2, 2025.3.0b)}}}$$ | $${\color{teal}91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
+| llama3.3-awq | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ | $${\color{lime}100.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ |  | $${\color{teal}91.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, avg)}}}$$ |
+| gpt-4o | $${\color{olive}87.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${\color{greenyellow}78.3\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2025.3.0b)}}}$$ | $${\color{olive}89.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.2, avg)}}}$$ |
+| gpt-3.5 | $${\color{olive}80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\color{lime}100.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.0b)}}}$$ | $${\color{gray}53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.3.0b)}}}$$ | $${\color{olive}87.6\\% \space\color{gray}\tiny{\textsf{(CI: 5.7, avg)}}}$$ |
+| gemma3-27b | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.3.3)}}}$$ |  |  | $${\color{olive}86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, avg)}}}$$ |
+| qwen2.5 | $${\color{olive}81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ | $${\color{olive}89.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, 2025.4.0b)}}}$$ |  | $${\color{olive}84.5\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, avg)}}}$$ |
+| mistral-nemo |  | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, avg)}}}$$ |
+| qwen2.5-14b | $${\color{greenyellow}78.8\\% \space\color{gray}\tiny{\textsf{(CI: 9.0, 2025.3.3)}}}$$ | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.3)}}}$$ |  | $${\color{olive}81.4\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, avg)}}}$$ |
+| gemini-2.0-flash | $${\color{greenyellow}72.5\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.0b)}}}$$ | $${\color{teal}93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.4.0b)}}}$$ | $${\color{yellowgreen}68.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.8, 2025.3.0b)}}}$$ | $${\color{olive}80.6\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, avg)}}}$$ |
+| llama3.1 | $${\color{yellowgreen}66.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2024.9.0dev)}}}$$ | $${\color{olive}89.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, 2025.4.0b)}}}$$ |  | $${\color{greenyellow}75.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, avg)}}}$$ |
+| assist-llm | $${\color{yellowgreen}67.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.9.0dev)}}}$$ | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0dev)}}}$$ |  | $${\color{greenyellow}72.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
+| llama3.2-3b | $${\color{yellowgreen}62.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.9.2)}}}$$ | $${\color{olive}81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  | $${\color{yellowgreen}69.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.9, avg)}}}$$ |
+| xlam-7b | $${\color{gray}51.2\\% \space\color{gray}\tiny{\textsf{(CI: 11.0, 2024.9.0dev)}}}$$ | $${\color{olive}85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2024.8.0b0)}}}$$ |  | $${\color{yellowgreen}64.3\\% \space\color{gray}\tiny{\textsf{(CI: 8.3, avg)}}}$$ |
+| gemma3-4b | $${\color{yellowgreen}63.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.5, 2025.3.3)}}}$$ |  |  | $${\color{yellowgreen}63.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.5, avg)}}}$$ |
+| functionary-small-v2.5 | $${\color{gray}56.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.9, 2024.7.0)}}}$$ | $${\color{yellowgreen}63.3\\% \space\color{gray}\tiny{\textsf{(CI: 13.5, 2024.8.0dev)}}}$$ |  | $${\color{gray}58.9\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, avg)}}}$$ |
+| assistant | $${\color{gray}37.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.6.3)}}}$$ | $${\color{yellowgreen}63.3\\% \space\color{gray}\tiny{\textsf{(CI: 13.5, 2024.8.0dev)}}}$$ |  | $${\color{gray}47.3\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, avg)}}}$$ |
+| home-llm | $${\color{gray}45.0\\% \space\color{gray}\tiny{\textsf{(CI: 10.9, 2024.6.3)}}}$$ | $${\color{gray}34.7\\% \space\color{gray}\tiny{\textsf{(CI: 13.3, 2024.8.0dev)}}}$$ |  | $${\color{gray}41.1\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, avg)}}}$$ |
+| llama3-groq-tool-use | $${\color{gray}20.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2024.8.0b)}}}$$ | $${\color{gray}51.0\\% \space\color{gray}\tiny{\textsf{(CI: 14.0, 2024.8.0b0)}}}$$ |  | $${\color{gray}31.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.0, avg)}}}$$ |
+| xlam-1b |  | $${\color{gray}27.1\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2024.8.0b0)}}}$$ |  | $${\color{gray}27.1\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, avg)}}}$$ |
+| llama3.2-1b | $${\color{gray}7.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2024.9.2)}}}$$ | $${\color{gray}4.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.2)}}}$$ |  | $${\color{gray}6.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
+| mistral-v3 | $${\color{gray}3.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2024.8.0b)}}}$$ | $${\color{gray}2.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ |  | $${\color{gray}3.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -64,18 +64,18 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #d9ead3, #0f9d58, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #ea4335, #fbbc04, #34a853, #ff6d01, #1155cc, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #0f9d58, #4285f4"
 
 ---
 xychart-beta
   title "assist"
-  x-axis "Model" [qwq, claude-3-haiku, gemini-1.5-flash, qwen2.5-32b, gpt-4o-mini, llama3.3, llama3.3-awq, gpt-4o, gpt-3.5, gemma3-27b, qwen2.5, qwen2.5-14b, .]
+  x-axis "Model" [claude-3-haiku, qwq, gpt-4o-mini, qwen2.5-32b, gemini-1.5-flash, llama3.3, llama3.3-awq, gpt-4o, gpt-3.5, gemma3-27b, qwen2.5, qwen2.5-14b, .]
   y-axis "Score" 1 --> 100
   bar [96.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 88.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 91.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 96.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 92.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 92.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 91.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 92.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 87.5, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -110,70 +110,26 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #674ea7, #d9ead3, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #d9ead3, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [claude-3-5-sonnet, qwq, claude-3-haiku, gemini-1.5-flash, qwen2.5-32b, gpt-4o-mini, llama3.3, llama3.3-awq, gpt-4o, gpt-3.5, claude-3-5-haiku, qwen2.5, .]
+  x-axis "Model" [claude-3-haiku, qwq, claude-3-5-sonnet, gpt-4o-mini, qwen2.5-32b, gemini-1.5-flash, llama3.3, claude-3-5-haiku, llama3.3-awq, gpt-4o, gpt-3.5, qwen2.5, .]
   y-axis "Score" 1 --> 100
-  bar [95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.8, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.8, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 89.8, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
-```
-
-### assist-mini-stateless
-
-This runs the `assist-mini` dataset, but without entity state information available
-in the prompt. This is a dataset built to exercise the Home Assistant LLM API. The homes
-for this dataset were synthetically generated using gpt-3.5, and then simplified
-for exercising smaller LLMs. The use cases are not intented to be very tricky
-or complicated and aimed at a smaller context window. The number of devices/entities
-in each test is intentionally small (e.g. typically under 5 entities per test)
-to focus on tool calling capabilities rather than context retrieval.
-
-More information:
-- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
-
-```mermaid
----
-config:
-    xyChart:
-        width: 1500
-        height: 800
-        xAxis:
-          labelFontSize: 12
-          labelPadding: 8
-    themeVariables:
-        xyChart:
-            titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #f4b400, #ea4335, #34a853, #1155cc, #d5a6bd, #674ea7, #d9ead3, #f4b400, #4285f4"
-
----
-xychart-beta
-  title "assist-mini-stateless"
-  x-axis "Model" [claude-3-5-sonnet, claude-3-haiku, gemini-1.5-flash, gpt-4o-mini, gpt-4o, gpt-3.5, claude-3-5-haiku, qwen2.5, gemini-2.0-flash, .]
-  y-axis "Score" 1 --> 100
-  bar [98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 87.8, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 79.6, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.7, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 95.9, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
 ### automations
@@ -204,20 +160,20 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #f4b400, #ea4335, #34a853, #1155cc, #d5a6bd, #674ea7, #f4b400, #4285f4"
+            plotColorPalette: "#4285f4, #f4b400, #ea4335, #34a853, #46bdc6, #d5a6bd, #6aa84f, #f4b400, #4285f4"
 
 ---
 xychart-beta
   title "automations"
-  x-axis "Model" [claude-3-5-sonnet, claude-3-haiku, gemini-1.5-flash, gpt-4o-mini, gpt-4o, gpt-3.5, claude-3-5-haiku, gemini-2.0-flash, .]
+  x-axis "Model" [claude-3-haiku, claude-3-5-sonnet, gpt-4o-mini, gemini-1.5-flash, claude-3-5-haiku, gpt-4o, gpt-3.5, gemini-2.0-flash, .]
   y-axis "Score" 1 --> 100
-  bar [81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 41.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 30.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 50.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 78.3, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 53.3, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 63.3, 0.0, 0.0]
+  bar [41.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 50.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 30.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 63.3, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 78.3, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 53.3, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 68.3, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
@@ -357,6 +313,7 @@ QwQ is the reasoning model of the Qwen series.
 
 More information:
 - https://qwenlm.github.io/blog/qwq-32b/
+- https://ollama.com/library/qwq
 
 
 ### llama3-groq-tool-use
