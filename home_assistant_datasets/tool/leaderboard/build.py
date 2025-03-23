@@ -227,6 +227,9 @@ def create_leaderboard_table(
             text_parts = [
                 "$${",
             ]
+            label = ""
+            if model_id in best_dataset_scores[dataset]:
+                label = " * "
             score = best_record.good_percent_value()
             score_str = f"{score*100:0.1f}"
             if model_id in best_dataset_scores[dataset]:
@@ -234,6 +237,7 @@ def create_leaderboard_table(
             text_parts.extend(
                 [
                     score_str,
+                    label,
                     "\\\\% \\space",  # % sign
                     # Put the CI and dataset label in small gray text
                     "\\color{gray}\\tiny{\\textsf{",
