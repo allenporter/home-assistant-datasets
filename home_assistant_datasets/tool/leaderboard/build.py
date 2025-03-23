@@ -92,7 +92,7 @@ def parse_model_reports(
         report_file = eval_report.report_file
         if not report_file.exists():
             raise ValueError(
-                f"Report file {report_file} does not exist, run `prebuild` first"
+                f"Report file {report_file} does not exist, make sure `eval` is run first"
             )
 
         report = yaml.load(eval_report.report_file.read_text(), Loader=yaml.CSafeLoader)

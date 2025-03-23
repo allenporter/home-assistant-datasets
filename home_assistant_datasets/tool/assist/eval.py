@@ -4,96 +4,38 @@ See `assist_collect` for the step to collect data. You can then run an offline
 analysis of the model using the following command:
 
 ```bash
-$ OUTPUT_DIR="output/$(date +"%Y-%m-%d")/"
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR}
-```
+usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR] [--report_dir REPORT_DIR] [--collect-only] [-s]
+                                           [--verbose | --verbosity N]
+                                           [test_path]
 
-Usage:
-
-```
-usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR]
-                                           --output_type {csv,yaml,report}
-                                           [--ignore_invalid | --no-ignore_invalid]
+positional arguments:
+  test_path             A pytest pass through flag that is the directory containing the dataset to evaluate.
 
 options:
   -h, --help            show this help message and exit
   --model_output_dir MODEL_OUTPUT_DIR
                         Specifies the model output directory from `collect`.
-  --output_type {csv,yaml,report}
-                        Specifies the output type.
-  --ignore_invalid, --no-ignore_invalid
-                        Ignore empty or invalid eval results from in progress evals.
+  --report_dir REPORT_DIR
+                        Specifies the directory where the report will be written, or defaults to --model_output_dir.
+  --collect-only        A pytest pass through flag to only collect the list of tests without actually running them.
+  -s                    A pytest pass through flag to show streaming test output.
+  --verbose, -v         A pytest pass through flag to increase verbosity.
+  --verbosity N         A pytest pass through flag to set verbosity. Default is 0
 """
 
 import argparse
-from dataclasses import dataclass
 import logging
-import pathlib
-from typing import Any
 
-import yaml
-from mashumaro.mixins.yaml import EncodedData
-from mashumaro.exceptions import MissingField
+import pytest
 
-from homeassistant.components.conversation import trace
 
-from home_assistant_datasets.tool.data_model import (
-    ModelOutput,
-    EvalMetric,
-)
-from home_assistant_datasets.tool.eval_report import (
-    GOOD_LABEL,
-    BAD_LABEL,
-    create_writer,
-    OutputType,
-)
-from home_assistant_datasets.tool.conftest import find_token_stats
+from home_assistant_datasets.tool.fixtures import configure_yaml
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-
-SKIP_COLUMNS = ["uuid"]
-
-
-@dataclass(kw_only=True)
-class AssistEvalMetric(EvalMetric):
-    """Eval Metric for the assist dataset."""
-
-    category: str
-    task_prefix: str
-    label: str
-    text: str
-    response: str
-    tool_call: dict[str, Any] | None
-    entity_diff: dict[str, Any] | str | None
-
-
-def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
-    """Gets the llm call from the conversation trace."""
-    tool_call = next(
-        iter(
-            event
-            for event in trace_events
-            if event["event_type"]
-            # type: ignore[attr-defined]
-            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
-        ),
-        None,
-    )
-    if tool_call is None:
-        return None
-
-    data = tool_call["data"]
-    return {
-        "tool_name": data.get("tool_name"),
-        "tool_args": data.get("tool_args"),
-    }
-
-
-def yaml_decoder(data: EncodedData) -> Any:
-    return yaml.load(data, yaml.UnsafeLoader)
+PLUGINS = []
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -104,73 +46,90 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="Specifies the model output directory from `collect`.",
     )
     args.add_argument(
-        "--output_type",
-        type=OutputType,
-        choices=OutputType,
-        help="Specifies the output type.",
-        required=True,
+        "--report_dir",
+        type=str,
+        help="Specifies the directory where the report will be written, or defaults to --model_output_dir.",
     )
     args.add_argument(
-        "--ignore_invalid",
-        type=bool,
-        action=argparse.BooleanOptionalAction,
-        help="Ignore empty or invalid eval results from in progress evals.",
+        "--dataset",
+        type=str,
+        help="Specifies the test dataset to load for evaluation",
     )
+    args.add_argument(
+        "test_path",
+        help="A pytest pass through flag that is the directory containing the dataset to evaluate.",
+        type=str,
+        default="home_assistant_datasets/tool/assist/eval_tests/test_eval.py",
+        nargs="?",
+    )
+    # Flags consistent with pytest for pass through
+    verbosity_group = args.add_mutually_exclusive_group()
+    verbosity_group.add_argument(
+        "--verbose",
+        "-v",
+        action="count",
+        dest="verbosity",
+        help="A pytest pass through flag to increase verbosity.",
+    )
+    verbosity_group.add_argument(
+        "--verbosity",
+        action="store",
+        type=int,
+        metavar="N",
+        dest="verbosity",
+        help="A pytest pass through flag to set verbosity. Default is 0",
+    )
+    args.add_argument(
+        "--collect-only",
+        action="store_true",
+        help="A pytest pass through flag to only collect the list of tests without actually running them.",
+    )
+    args.add_argument(
+        "-s",
+        action="store_true",
+        help="A pytest pass through flag to show streaming test output.",
+    )
+    args.set_defaults(verbosity=0)
 
 
 def run(args: argparse.Namespace) -> int:
-    """Run the command line action."""
-    model_outputs = pathlib.Path(args.model_output_dir)
-    writer = create_writer(args.output_type, AssistEvalMetric)
-    writer.start()
-    for model_output_file in sorted(model_outputs.glob("*/**/*.yaml")):
-        stem = model_output_file.relative_to(model_outputs)
-        filename = model_output_file.name[:-5]  # strip .yaml
-        model_id = str(list(stem.parents)[0])
-        task_prefix = filename.split("-")[0]
-
-        try:
-            output = ModelOutput.from_yaml(
-                model_output_file.read_text(), decoder=yaml_decoder
-            )
-        except (yaml.error.YAMLError, ValueError, MissingField) as err:
-            if args.ignore_invalid:
-                _LOGGER.error(
-                    "Unable to parse model output file: %s: %s", model_output_file, err
-                )
-                continue
-            raise ValueError(
-                f"Unable to parse model output file: {model_output_file}: {str(err)}"
-            )
-
-        label = BAD_LABEL
-        unexpected_states = output.context["unexpected_states"]
-        if len(unexpected_states) == 0:
-            # Success!
-            label = GOOD_LABEL
-            if "Sorry" in output.response:
-                raise ValueError(
-                    f"Incorrect expected states logic in {model_output_file}? Response said Sorry but no unexpected states: {output.task_id}"
-                )
-        writer.row(
-            AssistEvalMetric(
-                uuid=output.uuid,
-                task_id=output.task_id,
-                model_id=model_id,
-                category=output.category,
-                task_prefix=task_prefix,
-                label=label,
-                text=output.task["input_text"],
-                response=output.response,
-                tool_call=find_llm_call(output.context.get("conversation_trace", {})),
-                entity_diff=writer.diff(unexpected_states),
-                token_stats=find_token_stats(
-                    output.context.get("conversation_trace", {})
-                ),
-                duration_ms=output.context.get("duration_ms"),
-            )
+    verbosity = args.verbosity
+    pytest_args = [
+        "--no-header",
+        "--disable-warnings",
+    ]
+    if verbosity:
+        pytest_args.extend(
+            [
+                "--verbosity",
+                str(verbosity),
+            ]
+        )
+    if args.test_path:
+        pytest_args.append(args.test_path)
+    if args.model_output_dir:
+        pytest_args.extend(
+            [
+                "--model_output_dir",
+                args.model_output_dir,
+            ]
+        )
+    if args.report_dir:
+        pytest_args.extend(
+            [
+                "--report_dir",
+                args.report_dir,
+            ]
         )
 
-    writer.finish()
+    if args.collect_only:
+        pytest_args.append("--collect-only")
+    if args.s:
+        pytest_args.append("-s")
+    configure_yaml()
 
-    return 0
+    retcode = pytest.main(
+        pytest_args,
+        plugins=PLUGINS,
+    )
+    return retcode

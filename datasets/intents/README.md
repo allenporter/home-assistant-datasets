@@ -122,24 +122,8 @@ See `home-assistant-datasets assist collect --help` for options to control pytes
 
 ## Evaluation
 
-Once you have collected data from the model, you can perform a manual or offline
-evaluation of the results in the model output directoyr.
+Once you have collected data from the model, you can automatically evaluate the results:
 
 ```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --output_type=csv > report.csv
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} ${DATASET_DIR}
 ```
-
-You can export the results into a spreadsheet or perform other analysis. In this example, the assistnat pipeline successfully handled around 51% of queries.
-
-```bash
-$ wc -l report.csv
-113 report.csv
-$ grep Good report.csv | wc -l
-58
-$ python -c "print(58/113)"
-0.5132743362831859
-```
-
-See [Annotations](../../script/README.md) for details on how to systematically
-run human annotations of the output. You can review the outputs manually if the
-tasks do not support exhaustive scoring.

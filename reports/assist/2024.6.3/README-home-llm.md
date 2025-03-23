@@ -81,5 +81,5 @@ Set a baseline with assistant of 50%:
 
 ```bash
 $ home-assistant-datasets assist collect --model_output_dir=${MODEL_OUTPUT_DIR} --dataset=${DATASET} --models=assistant
-$ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} --output_type=csv > ${MODEL_OUTPUT_DIR}/report.csv
+$ home-assistant-datasets assist eval --model_output_dir=${MODEL_OUTPUT_DIR} ${DATASET}
 ```

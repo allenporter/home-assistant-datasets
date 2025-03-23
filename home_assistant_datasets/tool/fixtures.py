@@ -24,14 +24,16 @@ from home_assistant_datasets.tool.data_model import (
     EvalTask,
     generate_tasks,
     EntityState,
+    TokenStats,
+    TokenStatsBank,
 )
 
-from .data_model import TokenStats, TokenStatsBank
 
 _LOGGER = logging.getLogger(__name__)
 
 PLUGINS = [
     "home_assistant_datasets.fixtures",
+    "home_assistant_datasets.tool.fixtures",
 ]
 
 
@@ -272,6 +274,28 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
             values["timestamp"] = datetime.datetime.fromisoformat(ts_str)
         result.append(values)
     return result
+
+
+def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Gets the llm call from the conversation trace."""
+    tool_call = next(
+        iter(
+            event
+            for event in trace_events
+            if event["event_type"]
+            # type: ignore[attr-defined]
+            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
+        ),
+        None,
+    )
+    if tool_call is None:
+        return None
+
+    data = tool_call["data"]
+    return {
+        "tool_name": data.get("tool_name"),
+        "tool_args": data.get("tool_args"),
+    }
 
 
 def find_token_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:

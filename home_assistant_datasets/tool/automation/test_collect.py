@@ -23,7 +23,7 @@ from home_assistant_datasets.tool.data_model import (
     EvalTask,
     ModelOutput,
 )
-from home_assistant_datasets.tool.conftest import dump_conversation_trace
+from home_assistant_datasets.tool.fixtures import dump_conversation_trace
 
 _LOGGER = logging.getLogger(__name__)
 TIMEOUT = 40
