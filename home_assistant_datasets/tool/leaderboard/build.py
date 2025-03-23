@@ -229,7 +229,7 @@ def create_leaderboard_table(
             ]
             best_tag = ""
             if model_id in best_dataset_scores[dataset]:
-                best_tag = "\\space * "
+                best_tag = " * \\space"
             score = best_record.good_percent_value()
             score_str = f"{score*100:0.1f}"
             if model_id in best_dataset_scores[dataset]:
@@ -238,11 +238,11 @@ def create_leaderboard_table(
                 [
                     score_str,
                     "\\\\% \\space",  # % sign
+                    best_tag,
                     # Put the CI and dataset label in small gray text
                     "\\color{gray}\\tiny{\\textsf{",
                     f"(CI: {ci:0.1f}, {best_record.dataset_label})",
                     "}}",  # end small text
-                    best_tag,
                     "}$$",
                 ]
             )
