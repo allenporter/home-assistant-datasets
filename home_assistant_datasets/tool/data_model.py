@@ -53,11 +53,17 @@ class Action(DataClassYAMLMixin):
     setup: dict[str, EntityState] = field(default_factory=dict)
     """Initial entity states to override."""
 
-    expect_changes: dict[str, EntityState] = field(default_factory=dict)
+    expect_changes: dict[str, EntityState] | None = None
     """The device states to assert on."""
 
     ignore_changes: dict[str, list[str]] | None = None
     """The device state or attribute changes to ignored."""
+
+    expect_response: str | list[str] | None = None
+    """Expect the agent to respond with this substring.
+
+    When specified as a list, the response may match any valid substring in the last.
+    """
 
     class Config(BaseConfig):
         forbid_extra_keys = False
@@ -98,6 +104,9 @@ class EvalTask(DataClassYAMLMixin):
 
     ignore_changes: dict[str, list[str]] | None = None
     """The device state changes to ignored."""
+
+    expect_response: str | list[str] | None = None
+    """Expect the agent to respond with this substring."""
 
     task_num: int | None = None
     """If running multiple times, the task number under test."""
@@ -182,6 +191,7 @@ def generate_tasks(
                     input_text=sentence,
                     expect_changes=action.expect_changes,
                     ignore_changes=action.ignore_changes,
+                    expect_response=action.expect_response,
                 )
             else:
                 for i in range(0, count):
@@ -193,6 +203,7 @@ def generate_tasks(
                         input_text=sentence,
                         expect_changes=action.expect_changes,
                         ignore_changes=action.ignore_changes,
+                        expect_response=action.expect_response,
                         task_num=i,
                     )
 

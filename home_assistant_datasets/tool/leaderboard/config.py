@@ -15,6 +15,7 @@ ASSIST_FAMILY_DATASETS = [
 DATASETS = [
     *ASSIST_FAMILY_DATASETS,
     "automations",
+    "questions",
 ]
 DATASETS_FOR_AVG = ASSIST_FAMILY_DATASETS
 
@@ -48,7 +49,9 @@ class EvalReport:
         return self.directory / CSV_FILE
 
 
-def eval_reports(report_dir: pathlib.Path, datasets: list[str]) -> Generator[EvalReport, None, None]:
+def eval_reports(
+    report_dir: pathlib.Path, datasets: list[str]
+) -> Generator[EvalReport, None, None]:
     """Generate the list of eval reports."""
     for dataset in datasets:
         dataset_dir = report_dir / dataset

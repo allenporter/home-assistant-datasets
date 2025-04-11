@@ -84,7 +84,7 @@ You then need to score the outputs by running the `eval` command. This report in
 a list of the wins and losses for manual inspection.
 
 ```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} ${DATASET}
+$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} --dataset=${DATASET}
 ```
 
 ### Leaderboard
