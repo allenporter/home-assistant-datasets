@@ -3,20 +3,20 @@
 | --- | --- | --- | --- | --- |
 | claude-3-haiku | $${96.2\\% \space\color{gray}\tiny{\textsf{(CI: 5.1, 2025.4.0b)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.9.0b2)}}}$$ | $${41.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.3.0b)}}}$$ |  | $${\textbf{97.1}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 3.3, avg)}}}$$ |
 | qwq | $${\textbf{96.2}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.3.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.3.3)}}}$$ |  |  | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
-| claude-3-5-sonnet |  | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ | $${\textbf{81.7}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.0b)}}}$$ |  | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
-| gpt-4o-mini | $${92.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.1, 2025.4.0b)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${50.0\\% \space\color{gray}\tiny{\textsf{(CI: 12.7, 2025.3.0b)}}}$$ | $${\textbf{42.9}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.4.1)}}}$$ | $${95.1\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
+| claude-3-5-sonnet |  | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ | $${\textbf{81.7}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.0b)}}}$$ | $${\textbf{57.1}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.5.0b)}}}$$ | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
+| gpt-4o-mini | $${92.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.1, 2025.4.0b)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${50.0\\% \space\color{gray}\tiny{\textsf{(CI: 12.7, 2025.3.0b)}}}$$ | $${42.9\\% \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.4.1)}}}$$ | $${95.1\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
 | qwen2.5-32b | $${92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.3.3)}}}$$ | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.3.3)}}}$$ |  |  | $${93.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
 | gemini-1.5-flash | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${30.0\\% \space\color{gray}\tiny{\textsf{(CI: 11.6, 2025.3.0b)}}}$$ | $${28.6\\% \space\color{gray}\tiny{\textsf{(CI: 33.5, 2025.4.1)}}}$$ | $${93.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
 | llama3.3 | $${92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ | $${91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ |  |  | $${92.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, avg)}}}$$ |
 | claude-3-5-haiku |  | $${91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${63.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.2, 2025.3.0b)}}}$$ |  | $${91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
 | llama3.3-awq | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ |  |  | $${91.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, avg)}}}$$ |
 | gpt-4o | $${87.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.2, 2024.6.3)}}}$$ | $${93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.2.4)}}}$$ | $${78.3\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2025.3.0b)}}}$$ |  | $${89.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.2, avg)}}}$$ |
-| gpt-3.5 | $${80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.0b)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.3.0b)}}}$$ | $${\textbf{42.9}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.4.1)}}}$$ | $${87.6\\% \space\color{gray}\tiny{\textsf{(CI: 5.7, avg)}}}$$ |
+| gpt-3.5 | $${80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.0b)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.3.0b)}}}$$ | $${42.9\\% \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.4.1)}}}$$ | $${87.6\\% \space\color{gray}\tiny{\textsf{(CI: 5.7, avg)}}}$$ |
 | gemma3-27b | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.3.3)}}}$$ |  |  |  | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, avg)}}}$$ |
 | qwen2.5 | $${81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ | $${89.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, 2025.4.0b)}}}$$ |  |  | $${84.5\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, avg)}}}$$ |
 | mistral-nemo |  | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, avg)}}}$$ |
 | qwen2.5-14b | $${78.8\\% \space\color{gray}\tiny{\textsf{(CI: 9.0, 2025.3.3)}}}$$ | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.3)}}}$$ |  |  | $${81.4\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, avg)}}}$$ |
-| gemini-2.0-flash | $${72.5\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.0b)}}}$$ | $${93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.4.0b)}}}$$ | $${68.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.8, 2025.3.0b)}}}$$ | $${\textbf{42.9}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.4.1)}}}$$ | $${80.6\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, avg)}}}$$ |
+| gemini-2.0-flash | $${72.5\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.0b)}}}$$ | $${93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.4.0b)}}}$$ | $${68.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.8, 2025.3.0b)}}}$$ | $${42.9\\% \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.4.1)}}}$$ | $${80.6\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, avg)}}}$$ |
 | llama3.1 | $${66.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2024.9.0dev)}}}$$ | $${89.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, 2025.4.0b)}}}$$ |  |  | $${75.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, avg)}}}$$ |
 | assist-llm | $${67.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2024.9.0dev)}}}$$ | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.0dev)}}}$$ |  |  | $${72.9\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
 | llama3.2-3b | $${62.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.9.2)}}}$$ | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${69.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.9, avg)}}}$$ |
@@ -204,18 +204,19 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#ea4335, #34a853, #6aa84f, #f4b400, #4285f4"
+            plotColorPalette: "#f4b400, #ea4335, #34a853, #6aa84f, #f4b400, #4285f4"
 
 ---
 xychart-beta
   title "questions"
-  x-axis "Model" [gpt-4o-mini, gemini-1.5-flash, gpt-3.5, gemini-2.0-flash, .]
+  x-axis "Model" [claude-3-5-sonnet, gpt-4o-mini, gemini-1.5-flash, gpt-3.5, gemini-2.0-flash, .]
   y-axis "Score" 1 --> 100
-  bar [42.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 28.6, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 42.9, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 42.9, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, -1.0]
+  bar [57.1, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 42.9, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 28.6, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 42.9, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 42.9, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
 
