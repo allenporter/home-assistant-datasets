@@ -111,6 +111,7 @@ async def test_assist_actions(
                 k: dataclasses.asdict(v)
                 for k, v in (eval_task.expect_changes or {}).items()
             },
+            "expect_response": eval_task.expect_response,
         },
         response=response,
         context={

@@ -105,9 +105,12 @@ def parse_model_reports(
 
             model_scores[model_id][eval_report.dataset].append(
                 ModelRecord(
-                    **model_data,
+                    model_id=model_id,
                     dataset=eval_report.dataset,
                     dataset_label=eval_report.dataset_label,
+                    good=model_data["good"],
+                    total=model_data["total"],
+                    good_percent=model_data.get("good_percent"),
                 )
             )
     return model_scores
