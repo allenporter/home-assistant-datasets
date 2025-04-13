@@ -3,6 +3,7 @@
 import enum
 import dataclasses
 import logging
+import math
 import pathlib
 import io
 import sys
@@ -215,6 +216,13 @@ class DurationStats:
             }
         }
 
+def confidence_interval(p: float, n: int) -> float:
+    """Compute the confidence interval for a proportion."""
+    if n == 0:
+        return 0
+    stddev = math.sqrt((p * (1 - p)) / n)
+    return 1.96 * stddev * 100
+
 
 class ReportWriter(WriterBase):
     """Handles creation of an eval report."""
@@ -252,11 +260,16 @@ class ReportWriter(WriterBase):
 
         items = []
         for key in sorted_keys:
+            good = self.good[key]
+            total = self.totals[key]
+            good_ratio = good / total
+            ci = confidence_interval(good_ratio, total)
             data = {
                 self.summary_key: key,
-                "good_percent": f"{100*(self.good[key] / self.totals[key]):0.1f}%",
-                "good": self.good[key],
-                "total": self.totals[key],
+                "good_percent": f"{100*good_ratio:0.1f}%",
+                "confidence_interval": f"{ci:0.1f}%",
+                "good": good,
+                "total": total,
             }
             if token_stats := self.token_stats.get(key):
                 data.update(token_stats.summary_data())
