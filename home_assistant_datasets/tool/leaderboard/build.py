@@ -82,6 +82,13 @@ class ModelRecord:
         p = self.good_percent_value()
         return math.sqrt((p * (1 - p)) / self.total)
 
+    @property
+    def confidence_interval(self) -> float:
+        """Compute the confidence interval of the score."""
+        if not self.total:
+            return 0
+        return 1.96 * self.stddev * 100
+
 
 def parse_model_reports(
     report_dir: pathlib.Path,
@@ -226,7 +233,7 @@ def create_leaderboard_table(
             if best_record.good_percent_value() == 0:
                 row.append("")
                 continue
-            ci = 1.96 * best_record.stddev * 100
+            ci = best_record.confidence_interval
             text_parts = [
                 "$${",
             ]
