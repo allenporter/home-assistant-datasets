@@ -131,6 +131,7 @@ def test_report_writer() -> None:
         == """---
 - model_id: model-id
   good_percent: 50.0%
+  confidence_interval: 69.3%
   good: 1
   total: 2
 
