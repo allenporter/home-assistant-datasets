@@ -1,23 +1,26 @@
 """Data collection test fixtures."""
 
+from collections.abc import Generator, Callable, Awaitable
+import datetime
+import enum
 import pathlib
 import logging
-import datetime
 from typing import Any
-from collections.abc import Generator, Callable, Awaitable
-import enum
 from typing import cast
+from unittest.mock import patch
 
 import yaml
 import pytest
 from homeassistant.util import dt as dt_util
 from homeassistant.core import HomeAssistant, Context
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import entity_registry as er, llm
-from homeassistant.components.conversation import trace
+from homeassistant.helpers import device_registry as dr, entity_registry as er, llm
+from homeassistant.components.conversation import trace, async_converse
 
 from home_assistant_datasets.data_model import (
     read_dataset_files,
+    read_dataset_card,
+    DATASET_CARD_FILE,
 )
 
 from home_assistant_datasets.tool.data_model import (
@@ -62,14 +65,16 @@ def pytest_generate_tests(metafunc: Any) -> None:
 
     # Tests are parameterized by the files that contain device actions. Ignore
     # fixtures and load those separately below.
-    dataset_files = read_dataset_files(pathlib.Path(dataset))
+    dataset_path = pathlib.Path(dataset)
+    dataset_files = read_dataset_files(dataset_path)
+    dataset_card = read_dataset_card(dataset_path / DATASET_CARD_FILE)
 
     categories_str = metafunc.config.getoption("categories")
     categories = set(categories_str.split(",") if categories_str else {})
     if count := metafunc.config.getoption("count"):
         count = int(count)
     else:
-        count = None
+        count = dataset_card.count
 
     output_path = pathlib.Path(output_dir)
 
@@ -108,6 +113,51 @@ def eval_output_file_fixture(model_id: str, eval_task: EvalTask) -> pathlib.Path
     a separate file containing an id of the prompt.
     """
     return pathlib.Path(f"{eval_task.output_dir}/{model_id}/{eval_task.task_id}.yaml")
+
+
+@pytest.fixture(name="context_device_id")
+def context_device_id_fixture(
+    synthetic_home_config_entry: Any,
+    device_registry: dr.DeviceRegistry,
+    eval_task: EvalTask,
+) -> str | None:
+    """Fixture to return the Homoe Assistant device id for the current context."""
+    if eval_task.context_device is None:
+        return None
+    device_entries = dr.async_entries_for_config_entry(
+        device_registry, synthetic_home_config_entry.entry_id
+    )
+    device_entry_map = {
+        identifier[1]: device_entry
+        for device_entry in device_entries
+        for identifier in device_entry.identifiers
+    }
+    if context_device_entry := device_entry_map.get(eval_task.context_device):
+        return context_device_entry.id
+    raise ValueError(
+        f"Could not find context device '{eval_task.context_device}' in synthetic home {synthetic_home_config_entry}: {device_entry_map}"
+    )
+
+
+@pytest.fixture(name="patch_device_id", autouse=True)
+def patch_device_id_fixture(context_device_id: str | None) -> Generator[None]:
+    """Fixture to insert the LLM context device_id argument to the start of the conversation."""
+
+    if context_device_id is None:
+        yield
+        return
+
+    original_function = async_converse
+
+    async def add_device_id(*args: Any, **kwargs: Any) -> Any:
+        kwargs["device_id"] = context_device_id
+        return await original_function(*args, **kwargs)
+
+    with patch(
+        "homeassistant.components.conversation.async_converse",
+        side_effect=add_device_id,
+    ):
+        yield
 
 
 @pytest.fixture(name="synthetic_home_yaml")
