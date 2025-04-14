@@ -65,6 +65,9 @@ class Action(DataClassYAMLMixin):
     When specified as a list, the response may match any valid substring in the last.
     """
 
+    context_device: str | None = None
+    """Synthetic home device id for the current context of the request."""
+
     class Config(BaseConfig):
         forbid_extra_keys = False
 
@@ -98,6 +101,9 @@ class EvalTask(DataClassYAMLMixin):
 
     input_text: str
     """The conversation input text to state."""
+
+    context_device: str | None = None
+    """The device id for the current context."""
 
     expect_changes: dict[str, EntityState] | None = None
     """The device states to assert on."""
@@ -189,6 +195,7 @@ def generate_tasks(
                     record_id=record_id,
                     category=record.category,
                     input_text=sentence,
+                    context_device=action.context_device,
                     expect_changes=action.expect_changes,
                     ignore_changes=action.ignore_changes,
                     expect_response=action.expect_response,
@@ -201,6 +208,7 @@ def generate_tasks(
                         record_id=record_id,
                         category=record.category,
                         input_text=sentence,
+                        context_device=action.context_device,
                         expect_changes=action.expect_changes,
                         ignore_changes=action.ignore_changes,
                         expect_response=action.expect_response,

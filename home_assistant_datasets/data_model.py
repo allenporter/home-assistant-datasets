@@ -1,6 +1,7 @@
 """Common librarys for collecting model outputs for evaluation."""
 
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Any
 import pathlib
 
@@ -33,6 +34,12 @@ class DatasetCard:
 
     urls: list[str]
     """More information about the dataset."""
+
+    count: int | None = None
+    """Number of times to run each task by default."""
+
+    version: str | None = None
+    """Current version of the dataset."""
 
     path: str | None = field(default=None)
     """Path to use for reading the dataset files instead of the current directory."""
@@ -129,6 +136,7 @@ def read_model(model_id: str) -> ModelConfig:
     )
 
 
+@lru_cache
 def read_dataset_card(dataset_card: pathlib.Path) -> DatasetCard:
     """Read a single dastaset configuration file."""
     data = yaml.load(dataset_card.read_text(), Loader=yaml.Loader)
