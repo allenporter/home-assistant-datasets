@@ -242,7 +242,7 @@ class TokenStats:
     cached_input_tokens: int | float
     output_tokens: int | float
 
-    n_count: int = 1
+    n_count: int | float = 1
     """Total raw number of requests, which may be more than number of tasks."""
 
 
@@ -281,7 +281,7 @@ class TokenStatsBank:
             output_tokens=round(
                 sum(s.output_tokens for s in self.stats) / len(self.stats), 2
             ),
-            n_count=sum(s.n_count for s in self.stats),
+            n_count=round(sum(s.n_count for s in self.stats) / len(self.stats), 2),
         )
 
     def sum(self) -> TokenStats:
@@ -290,7 +290,7 @@ class TokenStatsBank:
             input_tokens=sum(s.input_tokens for s in self.stats),
             cached_input_tokens=sum(s.cached_input_tokens for s in self.stats),
             output_tokens=sum(s.output_tokens for s in self.stats),
-            n_count=len(self.stats),
+            n_count=sum(s.n_count for s in self.stats),
         )
 
 
