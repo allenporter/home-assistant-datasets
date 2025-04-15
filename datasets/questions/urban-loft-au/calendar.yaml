@@ -17,6 +17,10 @@ tests:
               location: Butcher's Prime Restaurant
               start: 2025-04-02 19:00+10:00
               end: 2025-04-02 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
     expect_response:
       - chemistry
 
@@ -36,6 +40,10 @@ tests:
               location: Peninsula CR Steak & Seafood Grill
               start: 2025-04-02 19:00+10:00
               end: 2025-04-02 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
     expect_response:
       - Liza
 
@@ -87,6 +95,67 @@ tests:
               location: Home
               start: 2025-04-02 18:00+10:00
               end: 2025-04-02 20:25+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
     expect_response:
       - "no"
       - nothing
+
+  # Here we're exercising that the prompt asks to search the whole week, not just today
+  - sentences:
+      - How many nights this week do I need to cook?
+      - From my personal calendar, how many nights do I need to cook this week?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-04 19:00+10:00
+              end: 2025-04-04 20:30+10:00
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-05 19:00+10:00
+              end: 2025-04-05 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    expect_response:
+      - "3"
+      - three
+
+  # Here we're exercising that the prompt asks to search the whole week, not just today
+  - sentences:
+      - Is anyone coming to visit?
+      - According to my calendar, is anyone visiting?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Liza visit
+              location: Home
+              start: 2025-04-05
+              end: 2025-04-07
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-05 19:00+10:00
+              end: 2025-04-05 20:30+10:00
+    expect_response:
+      - liza
