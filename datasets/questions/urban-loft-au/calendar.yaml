@@ -1,0 +1,92 @@
+---
+category: calendar
+tests:
+  - sentences:
+      - What classes do I have today?
+      - What classes are on my personal calendar today?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Dinner with Liza
+              description: Meet up with Liza, don't forget to bring flowers
+              location: Butcher's Prime Restaurant
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+    expect_response:
+      - chemistry
+
+  - sentences:
+      - Who am I meeting for dinner?
+      - According to my personal calendar, who am I meeting for dinner?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Dinner with Liza
+              description: Don't forget to bring flowers
+              location: Peninsula CR Steak & Seafood Grill
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+    expect_response:
+      - Liza
+
+  - sentences:
+      - Am I leaving the house today?
+      - Do i have any personal calendar events away from home today?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+              location:
+            - summary: Dinner with Liza
+              description: Meet up with Liza, don't forget to bring flowers
+              location: Peninsula CR Steak & Seafood Grill
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+    expect_response:
+      - "yes"
+      - dinner
+      - school
+      - class
+
+  - sentences:
+      - Are we leaving the house today?
+      - According to my personal calendar, are we leaving the house today?
+      - According to my personal calendar, do I have any events away from home today?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Rest & Relax
+              location: Home
+              start: 2025-04-02 08:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Clean the garage
+              location: Home
+              start: 2025-04-02 13:00+10:00
+              end: 2025-04-02 14:25+10:00
+            - summary: Order delivery
+              location: Home
+              start: 2025-04-02 18:00+10:00
+              end: 2025-04-02 18:15+10:00
+            - summary: Netflix w/ Liza
+              location: Home
+              start: 2025-04-02 18:00+10:00
+              end: 2025-04-02 20:25+10:00
+    expect_response:
+      - "no"
+      - nothing
