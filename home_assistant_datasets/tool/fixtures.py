@@ -115,6 +115,21 @@ def eval_output_file_fixture(model_id: str, eval_task: EvalTask) -> pathlib.Path
     return pathlib.Path(f"{eval_task.output_dir}/{model_id}/{eval_task.task_id}.yaml")
 
 
+@pytest.fixture(name="context_now", autouse=True)
+def context_now_fixture(
+    eval_task: EvalTask,
+) -> Generator[datetime.datetime | None, None, None]:
+    """Fixture to set "now" based on the eval task context."""
+    if eval_task.context_now is None:
+        yield None
+        return
+
+    with patch(
+        "homeassistant.util.dt.now", return_value=eval_task.context_now
+    ) as now_dt:
+        yield now_dt
+
+
 @pytest.fixture(name="context_device_id")
 def context_device_id_fixture(
     synthetic_home_config_entry: Any,

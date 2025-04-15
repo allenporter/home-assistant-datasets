@@ -4,13 +4,14 @@ This file defines dataclasses that hold data for the eval run, essentially the
 output of parsing the yaml files.
 """
 
-import logging
-from typing import Any
+from collections.abc import Generator
 import dataclasses
 from dataclasses import dataclass, field
-from collections.abc import Generator
+import datetime
+import logging
 import pathlib
 from slugify import slugify
+from typing import Any
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
 
@@ -68,6 +69,9 @@ class Action(DataClassYAMLMixin):
     context_device: str | None = None
     """Synthetic home device id for the current context of the request."""
 
+    context_now: datetime.datetime | None = None
+    """The current time to use during tests."""
+
     class Config(BaseConfig):
         forbid_extra_keys = False
 
@@ -104,6 +108,9 @@ class EvalTask(DataClassYAMLMixin):
 
     context_device: str | None = None
     """The device id for the current context."""
+
+    context_now: datetime.datetime | None = None
+    """The current time for the current context."""
 
     expect_changes: dict[str, EntityState] | None = None
     """The device states to assert on."""
@@ -196,6 +203,7 @@ def generate_tasks(
                     category=record.category,
                     input_text=sentence,
                     context_device=action.context_device,
+                    context_now=action.context_now,
                     expect_changes=action.expect_changes,
                     ignore_changes=action.ignore_changes,
                     expect_response=action.expect_response,
@@ -209,6 +217,7 @@ def generate_tasks(
                         category=record.category,
                         input_text=sentence,
                         context_device=action.context_device,
+                        context_now=action.context_now,
                         expect_changes=action.expect_changes,
                         ignore_changes=action.ignore_changes,
                         expect_response=action.expect_response,
