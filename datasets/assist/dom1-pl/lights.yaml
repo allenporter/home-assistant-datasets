@@ -128,3 +128,37 @@ tests:
         state: "on"
       light.bedroom_4_light:
         state: "on"
+
+  # Exercise multiple commands
+  - sentences:
+      - Turn on the kitchen light and then turn off the living room light
+      - Turn on the light in the kitchen, then turn off the light in the living room
+      - Turn off the living room light then turn on the kitchen light
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "off"
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+  - sentences:
+      - Turn on both the kitchen light and living room lights
+      - Turn on the living room and kitchen lights
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "off"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "on"
