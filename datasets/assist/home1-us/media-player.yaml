@@ -1,0 +1,53 @@
+---
+category: media-player
+tests:
+  # Infer context from the device
+  - sentences:
+      - Set the volume to 0%
+    context_device: nest_hub
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.nest_hub:
+        attributes:
+          volume_level: 0.0
+
+  # Infer context from another device device
+  - sentences:
+      - Set the volume to 0%
+    context_device: smart_speaker
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.smart_speaker:
+        attributes:
+          volume_level: 0.0
+
+  # This is ambiguous since we don't know which area/device to target. Expect
+  # that devices are updated.
+  - sentences:
+      - Set the volume to 0%
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes: {}

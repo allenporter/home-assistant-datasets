@@ -2,11 +2,9 @@
 category: lock
 tests:
   - sentences:
-      - Lock smart lock
       - Lock the front door lock
       - Lock the entry lock
       - Lock the smart lock
-      - Lock all the locks
     setup:
       lock.smart_lock:
         state: unlocked
@@ -14,13 +12,38 @@ tests:
       lock.smart_lock:
         state: locked
   - sentences:
-      - Unlock smart lock
       - Unlock the entry lock
       - Unlock the smart lock
-      - Unlock all the doors
     setup:
       lock.smart_lock:
         state: locked
     expect_changes:
       lock.smart_lock:
         state: unlocked
+  # Ambiguous sentence should not lock any locks and should instead ask for an area
+  - sentences:
+      - Lock all the locks please
+      - Lock the lock
+      - Lock the door
+    setup:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+  - sentences:
+      - Unlock all the doors
+    setup:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked
