@@ -134,10 +134,12 @@ def run(args: argparse.Namespace) -> int:
         f"--categories={args.categories or ''}",
     ]
     if args.verbosity:
-        pytest_args.extend([
-            "--verbosity",
-            str(verbosity),
-        ])
+        pytest_args.extend(
+            [
+                "--verbosity",
+                str(verbosity),
+            ]
+        )
     if not args.disable_random:
         pytest_args.append("--random-order-seed=42")
     if args.count:
