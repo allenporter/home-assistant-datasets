@@ -350,6 +350,9 @@ class ScrapeConfig(DataClassYAMLMixin):
     dataset_path: str
     """The path to the dataset used to generate the predictions."""
 
+    dataset_version: str | None = None
+    """Additional version information about the dataset."""
+
     model_id: str
     """The model identifier used to generate the predictions."""
 

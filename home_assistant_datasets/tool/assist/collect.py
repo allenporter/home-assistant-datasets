@@ -127,14 +127,17 @@ def run(args: argparse.Namespace) -> int:
     verbosity = args.verbosity
 
     pytest_args = [
-        "--verbosity",
-        str(verbosity),
         # See flags defined in conftest.py
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
         f"--categories={args.categories or ''}",
     ]
+    if args.verbosity:
+        pytest_args.extend([
+            "--verbosity",
+            str(verbosity),
+        ])
     if not args.disable_random:
         pytest_args.append("--random-order-seed=42")
     if args.count:

@@ -112,6 +112,7 @@ def scrape_config(model_id: str, dataset: str, output_path: str) -> ScrapeConfig
     return ScrapeConfig(
         dataset=dataset_card.name,
         dataset_path=str(dataset_path),
+        dataset_version=dataset_card.version,
         model_id=model_id,
         model_output_path=str(output_path),
     )
@@ -137,8 +138,9 @@ def create_scrape_context(scrape_config: ScrapeConfig) -> ScrapeContext:
 def scrape_record_writer_fixture(scrape_config: ScrapeConfig) -> None:
     """Fixture to generate a scrape record."""
     scrape_context = create_scrape_context(scrape_config)
+    scrape_config.scrape_output_path.parent.mkdir(exist_ok=True)
+    scrape_config.scrape_output_path.mkdir(exist_ok=True)
     output = scrape_config.scrape_output_path / SCRAPE_CONTEXT_FILE
-    output.parent.mkdir(exist_ok=True)
     output.write_text(yaml.dump(scrape_context, sort_keys=False, explicit_start=True))
 
 
