@@ -1,4 +1,4 @@
-"""Tests to validate the format of the automation datasets."""
+"""Tests to validate the format of the eval tasks in datasets."""
 
 import pathlib
 
@@ -11,6 +11,7 @@ DATASETS = [
     "assist",
     "assist-mini",
     "automations",
+    "questions",
 ]
 
 

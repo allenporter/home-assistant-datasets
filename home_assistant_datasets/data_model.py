@@ -113,7 +113,7 @@ class Models:
     prerequisites: list[EntryConfig]
     """The prerequisites for the models under evaluation."""
 
-
+@lru_cache
 def read_models() -> Models:
     """Read models configuration file."""
     if MODEL_CONFIG_FILE.exists():
