@@ -99,7 +99,7 @@ class ModelConfig:
     rpm: int | None = None
     """Requests per minute allowed for this model."""
 
-    categories: list[str] | None = field(default_factory=list)
+    categories: list[str] = field(default_factory=list)
     """Arbitrary labels about this model."""
 
 

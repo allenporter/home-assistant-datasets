@@ -265,14 +265,25 @@ def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
     report_dir = pathlib.Path(args.report_dir)
 
+    active_models = {
+        model.model_id: model
+        for model in data_model.read_models().models
+        if data_model.ARCHIVED_LABEL not in model.categories
+    }
     model_scores = parse_model_reports(report_dir)
+    model_scores = {
+        model_id: v
+        for model_id, v in model_scores.items()
+        if model_id in active_models
+    }
+
     best_model_scores = compute_best_scores(model_scores)
 
     # Models in the config file are ranked/grouped logically for display display.
     # These models may not be present in the reports, however.
     ranked_model_ids = {
         model.model_id: model
-        for model in data_model.read_models().models
+        for model in active_models.values()
         if model.model_id in best_model_scores
     }
     dataset_cards = {
