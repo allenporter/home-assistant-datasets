@@ -14,7 +14,7 @@ from . import yaml_loaders
 MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
 MODEL_CONFIG_DIR = pathlib.Path("models")
 DATASET_CARD_FILE = "dataset_card.yaml"
-DATASET_CARD_FILES = list(pathlib.Path("datasets").glob(f"**/{DATASET_CARD_FILE}"))
+DATASET_CARD_FILES = sorted(list(pathlib.Path("datasets").glob(f"**/{DATASET_CARD_FILE}")))
 DATASET_TASK_IGNORE_FILES = {
     "_fixtures.yaml",
     "_home.yaml",
@@ -125,7 +125,7 @@ def read_models() -> Models:
     else:
         models = Models(models=[], prerequisites=[])
 
-    for model_file in sorted(MODEL_CONFIG_DIR.glob("**/*.yaml")):
+    for model_file in sorted(list(MODEL_CONFIG_DIR.glob("**/*.yaml"))):
         try:
             model_config = yaml_loaders.yaml_decode(model_file.open(), ModelConfig)
         except Exception as err:
