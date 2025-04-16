@@ -10,7 +10,11 @@ import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.util import dt as dt_util
 
-from home_assistant_datasets.tool.data_model import EvalMetric, ModelOutput
+from home_assistant_datasets.tool.data_model import (
+    EvalMetric,
+    ModelOutput,
+    model_output_files,
+)
 from home_assistant_datasets.tool.eval_report import (
     EvalReport,
     exception_repr,
@@ -109,15 +113,10 @@ def pytest_generate_tests(metafunc: Any) -> None:
         raise ValueError("Required flag --model_output_dir was not specified")
 
     model_output_path = pathlib.Path(model_output_dir)
-    models = model_output_path.glob("*")
-
-    # Limit the models to the one under test
-    tasks = []
-    for model in models:
-        report_files = model.glob("*.yaml")
-        tasks.extend([str(report_file) for report_file in report_files])
-
-    metafunc.parametrize("model_output_file", [pytest.param(task) for task in tasks])
+    tasks = model_output_files(model_output_path)
+    metafunc.parametrize(
+        "model_output_file", [pytest.param(str(task)) for task in tasks]
+    )
 
 
 @pytest.fixture(autouse=True)
@@ -147,7 +146,12 @@ async def model_output_fixture(model_output_file: str | None) -> ModelOutput | N
     if model_output_file is None:
         return None
     model_output_path = pathlib.Path(model_output_file)
-    return ModelOutput.from_yaml(model_output_path.read_text())
+    try:
+        return ModelOutput.from_yaml(model_output_path.read_text())
+    except Exception as err:
+        raise ValueError(
+            f"Error while reading model output file {model_output_path}: {err}"
+        ) from err
 
 
 @pytest.fixture(autouse=True)

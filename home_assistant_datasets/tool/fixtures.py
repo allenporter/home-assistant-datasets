@@ -3,11 +3,15 @@
 from collections.abc import Generator, Callable, Awaitable
 import datetime
 import enum
+import getpass
+from importlib.metadata import version
 import pathlib
 import logging
 from typing import Any
 from typing import cast
 from unittest.mock import patch
+import sys
+import uuid
 
 import yaml
 import pytest
@@ -29,6 +33,9 @@ from home_assistant_datasets.tool.data_model import (
     EntityState,
     TokenStats,
     TokenStatsBank,
+    ScrapeContext,
+    ScrapeConfig,
+    SCRAPE_CONTEXT_FILE,
 )
 
 
@@ -77,14 +84,15 @@ def pytest_generate_tests(metafunc: Any) -> None:
         count = dataset_card.count
 
     output_path = pathlib.Path(output_dir)
+    metafunc.parametrize(
+        "output_path", [pytest.param(output_path, id="output_path")], scope="module"
+    )
 
     tasks = []
     for record_id, record_path in dataset_files.items():
 
         try:
-            eval_tasks = list(
-                generate_tasks(record_id, record_path, output_path, categories, count)
-            )
+            eval_tasks = list(generate_tasks(record_id, record_path, categories, count))
         except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(
                 f"Task record file '{str(record_path)}' was invalid: {err}"
@@ -96,6 +104,44 @@ def pytest_generate_tests(metafunc: Any) -> None:
     )
 
 
+@pytest.fixture(name="scrape_config", scope="module")
+def scrape_config(model_id: str, dataset: str, output_path: str) -> ScrapeConfig:
+    """Fixture to generate a scrape config."""
+    dataset_path = pathlib.Path(dataset)
+    dataset_card = read_dataset_card(dataset_path / DATASET_CARD_FILE)
+    return ScrapeConfig(
+        dataset=dataset_card.name,
+        dataset_path=str(dataset_path),
+        model_id=model_id,
+        model_output_path=str(output_path),
+    )
+
+
+def create_scrape_context(scrape_config: ScrapeConfig) -> ScrapeContext:
+    """Fixture to generate a scrape record."""
+    home_assistant_version = version("homeassistant")
+    context: dict[str, Any] = {"user": getpass.getuser() or "unknown"}
+    if sys.argv:
+        context["argv"] = sys.argv
+    return ScrapeContext(
+        uuid=str(uuid.uuid4()),
+        timestamp=datetime.datetime.now(),
+        version=home_assistant_version,
+        scrape_config=scrape_config,
+        context=context,
+        notes="",
+    )
+
+
+@pytest.fixture(name="scrape_record_writer", scope="module", autouse=True)
+def scrape_record_writer_fixture(scrape_config: ScrapeConfig) -> None:
+    """Fixture to generate a scrape record."""
+    scrape_context = create_scrape_context(scrape_config)
+    output = scrape_config.scrape_output_path / SCRAPE_CONTEXT_FILE
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(yaml.dump(scrape_context, sort_keys=False, explicit_start=True))
+
+
 @pytest.fixture(autouse=True)
 def restore_tz() -> Generator[None, None, None]:
     yield
@@ -105,14 +151,16 @@ def restore_tz() -> Generator[None, None, None]:
 
 
 @pytest.fixture(name="eval_output_file")
-def eval_output_file_fixture(model_id: str, eval_task: EvalTask) -> pathlib.Path:
+def eval_output_file_fixture(
+    scrape_config: ScrapeConfig, eval_task: EvalTask
+) -> pathlib.Path:
     """Sets the output filename for the evaluation run.
 
     This output file needs to be unique across the test instances to avoid overwriting. For
     example if you add a parameter based on the system prompt then this needs to create
     a separate file containing an id of the prompt.
     """
-    return pathlib.Path(f"{eval_task.output_dir}/{model_id}/{eval_task.task_id}.yaml")
+    return scrape_config.eval_task_output_path(eval_task.task_id)
 
 
 @pytest.fixture(name="context_now", autouse=True)

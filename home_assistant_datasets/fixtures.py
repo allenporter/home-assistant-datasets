@@ -6,8 +6,8 @@ import os
 import pathlib
 from typing import Any, TextIO
 from unittest.mock import patch, mock_open
-from pyrate_limiter import Duration, Rate, Limiter
 
+from pyrate_limiter import Duration, Rate, Limiter
 import pytest
 import pytest_socket
 import yaml
