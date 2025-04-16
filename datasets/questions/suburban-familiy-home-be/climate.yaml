@@ -1,0 +1,39 @@
+# sensor.guest_room_thermostat_temperature
+# climate.guest_room_thermostat
+---
+category: climate
+tests:
+  - sentences:
+      - If the temperature in the guest room is above 23 then set the target temperature to 22
+    setup:
+      sensor.guest_room_thermostat_temperature:
+        attributes:
+          native_value: 25
+      climate.guest_room_thermostat:
+        state: "cool"
+        attributes:
+          hvac_mode: "cool"
+          current_temperature: 25
+          target_temperature: 26
+    expect_changes:
+      climate.guest_room_thermostat:
+        attributes:
+          temperature: 22.0
+
+  # No change is expected since the temp is below the target
+  - sentences:
+      - Set the target temperature to 22 in the guest room if it is above 23
+    setup:
+      sensor.guest_room_thermostat_temperature:
+        attributes:
+          native_value: 21
+      climate.guest_room_thermostat:
+        state: "cool"
+        attributes:
+          hvac_mode: "cool"
+          current_temperature: 21
+          target_temperature: 21
+    expect_changes:
+      # No change
+      climate.guest_room_thermostat:
+        state: "cool"
