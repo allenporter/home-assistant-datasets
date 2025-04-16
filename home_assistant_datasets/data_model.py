@@ -21,6 +21,8 @@ DATASET_TASK_IGNORE_FILES = {
     "solution.yaml",
     DATASET_CARD_FILE,
 }
+# Label used to keep around configuration but not use for latest metric calculations
+ARCHIVED_LABEL = "archived"
 
 
 @dataclass(kw_only=True)
@@ -97,6 +99,9 @@ class ModelConfig:
     rpm: int | None = None
     """Requests per minute allowed for this model."""
 
+    categories: list[str] | None = field(default_factory=list)
+    """Arbitrary labels about this model."""
+
 
 @dataclass
 class Models:
@@ -125,6 +130,8 @@ def read_models() -> Models:
             model_config = yaml_loaders.yaml_decode(model_file.open(), ModelConfig)
         except Exception as err:
             raise ValueError(f"Error while loading {model_file}: {err}")
+        if "archive" in str(model_file):
+            model_config.categories.append(ARCHIVED_LABEL)
         models.models.append(model_config)
 
     return models
