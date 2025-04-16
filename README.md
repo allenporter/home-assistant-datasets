@@ -2,6 +2,7 @@
 
 This package is a collection of datasets for evaluating AI Models in the context
 of Home Assistant. The overall approach is:
+
 - Synthetic Data Generation: Create synthetic datasets that represent a home
 - Synthetic Home: Load the data into Home Assistant and exercise different device states (e.g. light on, off)
 - Model Evaluation: Evaluate Home Assistant Conversation agents with different models (e.g. OpenAI, Google, local models)
@@ -64,7 +65,6 @@ example data and a prompt, then is persisted.
 
 The synthetic data generation is run with Jupyter notebooks.
 
-
 ```mermaid
 
 classDiagram
@@ -97,7 +97,7 @@ classDiagram
 ## Model Evaluation
 
 You can use the generated synthetic data in Home Assistat and with integrated
-converation agents to produce outputs for evaluation.
+conversation agents to produce outputs for evaluation.
 
 Model evaluation is currently performed with pytest, [Synthetic Home](https://github.com/allenporter/home-assistant-synthetic-home/), and any conversation agent (Open AI, Google, custom components, etc)
 
@@ -114,8 +114,7 @@ for more information on running an evaluation:
 - [datasets/assist-mini](datasets/assist-mini/README.md) - A much simpler dataset set of tasks for smaller models using very limited number of entities.
 - [datasets/intents](datasets/intents/README.md) - A dataset based on the home assistant intents repository unit tests that are used for the NLP model. These have a very large home.
 
-
-Models are configured in `models.yaml`.
+Models are configured in `models/`.
 
 ### Example Evaluation for Area Summaries
 
@@ -133,9 +132,10 @@ These can be used for human evaluation to determine the model quality. In this p
 evaluation.
 
 Human rater (me) scores the result quality:
-  - 1: Low: Bad, incorrect, misleading, etc.
-  - 2: Medium: Solid, not incorrect, though perhaps a missed opportunity
-  - 3: High: Good
+
+- 1: Low: Bad, incorrect, misleading, etc.
+- 2: Medium: Solid, not incorrect, though perhaps a missed opportunity
+- 3: High: Good
 
 See the [script/](script/) directory for more details on preparing the data for
 human eval procedure using Doccano.

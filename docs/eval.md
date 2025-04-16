@@ -48,18 +48,23 @@ $ export PYTHONPATH="${PYTHONPATH}:${PWD}"
 
 ## Model setup
 
-Review `models.yaml` and use an existing model or configure an additional
-model. Here is an example of addint an additional ollama model:
+Models are configured in the `models/` directory with a file for each
+model and integration combination. This may reference an integration in core
+or a custom component you have installed locally.
+
+An example `models/llama3.1.yaml` has a configuration file like this:
 
 ```yaml
-- model_id: llama3.1
-  domain: ollama
-  config_entry_data:
-    url: !secret ollama_url
-    model: llama3.1:latest
-  config_entry_options:
-    llm_hass_api: assist
+model_id: llama3.1
+domain: ollama
+config_entry_data:
+  url: !secret ollama_url
+  model: llama3.1:latest
+config_entry_options:
+  llm_hass_api: assist
 ```
+
+This includes referencing a secret defined in `secrets.yaml` in the root dir.
 
 ### Scape
 

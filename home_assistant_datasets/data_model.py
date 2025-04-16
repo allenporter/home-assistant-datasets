@@ -12,6 +12,7 @@ from . import yaml_loaders
 
 
 MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
+MODEL_CONFIG_DIR = pathlib.Path("models")
 DATASET_CARD_FILE = "dataset_card.yaml"
 DATASET_CARD_FILES = list(pathlib.Path("datasets").glob(f"**/{DATASET_CARD_FILE}"))
 DATASET_TASK_IGNORE_FILES = {
@@ -110,18 +111,23 @@ class Models:
 
 def read_models() -> Models:
     """Read models configuration file."""
-    with MODEL_CONFIG_FILE.open() as fd:
+    if MODEL_CONFIG_FILE.exists():
+        model_config_content = MODEL_CONFIG_FILE.open()
         try:
-            model_data = yaml.load(fd.read(), Loader=yaml_loaders.FastSafeLoader)
+            models: Models = yaml_loaders.yaml_decode(model_config_content, Models)
         except Exception as err:
             raise ValueError(f"Error while loading {MODEL_CONFIG_FILE}: {err}")
+    else:
+        models = Models(models=[], prerequisites=[])
 
-    models = model_data.get("models", [])
-    prerequisites = model_data.get("prerequisites", [])
-    return Models(
-        models=[ModelConfig(**model) for model in models],
-        prerequisites=[EntryConfig(**prerequisite) for prerequisite in prerequisites],
-    )
+    for model_file in MODEL_CONFIG_DIR.glob("**/*.yaml"):
+        try:
+            model_config = yaml_loaders.yaml_decode(model_file.open(), ModelConfig)
+        except Exception as err:
+            raise ValueError(f"Error while loading {model_file}: {err}")
+        models.models.append(model_config)
+
+    return models
 
 
 def read_model(model_id: str) -> ModelConfig:
