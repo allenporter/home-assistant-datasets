@@ -55,46 +55,39 @@ which parameters to adjust. This includes things like the model to use, the prom
 
 ### Configure Conversation Agents
 
-Models are configured in the `models.yaml` file in the root of this repository. These
+Models are configured in the `models/` file in the root of this repository. These
 are configuration entries for home assistant integrations.
 
-Here is an example `models.yaml`:
+Here are example model configuration files:
 
 ```yaml
-models:
-  - model_id: assistant
-    domain: homeassistant
+model_id: gemini-1.5-flash
+domain: google_generative_ai_conversation
+config_entry_data:
+  api_key: XXXXXXXXXXXX
+config_entry_options:
+  chat_model: models/gemini-1.5-flash-latest
+  llm_hass_api: assist
+```
 
-  - model_id: gemini-1.5-flash
-    domain: google_generative_ai_conversation
-    config_entry_data:
-      api_key: XXXXXXXXXXXX
-    config_entry_options:
-      chat_model: models/gemini-1.5-flash-latest
-      llm_hass_api: assist
+```yaml
+model_id: gpt-4o
+domain: openai_conversation
+config_entry_data:
+  api_key: sk-XXXXXXXXXXXX
+config_entry_options:
+  chat_model: gpt-4o
+  llm_hass_api: assist
+```
 
-  - model_id: gpt-4o
-    domain: openai_conversation
-    config_entry_data:
-      api_key: sk-XXXXXXXXXXXX
-    config_entry_options:
-      chat_model: gpt-4o
-      llm_hass_api: assist
-
-  # Update when ollama supports tool calling
-  - model_id: llama3
-    domain: ollama
-    config_entry_data:
-      url: http://ollama.ollama:11434/
-      model: llama3:latest
-
-  - model_id: mistral-7b-instruct
-    domain: vicuna_conversation
-    config_entry_data:
-      api_key: sk-0000000000000000000
-      base_url: http://llama-cublas.llama:8000/v1
-    config_entry_options:
-      llm_hass_api: assist
+```yaml
+model_id: llama3.1
+domain: ollama
+config_entry_data:
+  url: !secret ollama_url
+  model: llama3.1:latest
+config_entry_options:
+  llm_hass_api: assist
 ```
 
 ### Prepare environment

@@ -36,7 +36,7 @@ $ home-assistant-datasets automation eval ${DATASET_DIR}
 
 See `/docs/eval.md` for details on how to setup the eval environment.
 
-Below is an example of scraping solutions from a model defined in `models.yaml`.
+Below is an example of scraping solutions from a model defined in `models/`.
 Note that a model may be defined in terms of any conversatio agent, including
 custom components.
 
