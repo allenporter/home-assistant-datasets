@@ -125,7 +125,7 @@ def read_models() -> Models:
     else:
         models = Models(models=[], prerequisites=[])
 
-    for model_file in MODEL_CONFIG_DIR.glob("**/*.yaml"):
+    for model_file in sorted(MODEL_CONFIG_DIR.glob("**/*.yaml")):
         try:
             model_config = yaml_loaders.yaml_decode(model_file.open(), ModelConfig)
         except Exception as err:
