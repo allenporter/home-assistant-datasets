@@ -5,17 +5,17 @@ of Home Assistant. The overall approach is:
 
 - Synthetic Data Generation: Create synthetic datasets that represent a home
 - Synthetic Home: Load the data into Home Assistant and exercise different device states (e.g. light on, off)
-- Model Evaluation: Evaluate Home Assistant Conversation agents with different models (e.g. OpenAI, Google, local models)
-- Human Annotation: Humans can annotate the results (e.g. great, ok, bad)
-- Results Visualization: Track improvements over time with different models, prompts, tools, RAG, etc.
+- Collect Model Outputs: Run the datasets with Home Assistant Conversation agents with different models (e.g. OpenAI, Google, local models) to generate model outputs (e.g. tool calls, responses)
+- Evaluate Results: Evaluate the model outsputs with the groundtruth (e.g. is the action correct), or humans can annotate the results (e.g. great, ok, bad)
+- Visualize Results: Track improvements over time with different models, prompts, tools, RAG, etc.
 
 ```mermaid
 graph LR;
     A[Synthetic Data Generation]
     B[Dataset]
-    C[Model Evaluation]
+    C[Collect Model Outputs]
     D[Synthetic Home]
-    F[Human Annotation]
+    F[Evaluate Results]
     G[Visualize Results]
 
     H[OpenAI]
@@ -45,8 +45,6 @@ graph LR;
     K --> D
     M --> D
 ```
-
-The idea would also be to start building datasets that can be used for training in the future.
 
 ## Synthetic Datasets
 
@@ -94,7 +92,7 @@ classDiagram
 
 ```
 
-## Model Evaluation
+## Collect Model Outputs
 
 You can use the generated synthetic data in Home Assistat and with integrated
 conversation agents to produce outputs for evaluation.
