@@ -15,7 +15,6 @@ from typing import Any
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
 
-# from mashumaro.codecs.yaml import yaml_decode
 from mashumaro.config import BaseConfig
 import yaml
 
@@ -23,10 +22,15 @@ from home_assistant_datasets.yaml_loaders import yaml_decode
 
 _LOGGER = logging.getLogger(__name__)
 
+SCRAPE_CONTEXT_FILE = "_scrape_context.yaml"
+
 
 @dataclass
 class EntityState(DataClassYAMLMixin):
-    """An entity state or attributes"""
+    """An entity state or attributes.
+
+    This is used to describe entity state to load, or expected changes.
+    """
 
     state: str | None = None
     attributes: dict[str, Any] | None = None
@@ -52,13 +56,13 @@ class Action(DataClassYAMLMixin):
     """Sentences spoken."""
 
     setup: dict[str, EntityState] = field(default_factory=dict)
-    """Initial entity states to override."""
+    """Initial entity states to override keyed by entity_id."""
 
     expect_changes: dict[str, EntityState] | None = None
-    """The device states to assert on."""
+    """The device states to assert on, keyed by entity_id."""
 
     ignore_changes: dict[str, list[str]] | None = None
-    """The device state or attribute changes to ignored."""
+    """The device state or attribute changes to ignored, keyed by entity_id."""
 
     expect_response: str | list[str] | None = None
     """Expect the agent to respond with this substring.
@@ -90,9 +94,6 @@ class Record(DataClassYAMLMixin):
 @dataclass
 class EvalTask(DataClassYAMLMixin):
     """Flattened detail about the task that is being evaluated."""
-
-    output_dir: pathlib.Path
-    """The eval task recordwriter output file."""
 
     synthetic_home_yaml: str
     """The synthetic home content to load."""
@@ -151,7 +152,6 @@ def read_record(filename: pathlib.Path) -> Record:
 def generate_tasks(
     record_id: str,
     record_path: pathlib.Path,
-    output_dir: pathlib.Path,
     categories: set[str],
     count: int | None = None,
 ) -> Generator[EvalTask, None, None]:
@@ -197,7 +197,6 @@ def generate_tasks(
         for sentence in action.sentences:
             if count is None:
                 yield EvalTask(
-                    output_dir=output_dir,
                     synthetic_home_yaml=yaml_contents,
                     record_id=record_id,
                     category=record.category,
@@ -211,7 +210,6 @@ def generate_tasks(
             else:
                 for i in range(0, count):
                     yield EvalTask(
-                        output_dir=output_dir,
                         synthetic_home_yaml=yaml_contents,
                         record_id=record_id,
                         category=record.category,
@@ -340,3 +338,75 @@ class EvalMetric(DataClassYAMLMixin):
 
     duration_ms: float | None = None
     """The duration in milliseconds for the model to generate the prediction."""
+
+
+@dataclass(kw_only=True)
+class ScrapeConfig(DataClassYAMLMixin):
+    """Details about a collection of model outputs collected by this tooling."""
+
+    dataset: str
+    """The dataset identifier used to generate the predictions."""
+
+    dataset_path: str
+    """The path to the dataset used to generate the predictions."""
+
+    dataset_version: str | None = None
+    """Additional version information about the dataset."""
+
+    model_id: str
+    """The model identifier used to generate the predictions."""
+
+    model_output_path: str
+    """Path where model predictions are stored for this scrape."""
+
+    @property
+    def scrape_output_path(self) -> pathlib.Path:
+        """Base path for output files."""
+        return pathlib.Path(self.model_output_path) / self.model_id
+
+    def eval_task_output_path(self, task_id: str) -> pathlib.Path:
+        """Return the output filename for an evaluation task run.
+
+        This output file needs to be unique across the test instances to avoid overwriting. For
+        example if you add a parameter based on the system prompt then this needs to create
+        a separate file containing an id of the prompt.
+        """
+        return self.scrape_output_path / f"{task_id}.yaml"
+
+
+@dataclass(kw_only=True)
+class ScrapeContext(DataClassYAMLMixin):
+    """Details about a collection of model outputs collected by this tooling."""
+
+    uuid: str
+    """Unique identifier of the scrape run."""
+
+    timestamp: datetime.datetime = field(default_factory=datetime.datetime.now)
+    """The time when the scrape was performed."""
+
+    scrape_config: ScrapeConfig
+    """Details about the scrape configuration."""
+
+    version: str
+    """The home assistant software version used to create the scrape record."""
+
+    context: dict[str, str] = field(default_factory=dict)
+    """Additional context about this scrape record provided by tooling."""
+
+    notes: str = ""
+    """Additional manually entered from the developer about this scrape record."""
+
+
+def read_scrape_context(filename: pathlib.Path) -> ScrapeContext:
+    """Read the scrape context from a file."""
+    return yaml_decode(filename.open(), ScrapeContext)
+
+
+def model_output_files(model_output_path: pathlib.Path) -> list[pathlib.Path]:
+    """Return the list of model output files in the specified path."""
+    return [
+        report_file
+        for model in sorted(list(model_output_path.glob("*")))
+        for report_file in sorted(list(model.glob("*.yaml")))
+        if report_file.name != SCRAPE_CONTEXT_FILE
+    ]

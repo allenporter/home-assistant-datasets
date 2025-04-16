@@ -1,4 +1,4 @@
-"""Tests to validate the format of the automation datasets."""
+"""Tests to validate the format of the eval tasks in datasets."""
 
 import pathlib
 
@@ -11,6 +11,7 @@ DATASETS = [
     "assist",
     "assist-mini",
     "automations",
+    "questions",
 ]
 
 
@@ -30,12 +31,10 @@ def test_eval_tasks(dataset: str, record_id: str) -> None:
         generate_tasks(
             record_id,
             TEST_FILES[(dataset, record_id)],
-            pathlib.Path("/dev/null"),
             {"example"},
         )
     )
 
     for eval_task in eval_tasks:
-        assert eval_task.output_dir
         assert eval_task.input_text
         assert eval_task.category

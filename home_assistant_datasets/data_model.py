@@ -14,7 +14,9 @@ from . import yaml_loaders
 MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
 MODEL_CONFIG_DIR = pathlib.Path("models")
 DATASET_CARD_FILE = "dataset_card.yaml"
-DATASET_CARD_FILES = sorted(list(pathlib.Path("datasets").glob(f"**/{DATASET_CARD_FILE}")))
+DATASET_CARD_FILES = sorted(
+    list(pathlib.Path("datasets").glob(f"**/{DATASET_CARD_FILE}"))
+)
 DATASET_TASK_IGNORE_FILES = {
     "_fixtures.yaml",
     "_home.yaml",
@@ -114,6 +116,7 @@ class Models:
     """The prerequisites for the models under evaluation."""
 
 
+@lru_cache
 def read_models() -> Models:
     """Read models configuration file."""
     if MODEL_CONFIG_FILE.exists():
