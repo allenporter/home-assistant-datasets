@@ -1,1 +1,0 @@
-"""Area summary evaluation module."""
