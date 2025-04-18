@@ -12,9 +12,9 @@ from typing import Any
 import pytest
 import yaml
 
+from home_assistant_datasets.agent.trace_events import TokenStatsBank
 from home_assistant_datasets.tool.data_model import (
     EvalMetric,
-    TokenStatsBank,
 )
 
 
@@ -215,6 +215,7 @@ class DurationStats:
                 "max": round(self.max(), 2),
             }
         }
+
 
 def confidence_interval(p: float, n: int) -> float:
     """Compute the confidence interval for a proportion."""

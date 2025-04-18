@@ -14,6 +14,7 @@ from homeassistant.util import dt as dt_util
 from homeassistant.helpers import entity_registry as er
 from homeassistant.setup import async_setup_component
 
+from home_assistant_datasets.agent.trace_events import find_token_stats
 from home_assistant_datasets.tool.data_model import EvalMetric, ModelOutput
 from home_assistant_datasets.tool.eval_report import EvalReport, exception_repr
 from home_assistant_datasets.blueprint import (
@@ -22,7 +23,6 @@ from home_assistant_datasets.blueprint import (
     BlueprintContentStatus,
     extract_blueprint_content,
 )
-from home_assistant_datasets.tool.fixtures import find_token_stats
 
 FIXTURES = "_fixtures.yaml"
 SOLUTION = "solution.yaml"

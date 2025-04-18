@@ -14,6 +14,7 @@ from .agent import ConversationAgent
 __all__ = [
     "ConversatioAgent",
     "create_default_agent",
+    "trace_events",
     "service_call",
     "rate_limit",
     "retryable",

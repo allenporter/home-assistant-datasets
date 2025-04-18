@@ -15,7 +15,7 @@ from homeassistant.helpers.event import async_track_state_change_event
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from home_assistant_datasets.blueprint import BlueprintContentStatus, BlueprintContent
-from home_assistant_datasets.tool.data_model import EntityState
+from home_assistant_datasets.entity_state import EntityState
 
 
 DOOR_ENTITY = "binary_sensor.pantry_door"
