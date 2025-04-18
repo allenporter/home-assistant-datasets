@@ -183,24 +183,30 @@ async def mock_conversation_agent_config_entry(
     return config_entry
 
 
-@pytest.fixture(name="conversation_agent_id")
-async def mock_conversation_agent_id(
-    model_config: ModelConfig,
-    conversation_agent_config_entry: MockConfigEntry,
-) -> str:
+@pytest.fixture(name="conversation_agent_id", scope="module")
+async def mock_conversation_agent_id(model_config: ModelConfig) -> str:
     """Return the id for the conversation agent under test."""
     if model_config.domain == "homeassistant":
         return "conversation.home_assistant"
-    return "conversation.mock_title"  # conversation_agent_config_entry.entry_id)
+    return "conversation.mock_title"
 
 
-@pytest.fixture(name="agent")
-async def mock_agent(
+@pytest.fixture(name="rate_limited_agent", scope="module")
+async def rate_limited_agent_fixture(
     conversation_agent_id: str,
     model_config: ModelConfig,
 ) -> ConversationAgent:
     """Create the conversation agent client id."""
     return create_default_agent(conversation_agent_id, model_config.rpm)
+
+
+@pytest.fixture(name="agent")
+async def agent_fixture(
+    rate_limited_agent: ConversationAgent,
+    conversation_agent_config_entry: MockConfigEntry,
+) -> ConversationAgent:
+    """Fixture to ensure the conversation agent and config entry are loaded."""
+    return rate_limited_agent
 
 
 class EvalRecordWriter:
