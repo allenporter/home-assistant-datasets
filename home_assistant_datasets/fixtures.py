@@ -27,11 +27,8 @@ from home_assistant_datasets.data_model import (
     DATASET_CARD_FILE,
 )
 from home_assistant_datasets.agent import (
-    rate_limit,
-    service_call,
-    retryable,
     ConversationAgent,
-    timing,
+    create_default_agent,
 )
 
 from . import data_model
@@ -203,12 +200,7 @@ async def mock_agent(
     model_config: ModelConfig,
 ) -> ConversationAgent:
     """Create the conversation agent client id."""
-    agent = service_call.create_agent(conversation_agent_id)
-    agent = timing.timed_agent(agent)
-    if model_config.rpm:
-        agent = rate_limit.wrap_rate_limit(agent, model_config.rpm)
-    agent = retryable.wrap_retryable(agent)
-    return agent
+    return create_default_agent(conversation_agent_id, model_config.rpm)
 
 
 class EvalRecordWriter:
