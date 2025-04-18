@@ -21,7 +21,7 @@ from home_assistant_datasets.tool.eval_report import (
     GOOD_LABEL,
     BAD_LABEL,
 )
-from .conftest import TestEvalMetric
+from .conftest import FakeEvalMetric
 
 
 def test_eval_report(success: bool, eval_metric: EvalMetric) -> None:
@@ -50,10 +50,10 @@ def test_exception_repr(success: bool, exc: Exception | None) -> None:
 def test_csv_report_writer() -> None:
     """Test a csv report writer."""
     buf = io.StringIO()
-    writer = create_writer(OutputType.CSV, cls=TestEvalMetric, fd=buf)
+    writer = create_writer(OutputType.CSV, cls=FakeEvalMetric, fd=buf)
     writer.start()
     writer.row(
-        TestEvalMetric(
+        FakeEvalMetric(
             uuid="1234",
             task_id="task-id",
             model_id="model_id",
@@ -74,10 +74,10 @@ def test_csv_report_writer() -> None:
 def test_yaml_report_writer() -> None:
     """Test a yaml report writer."""
     buf = io.StringIO()
-    writer = create_writer(OutputType.YAML, cls=TestEvalMetric, fd=buf)
+    writer = create_writer(OutputType.YAML, cls=FakeEvalMetric, fd=buf)
     writer.start()
     writer.row(
-        TestEvalMetric(
+        FakeEvalMetric(
             uuid="1234",
             task_id="task-id",
             model_id="model_id",
@@ -104,10 +104,10 @@ some_value: val
 def test_report_writer() -> None:
     """Test a report writer."""
     buf = io.StringIO()
-    writer = create_writer(OutputType.REPORT, cls=TestEvalMetric, fd=buf)
+    writer = create_writer(OutputType.REPORT, cls=FakeEvalMetric, fd=buf)
     writer.start()
     writer.row(
-        TestEvalMetric(
+        FakeEvalMetric(
             uuid="1234",
             task_id="task-id-1",
             model_id="model-id",
@@ -116,7 +116,7 @@ def test_report_writer() -> None:
         )
     )
     writer.row(
-        TestEvalMetric(
+        FakeEvalMetric(
             uuid="4321",
             task_id="task-id-2",
             model_id="model-id",

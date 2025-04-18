@@ -11,14 +11,14 @@ from home_assistant_datasets.tool.eval_report import EvalReport, exception_repr
 
 
 @dataclass(kw_only=True)
-class TestEvalMetric(EvalMetric):
+class FakeEvalMetric(EvalMetric):
     """Test EvalMetric for the eval report."""
 
     some_value: float | None = None
     details: str | None = None
 
 
-eval_metric_stash_key = pytest.StashKey[TestEvalMetric]()
+eval_metric_stash_key = pytest.StashKey[FakeEvalMetric]()
 """Stash key for the eval metric."""
 
 
@@ -31,7 +31,7 @@ def pytest_configure(config: Any) -> None:
     """Register a plugin that generates the results of the eval."""
     model_output_dir = config.getoption("model_output_dir")
     if model_output_dir is not None:
-        report = EvalReport(pathlib.Path(model_output_dir), TestEvalMetric)
+        report = EvalReport(pathlib.Path(model_output_dir), FakeEvalMetric)
         config.pluginmanager.register(report)
 
 
@@ -58,9 +58,9 @@ def consume_success_fixture(success: Any) -> None:
 
 
 @pytest.fixture(name="eval_metric", autouse=True)
-def eval_metric_fixture(pytestconfig: Any) -> TestEvalMetric:
+def eval_metric_fixture(pytestconfig: Any) -> FakeEvalMetric:
     """Add details to the eval reports."""
-    eval_metric = TestEvalMetric(uuid="1234", task_id="task-id", model_id="model_id")
+    eval_metric = FakeEvalMetric(uuid="1234", task_id="task-id", model_id="model_id")
     pytestconfig.stash[eval_metric_stash_key] = eval_metric
     yield eval_metric
     del pytestconfig.stash[eval_metric_stash_key]
