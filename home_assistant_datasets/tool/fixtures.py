@@ -1,14 +1,12 @@
 """Data collection test fixtures."""
 
-from collections.abc import Generator, Callable, Awaitable
+from collections.abc import Generator
 import datetime
-import enum
 import getpass
 from importlib.metadata import version
 import pathlib
 import logging
 from typing import Any
-from typing import cast
 from unittest.mock import patch
 import sys
 import uuid
@@ -19,20 +17,18 @@ from homeassistant.util import dt as dt_util
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import device_registry as dr, entity_registry as er
-from homeassistant.components.conversation import trace, async_converse
+from homeassistant.components.conversation import async_converse
 
 from home_assistant_datasets.data_model import (
     read_dataset_files,
     read_dataset_card,
     DATASET_CARD_FILE,
 )
-
+from home_assistant_datasets.entity_state import EntityStateFixture
+from home_assistant_datasets.entity_state.diff import EntityStateDiffFixture
 from home_assistant_datasets.tool.data_model import (
     EvalTask,
     generate_tasks,
-    EntityState,
-    TokenStats,
-    TokenStatsBank,
     ScrapeContext,
     ScrapeConfig,
     SCRAPE_CONTEXT_FILE,
@@ -231,177 +227,15 @@ def mock_synthetic_home_content(eval_task: EvalTask) -> str | None:
     return eval_task.synthetic_home_yaml
 
 
-@pytest.fixture(name="get_state")
-def get_state_fixture(
+@pytest.fixture(name="entity_state_diff")
+def entity_state_diff_fixture(
     hass: HomeAssistant,
     synthetic_home_config_entry: ConfigEntry,
     entity_registry: er.EntityRegistry,
-) -> Callable[[], dict[str, EntityState]]:
+) -> EntityStateDiffFixture:
     """Fixture with a function call to change device state for evaluation."""
-
-    def func() -> dict[str, EntityState]:
-        entity_entries = er.async_entries_for_config_entry(
-            entity_registry, synthetic_home_config_entry.entry_id
-        )
-        results = {}
-        for entity_entry in entity_entries:
-            state = hass.states.get(entity_entry.entity_id)
-            assert state
-            assert state.state
-            assert state.attributes
-            results[entity_entry.entity_id] = EntityState(
-                state=state.state, attributes=dict(state.attributes)
-            )
-            assert state.state not in (
-                "unavailable",
-                "unknown",
-            ), f"Entity id has unavailable state {entity_entry.entity_id}: {state.state}"
-
-        return results
-
-    return func
-
-
-def compare_state(v: Any, other_v: Any) -> bool:
-    """Compare values for equivalence."""
-    # Coerce some equivalent types for simpler comparisons
-    if isinstance(v, tuple) or isinstance(other_v, tuple):
-        v = list(v)
-        other_v = list(v)
-        return cast(bool, v == other_v)
-
-    if isinstance(v, enum.StrEnum) or isinstance(other_v, enum.StrEnum):
-        v = str(v)
-        other_v = str(other_v)
-        return cast(bool, v == other_v)
-
-    if v == other_v:
-        return True
-
-    if str(v) == str(other_v):
-        return True
-
-    return False
-
-
-def compute_entity_diff(
-    a_state: EntityState, b_state: EntityState, ignored: set[str]
-) -> dict[str, Any] | None:
-    """Compute a diff between two entity states."""
-    a = a_state.as_dict()
-    b = b_state.as_dict()
-
-    diff_attributes = set([])
-    for k, v in a.items():
-        other_v = b.get(k)
-        if not compare_state(other_v, v):
-            diff_attributes.add(k)
-    for k in b:
-        if k not in a and k:
-            diff_attributes.add(k)
-    diff_attributes = set({k for k in diff_attributes if k not in ignored})
-    if not diff_attributes:
-        return None
-    return {
-        "expected": {key: a.get(key) for key in diff_attributes},
-        "got": {key: b.get(key) for key in diff_attributes},
-    }
-
-
-@pytest.fixture(name="verify_state")
-async def verify_state_fixture(
-    hass: HomeAssistant,
-    synthetic_home_config_entry: ConfigEntry,
-    entity_registry: er.EntityRegistry,
-) -> Callable[
-    [EvalTask, dict[str, EntityState], dict[str, EntityState]],
-    Awaitable[dict[str, Any]],
-]:
-    """Fixture that will verify the device state is in the expected state."""
-
-    async def func(
-        task: EvalTask,
-        states: dict[str, EntityState],
-        updated_states: dict[str, EntityState],
-    ) -> dict[str, Any]:
-        # Update states to what is expected
-        for entity_id, entity_state in (task.expect_changes or {}).items():
-            if entity_id not in states:
-                raise ValueError(
-                    f"Entity defined in eval task does not exist: {entity_id}"
-                )
-            if entity_state.state is not None:
-                states[entity_id].state = entity_state.state
-            if entity_state.attributes is not None:
-                if states[entity_id].attributes is None:
-                    states[entity_id].attributes = {}
-                states[entity_id].attributes = {
-                    **states[entity_id].attributes,  # type: ignore[dict-item]
-                    **entity_state.attributes,
-                }
-
-        for entity_id in updated_states:
-            if entity_id not in states:
-                raise ValueError(f"Unexpected new entity found: {entity_id}")
-
-        diffs = {}
-        for entity_id in states:
-            ignored_attributes = (
-                set(task.ignore_changes.get(entity_id, []))
-                if task.ignore_changes
-                else set({})
-            )
-            old = states[entity_id]
-            new = updated_states[entity_id]
-            if diff := compute_entity_diff(old, new, ignored_attributes):
-                diffs[entity_id] = diff
-        return diffs
-
-    return func
-
-
-def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
-    """Gets the llm call from the conversation trace."""
-    tool_call = next(
-        iter(
-            event
-            for event in trace_events
-            if event["event_type"]
-            # type: ignore[attr-defined]
-            in (trace.ConversationTraceEventType.TOOL_CALL, "llm_tool_call")
-        ),
-        None,
-    )
-    if tool_call is None:
-        return None
-
-    data = tool_call["data"]
-    return {
-        "tool_name": data.get("tool_name"),
-        "tool_args": data.get("tool_args"),
-    }
-
-
-def find_token_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:
-    """Gets the agent detail that contains conversation agent statistics."""
-    stats_data = list(
-        stats
-        for event in trace_events
-        if event["event_type"] == trace.ConversationTraceEventType.AGENT_DETAIL
-        and (stats := event["data"].get("stats")) is not None
-    )
-    if not stats_data:
-        return None
-    bank = TokenStatsBank()
-    for stats in stats_data:
-        bank.append(
-            TokenStats(
-                input_tokens=stats.get("input_tokens", 0),
-                cached_input_tokens=stats.get("cached_input_tokens", 0),
-                output_tokens=stats.get("output_tokens", 0),
-            )
-        )
-    return bank.sum()
+    get_state = EntityStateFixture(hass, synthetic_home_config_entry, entity_registry)
+    return EntityStateDiffFixture(get_state)
 
 
 def configure_yaml() -> None:

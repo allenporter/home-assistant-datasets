@@ -5,7 +5,6 @@ output of parsing the yaml files.
 """
 
 from collections.abc import Generator
-import dataclasses
 from dataclasses import dataclass, field
 import datetime
 import logging
@@ -18,34 +17,13 @@ from mashumaro.mixins.yaml import DataClassYAMLMixin
 from mashumaro.config import BaseConfig
 import yaml
 
+from home_assistant_datasets.agent.trace_events import TokenStats
+from home_assistant_datasets.entity_state import EntityState
 from home_assistant_datasets.yaml_loaders import yaml_decode
 
 _LOGGER = logging.getLogger(__name__)
 
 SCRAPE_CONTEXT_FILE = "_scrape_context.yaml"
-
-
-@dataclass
-class EntityState(DataClassYAMLMixin):
-    """An entity state or attributes.
-
-    This is used to describe entity state to load, or expected changes.
-    """
-
-    state: str | None = None
-    attributes: dict[str, Any] | None = None
-
-    def as_dict(self) -> dict[str, Any]:
-        """Flattent to a dictionary."""
-        data = {}
-        if self.state is not None:
-            data["state"] = self.state
-        if self.attributes:
-            data.update(self.attributes)
-        return data
-
-    class Config(BaseConfig):
-        forbid_extra_keys = True
 
 
 @dataclass
@@ -247,66 +225,6 @@ class ModelOutput(DataClassYAMLMixin):
 
     context: dict[str, Any]
     """Additional context about the prediction run, e.g. internal model call details."""
-
-
-@dataclass(frozen=True, kw_only=True)
-class TokenStats:
-    """Class for token stats."""
-
-    input_tokens: int | float
-    cached_input_tokens: int | float
-    output_tokens: int | float
-
-    n_count: int | float = 1
-    """Total raw number of requests, which may be more than number of tasks."""
-
-
-class TokenStatsBank:
-    """Class for wriing the summarized eval metric results."""
-
-    def __init__(self) -> None:
-        """Initialize report."""
-        self.stats: list[TokenStats] = []
-
-    def append(self, stats: TokenStats) -> None:
-        """Append a token stats record."""
-        self.stats.append(stats)
-
-    def summary_data(self) -> dict[str, Any]:
-        """Return a summary of the token stats as a dictionary."""
-        return {
-            "token_avg": dataclasses.asdict(self.avg()),
-            "token_sum": dataclasses.asdict(self.sum()),
-            "token_input_cache_ratio": round(
-                sum(s.cached_input_tokens for s in self.stats)
-                / sum(s.input_tokens for s in self.stats),
-                2,
-            ),
-        }
-
-    def avg(self) -> TokenStats:
-        """Average the number of tokens across tasks."""
-        return TokenStats(
-            input_tokens=round(
-                sum(s.input_tokens for s in self.stats) / len(self.stats), 2
-            ),
-            cached_input_tokens=round(
-                sum(s.cached_input_tokens for s in self.stats) / len(self.stats), 2
-            ),
-            output_tokens=round(
-                sum(s.output_tokens for s in self.stats) / len(self.stats), 2
-            ),
-            n_count=round(sum(s.n_count for s in self.stats) / len(self.stats), 2),
-        )
-
-    def sum(self) -> TokenStats:
-        """Sum the token stats across tasks."""
-        return TokenStats(
-            input_tokens=sum(s.input_tokens for s in self.stats),
-            cached_input_tokens=sum(s.cached_input_tokens for s in self.stats),
-            output_tokens=sum(s.output_tokens for s in self.stats),
-            n_count=sum(s.n_count for s in self.stats),
-        )
 
 
 @dataclass

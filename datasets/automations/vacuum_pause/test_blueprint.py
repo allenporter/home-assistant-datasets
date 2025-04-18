@@ -14,7 +14,7 @@ from homeassistant.helpers.event import async_track_state_change_event
 
 
 from home_assistant_datasets.blueprint import BlueprintContentStatus, BlueprintContent
-from home_assistant_datasets.tool.data_model import EntityState
+from home_assistant_datasets.entity_state import EntityState
 
 
 VACUUM_ENTITY = "vacuum.vacuum_cleaner"

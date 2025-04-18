@@ -10,6 +10,7 @@ import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.util import dt as dt_util
 
+from home_assistant_datasets.agent.trace_events import find_token_stats, find_llm_call
 from home_assistant_datasets.tool.data_model import (
     EvalMetric,
     ModelOutput,
@@ -18,10 +19,6 @@ from home_assistant_datasets.tool.data_model import (
 from home_assistant_datasets.tool.eval_report import (
     EvalReport,
     exception_repr,
-)
-from home_assistant_datasets.tool.fixtures import (
-    find_token_stats,
-    find_llm_call,
 )
 
 
