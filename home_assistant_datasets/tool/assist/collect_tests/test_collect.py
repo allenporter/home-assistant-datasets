@@ -57,9 +57,6 @@ async def test_assist_actions(
     except ValueError as err:
         unexpected_states = f"Error verifying state: {err}"
 
-    context = agent.trace_context()
-    context["unexpected_states"] = unexpected_states
-
     output = ModelOutput(
         uuid=str(uuid.uuid4()),  # Unique based on the model evaluated
         task_id=eval_task.task_id,
@@ -73,7 +70,10 @@ async def test_assist_actions(
             "expect_response": eval_task.expect_response,
         },
         response=response,
-        context=context,
+        context={
+            "unexpected_states": unexpected_states,
+            **agent.trace_context()
+        }
     )
     _LOGGER.info(output)
     eval_record_writer.write(dataclasses.asdict(output))
