@@ -16,9 +16,9 @@ import uuid
 import yaml
 import pytest
 from homeassistant.util import dt as dt_util
-from homeassistant.core import HomeAssistant, Context
+from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import device_registry as dr, entity_registry as er, llm
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.components.conversation import trace, async_converse
 
 from home_assistant_datasets.data_model import (
@@ -358,37 +358,6 @@ async def verify_state_fixture(
         return diffs
 
     return func
-
-
-def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, Any]]:
-    """Serialize the conversation trace for evaluation."""
-    trace_data = trace.as_dict()
-    trace_events = trace_data["events"]
-    result = []
-    for trace_event in trace_events:
-        trace_event_data = trace_event["data"]
-        data = {}
-        for k, v in trace_event_data.items():
-            if isinstance(v, Context):
-                v = dict(v.as_dict())
-            if isinstance(v, list) and v and isinstance(v[0], llm.Tool):
-                v = [
-                    {
-                        "name": tool.name,
-                        "description": tool.description,
-                        "parameters": str(tool.parameters),
-                    }
-                    for tool in v
-                ]
-            data[k] = v
-        values: dict[str, Any] = {
-            "event_type": str(trace_event["event_type"]),
-            "data": data,
-        }
-        if ts_str := trace_event.get("timestamp"):
-            values["timestamp"] = datetime.datetime.fromisoformat(ts_str)
-        result.append(values)
-    return result
 
 
 def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:

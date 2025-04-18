@@ -4,6 +4,7 @@
 
 __all__ = [
     "tool",
+    "agent",
     "data_model",
     "model_client",
     "secrets",

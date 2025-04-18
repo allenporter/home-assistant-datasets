@@ -7,7 +7,6 @@ import pathlib
 from typing import Any, TextIO
 from unittest.mock import patch, mock_open
 
-from pyrate_limiter import Duration, Rate, Limiter
 import pytest
 import pytest_socket
 import yaml
@@ -26,6 +25,13 @@ from home_assistant_datasets.data_model import (
     EntryConfig,
     DatasetCard,
     DATASET_CARD_FILE,
+)
+from home_assistant_datasets.agent import (
+    rate_limit,
+    service_call,
+    retryable,
+    ConversationAgent,
+    timing,
 )
 
 from . import data_model
@@ -118,18 +124,6 @@ async def model_config(model_id: str) -> ModelConfig:
         pytest.exit(str(err))
 
 
-MAX_DELAY = 60 * 1000  # 1 minute
-
-
-@pytest.fixture(scope="module")
-async def rate_limiter(model_config: ModelConfig) -> Limiter | None:
-    """Fixture to read the model config yaml."""
-    if model_config.rpm is None:
-        return None
-    rate = Rate(model_config.rpm, Duration.MINUTE)
-    return Limiter(rate, max_delay=MAX_DELAY)
-
-
 @pytest.fixture
 async def prerequisites() -> list[EntryConfig]:
     """Fixture to read the prerequisites yaml."""
@@ -192,27 +186,6 @@ async def mock_conversation_agent_config_entry(
     return config_entry
 
 
-class ConversationAgent:
-    """A client library for a conversation agent service call."""
-
-    def __init__(self, agent_id: str) -> None:
-        """Initialize the agent."""
-        self._agent_id = agent_id
-
-    async def async_process(self, hass: HomeAssistant, text: str) -> str:
-        """Process a text input and return the response."""
-        service_response = await hass.services.async_call(
-            "conversation",
-            "process",
-            {"agent_id": self._agent_id, "text": text},
-            blocking=True,
-            return_response=True,
-        )
-        assert service_response
-        response = service_response["response"]
-        return str(response["speech"]["plain"]["speech"])  # type: ignore[call-overload, index]
-
-
 @pytest.fixture(name="conversation_agent_id")
 async def mock_conversation_agent_id(
     model_config: ModelConfig,
@@ -225,9 +198,17 @@ async def mock_conversation_agent_id(
 
 
 @pytest.fixture(name="agent")
-async def mock_agent(conversation_agent_id: str) -> ConversationAgent:
+async def mock_agent(
+    conversation_agent_id: str,
+    model_config: ModelConfig,
+) -> ConversationAgent:
     """Create the conversation agent client id."""
-    return ConversationAgent(conversation_agent_id)
+    agent = service_call.create_agent(conversation_agent_id)
+    agent = timing.timed_agent(agent)
+    if model_config.rpm:
+        agent = rate_limit.wrap_rate_limit(agent, model_config.rpm)
+    agent = retryable.wrap_retryable(agent)
+    return agent
 
 
 class EvalRecordWriter:
