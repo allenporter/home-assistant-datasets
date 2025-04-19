@@ -1,6 +1,7 @@
 """Library for creating simple markdown tables."""
 
-from home_assistant_datasets import data_model
+from home_assistant_datasets.datasets.dataset_card import DatasetCard
+from home_assistant_datasets.models import ModelConfig
 
 
 CARD_MARKDOWN = """
@@ -13,7 +14,7 @@ More information:
 """
 
 
-def format_dataset_card(dataset_card: data_model.DatasetCard) -> str:
+def format_dataset_card(dataset_card: DatasetCard) -> str:
     """Format a dataset card."""
     return CARD_MARKDOWN.format(
         name=dataset_card.name,
@@ -22,7 +23,7 @@ def format_dataset_card(dataset_card: data_model.DatasetCard) -> str:
     )
 
 
-def format_model_card(model_card: data_model.ModelConfig) -> str:
+def format_model_card(model_card: ModelConfig) -> str:
     """Format a dataset card."""
     return CARD_MARKDOWN.format(
         name=model_card.model_id,

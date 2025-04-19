@@ -1,6 +1,5 @@
 """An evaluation for calling Device Actions, expected to be used to evaluate intents."""
 
-import dataclasses
 import logging
 import uuid
 import textwrap
@@ -11,12 +10,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 
 from home_assistant_datasets.agent import ConversationAgent
-from home_assistant_datasets.fixtures import EvalRecordWriter
-
-from home_assistant_datasets.tool.data_model import (
-    EvalTask,
-    ModelOutput,
-)
+from home_assistant_datasets.datasets.assist_eval_task import EvalTask
+from home_assistant_datasets.scrape import ModelOutput, ModelOutputWriter
 
 _LOGGER = logging.getLogger(__name__)
 TIMEOUT = 40
@@ -43,7 +38,7 @@ async def system_prompt_fixture() -> str:
 async def test_assist_actions(
     hass: HomeAssistant,
     agent: ConversationAgent,
-    eval_record_writer: EvalRecordWriter,
+    model_output_writer: ModelOutputWriter,
     synthetic_home_config_entry: ConfigEntry,
     eval_task: EvalTask,
 ) -> None:
@@ -62,4 +57,4 @@ async def test_assist_actions(
         context=agent.trace_context(),
     )
     _LOGGER.info(output)
-    eval_record_writer.write(dataclasses.asdict(output))
+    model_output_writer.write(output)

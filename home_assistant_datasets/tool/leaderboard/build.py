@@ -18,7 +18,8 @@ import pathlib
 
 import yaml
 
-from home_assistant_datasets import data_model
+from home_assistant_datasets.datasets.dataset_card import read_dataset_cards
+from home_assistant_datasets.models import read_models, ARCHIVED_LABEL
 
 from .config import (
     REPORT_DIR,
@@ -267,14 +268,12 @@ def run(args: argparse.Namespace) -> int:
 
     active_models = {
         model.model_id: model
-        for model in data_model.read_models().models
-        if data_model.ARCHIVED_LABEL not in model.categories
+        for model in read_models().models
+        if ARCHIVED_LABEL not in model.categories
     }
     model_scores = parse_model_reports(report_dir)
     model_scores = {
-        model_id: v
-        for model_id, v in model_scores.items()
-        if model_id in active_models
+        model_id: v for model_id, v in model_scores.items() if model_id in active_models
     }
 
     best_model_scores = compute_best_scores(model_scores)
@@ -288,7 +287,7 @@ def run(args: argparse.Namespace) -> int:
     }
     dataset_cards = {
         dataset_card.name: dataset_card
-        for dataset_card in data_model.read_dataset_cards()
+        for dataset_card in read_dataset_cards()
         if dataset_card.name in DATASETS
     }
 

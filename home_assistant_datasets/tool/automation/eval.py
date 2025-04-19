@@ -39,7 +39,6 @@ _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_DATASET = "datasets/automations"
 PLUGINS = [
-    "home_assistant_datasets.fixtures",
     "home_assistant_datasets.pytest_metrics",
 ]
 

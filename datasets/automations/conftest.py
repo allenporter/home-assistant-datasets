@@ -13,7 +13,6 @@ from homeassistant.setup import async_setup_component
 
 from home_assistant_datasets.agent.trace_events import token_stats_from_context
 from home_assistant_datasets.entity_state import EntityStateFixture
-from home_assistant_datasets.tool.data_model import ModelOutput
 from home_assistant_datasets.metrics import ScrapeRecord
 from home_assistant_datasets.blueprint import (
     VALID_BLUEPRINT,
@@ -21,13 +20,13 @@ from home_assistant_datasets.blueprint import (
     BlueprintContentStatus,
     extract_blueprint_content,
 )
+from home_assistant_datasets.scrape import ModelOutput
 
 FIXTURES = "_fixtures.yaml"
 SOLUTION = "solution.yaml"
 
 
 pytest_plugins = [
-    "home_assistant_datasets.fixtures",
     "home_assistant_datasets.pytest_synthetic_home",
 ]
 
@@ -129,7 +128,7 @@ def solution_path_fixture(test_path: pathlib.Path) -> str:
 
 
 @pytest.fixture(name="model_output", scope="module")
-async def model_output_fixture(model_output_file: str | None) -> ModelOutput | None:
+def model_output_fixture(model_output_file: str | None) -> ModelOutput | None:
     """Fixture that produces the scaped model output record."""
     if model_output_file is None:
         return None
@@ -158,7 +157,7 @@ def scrape_record_fixture(model_output: ModelOutput | None) -> ScrapeRecord | No
 
 
 @pytest.fixture(name="model_output_blueprint")
-async def blueprint_yaml_fixture(
+def blueprint_yaml_fixture(
     model_output: ModelOutput | None,
 ) -> Generator[BlueprintContent | None]:
     """Fixture to produce the yaml"""

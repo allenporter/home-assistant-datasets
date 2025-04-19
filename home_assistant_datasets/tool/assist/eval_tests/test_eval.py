@@ -1,6 +1,6 @@
 """Evaluate the result of the scraped model output."""
 
-from home_assistant_datasets.tool.data_model import ModelOutput
+from home_assistant_datasets.scrape import ModelOutput
 
 
 def test_evaluate_result(model_output: ModelOutput) -> None:

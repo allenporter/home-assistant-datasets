@@ -11,12 +11,9 @@ import yaml
 from homeassistant.core import HomeAssistant
 
 from home_assistant_datasets.agent import ConversationAgent
+from home_assistant_datasets.datasets.assist_eval_task import EvalTask
 from home_assistant_datasets.entity_state.diff import EntityStateDiffFixture
-from home_assistant_datasets.fixtures import EvalRecordWriter
-from home_assistant_datasets.tool.data_model import (
-    EvalTask,
-    ModelOutput,
-)
+from home_assistant_datasets.scrape import ModelOutput, ModelOutputWriter
 
 _LOGGER = logging.getLogger(__name__)
 TIMEOUT = 40
@@ -28,7 +25,7 @@ MAX_TRIES = 3
 async def test_assist_actions(
     hass: HomeAssistant,
     agent: ConversationAgent,
-    eval_record_writer: EvalRecordWriter,
+    model_output_writer: ModelOutputWriter,
     eval_task: EvalTask,
     entity_state_diff: EntityStateDiffFixture,
 ) -> None:
@@ -38,7 +35,7 @@ async def test_assist_actions(
         yaml.representer.SafeRepresenter.represent_str,
     )
     entity_state_diff.prepare(
-        eval_task.expect_changes or {}, eval_task.ignore_changes or {}
+        eval_task.action.expect_changes or {}, eval_task.action.ignore_changes or {}
     )
 
     # Run the conversation agent
@@ -53,12 +50,12 @@ async def test_assist_actions(
             "input_text": eval_task.input_text,
             "expect_changes": {
                 k: dataclasses.asdict(v)
-                for k, v in (eval_task.expect_changes or {}).items()
+                for k, v in (eval_task.action.expect_changes or {}).items()
             },
-            "expect_response": eval_task.expect_response,
+            "expect_response": eval_task.action.expect_response,
         },
         response=response,
         context={"unexpected_states": unexpected_states, **agent.trace_context()},
     )
     _LOGGER.info(output)
-    eval_record_writer.write(dataclasses.asdict(output))
+    model_output_writer.write(output)
