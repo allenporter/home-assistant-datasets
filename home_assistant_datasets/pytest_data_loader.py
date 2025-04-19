@@ -28,8 +28,9 @@ def pytest_addoption(parser: Any) -> None:
 
 
 def pytest_generate_tests(metafunc: Metafunc) -> None:
-    """Generate test parameters for dataset reading from flags."""
+    """Generate test parameters for loading eval tasks from flags."""
 
+    # Defined in pytest_dataset
     dataset = metafunc.config.getoption("dataset")
     if not dataset:
         raise ValueError(

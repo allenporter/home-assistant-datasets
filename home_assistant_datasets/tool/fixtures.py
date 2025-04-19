@@ -45,7 +45,7 @@ def pytest_addoption(parser: Any) -> None:
     parser.addoption("--model_output_dir")
 
 
-# XXX Ensure there are better homes for this
+# TODO: Move these into separate fixtures
 def pytest_generate_tests(metafunc: Any) -> None:
     """Generate test parameters for the evaluation from flags."""
     # Parameterize tests by the models under development
@@ -75,14 +75,6 @@ def scrape_config(model_id: str, dataset: str, output_path: str) -> ScrapeConfig
 def scrape_record_writer_fixture(scrape_config: ScrapeConfig) -> None:
     """Fixture to generate a scrape record."""
     write_scrape_context(scrape_config)
-
-
-@pytest.fixture(autouse=True)
-def restore_tz() -> Generator[None, None, None]:
-    yield
-    # Home Assistant teardown seems to run too soon and expects this so try to
-    # patch it in first.
-    dt_util.set_default_time_zone(datetime.UTC)
 
 
 @pytest.fixture(name="model_output_writer")
