@@ -39,6 +39,7 @@ async def test_assist_actions(
     hass: HomeAssistant,
     agent: ConversationAgent,
     model_output_writer: ModelOutputWriter,
+    model_id: str,
     synthetic_home_config_entry: ConfigEntry,
     eval_task: EvalTask,
 ) -> None:
@@ -48,6 +49,7 @@ async def test_assist_actions(
 
     output = ModelOutput(
         uuid=str(uuid.uuid4()),  # Unique based on the model evaluated
+        model_id=model_id,
         task_id=eval_task.task_id,
         category=eval_task.category,
         task={

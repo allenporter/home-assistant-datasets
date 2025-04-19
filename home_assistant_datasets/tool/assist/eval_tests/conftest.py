@@ -70,16 +70,15 @@ def scrape_record_fixture(
     if model_output_file is None or model_output is None:
         return None
 
-    task_prefix = model_output_file.split("-")[0]
     return ScrapeRecord(
         uuid=model_output.uuid,
         task_id=model_output.task_id,
-        model_id=model_output.model_id
-        or "unknown",  # TODO: Cleanup old records with no model_id
+        # TODO: Cleanup old records with no model_id
+        model_id=model_output.model_id or "unknown",
         context=model_output.context,
         token_stats=token_stats_from_context(model_output.context),
         extra_data={
-            "category": task_prefix,
+            "category": model_output.category,
             "text": model_output.task["input_text"],
             "tool_call": find_llm_call(
                 model_output.context.get("conversation_trace", {})
