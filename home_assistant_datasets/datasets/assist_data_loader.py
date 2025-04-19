@@ -104,7 +104,9 @@ def read_record_sources(dataset_card: DatasetCard) -> Generator[RecordSource]:
     def unique_record_id(filename: pathlib.Path) -> str:
         """Convert the filename to a unique id withint he dataset."""
         assert dataset_card.path is not None
-        return _make_slug(str(filename.relative_to(dataset_card.path))[:-5])
+        relative_path = filename.relative_to(dataset_card.dataset_path)
+        stem = str(relative_path)[:-5]  # No .yaml suffix
+        return _make_slug(stem)
 
     for filename in dataset_card.dataset_files:
         yield RecordSource(record_id=unique_record_id(filename), record_path=filename)
@@ -129,6 +131,6 @@ def read_dataset_records(
                 record.category,
                 categories,
             )
-            return
+            continue
         record.record_source = record_source
         yield record

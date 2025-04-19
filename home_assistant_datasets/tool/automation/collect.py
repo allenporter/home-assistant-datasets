@@ -77,6 +77,11 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         help="A pytest pass through flag to show streaming test output.",
     )
     args.add_argument(
+        "--categories",
+        type=str,
+        help="Limit evaluation tasks to a specific category",
+    )
+    args.add_argument(
         "--count",
         action="store",
         type=int,
@@ -119,6 +124,7 @@ def run(args: argparse.Namespace) -> int:
         f"--models={args.models or ''}",
         f"--dataset={args.dataset or ''}",
         f"--model_output_dir={args.model_output_dir or ''}",
+        f"--categories={args.categories or ''}",
         f"--count={args.count}",
     ]
     if verbosity:

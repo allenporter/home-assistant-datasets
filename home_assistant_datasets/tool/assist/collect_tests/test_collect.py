@@ -25,6 +25,7 @@ MAX_TRIES = 3
 async def test_assist_actions(
     hass: HomeAssistant,
     agent: ConversationAgent,
+    model_id: str,
     model_output_writer: ModelOutputWriter,
     eval_task: EvalTask,
     entity_state_diff: EntityStateDiffFixture,
@@ -44,6 +45,7 @@ async def test_assist_actions(
     unexpected_states = entity_state_diff.get_unexpected_changes()
     output = ModelOutput(
         uuid=str(uuid.uuid4()),  # Unique based on the model evaluated
+        model_id=model_id,
         task_id=eval_task.task_id,
         category=eval_task.category,
         task={

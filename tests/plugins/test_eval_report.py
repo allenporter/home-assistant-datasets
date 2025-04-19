@@ -29,7 +29,7 @@ TEST_FILE_CONTENTS_FORMAT = """
                 cached_input_tokens=100,
                 output_tokens=250,
                 duration_ms=500,
-            )
+            ),
         )
 
     def test_success_1() -> None:

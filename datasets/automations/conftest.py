@@ -147,7 +147,6 @@ def scrape_record_fixture(model_output: ModelOutput | None) -> ScrapeRecord | No
     """Fixture for the ScrapeRecord with details about this specific task for reporting."""
     if model_output is None:
         return None
-        return
     return ScrapeRecord(
         uuid=model_output.uuid,
         task_id=model_output.task_id,
