@@ -10,10 +10,7 @@ from home_assistant_datasets.agent.trace_events import (
     find_llm_call,
 )
 from home_assistant_datasets.metrics import ScrapeRecord
-from home_assistant_datasets.tool.data_model import (
-    ModelOutput,
-    model_output_files,
-)
+from home_assistant_datasets.scrape import ModelOutput, model_output_files
 
 
 def pytest_generate_tests(metafunc: Any) -> None:
@@ -50,7 +47,7 @@ def expected_lingering_timers() -> bool:
 
 
 @pytest.fixture(name="model_output", scope="module")
-async def model_output_fixture(model_output_file: str | None) -> ModelOutput | None:
+def model_output_fixture(model_output_file: str | None) -> ModelOutput | None:
     """Fixture that produces the scaped model output record."""
     if model_output_file is None:
         return None

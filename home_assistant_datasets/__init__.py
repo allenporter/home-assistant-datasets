@@ -4,9 +4,14 @@
 
 __all__ = [
     "tool",
+    "datasets",
+    "models",
     "agent",
     "entity_state",
-    "data_model",
     "model_client",
+    "scrape",
     "secrets",
+    "pytest_agent",
+    "pytest_metrics",
+    "pytest_synthetic_home",
 ]

@@ -1,9 +1,13 @@
 """Test fixtures for loading a conversation agent.
 
 Tests should provide a `model_id` fixture that references a model in the
-registry (either `models.yaml` or `models/` in a yaml file)
+registry (either `models.yaml` or `models/` in a yaml file).
+
+This also depends on the `pytest_dataset` plugin for loading any dataset
+specific agent configuration needed.
 """
 
+import dataclasses
 import logging
 from typing import Any
 
@@ -14,15 +18,18 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntryState, ConfigEntry
 from homeassistant.setup import async_setup_component
 
-from home_assistant_datasets.data_model import (
-    ModelConfig,
-    EntryConfig,
-    DatasetCard,
-    read_model,
-)
+
 from home_assistant_datasets.agent import (
     ConversationAgent,
     create_default_agent,
+)
+from home_assistant_datasets.datasets.dataset_card import (
+    DatasetCard,
+)
+from home_assistant_datasets.models import (
+    ModelConfig,
+    read_model,
+    read_prerequisites,
 )
 
 # TODO(#12): Support loading from the custom component or core development environment
@@ -43,15 +50,8 @@ def mock_allow_sockets(socket_enabled: Any) -> None:
     pass
 
 
-@pytest.fixture(autouse=True)
-async def mock_default_components(hass: HomeAssistant) -> None:
-    """Fixture to setup required default components."""
-    assert await async_setup_component(hass, "homeassistant", {})
-    assert await async_setup_component(hass, "conversation", {})
-
-
 @pytest.fixture(scope="module")
-async def model_config(model_id: str) -> ModelConfig:
+def model_config(model_id: str) -> ModelConfig:
     """Fixture to read the model config yaml."""
     try:
         return read_model(model_id)
@@ -60,22 +60,92 @@ async def model_config(model_id: str) -> ModelConfig:
 
 
 @pytest.fixture(name="system_prompt")
-async def system_prompt_fixture() -> None:
+def system_prompt_fixture() -> None:
     """Fixture to provide the system prompt or None to use the default."""
     return None
+
+
+@pytest.fixture(name="merged_model_config")
+def merged_model_config_fixture(
+    model_config: ModelConfig,
+    dataset_card: DatasetCard,
+    system_prompt: str | None,
+) -> ModelConfig:
+    """Fixture that merges in model settings from the DataSet card."""
+    options: dict[str, Any] = {}
+    if model_config.config_entry_options:
+        options.update(model_config.config_entry_options)
+    data: dict[str, Any] = {}
+    if model_config.config_entry_data:
+        data.update({**model_config.config_entry_data})
+
+    # Override any config entry data from the dataset (e.g. changing LLM API)
+    if dataset_card.config_entry_options:
+        options.update(dataset_card.config_entry_options)
+    if dataset_card.config_entry_data:
+        data.update(dataset_card.config_entry_data)
+
+    # Override the default system prompt with a fixture specific prompt
+    if system_prompt:
+        options["prompt"] = system_prompt
+
+    return dataclasses.replace(
+        model_config,
+        config_entry_options=options,
+        config_entry_data=data,
+    )
 
 
 @pytest.fixture(name="conversation_agent_config_entry")
 async def mock_conversation_agent_config_entry(
     hass: HomeAssistant,
-    model_config: ModelConfig,
-    system_prompt: str | None,
-    prerequisites: list[EntryConfig],
-    dataset_card: DatasetCard,
+    merged_model_config: ModelConfig,
 ) -> MockConfigEntry | None:
     """Fixture to create a conversation agent config entry."""
+    if merged_model_config.domain == "homeassistant":
+        return None
+    config_entry = MockConfigEntry(
+        domain=merged_model_config.domain,
+        data=merged_model_config.config_entry_data,
+        options=merged_model_config.config_entry_options,
+        version=merged_model_config.version or 1,
+    )
+    _LOGGER.info("Config entry options=%s", config_entry.options)
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    assert config_entry.state == ConfigEntryState.LOADED
+    return config_entry
 
-    for entry in prerequisites:
+
+@pytest.fixture(name="conversation_agent_id", scope="module")
+def mock_conversation_agent_id(model_config: ModelConfig) -> str:
+    """Return the id for the conversation agent under test."""
+    if model_config.domain == "homeassistant":
+        return "conversation.home_assistant"
+    return "conversation.mock_title"
+
+
+@pytest.fixture(name="rate_limited_agent", scope="module")
+def rate_limited_agent_fixture(
+    conversation_agent_id: str,
+    model_config: ModelConfig,
+) -> ConversationAgent:
+    """Create the conversation agent.
+
+    This is a module level fixture to ensure the rate limit is respected across
+    individual test runs.
+    """
+    return create_default_agent(conversation_agent_id, model_config.rpm)
+
+
+@pytest.fixture(name="configure_prerequisites")
+async def configure_prerequisites_fixture(hass: HomeAssistant) -> None:
+    """Fixture to load prerequisite integrations."""
+
+    assert await async_setup_component(hass, "homeassistant", {})
+    assert await async_setup_component(hass, "conversation", {})
+
+    for entry in read_prerequisites():
         config_entry = MockConfigEntry(
             domain=entry.domain,
             data=entry.config_entry_data,
@@ -86,55 +156,10 @@ async def mock_conversation_agent_config_entry(
         await hass.config_entries.async_setup(config_entry.entry_id)
         assert config_entry.state == ConfigEntryState.LOADED
 
-    if model_config.domain == "homeassistant":
-        return None
-    options: dict[str, Any] = {}
-    if model_config.config_entry_options:
-        options.update(model_config.config_entry_options)
-    data: dict[str, Any] = {}
-    if model_config.config_entry_data:
-        data.update({**model_config.config_entry_data})
-
-    # Override any config entr data from the dataset (e.g. changing LLM API)
-    if dataset_card.config_entry_options:
-        options.update(dataset_card.config_entry_options)
-    if dataset_card.config_entry_data:
-        data.update(dataset_card.config_entry_data)
-
-    if system_prompt:
-        options["prompt"] = system_prompt
-    config_entry = MockConfigEntry(
-        domain=model_config.domain,
-        data=data,
-        options=options,
-        version=model_config.version or 1,
-    )
-    _LOGGER.info("Config entry options=%s", config_entry.options)
-    config_entry.add_to_hass(hass)
-    await hass.config_entries.async_setup(config_entry.entry_id)
-    assert config_entry.state == ConfigEntryState.LOADED
-    return config_entry
-
-
-@pytest.fixture(name="conversation_agent_id", scope="module")
-async def mock_conversation_agent_id(model_config: ModelConfig) -> str:
-    """Return the id for the conversation agent under test."""
-    if model_config.domain == "homeassistant":
-        return "conversation.home_assistant"
-    return "conversation.mock_title"
-
-
-@pytest.fixture(name="rate_limited_agent", scope="module")
-async def rate_limited_agent_fixture(
-    conversation_agent_id: str,
-    model_config: ModelConfig,
-) -> ConversationAgent:
-    """Create the conversation agent client id."""
-    return create_default_agent(conversation_agent_id, model_config.rpm)
-
 
 @pytest.fixture(name="agent")
-async def agent_fixture(
+def agent_fixture(
+    configure_prerequisites: Any,
     rate_limited_agent: ConversationAgent,
     conversation_agent_config_entry: ConfigEntry,
 ) -> ConversationAgent:
