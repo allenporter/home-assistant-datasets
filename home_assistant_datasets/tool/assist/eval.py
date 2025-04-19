@@ -35,7 +35,7 @@ __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-PLUGINS = []
+PLUGINS = ["home_assistant_datasets.pytest_metrics"]
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:
@@ -105,8 +105,6 @@ def run(args: argparse.Namespace) -> int:
                 str(verbosity),
             ]
         )
-    if args.test_path:
-        pytest_args.append(args.test_path)
     if args.model_output_dir:
         pytest_args.extend(
             [
@@ -126,6 +124,8 @@ def run(args: argparse.Namespace) -> int:
         pytest_args.append("--collect-only")
     if args.s:
         pytest_args.append("-s")
+    if args.test_path:
+        pytest_args.append(args.test_path)
     configure_yaml()
 
     retcode = pytest.main(

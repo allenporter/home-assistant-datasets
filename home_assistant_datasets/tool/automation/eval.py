@@ -40,6 +40,7 @@ _LOGGER = logging.getLogger(__name__)
 DEFAULT_DATASET = "datasets/automations"
 PLUGINS = [
     "home_assistant_datasets.fixtures",
+    "home_assistant_datasets.pytest_metrics",
 ]
 
 
@@ -136,7 +137,6 @@ def run(args: argparse.Namespace) -> int:
         pytest_args.append("-s")
     # The dataset path contains tests
     pytest_args.append(args.dataset)
-
     configure_yaml()
 
     retcode = pytest.main(

@@ -13,11 +13,9 @@ from slugify import slugify
 from typing import Any
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
-
 from mashumaro.config import BaseConfig
 import yaml
 
-from home_assistant_datasets.agent.trace_events import TokenStats
 from home_assistant_datasets.entity_state import EntityState
 from home_assistant_datasets.yaml_loaders import yaml_decode
 
@@ -225,37 +223,6 @@ class ModelOutput(DataClassYAMLMixin):
 
     context: dict[str, Any]
     """Additional context about the prediction run, e.g. internal model call details."""
-
-
-@dataclass
-class EvalMetric(DataClassYAMLMixin):
-    """Used for pointwise computation based metrics, comparing predictions to groundtruth.
-
-    This currently supports a success or failure rating for a single task.
-    Model performance on a dataset can be understood by aggregating ratings
-    across all tasks.
-    """
-
-    uuid: str
-    """The unique identifier for the model output/prediction."""
-
-    task_id: str
-    """An identifier for the task in the dataset."""
-
-    model_id: str
-    """The model identifier used to generate the prediction."""
-
-    label: str | None = None
-    """The groundtruth label for the task, can be 'GOOD' or 'BAD' when computation."""
-
-    context: dict[str, Any] = field(default_factory=dict)
-    """Additional context/detail from runtime of evaluating the prediction."""
-
-    token_stats: TokenStats | None = None
-    """Token statistics for the model output."""
-
-    duration_ms: float | None = None
-    """The duration in milliseconds for the model to generate the prediction."""
 
 
 @dataclass(kw_only=True)

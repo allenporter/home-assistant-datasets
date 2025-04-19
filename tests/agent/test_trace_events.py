@@ -14,6 +14,7 @@ def test_token_stats_bank(snapshot: SnapshotAssertion) -> None:
             input_tokens=500,
             cached_input_tokens=100,
             output_tokens=250,
+            duration_ms=150.0,
         )
     )
     bank.append(
@@ -21,6 +22,7 @@ def test_token_stats_bank(snapshot: SnapshotAssertion) -> None:
             input_tokens=500,
             cached_input_tokens=100,
             output_tokens=250,
+            duration_ms=105.0,
         )
     )
     assert bank.summary_data() == snapshot

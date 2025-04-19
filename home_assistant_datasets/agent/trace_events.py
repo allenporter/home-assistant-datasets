@@ -30,7 +30,7 @@ class TokenStats:
     input_tokens: int | float
     cached_input_tokens: int | float
     output_tokens: int | float
-
+    duration_ms: float = 0
     n_count: int | float = 1
     """Total raw number of requests, which may be more than number of tasks."""
 
@@ -70,6 +70,9 @@ class TokenStatsBank:
             output_tokens=round(
                 sum(s.output_tokens for s in self.stats) / len(self.stats), 2
             ),
+            duration_ms=round(
+                sum(s.duration_ms for s in self.stats) / len(self.stats), 2
+            ),
             n_count=round(sum(s.n_count for s in self.stats) / len(self.stats), 2),
         )
 
@@ -79,11 +82,14 @@ class TokenStatsBank:
             input_tokens=sum(s.input_tokens for s in self.stats),
             cached_input_tokens=sum(s.cached_input_tokens for s in self.stats),
             output_tokens=sum(s.output_tokens for s in self.stats),
+            duration_ms=sum(s.duration_ms for s in self.stats),
             n_count=sum(s.n_count for s in self.stats),
         )
 
 
-def find_token_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:
+def find_token_stats(
+    trace_events: list[dict[str, Any]], duration_ms: float
+) -> TokenStats | None:
     """Gets the agent detail that contains conversation agent statistics."""
     stats_data = list(
         stats
@@ -100,8 +106,10 @@ def find_token_stats(trace_events: list[dict[str, Any]]) -> TokenStats | None:
                 input_tokens=stats.get("input_tokens", 0),
                 cached_input_tokens=stats.get("cached_input_tokens", 0),
                 output_tokens=stats.get("output_tokens", 0),
+                duration_ms=duration_ms,
             )
         )
+        duration_ms = 0
     return bank.sum()
 
 
@@ -125,3 +133,10 @@ def find_llm_call(trace_events: list[dict[str, Any]]) -> dict[str, Any] | None:
         "tool_name": data.get("tool_name"),
         "tool_args": data.get("tool_args"),
     }
+
+
+def token_stats_from_context(context: dict[str, Any]) -> TokenStats | None:
+    """Extract the TokenStats from the collection context."""
+    return find_token_stats(
+        context.get("conversation_trace", {}), duration_ms=context.get("duration_ms", 0)
+    )

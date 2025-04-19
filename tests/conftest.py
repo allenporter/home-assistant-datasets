@@ -8,6 +8,8 @@ from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.location import PyTestLocation
 
 
+pytest_plugins = ["pytester"]
+
 DIFFERENT_DIRECTORY = "snapshots"
 
 
