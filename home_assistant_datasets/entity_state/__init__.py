@@ -64,9 +64,8 @@ class EntityStateFixture:
             state = self._hass.states.get(entity_entry.entity_id)
             assert state
             assert state.state
-            assert state.attributes
             results[entity_entry.entity_id] = EntityState(
-                state=state.state, attributes=dict(state.attributes)
+                state=state.state, attributes=dict(state.attributes or {})
             )
             assert state.state not in (
                 "unavailable",
