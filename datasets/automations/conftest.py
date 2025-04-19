@@ -28,17 +28,19 @@ SOLUTION = "solution.yaml"
 
 pytest_plugins = [
     "home_assistant_datasets.fixtures",
+    "home_assistant_datasets.pytest_synthetic_home",
 ]
 
-
-def pytest_addoption(parser):
-    """Pytest arguments passed from the `eval` action to the test."""
-    parser.addoption(
-        "--model_output_dir",
-        action="store",
-        default=None,
-        help="Specifies the model output directory from `collect`.",
-    )
+# Required to run benchmarks against solutions.
+#
+# def pytest_addoption(parser):
+#     """Pytest arguments passed from the `eval` action to the test."""
+#     parser.addoption(
+#         "--model_output_dir",
+#         action="store",
+#         default=None,
+#         help="Specifies the model output directory from `collect`.",
+#     )
 
 
 def pytest_generate_tests(metafunc: Any) -> None:
@@ -118,6 +120,7 @@ def get_state_fixture(
         }
 
     return func
+
 
 @pytest.fixture(name="solution_path")
 def solution_path_fixture(test_path: pathlib.Path) -> str:
