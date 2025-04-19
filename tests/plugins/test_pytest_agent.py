@@ -16,8 +16,8 @@ _DATASET_CARD = read_dataset_card(pathlib.Path("datasets/assist/"))
 
 PYTEST_ARGS = ["--dataset", "datasets/assist"]
 PLUGINS = [
-    "home_assistant_datasets.pytest_dataset",
-    "home_assistant_datasets.pytest_agent",
+    "home_assistant_datasets.plugins.pytest_dataset",
+    "home_assistant_datasets.plugins.pytest_agent",
 ]
 PYTEST_INI = """
 [pytest]

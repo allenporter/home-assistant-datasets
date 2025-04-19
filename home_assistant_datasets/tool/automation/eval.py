@@ -31,7 +31,7 @@ import logging
 
 import pytest
 
-from home_assistant_datasets.tool.fixtures import configure_yaml
+from home_assistant_datasets.plugins.fixtures import configure_yaml
 
 __all__ = []
 
@@ -39,7 +39,7 @@ _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_DATASET = "datasets/automations"
 PLUGINS = [
-    "home_assistant_datasets.pytest_metrics",
+    "home_assistant_datasets.plugins.pytest_metrics",
 ]
 
 

@@ -7,7 +7,7 @@ import pytest
 import pathlib
 from syrupy import SnapshotAssertion
 
-PLUGINS = ["home_assistant_datasets.pytest_metrics"]
+PLUGINS = ["home_assistant_datasets.plugins.pytest_metrics"]
 
 TEST_FILE_CONTENTS_FORMAT = """
     from dataclasses import dataclass
