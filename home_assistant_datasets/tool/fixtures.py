@@ -38,6 +38,8 @@ from home_assistant_datasets.tool.data_model import (
 _LOGGER = logging.getLogger(__name__)
 
 PLUGINS = [
+    "home_assistant_datasets.pytest_synthetic_home",
+    "home_assistant_datasets.pytest_agent",
     "home_assistant_datasets.fixtures",
     "home_assistant_datasets.tool.fixtures",
 ]

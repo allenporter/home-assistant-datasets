@@ -7,6 +7,7 @@ import pytest
 import pathlib
 from syrupy import SnapshotAssertion
 
+PLUGINS = ["home_assistant_datasets.pytest_metrics"]
 
 TEST_FILE_CONTENTS_FORMAT = """
     from dataclasses import dataclass
@@ -90,9 +91,7 @@ def test_verify_report_output_files(
     """Exercise the report plugin."""
 
     pytester.makepyfile(TEST_FILE_CONTENTS_FORMAT.format(tmpdir=tmpdir))
-    result = pytester.runpytest(
-        "--model_output_dir", tmpdir, plugins=["home_assistant_datasets.pytest_metrics"]
-    )
+    result = pytester.runpytest("--model_output_dir", tmpdir, plugins=PLUGINS)
 
     # Parse the output lines for "Generated eval report" filenames
     report_files = parse_report_filenames(tmpdir, result.stdout.lines)
