@@ -1,23 +1,11 @@
 """Test for running the automation eval end to end."""
 
-import logging
 import pathlib
-import subprocess
 import tempfile
 
 from syrupy import SnapshotAssertion
 
-
-_LOGGER = logging.getLogger(__name__)
-
-
-def run_cmd(cmds: list[str]) -> None:
-    """Run the specified commands."""
-    _LOGGER.debug(cmds)
-    p = subprocess.Popen(cmds, stdout=subprocess.PIPE)
-    (cmd_output, _) = p.communicate()
-    _LOGGER.debug("Output: %s", cmd_output)
-    return p.returncode
+from . import run_cmd
 
 
 def test_automation(snapshot: SnapshotAssertion) -> None:

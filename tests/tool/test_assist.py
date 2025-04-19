@@ -1,27 +1,11 @@
 """Test for running the assist eval end to end command."""
 
-import logging
 import pathlib
-import subprocess
-import sys
 import tempfile
 
 from syrupy import SnapshotAssertion
 
-
-_LOGGER = logging.getLogger(__name__)
-
-
-def run_cmd(cmds: list[str]) -> None:
-    """Run the specified commands."""
-    _LOGGER.debug("Running: %s", cmds)
-    p = subprocess.Popen(cmds, stdout=subprocess.PIPE)
-    (output, _) = p.communicate()
-    if p.returncode != 0:
-        _LOGGER.info("Command failed: %s", p.returncode)
-    if _LOGGER.isEnabledFor(logging.DEBUG):
-        print(output.decode(), file=sys.stderr)
-    return p.returncode
+from . import run_cmd
 
 
 def test_assist(snapshot: SnapshotAssertion) -> None:
