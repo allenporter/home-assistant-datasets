@@ -29,13 +29,13 @@ import logging
 import pytest
 
 
-from home_assistant_datasets.tool.fixtures import configure_yaml
+from home_assistant_datasets.plugins.fixtures import configure_yaml
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-PLUGINS = ["home_assistant_datasets.pytest_metrics"]
+PLUGINS = ["home_assistant_datasets.plugins.pytest_metrics"]
 
 
 def create_arguments(args: argparse.ArgumentParser) -> None:

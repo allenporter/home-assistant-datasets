@@ -11,7 +11,5 @@ __all__ = [
     "model_client",
     "scrape",
     "secrets",
-    "pytest_agent",
-    "pytest_metrics",
-    "pytest_synthetic_home",
+    "plugins",
 ]

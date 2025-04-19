@@ -12,9 +12,9 @@ from pytest import Metafunc
 
 import yaml
 
-from .datasets.dataset_card import read_dataset_card
-from .datasets.assist_data_loader import read_dataset_records
-from .datasets.assist_eval_task import EvalTask, generate_assist_eval_tasks
+from home_assistant_datasets.datasets.dataset_card import read_dataset_card
+from home_assistant_datasets.datasets.assist_data_loader import read_dataset_records
+from home_assistant_datasets.datasets.assist_eval_task import EvalTask, generate_assist_eval_tasks
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ def pytest_generate_tests(metafunc: Metafunc) -> None:
     dataset = metafunc.config.getoption("dataset")
     if not dataset:
         raise ValueError(
-            "Missing required plugin dependency 'home_assistant_datasets.pytest_dataset'"
+            "Missing required plugin dependency 'home_assistant_datasets.plugins.pytest_dataset'"
         )
 
     # The actual "task" that will be scraped is a spoke sentence. We expand the

@@ -26,15 +26,17 @@ from home_assistant_datasets.scrape import (
     ModelOutputWriter,
 )
 
+# TODO: The set of functions in this file should be renamed/specialized to
+# focus on scraping tests.
 
 _LOGGER = logging.getLogger(__name__)
 
 PLUGINS = [
-    "home_assistant_datasets.pytest_synthetic_home",
-    "home_assistant_datasets.pytest_agent",
-    "home_assistant_datasets.tool.fixtures",
-    "home_assistant_datasets.pytest_dataset",
-    "home_assistant_datasets.pytest_data_loader",
+    "home_assistant_datasets.plugins.pytest_synthetic_home",
+    "home_assistant_datasets.plugins.pytest_agent",
+    "home_assistant_datasets.plugins.fixtures",
+    "home_assistant_datasets.plugins.pytest_dataset",
+    "home_assistant_datasets.plugins.pytest_data_loader",
 ]
 
 

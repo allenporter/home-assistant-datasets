@@ -9,7 +9,7 @@ from typing import Any
 import logging
 import pytest
 
-from .datasets.dataset_card import DatasetCard, read_dataset_card
+from home_assistant_datasets.datasets.dataset_card import DatasetCard, read_dataset_card
 
 _LOGGER = logging.getLogger(__name__)
 
