@@ -1,10 +1,8 @@
 """Tests for the command line tool package."""
 
 import logging
-import pathlib
 import subprocess
 import sys
-import tempfile
 
 _LOGGER = logging.getLogger(__name__)
 
