@@ -9,7 +9,6 @@ from unittest.mock import patch
 
 import yaml
 import pytest
-from homeassistant.util import dt as dt_util
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import device_registry as dr, entity_registry as er
