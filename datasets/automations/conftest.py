@@ -28,7 +28,6 @@ SOLUTION = "solution.yaml"
 
 pytest_plugins = [
     "home_assistant_datasets.fixtures",
-    # "home_assistant_datasets.pytest_metrics",
 ]
 
 
