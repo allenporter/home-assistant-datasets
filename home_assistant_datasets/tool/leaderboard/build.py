@@ -19,7 +19,7 @@ import pathlib
 import yaml
 
 from home_assistant_datasets.datasets.dataset_card import read_dataset_cards
-from home_assistant_datasets.models import read_models, ARCHIVED_LABEL
+from home_assistant_datasets.models import read_models
 
 from .config import (
     REPORT_DIR,
@@ -269,7 +269,6 @@ def run(args: argparse.Namespace) -> int:
     active_models = {
         model.model_id: model
         for model in read_models().models
-        if ARCHIVED_LABEL not in model.categories
     }
     model_scores = parse_model_reports(report_dir)
     model_scores = {

@@ -2,6 +2,7 @@
 
 from typing import Any
 import pathlib
+from unittest.mock import patch
 
 from syrupy import SnapshotAssertion
 
@@ -11,7 +12,8 @@ from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 # Loading these has the effect of caching them so the calls work inside of
 # pytesster. This is a bit of a hack, but leaving since its less code than
 # copy all the files into the environment.
-_MODEL_CONFIG = read_model("assistant")
+with patch("home_assistant_datasets.secrets.get_secret", return_value="SECRET"):
+    _MODEL_CONFIG = read_model("assistant")
 _DATASET_CARD = read_dataset_card(pathlib.Path("datasets/assist/"))
 
 PYTEST_ARGS = ["--dataset", "datasets/assist"]

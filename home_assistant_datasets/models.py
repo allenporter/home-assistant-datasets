@@ -21,8 +21,7 @@ __all__ = [
 MODEL_CONFIG_FILE = pathlib.Path("models.yaml")
 MODEL_CONFIG_DIR = pathlib.Path("models/")
 
-# Label used to keep around configuration but not use for latest metric calculations
-ARCHIVED_LABEL = "archived"
+ARCHIVE_LABEL = "archive"
 
 
 @dataclass
@@ -106,12 +105,12 @@ def read_models() -> Models:
         )
 
     for model_file in sorted(list(MODEL_CONFIG_DIR.glob("**/*.yaml"))):
+        if ARCHIVE_LABEL in str(model_file):
+            continue
         try:
             model_config = yaml_decode(model_file.open(), ModelConfig)
         except Exception as err:
             raise ValueError(f"Error while loading {model_file}: {err}")
-        if "archive" in str(model_file):
-            model_config.categories.append(ARCHIVED_LABEL)
         models.models.append(model_config)
 
     return models
