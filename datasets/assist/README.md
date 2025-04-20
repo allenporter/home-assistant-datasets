@@ -137,7 +137,7 @@ underlying framework.
 $ DATASET="datasets/assist/"
 $ OUTPUT_DIR="reports/assist/2024.8.0b"  # Output based on home assistant version used
 $ MODEL=llama3.1
-$ pytest home_assistant_datasets/tools/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
+$ pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
 
 If you don't know the homeassistant version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
@@ -147,7 +147,7 @@ If you don't know the homeassistant version, you can run `uv pip freeze | grep "
 Once you have collected data from the model, you can automatically evaluate the results:
 
 ```bash
-$ pytest home_assistant_datasets/tools/eval --model_output_dir=${OUTPUT_DIR}
+$ pytest home_assistant_datasets/tool/assist/eval --model_output_dir=${OUTPUT_DIR}
 ```
 
 You can see the output reports created in `${OUTPUT_DIR}`.
