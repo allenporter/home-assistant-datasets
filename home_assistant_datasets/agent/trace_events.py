@@ -68,7 +68,7 @@ class TokenStatsBank:
                 sum(s.cached_input_tokens for s in self.stats) / len(self.stats), 2
             ),
             output_tokens=round(
-                sum(s.output_tokens for s in self.stats) / len(self.stats), 2
+                sum(s.output_tokens or 0 for s in self.stats) / len(self.stats), 2
             ),
             duration_ms=round(
                 sum(s.duration_ms for s in self.stats) / len(self.stats), 2
@@ -81,7 +81,7 @@ class TokenStatsBank:
         return TokenStats(
             input_tokens=sum(s.input_tokens for s in self.stats),
             cached_input_tokens=sum(s.cached_input_tokens for s in self.stats),
-            output_tokens=sum(s.output_tokens for s in self.stats),
+            output_tokens=sum(s.output_tokens or 0 for s in self.stats),
             duration_ms=sum(s.duration_ms for s in self.stats),
             n_count=sum(s.n_count for s in self.stats),
         )

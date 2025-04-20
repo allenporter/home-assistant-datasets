@@ -78,10 +78,10 @@ Common datasets to evaluate against are `assist`, `assist-mini`, and `intents`.
 $ DATASET="datasets/assist/"
 $ MODEL=llama3.1
 $ OUTPUT_DIR="reports/assist/2024.8.0b"  # Output based on home assistant version used
-$ pytest home_assistant_datasets/tools/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
+$ pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
 
-If you don't know the homeassistnat version, you can run `uv pip freeze | grep "^homeassistant=="` to find out. See `home-assistant-datasets assist collect --help` for options to control pytest such as running a single test.
+If you don't know the homeassistnat version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
 
 ### Evaluate
 
@@ -89,7 +89,7 @@ You then need to score the outputs by running the `eval` command. This report in
 a list of the wins and losses for manual inspection.
 
 ```bash
-$ pytest home_assistant_datasets/tools/eval --model_output_dir=${OUTPUT_DIR}
+$ pytest home_assistant_datasets/tool/assist/eval --model_output_dir=${OUTPUT_DIR}
 ```
 
 ### Leaderboard
