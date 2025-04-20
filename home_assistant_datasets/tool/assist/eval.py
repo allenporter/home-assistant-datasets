@@ -4,7 +4,7 @@ See `assist_collect` for the step to collect data. You can then run an offline
 analysis of the model using the following command:
 
 ```bash
-usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR] [--report_dir REPORT_DIR] [--collect-only] [-s]
+usage: home-assistant-datasets assist eval [-h] [--model_output_dir MODEL_OUTPUT_DIR] [--collect-only] [-s]
                                            [--verbose | --verbosity N]
                                            [test_path]
 
@@ -15,8 +15,6 @@ options:
   -h, --help            show this help message and exit
   --model_output_dir MODEL_OUTPUT_DIR
                         Specifies the model output directory from `collect`.
-  --report_dir REPORT_DIR
-                        Specifies the directory where the report will be written, or defaults to --model_output_dir.
   --collect-only        A pytest pass through flag to only collect the list of tests without actually running them.
   -s                    A pytest pass through flag to show streaming test output.
   --verbose, -v         A pytest pass through flag to increase verbosity.
@@ -44,11 +42,6 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         "--model_output_dir",
         type=str,
         help="Specifies the model output directory from `collect`.",
-    )
-    args.add_argument(
-        "--report_dir",
-        type=str,
-        help="Specifies the directory where the report will be written, or defaults to --model_output_dir.",
     )
     args.add_argument(
         "--dataset",
@@ -110,13 +103,6 @@ def run(args: argparse.Namespace) -> int:
             [
                 "--model_output_dir",
                 args.model_output_dir,
-            ]
-        )
-    if args.report_dir:
-        pytest_args.extend(
-            [
-                "--report_dir",
-                args.report_dir,
             ]
         )
 
