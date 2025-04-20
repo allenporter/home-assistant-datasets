@@ -1,6 +1,6 @@
 """Tests for the synthetic home pytest plugin."""
 
-from typing import Any
+import pytest
 
 
 PLUGINS = ["home_assistant_datasets.plugins.pytest_synthetic_home"]
@@ -80,7 +80,7 @@ def test_success(hass: HomeAssistant, synthetic_home_config_entry: ConfigEntry) 
 """
 
 
-def test_synthetic_home_fixture(pytester: Any) -> None:
+def test_synthetic_home_fixture(pytester: pytest.Pytester) -> None:
     """Exercise the report plugin."""
 
     pytester.makepyfile(TEST_FILE_CONTENTS_FORMAT)

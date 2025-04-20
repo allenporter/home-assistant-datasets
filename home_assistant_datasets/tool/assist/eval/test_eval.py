@@ -1,8 +1,11 @@
 """Evaluate the result of the scraped model output."""
 
+import pytest
+
 from home_assistant_datasets.scrape import ModelOutput
 
 
+@pytest.mark.eval_model_outputs
 def test_evaluate_result(model_output: ModelOutput) -> None:
     """Evaluate the result of the scraped model output compared against the golden."""
 

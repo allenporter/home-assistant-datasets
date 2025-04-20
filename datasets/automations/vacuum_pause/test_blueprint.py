@@ -56,11 +56,13 @@ async def vacuum_event_fixture(
     unsub()
 
 
+@pytest.mark.eval_model_outputs(task_id="vacuum_pause")
 async def test_blueprint_inputs(blueprint_content: BlueprintContent) -> None:
     """Test the blueprint inputs."""
     blueprint_content.validate_inputs_present(BLUEPRINT_INPUT.keys())
 
 
+@pytest.mark.eval_model_outputs(task_id="vacuum_pause")
 async def test_vacuum_running_and_paused(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,
@@ -100,6 +102,7 @@ async def test_vacuum_running_and_paused(
     assert get_state() == expected_states
 
 
+@pytest.mark.eval_model_outputs(task_id="vacuum_pause")
 async def test_vacuum_not_changed_when_idle(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,

@@ -1,9 +1,9 @@
 """Tests for the conversation agent pytest plugin."""
 
-from typing import Any
 import pathlib
 from unittest.mock import patch
 
+import pytest
 from syrupy import SnapshotAssertion
 
 from home_assistant_datasets.models import read_model
@@ -44,7 +44,7 @@ TEST_FILE_CONTENTS = """
 """
 
 
-def test_pytest_agent(pytester: Any, snapshot: SnapshotAssertion) -> None:
+def test_pytest_agent(pytester: pytest.Pytester, snapshot: SnapshotAssertion) -> None:
     """Exercise the report plugin."""
 
     pytester.makepyfile(TEST_FILE_CONTENTS)

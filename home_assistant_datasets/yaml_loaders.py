@@ -1,6 +1,7 @@
 """Initialize the yaml_loaders extensions."""
 
 import logging
+import enum
 from pathlib import Path
 from typing import Any, TypeVar, Type
 
@@ -103,6 +104,29 @@ def _get_secret_constructor(
             _LOGGER.warning("Unable to load secret, proceeding anyway: %s", err)
         _missing_secrets.add(secret_name)
         return None
+
+
+def configure_encoders() -> None:
+    """Configure pyyaml with some formatting options specific to our eval records."""
+
+    # Skip any output for unknown tags
+    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
+
+    # Make automation dumps look a little nicer in the output reports
+    def str_presenter(dumper, data):  # type: ignore[no-untyped-def]
+        """configures yaml for dumping multiline strings
+        Ref: https://stackoverflow.com/questions/8640959/how-can-i-control-what-scalar-form-pyyaml-uses-for-my-data
+        """
+        if data.count("\n") > 0:  # check for multiline string
+            return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+    yaml.add_representer(str, str_presenter)
+    yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
+    yaml.SafeDumper.add_multi_representer(
+        enum.StrEnum,
+        yaml.representer.SafeRepresenter.represent_str,
+    )
 
 
 # Register the custom tag constructors.

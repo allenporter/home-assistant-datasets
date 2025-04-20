@@ -1,4 +1,4 @@
-"""Data collection test fixtures."""
+"""Pytest plugin for scraping model outputs."""
 
 from collections.abc import Generator
 import datetime
@@ -7,7 +7,6 @@ import logging
 from typing import Any
 from unittest.mock import patch
 
-import yaml
 import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
@@ -25,16 +24,14 @@ from home_assistant_datasets.scrape import (
     write_scrape_context,
     ModelOutputWriter,
 )
+from home_assistant_datasets.yaml_loaders import configure_encoders
 
-# TODO: The set of functions in this file should be renamed/specialized to
-# focus on scraping tests.
 
 _LOGGER = logging.getLogger(__name__)
 
-PLUGINS = [
+pytest_plugins = [
     "home_assistant_datasets.plugins.pytest_synthetic_home",
     "home_assistant_datasets.plugins.pytest_agent",
-    "home_assistant_datasets.plugins.fixtures",
     "home_assistant_datasets.plugins.pytest_dataset",
     "home_assistant_datasets.plugins.pytest_data_loader",
 ]
@@ -42,11 +39,24 @@ PLUGINS = [
 
 def pytest_addoption(parser: Any) -> None:
     """Pytest arguments passed from the `collect` action to the test."""
-    parser.addoption("--models")
-    parser.addoption("--model_output_dir")
+    parser.addoption(
+        "--models",
+        required=True,
+        help="A comma separated list of models to scrape.",
+    )
+    parser.addoption(
+        "--model_output_dir",
+        required=True,
+        help="The path where scraped outputs are written.",
+    )
 
 
-# TODO: Move these into separate fixtures
+def pytest_configure(config: Any) -> None:
+    """Pytest configuration for this plugin."""
+    # Ensure output formatting is as expected.
+    configure_encoders()
+
+
 def pytest_generate_tests(metafunc: Any) -> None:
     """Generate test parameters for the evaluation from flags."""
     # Parameterize tests by the models under development
@@ -56,6 +66,18 @@ def pytest_generate_tests(metafunc: Any) -> None:
     output_dir = metafunc.config.getoption("model_output_dir")
     pathlib.Path(output_dir).mkdir(exist_ok=True)
     metafunc.parametrize("output_path", [output_dir], scope="module")
+
+
+@pytest.hookimpl(trylast=True)
+def pytest_terminal_summary(terminalreporter: Any) -> None:
+    """Invoked at the end of the test run to output the test summary."""
+    output_dir = terminalreporter.config.getoption("model_output_dir")
+    models = terminalreporter.config.getoption("models").split(",")
+    for model_id in models:
+        terminalreporter.write_sep(
+            "-",
+            f"Scraped model output: {str(pathlib.Path(output_dir) / model_id)}",
+        )
 
 
 @pytest.fixture(name="scrape_config", scope="module")
@@ -72,8 +94,8 @@ def scrape_config(model_id: str, dataset: str, output_path: str) -> ScrapeConfig
     )
 
 
-@pytest.fixture(name="scrape_record_writer", scope="module", autouse=True)
-def scrape_record_writer_fixture(scrape_config: ScrapeConfig) -> None:
+@pytest.fixture(name="scrape_context", scope="module", autouse=True)
+def scrape_context_fixture(scrape_config: ScrapeConfig) -> None:
     """Fixture to generate a scrape record."""
     write_scrape_context(scrape_config)
 
@@ -161,42 +183,3 @@ def entity_state_diff_fixture(
     """Fixture with a function call to change device state for evaluation."""
     get_state = EntityStateFixture(hass, synthetic_home_config_entry, entity_registry)
     return EntityStateDiffFixture(get_state)
-
-
-def configure_yaml() -> None:
-    """Configure pyyaml with some formatting options specific to our eval records."""
-
-    # Skip any output for unknown tags
-    yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
-
-    # Make automation dumps look a little nicer in the output reports
-    def str_presenter(dumper, data):  # type: ignore[no-untyped-def]
-        """configures yaml for dumping multiline strings
-        Ref: https://stackoverflow.com/questions/8640959/how-can-i-control-what-scalar-form-pyyaml-uses-for-my-data
-        """
-        if data.count("\n") > 0:  # check for multiline string
-            return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
-        return dumper.represent_scalar("tag:yaml.org,2002:str", data)
-
-    yaml.add_representer(str, str_presenter)
-    yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
-
-
-def run_pytest_main(additional_args: list[str], directory: str) -> int:
-    """Run pytest with the default set of arguments plus the additional args passed."""
-
-    configure_yaml()
-
-    # nest_asyncio.apply()
-    pytest_args = [
-        "--no-header",
-        "--disable-warnings",
-        # Limit to tests in this directory
-        directory,
-        *additional_args,
-    ]
-    retcode = pytest.main(
-        pytest_args,
-        plugins=PLUGINS,
-    )
-    return retcode

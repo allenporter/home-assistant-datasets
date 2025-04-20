@@ -9,7 +9,8 @@ _LOGGER = logging.getLogger(__name__)
 
 def run_cmd(cmds: list[str]) -> None:
     """Run the specified commands."""
-    _LOGGER.debug("Running: %s", cmds)
+    if _LOGGER.isEnabledFor(logging.DEBUG):
+        _LOGGER.debug("Running: %s", " ".join(cmds))
     p = subprocess.Popen(cmds, stdout=subprocess.PIPE)
     (output, _) = p.communicate()
     if p.returncode != 0:

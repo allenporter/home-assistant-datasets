@@ -2,8 +2,13 @@
 
 This is a dataset for the Home Assistant LLM API ([blog post](https://developers.home-assistant.io/blog/2024/05/20/llm-api/)).
 
-See the `home-assistant-datasets assist` command for more details on how to
-run evaluations.
+Running an evaluation consists of two steps:
+
+- Collecting data by scraping model outputs
+- Evaluating the scraped outputs against the groundtruth results and summarizing metrics
+
+The scraping and evaluation are implemented using `pytest` tests that write results
+to local output files.
 
 ## Dataset details
 
@@ -132,19 +137,17 @@ underlying framework.
 $ DATASET="datasets/assist/"
 $ OUTPUT_DIR="reports/assist/2024.8.0b"  # Output based on home assistant version used
 $ MODEL=llama3.1
-$ home-assistant-datasets assist collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
+$ pytest home_assistant_datasets/tools/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
 
 If you don't know the homeassistant version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
-
-See `home-assistant-datasets assist collect --help` for options to control pytest.
 
 ## Evaluation
 
 Once you have collected data from the model, you can automatically evaluate the results:
 
 ```bash
-$ home-assistant-datasets assist eval --model_output_dir=${OUTPUT_DIR} ${DATASET_DIR}
+$ pytest home_assistant_datasets/tools/eval --model_output_dir=${OUTPUT_DIR}
 ```
 
 You can see the output reports created in `${OUTPUT_DIR}`.
