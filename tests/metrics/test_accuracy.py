@@ -1,14 +1,4 @@
-"""Tests for the eval report generation.
-
-This test will by default not exercise the eval report. This is used for
-manual testing only and you need to specity the `--model_output_dir` flag. See
-the `conftest.py` methods for setup.
-
-```bash
-$ pytest tests/tool/test_eval_report.py  --model_output_dir=/tmp/
-$ cat /tmp/report.yaml
-```
-"""
+"""Tests for the accuracy module."""
 
 import io
 
@@ -16,8 +6,8 @@ from home_assistant_datasets.metrics import TaskResult, ScrapeRecord
 from home_assistant_datasets.metrics.accuracy import AccuracySummary
 
 
-def test_report_summary() -> None:
-    """Test a report writer."""
+def test_accuracy_summary() -> None:
+    """Test AccuracySummary aggregating TaskResults and building a yaml report."""
     buf = io.StringIO()
     writer = AccuracySummary(fd=buf, summary_key="model_id")
     writer.start()
