@@ -11,10 +11,10 @@ The requirements for this module are:
 - Write detailed metrics to a file
 - Aggregate metrics e.g. by task, by model, etc and write outputs to a file
 
-When using this fixture, your test is responsible for producing a
-`scrape_record` fixture that produces a `@dataclass` of type
-`home_assistant_datasets.metrics.report.ScrapeRecord`. This identifies the record
-used by the output of a prior scrape run.
+This will read file paths from the `--model_output_dir` and produce a
+`scrape_record` which is a  `@dataclass` of type
+`home_assistant_datasets.metrics.report.ScrapeRecord`. This identifies the
+record used by the output of a prior scrape run.
 
 Each pytest test is an eval task. This plugin will examine the pytest output
 and create a `home_assistant_datasets.metrics.report.TaskResult` that indicates
@@ -35,12 +35,14 @@ from home_assistant_datasets.metrics import (
     TaskResult,
     ScrapeRecord,
 )
+from home_assistant_datasets.scrape import ModelOutput
 from home_assistant_datasets.metrics.report_suite import (
     ReportSuite,
     ReportSuiteConfig,
     exception_repr,
     extract_task_name,
 )
+from home_assistant_datasets.metrics.scrape_reader import model_output_files, read_model_output, scrape_record_from_output
 
 __all__ = []
 
@@ -62,16 +64,40 @@ def pytest_configure(config: Any) -> None:
     suite = ReportSuite(
         ReportSuiteConfig(output_dir=pathlib.Path(model_output_dir)),
     )
-    plugin = ReportSuitePlugin(
-        suite,
-    )
+    plugin = ReportSuitePlugin(suite)
     config.pluginmanager.register(plugin)
 
     config.stash[SUITE_STASH_KEY] = suite
 
 
-@pytest.fixture(name="consume_scrape_record", autouse=True, scope="module")
-def scrape_record_fixture(
+def pytest_generate_tests(metafunc: Any) -> None:
+    """Generate test parameters for the evaluation from flags."""
+    # Parameterize tests by the models under development
+    model_output_dir = metafunc.config.getoption("model_output_dir")
+    model_output_path = pathlib.Path(model_output_dir)
+    tasks = model_output_files(model_output_path)
+    _LOGGER.debug("tasks: %s", model_output_path)
+    metafunc.parametrize(
+        "model_output_file",
+        [pytest.param(str(task)) for task in tasks],
+        ids=[str(task) for task in tasks],
+    )
+
+
+@pytest.fixture(name="model_output", autouse=True)
+def model_output_fixture(model_output_file: str) -> ModelOutput:
+    """Fixture to read the ScrapeRecord from a ModelOutput file."""
+    return read_model_output(pathlib.Path(model_output_file))
+
+
+@pytest.fixture(name="scrape_record", autouse=True)
+def scrape_record_fixture(model_output: ModelOutput) -> ScrapeRecord:
+    """Fixture to read the ScrapeRecord from a ModelOutput file."""
+    return scrape_record_from_output(model_output)
+
+
+@pytest.fixture(name="consume_scrape_record", autouse=True)
+def consume_scrape_record_fixture(
     request: FixtureRequest, scrape_record: ScrapeRecord
 ) -> Generator[None]:
     """Fixture to process the scrape record report."""

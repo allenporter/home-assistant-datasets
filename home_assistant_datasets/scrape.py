@@ -168,13 +168,3 @@ class ModelOutputWriter:
         self._eval_output.write_text(
             yaml.dump(record.to_dict(), sort_keys=False, explicit_start=True)
         )
-
-
-def model_output_files(model_output_path: pathlib.Path) -> list[pathlib.Path]:
-    """Return the list of model output files in the specified path."""
-    return [
-        report_file
-        for model in sorted(list(model_output_path.glob("*")))
-        for report_file in sorted(list(model.glob("*.yaml")))
-        if report_file.name != SCRAPE_CONTEXT_FILE
-    ]
