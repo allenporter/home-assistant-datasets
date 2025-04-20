@@ -11,9 +11,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import entity_registry as er
 from homeassistant.setup import async_setup_component
 
-from home_assistant_datasets.agent.trace_events import token_stats_from_context
 from home_assistant_datasets.entity_state import EntityStateFixture
-from home_assistant_datasets.metrics import ScrapeRecord
 from home_assistant_datasets.blueprint import (
     VALID_BLUEPRINT,
     BlueprintContent,

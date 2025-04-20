@@ -1,9 +1,6 @@
 """Module for reading scraped model outputs for evaluation."""
 
 import pathlib
-from collections.abc import Generator
-
-import pytest
 
 from home_assistant_datasets.agent.trace_events import token_stats_from_context, find_llm_call
 from home_assistant_datasets.scrape import ModelOutput, SCRAPE_CONTEXT_FILE

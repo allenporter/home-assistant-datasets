@@ -27,7 +27,6 @@ __all__ = [
     "read_scrape_context",
     "ModelOutput",
     "ModelOutputWriter",
-    "model_output_files",
 ]
 
 _LOGGER = logging.getLogger(__name__)
