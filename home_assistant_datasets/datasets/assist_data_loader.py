@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 import logging
 import pathlib
 from slugify import slugify
+from typing import Any
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
 from mashumaro.config import BaseConfig
@@ -31,6 +32,23 @@ __all__ = [
 ]
 
 _LOGGER = logging.getLogger(__name__)
+
+
+@dataclass(kw_only=True, frozen=True)
+class ToolCall(DataClassYAMLMixin):
+    """Represents an expected tool call."""
+
+    tool_name: str
+    """The name of the tool to call."""
+
+    tool_args: dict[str, Any]
+    """Arguments to the tool call."""
+
+    class Config(BaseConfig):
+        code_generation_options = ["TO_DICT_ADD_OMIT_NONE_FLAG"]
+        forbid_extra_keys = False
+        sort_keys = False
+        omit_none = True
 
 
 @dataclass(kw_only=True, frozen=True)
@@ -55,6 +73,9 @@ class Action(DataClassYAMLMixin):
     When specified as a list, the response may match any valid substring in the last.
     """
 
+    expect_tool_call: ToolCall | None = None
+    """Expect the specified tool call to occur, independent of the outcome."""
+
     context_device: str | None = None
     """Synthetic home device id for the current context of the request."""
 
@@ -62,7 +83,11 @@ class Action(DataClassYAMLMixin):
     """The current time to use during tests."""
 
     class Config(BaseConfig):
+        code_generation_options = ["TO_DICT_ADD_OMIT_NONE_FLAG"]
         forbid_extra_keys = False
+        sort_keys = False
+        omit_none = True
+        omit_default = True
 
 
 @dataclass(kw_only=True, frozen=True)
@@ -91,6 +116,11 @@ class Record(DataClassYAMLMixin):
 
     Attribute is set at runtime after being loaded.
     """
+
+    class Config(BaseConfig):
+        code_generation_options = ["TO_DICT_ADD_OMIT_NONE_FLAG"]
+        sort_keys = False
+        omit_none = True
 
 
 def _make_slug(text: str) -> str:

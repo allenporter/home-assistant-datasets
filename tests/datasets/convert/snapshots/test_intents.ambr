@@ -1,0 +1,54 @@
+# serializer version: 1
+# name: test_parse_fixtures_as_inventory
+  list([
+    PosixPath('en/_fixtures.yaml'),
+    PosixPath('en/cover_HassTurnOn.yaml'),
+  ])
+# ---
+# name: test_parse_fixtures_as_inventory.1
+  '''
+  ---
+  language: "en"
+  floors:
+    - name: "Upstairs"
+      id: "upstairs_id"
+  areas:
+    - name: "Guest Room"
+      id: "guest_room_id"
+      # prepositional floor
+      floor: "upstairs_id"
+  
+  entities:
+    - name: "Shade Left"
+      id: "cover.shade_left"
+      area: "guest_room_id"
+      state: "open"
+      attributes:
+        device_class: shade
+  
+  timers:
+    - name: "pizza"
+      start_minutes: 30
+      total_seconds_left: 1505
+      rounded_hours_left: 0
+      rounded_minutes_left: 25
+      rounded_seconds_left: 0
+  
+  '''
+# ---
+# name: test_parse_fixtures_as_inventory.2
+  '''
+  category: cover
+  tests:
+  - expect_response:
+    - Opened the garage
+    expect_tool_call:
+      tool_args:
+        device_class: garage
+        domain: cover
+      tool_name: HassTurnOn
+    sentences:
+    - open the garage door
+  
+  '''
+# ---
