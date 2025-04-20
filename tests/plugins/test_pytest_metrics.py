@@ -8,6 +8,32 @@ import pathlib
 from syrupy import SnapshotAssertion
 
 PLUGINS = ["home_assistant_datasets.plugins.pytest_metrics"]
+PYTEST_INI = """
+[pytest]
+asyncio_mode = auto
+asyncio_default_fixture_loop_scope = function
+"""
+
+MODEL_OUTPUT_YAML = """---
+uuid: e489d6b0-0f5f-4c49-aced-b9abe1c5104f
+task_id: urban_loft_au_light-how_many_lights_are_currently_on_please_respond_with_a_number
+model_id: example-model
+category: light
+task:
+  input_text: How many lights are currently on? Please respond with a number.
+  expect_changes: {}
+  expect_response:
+  - 4
+response: |-
+  Based on the current state of the devices in the home, I can provide you with the number of lights that are currently on.
+
+  4
+context:
+  unexpected_states: {}
+  conversation_trace: {}
+  tries: 0
+  duration_ms: 3582.574
+"""
 
 TEST_FILE_CONTENTS_FORMAT = """
     from dataclasses import dataclass
@@ -18,21 +44,8 @@ TEST_FILE_CONTENTS_FORMAT = """
     from home_assistant_datasets.agent.trace_events import TokenStats
     from home_assistant_datasets.metrics.report import ScrapeRecord
 
-    @pytest.fixture(name="scrape_record", autouse=True, scope="module")
-    def scrape_record_fixture() -> ScrapeRecord:
-        return ScrapeRecord(
-            uuid="1234",
-            task_id="task-id",
-            model_id="model_id",
-            token_stats=TokenStats(
-                input_tokens=500,
-                cached_input_tokens=100,
-                output_tokens=250,
-                duration_ms=500,
-            ),
-        )
 
-    def test_success_1() -> None:
+    def test_success_1(scrape_record: Any) -> None:
         assert True
 
     def test_success_2() -> None:
@@ -43,7 +56,6 @@ TEST_FILE_CONTENTS_FORMAT = """
 
     def test_skip() -> None:
         pytest.skip()
-
 
     @pytest.mark.parametrize(
         "exc",
@@ -91,7 +103,14 @@ def test_verify_report_output_files(
     """Exercise the report plugin."""
 
     pytester.makepyfile(TEST_FILE_CONTENTS_FORMAT.format(tmpdir=tmpdir))
-    result = pytester.runpytest("--model_output_dir", tmpdir, plugins=PLUGINS)
+    pytester.makeini(PYTEST_INI)
+
+    # Prepare a fake scraped model output file in the model output directory.
+    model_output_path = pathlib.Path(tmpdir)
+    (model_output_path / "model-1").mkdir()
+    (model_output_path / "model-1" / "model-1-output.yaml").write_text(MODEL_OUTPUT_YAML)
+
+    result = pytester.runpytest("--model_output_dir", tmpdir, "-vv", plugins=PLUGINS)
 
     # Parse the output lines for "Generated eval report" filenames
     report_files = parse_report_filenames(tmpdir, result.stdout.lines)
