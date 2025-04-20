@@ -1,26 +1,24 @@
 """Module for computing eval metrics from pytest.
 
-This will run an evaluation using pytest to generate pass or fail, then
-aggregate the results and writ ethem to an output file.
+This plugin requires that evaluation task tests are annotated with `@pytest.mark.eval_model_outputs`.
+The evaluation will run as a pytest test, generate pass or fail reulsts, then
+aggregate the results and write them to report files.
 
-The requirements for this module are:
-- Needs to know the output directory
-- Needs to know the current "task" under test for report detail
-- There may be multiple "tests" for each task (e.g. tone, accuracy, etc)
-- Needs to get the success/failure for each test
-- Write detailed metrics to a file
-- Aggregate metrics e.g. by task, by model, etc and write outputs to a file
+The lifecycle of tests and plugin are:
+- The metrics plugin expects `--model_output_dir` to point to an output directory.
+- All tests are examined for presence of `@pytest.mark.eval_model_outputs` which determines
+  the set of tasks to evaluate.
+- The plugin setup will look at all scrape files in the output directory.
+- The evaluation tasks (tests) are parameterized with each relevant scrape file.
+- The plugin examines a test rules with a success, failure, or skip if not relevant.
+- The plugin report suite will write aggregated metrics to a report file.
+- The plugin report suite will write detailed metrics to a report file.
 
-This will read file paths from the `--model_output_dir` and produce a
-`scrape_record` which is a  `@dataclass` of type
-`home_assistant_datasets.metrics.report.ScrapeRecord`. This identifies the
-record used by the output of a prior scrape run.
+Internally, the model outputs are read as a `ScrapeRecord` dataclass. This identifies
+the record written by a previous model scrape.
 
 Each pytest test is an eval task. This plugin will examine the pytest output
-and create a `home_assistant_datasets.metrics.report.TaskResult` that indicates
-pass or failure.
-
-This plugin handles writing out the report output.
+and create a `TaskResult` that indicates pass or failure.
 """
 
 import logging

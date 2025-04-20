@@ -26,8 +26,6 @@ from home_assistant_datasets.scrape import (
 )
 from home_assistant_datasets.yaml_loaders import configure_encoders
 
-from custom_components import synthetic_home  # noqa: F401
-
 
 _LOGGER = logging.getLogger(__name__)
 
