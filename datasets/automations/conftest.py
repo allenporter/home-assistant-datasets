@@ -53,18 +53,6 @@ def synthetic_home_yaml(test_path: pathlib.Path) -> str:
     return (test_path / FIXTURES).read_text()
 
 
-@pytest.fixture(autouse=True)
-def expected_lingering_tasks() -> bool:
-    """Fixtures to avoid tasks around store shutdown."""
-    return True
-
-
-@pytest.fixture(autouse=True)
-def expected_lingering_timers() -> bool:
-    """Fixtures to avoid timers around store shutdown."""
-    return True
-
-
 @pytest.fixture(name="get_state")
 def get_state_fixture(
     hass: HomeAssistant,

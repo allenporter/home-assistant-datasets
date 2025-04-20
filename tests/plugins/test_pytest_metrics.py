@@ -1,10 +1,9 @@
 """Tests for the eval report generation pytest plugin."""
 
-from typing import Any
 import tempfile
+import pathlib
 
 import pytest
-import pathlib
 from syrupy import SnapshotAssertion
 
 PLUGINS = ["home_assistant_datasets.plugins.pytest_metrics"]
@@ -44,19 +43,23 @@ TEST_FILE_CONTENTS_FORMAT = """
     from home_assistant_datasets.agent.trace_events import TokenStats
     from home_assistant_datasets.metrics.report import ScrapeRecord
 
-
+    @pytest.mark.eval_model_outputs
     def test_success_1(scrape_record: Any) -> None:
         assert True
 
+    @pytest.mark.eval_model_outputs
     def test_success_2() -> None:
         assert True
 
+    @pytest.mark.eval_model_outputs
     def test_fail() -> None:
         assert False, "Failed test case"
 
+    @pytest.mark.eval_model_outputs
     def test_skip() -> None:
         pytest.skip()
 
+    @pytest.mark.eval_model_outputs
     @pytest.mark.parametrize(
         "exc",
         [
@@ -98,7 +101,7 @@ def parse_report_filenames(tmpdir: str, stdout_list: str) -> list[pathlib.Path]:
 
 
 def test_verify_report_output_files(
-    pytester: Any, tmpdir: str, snapshot: SnapshotAssertion
+    pytester: pytest.Pytester, tmpdir: str, snapshot: SnapshotAssertion
 ) -> None:
     """Exercise the report plugin."""
 
@@ -108,9 +111,15 @@ def test_verify_report_output_files(
     # Prepare a fake scraped model output file in the model output directory.
     model_output_path = pathlib.Path(tmpdir)
     (model_output_path / "model-1").mkdir()
-    (model_output_path / "model-1" / "model-1-output.yaml").write_text(MODEL_OUTPUT_YAML)
+    (model_output_path / "model-1" / "model-1-output.yaml").write_text(
+        MODEL_OUTPUT_YAML
+    )
 
-    result = pytester.runpytest("--model_output_dir", tmpdir, "-vv", plugins=PLUGINS)
+    pytester.plugins.extend(PLUGINS)
+    result = pytester.runpytest_subprocess(
+        "--model_output_dir",
+        tmpdir,
+    )
 
     # Parse the output lines for "Generated eval report" filenames
     report_files = parse_report_filenames(tmpdir, result.stdout.lines)

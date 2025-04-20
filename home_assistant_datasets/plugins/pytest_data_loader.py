@@ -5,29 +5,36 @@ under test.
 """
 
 import pathlib
-from typing import Any
 import logging
 import pytest
-from pytest import Metafunc
 
 import yaml
 
 from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 from home_assistant_datasets.datasets.assist_data_loader import read_dataset_records
-from home_assistant_datasets.datasets.assist_eval_task import EvalTask, generate_assist_eval_tasks
+from home_assistant_datasets.datasets.assist_eval_task import (
+    EvalTask,
+    generate_assist_eval_tasks,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
 
-def pytest_addoption(parser: Any) -> None:
+def pytest_addoption(parser: pytest.Parser) -> None:
     """Pytest arguments passed when reading from a dataset for scraping."""
     # Filter on which dataset record categories to load
-    parser.addoption("--categories")
+    parser.addoption(
+        "--categories",
+        help="An optional comma separated list of entity domains to load from the dataset.",
+    )
     # Number of times to repeat each task in the dataset
-    parser.addoption("--count")
+    parser.addoption(
+        "--count",
+        help="Override the default number of times to run each task in the dataset.",
+    )
 
 
-def pytest_generate_tests(metafunc: Metafunc) -> None:
+def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     """Generate test parameters for loading eval tasks from flags."""
 
     # Defined in pytest_dataset

@@ -42,25 +42,40 @@ from home_assistant_datasets.metrics.report_suite import (
     exception_repr,
     extract_task_name,
 )
-from home_assistant_datasets.metrics.scrape_reader import model_output_files, read_model_output, scrape_record_from_output
+from home_assistant_datasets.metrics.scrape_reader import (
+    model_output_files,
+    read_model_output,
+    scrape_record_from_output,
+)
 
 __all__ = []
 
 _LOGGER = logging.getLogger(__name__)
 
-SUITE_STASH_KEY = pytest.StashKey[ReportSuite]
+SUITE_STASH_KEY = pytest.StashKey[ReportSuite]()
 SCRAPE_RECORD_STASH_KEY = pytest.StashKey[ScrapeRecord]()
 
 
-def pytest_addoption(parser: Any) -> None:
+def pytest_addoption(parser: pytest.Parser) -> None:
     """Pytest arguments passed."""
-    parser.addoption("--model_output_dir", default=None)
+    parser.addoption(
+        "--model_output_dir",
+        help="Path to scraped model outputs used for evaluation.",
+    )
 
 
-def pytest_configure(config: Any) -> None:
+def pytest_configure(config: pytest.Config) -> None:
     """Fixture to register the ReportSuitePlugin."""
     _LOGGER.debug("pytest_configure")
+
+    config.addinivalue_line(
+        "markers",
+        "eval_model_outputs(task_prefix=None): This test is used to score any model outputs, limited to an optional task prefix.",
+    )
+
     model_output_dir = config.getoption("model_output_dir")
+    if not model_output_dir:
+        return
     suite = ReportSuite(
         ReportSuiteConfig(output_dir=pathlib.Path(model_output_dir)),
     )
@@ -70,17 +85,28 @@ def pytest_configure(config: Any) -> None:
     config.stash[SUITE_STASH_KEY] = suite
 
 
-def pytest_generate_tests(metafunc: Any) -> None:
-    """Generate test parameters for the evaluation from flags."""
-    # Parameterize tests by the models under development
+def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
+    """Generate test parameters for a test.
+
+    Assist tests are parameterized by each model output.
+    """
+    markers = list(metafunc.definition.iter_markers(name="eval_model_outputs"))
+    if not markers:
+        return
+    if not metafunc.config.getoption("model_output_dir"):
+        pytest.skip("Test requires --model_output_dir")
+    task_id = markers[0].kwargs.get("task_id")
+
     model_output_dir = metafunc.config.getoption("model_output_dir")
     model_output_path = pathlib.Path(model_output_dir)
-    tasks = model_output_files(model_output_path)
-    _LOGGER.debug("tasks: %s", model_output_path)
+    model_outout_files = model_output_files(
+        model_output_path,
+        task_id=task_id,
+    )
     metafunc.parametrize(
         "model_output_file",
-        [pytest.param(str(task)) for task in tasks],
-        ids=[str(task) for task in tasks],
+        [pytest.param(str(task)) for task in model_outout_files],
+        ids=[str(task.relative_to(model_output_path)) for task in model_outout_files],
     )
 
 

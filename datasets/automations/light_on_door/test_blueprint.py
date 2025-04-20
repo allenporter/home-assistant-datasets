@@ -60,11 +60,13 @@ async def light_event_fixture(
     unsub()
 
 
+@pytest.mark.eval_model_outputs(task_id="light_on_door")
 async def test_blueprint_inputs(blueprint_content: BlueprintContent) -> None:
     """Test the blueprint inputs."""
     blueprint_content.validate_inputs_present(BLUEPRINT_INPUT.keys())
 
 
+@pytest.mark.eval_model_outputs(task_id="light_on_door")
 async def test_door_open(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,
@@ -91,6 +93,7 @@ async def test_door_open(
     assert get_state() == expected_states
 
 
+@pytest.mark.eval_model_outputs(task_id="light_on_door")
 async def test_door_open_close(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,
@@ -138,6 +141,7 @@ async def test_door_open_close(
     assert get_state() == expected_states
 
 
+@pytest.mark.eval_model_outputs(task_id="light_on_door")
 async def test_light_timeout(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,

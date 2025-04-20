@@ -40,6 +40,7 @@ async def automation_config(blueprint_content: BlueprintContent) -> dict[str, an
     }
 
 
+@pytest.mark.eval_model_outputs(task_id="humidity_fan")
 async def test_blueprint_inputs(blueprint_content: BlueprintContent) -> None:
     """Test the blueprint inputs."""
     blueprint_content.validate_inputs_present(BLUEPRINT_INPUT.keys())
@@ -61,6 +62,7 @@ async def fan_event_fixture(
     unsub()
 
 
+@pytest.mark.eval_model_outputs(task_id="humidity_fan")
 async def test_fan_triggered_on(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,
@@ -90,6 +92,7 @@ async def test_fan_triggered_on(
     assert get_state() == expected_states
 
 
+@pytest.mark.eval_model_outputs(task_id="humidity_fan")
 async def test_fan_triggered_off(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,

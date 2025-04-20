@@ -2,7 +2,10 @@
 
 import pathlib
 
-from home_assistant_datasets.agent.trace_events import token_stats_from_context, find_llm_call
+from home_assistant_datasets.agent.trace_events import (
+    token_stats_from_context,
+    find_llm_call,
+)
 from home_assistant_datasets.scrape import ModelOutput, SCRAPE_CONTEXT_FILE
 
 from . import ScrapeRecord
@@ -14,12 +17,15 @@ __all__ = [
 ]
 
 
-def model_output_files(model_output_dir: pathlib.Path) -> list[pathlib.Path]:
+def model_output_files(
+    model_output_dir: pathlib.Path, task_id: str | None = None
+) -> list[pathlib.Path]:
     """Return the list of model output files in the specified path."""
+    file_glob = f"{task_id or ''}*.yaml"
     return [
         report_file
         for model in sorted(list(model_output_dir.glob("*")))
-        for report_file in sorted(list(model.glob("*.yaml")))
+        for report_file in sorted(list(model.glob(file_glob)))
         if report_file.name != SCRAPE_CONTEXT_FILE
     ]
 

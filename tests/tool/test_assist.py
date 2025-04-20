@@ -13,15 +13,13 @@ def test_assist(snapshot: SnapshotAssertion) -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         run_cmd(
             [
-                "home-assistant-datasets",
-                "assist",
-                "collect",
+                "pytest",
+                "home_assistant_datasets/tool/assist/collect",
                 "--models=assistant",
                 "--dataset=./datasets/assist",
                 f"--model_output_dir={tmpdir}",
                 "--categories=light",
                 "--count=1",
-                "--disable-random",
             ]
         )
         # Ensure the scrape succeeded before proceeding
@@ -29,15 +27,11 @@ def test_assist(snapshot: SnapshotAssertion) -> None:
 
         run_cmd(
             [
-                "home-assistant-datasets",
-                "assist",
-                "eval",
-                "--dataset=./datasets/assist",
+                "pytest",
+                "home_assistant_datasets/tool/assist/eval",
                 f"--model_output_dir={tmpdir}",
-                "--",
             ]
         )
-
         output_files = sorted(list(pathlib.Path(tmpdir).glob("*.*")))
         assert [output.name for output in output_files] == snapshot
         for output in output_files:

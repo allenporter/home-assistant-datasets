@@ -63,11 +63,13 @@ async def media_player_state_changet_fixture(
     unsub()
 
 
+@pytest.mark.eval_model_outputs(task_id="door_left_open")
 async def test_blueprint_inputs(blueprint_content: BlueprintContent) -> None:
     """Test the blueprint inputs."""
     blueprint_content.validate_inputs_present(BLUEPRINT_INPUT.keys())
 
 
+@pytest.mark.eval_model_outputs(task_id="door_left_open")
 async def test_door_open_plays_media(
     hass: HomeAssistant,
     automation: BlueprintContentStatus,

@@ -13,11 +13,10 @@ def test_automation(snapshot: SnapshotAssertion) -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         run_cmd(
             [
-                "home-assistant-datasets",
-                "automation",
-                "collect",
+                "pytest",
+                "home_assistant_datasets/tool/automation/collect",
                 "--models=assistant",
-                "--dataset=datasets/automations",
+                "--dataset=./datasets/automations",
                 f"--model_output_dir={tmpdir}",
                 "--categories=light",
                 "--count=1",
@@ -28,14 +27,11 @@ def test_automation(snapshot: SnapshotAssertion) -> None:
 
         run_cmd(
             [
-                "home-assistant-datasets",
-                "automation",
-                "eval",
-                "--dataset=datasets/automations",
+                "pytest",
+                "datasets/automations",
                 f"--model_output_dir={tmpdir}",
             ]
         )
-
         output_files = sorted(list(pathlib.Path(tmpdir).glob("*.*")))
         assert [output.name for output in output_files] == snapshot
         for output in output_files:

@@ -5,7 +5,6 @@ dataset is under test.
 """
 
 import pathlib
-from typing import Any
 import logging
 import pytest
 
@@ -14,12 +13,16 @@ from home_assistant_datasets.datasets.dataset_card import DatasetCard, read_data
 _LOGGER = logging.getLogger(__name__)
 
 
-def pytest_addoption(parser: Any) -> None:
+def pytest_addoption(parser: pytest.Parser) -> None:
     """Pytest arguments passed when reading from a dataset for scraping."""
-    parser.addoption("--dataset")
+    parser.addoption(
+        "--dataset",
+        required=False,
+        help="The path to the 'assist' style dataset to load for scraping.",
+    )
 
 
-def pytest_generate_tests(metafunc: Any) -> None:
+def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     """Generate test parameters for dataset reading from flags."""
     dataset = metafunc.config.getoption("dataset")
     if not dataset:
