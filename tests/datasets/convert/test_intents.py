@@ -51,7 +51,7 @@ def test_convert_intent_tests(
     with patch("home_assistant_datasets.datasets.convert.intents.now") as mock_now:
         mock_now.return_value = FIXED_DATE
         intents.convert_intent_tests(TESTDATA, tmpdir)
-    found_files = [file for file in list(tmpdir.glob("**")) if not file.is_dir()]
+    found_files = [file for file in sorted(list(tmpdir.glob("**"))) if not file.is_dir()]
     assert [file.relative_to(tmpdir) for file in found_files] == snapshot
 
     for found_file in found_files:
