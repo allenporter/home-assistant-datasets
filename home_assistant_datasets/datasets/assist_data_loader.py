@@ -19,6 +19,7 @@ from typing import Any
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
 from mashumaro.config import BaseConfig
+from mashumaro.exceptions import MissingField
 
 from home_assistant_datasets.entity_state import EntityState
 from home_assistant_datasets.yaml_loaders import yaml_decode
@@ -41,12 +42,12 @@ class ToolCall(DataClassYAMLMixin):
     tool_name: str
     """The name of the tool to call."""
 
-    tool_args: dict[str, Any]
+    tool_args: dict[str, Any] | None = None
     """Arguments to the tool call."""
 
     class Config(BaseConfig):
         code_generation_options = ["TO_DICT_ADD_OMIT_NONE_FLAG"]
-        forbid_extra_keys = False
+        forbid_extra_keys = True
         sort_keys = False
         omit_none = True
 
@@ -91,7 +92,7 @@ class Action(DataClassYAMLMixin):
 
 
 @dataclass(kw_only=True, frozen=True)
-class RecordSource:
+class RecordSource(DataClassYAMLMixin):
     """Information about the Record file source."""
 
     record_id: str
@@ -119,7 +120,7 @@ class Record(DataClassYAMLMixin):
 
     class Config(BaseConfig):
         code_generation_options = ["TO_DICT_ADD_OMIT_NONE_FLAG"]
-        sort_keys = False
+        sort_keys = True
         omit_none = True
 
 
@@ -144,7 +145,10 @@ def read_record_sources(dataset_card: DatasetCard) -> Generator[RecordSource]:
 
 def read_record(filename: pathlib.Path) -> Record:
     """Read the dataset record"""
-    return yaml_decode(filename.open(), Record)
+    try:
+        return yaml_decode(filename.open(), Record)
+    except MissingField as err:
+        raise ValueError(f"Dataset record invalid {filename}: {err}") from err
 
 
 def read_dataset_records(

@@ -165,5 +165,10 @@ class ModelOutputWriter:
     def write(self, record: ModelOutput) -> None:
         """Write an eval record."""
         self._eval_output.write_text(
-            yaml.dump(record.to_dict(), sort_keys=False, explicit_start=True)
+            yaml.dump(
+                record.to_dict(),
+                sort_keys=False,
+                explicit_start=True,
+                allow_unicode=True,
+            )
         )

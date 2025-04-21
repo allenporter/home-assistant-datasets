@@ -1,8 +1,10 @@
 """Test library for converting intents."""
 
 from collections.abc import Generator
+import datetime
 import pathlib
 import tempfile
+from unittest.mock import patch
 
 import pytest
 from syrupy import SnapshotAssertion
@@ -40,12 +42,15 @@ def test_fixture_filename_parts(
     )
 
 
-def test_parse_fixtures_as_inventory(
+def test_convert_intent_tests(
     tmpdir: pathlib.Path, snapshot: SnapshotAssertion
 ) -> None:
-    """Test parsing the fixtures as an inventory file."""
+    """Test converting the intent tests to assist datasets."""
+    FIXED_DATE = datetime.datetime(2025, 4, 20, 17, 20)
 
-    intents.convert_intent_tests(TESTDATA, tmpdir)
+    with patch("home_assistant_datasets.datasets.convert.intents.now") as mock_now:
+        mock_now.return_value = FIXED_DATE
+        intents.convert_intent_tests(TESTDATA, tmpdir)
     found_files = [file for file in list(tmpdir.glob("**")) if not file.is_dir()]
     assert [file.relative_to(tmpdir) for file in found_files] == snapshot
 

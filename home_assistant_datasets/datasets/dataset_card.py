@@ -5,6 +5,7 @@ from functools import lru_cache
 import pathlib
 from typing import Any
 
+from mashumaro.config import BaseConfig
 from mashumaro.mixins.yaml import DataClassYAMLMixin
 
 from home_assistant_datasets.yaml_loaders import yaml_decode
@@ -77,6 +78,11 @@ class DatasetCard(DataClassYAMLMixin):
                 f"Could not find any dataset files in path: {str(self.dataset_path)}"
             )
         return filenames
+
+    class Config(BaseConfig):
+        # code_generation_options = [TO_DICT_ADD_OMIT_NONE_FLAG]
+        sort_keys = True
+        omit_none = True
 
 
 @lru_cache
