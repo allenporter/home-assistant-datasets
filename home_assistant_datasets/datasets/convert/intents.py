@@ -63,6 +63,7 @@ SUPPORTED_DOMAINS = {
     "binary_sensor",
     "climate",
     "fan",
+    "homeassistant",
     "light",
     "lock",
     "media_player",
@@ -75,7 +76,6 @@ SUPPORTED_DOMAINS = {
 UNSUPPORTED_DOMAINS = {
     "_test",
     "assist_satellite",
-    "homeassistant",  # XXX: What are these?
     "person",
     "weather",  # TODO: Can this be supported?
     # TODO: Add support for these to synthetic_home
@@ -86,7 +86,7 @@ UNSUPPORTED_DOMAINS = {
 # All domains must be explicitly supported or unsupported.
 SUPPORTED_INTENTS = {
     "HassTurnOn",
-    # XX: Are these on?
+    # TODO: Confirm if the get / set temperature calls are actually supported
     "HassClimateGetTemperature",
     "HassClimateSetTemperature",
     "HassLightSet",
@@ -108,6 +108,21 @@ UNSUPPORTED_INTENTS = {
     # We only support 'todo' platform entities
     "HassShoppingListAddItem",
     "HassShoppingListCompleteItem",
+    # TODO: Support timers
+    "HassCancelAllTimers",
+    "HassCancelTimer",
+    "HassDecreaseTimer",
+    "HassIncreaseTimer",
+    "HassStartTimer",
+    "HassTimerStatus",
+    "HassUnpauseTimer",
+
+    # Other requests that are not supported
+    "HassGetCurrentDate",
+    "HassGetCurrentTime",
+    "HassNevermind",
+    "HassPauseTimer",
+    "HassRespond",
 }
 
 
