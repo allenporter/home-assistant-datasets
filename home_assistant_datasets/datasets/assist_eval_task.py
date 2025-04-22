@@ -31,7 +31,7 @@ class EvalTask(DataClassYAMLMixin):
     record_source: RecordSource
     """Identifier for the synthetic home task."""
 
-    category: str
+    category: str | list[str]
     """Category used to describe the evaluation task when reporting"""
 
     input_text: str
@@ -42,6 +42,13 @@ class EvalTask(DataClassYAMLMixin):
 
     task_num: int | None = None
     """If running multiple times, the task number under test."""
+
+    @property
+    def categories(self) -> list[str]:
+        """Labels used for slicing model predictions."""
+        if isinstance(self.category, list):
+            return self.category
+        return [self.category]
 
     @property
     def task_id(self) -> str:

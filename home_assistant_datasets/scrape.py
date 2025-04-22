@@ -138,7 +138,7 @@ class ModelOutput(DataClassYAMLMixin):
     model_id: str | None = None
     """The model identifier used to generate the prediction."""
 
-    category: str
+    category: str | list[str]
     """A label used for slicing model predictions."""
 
     task: dict[str, Any]
@@ -149,6 +149,13 @@ class ModelOutput(DataClassYAMLMixin):
 
     context: dict[str, Any]
     """Additional context about the prediction run, e.g. internal model call details."""
+
+    @property
+    def categories(self) -> list[str]:
+        """Labels used for slicing model predictions."""
+        if isinstance(self.category, list):
+            return self.category
+        return [self.category]
 
     class Config(BaseConfig):
         omit_none = True
