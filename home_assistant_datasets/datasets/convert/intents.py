@@ -187,7 +187,7 @@ def convert_intent_test(intent_test_file: pathlib.Path) -> Record | None:
         _LOGGER.debug("Skipping intent with no actions")
         return None
     return Record(
-        category=domain,
+        category=[domain],
         tests=actions,
     )
 

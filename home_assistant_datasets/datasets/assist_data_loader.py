@@ -106,7 +106,7 @@ class RecordSource(DataClassYAMLMixin):
 class Record(DataClassYAMLMixin):
     """Represents an item in the dataset used to configure evaluation."""
 
-    category: str
+    category: str | list[str]
     """Category used to describe the evaluation task when reporting"""
 
     tests: list[Action] | None = field(default_factory=list)
@@ -117,6 +117,13 @@ class Record(DataClassYAMLMixin):
 
     Attribute is set at runtime after being loaded.
     """
+
+    @property
+    def categories(self) -> list[str]:
+        """Labels used for slicing model predictions."""
+        if isinstance(self.category, list):
+            return self.category
+        return [self.category]
 
     class Config(BaseConfig):
         code_generation_options = ["TO_DICT_ADD_OMIT_NONE_FLAG"]
@@ -159,7 +166,9 @@ def read_dataset_records(
     for record_source in read_record_sources(dataset_card):
         assert record_source.record_path is not None
         record = read_record(record_source.record_path)
-        if categories and record.category not in categories:
+        if categories and not any(
+            category in categories for category in record.categories
+        ):
             _LOGGER.debug(
                 "Skipping record with category %s (not in %s)",
                 record.category,
