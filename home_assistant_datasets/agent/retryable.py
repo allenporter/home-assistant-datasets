@@ -6,7 +6,7 @@ import json
 from typing import Any
 
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 
 from .agent import ConversationAgent
 
@@ -43,7 +43,12 @@ class RetryableAgent(ConversationAgent):
             try:
                 async with asyncio.timeout(TIMEOUT):
                     response = await self._agent.async_process(hass, text)
-            except (HomeAssistantError, TypeError, json.JSONDecodeError) as err:
+            except (
+                HomeAssistantError,
+                ServiceValidationError,
+                TypeError,
+                json.JSONDecodeError,
+            ) as err:
                 response = str(err)
             except (TimeoutError, asyncio.CancelledError):
                 _LOGGER.debug("Timeout error (tries=%s)", self._tries)

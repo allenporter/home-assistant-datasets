@@ -1,54 +1,87 @@
 # serializer version: 1
-# name: test_parse_fixtures_as_inventory
+# name: test_convert_intent_tests
   list([
+    PosixPath('dataset_card.yaml'),
     PosixPath('en/_fixtures.yaml'),
     PosixPath('en/cover_HassTurnOn.yaml'),
   ])
 # ---
-# name: test_parse_fixtures_as_inventory.1
+# name: test_convert_intent_tests.1
   '''
   ---
-  language: "en"
-  floors:
-    - name: "Upstairs"
-      id: "upstairs_id"
-  areas:
-    - name: "Guest Room"
-      id: "guest_room_id"
-      # prepositional floor
-      floor: "upstairs_id"
+  description: '
   
-  entities:
-    - name: "Shade Left"
-      id: "cover.shade_left"
-      area: "guest_room_id"
-      state: "open"
-      attributes:
-        device_class: shade
+    A dataset built form the Home Assistant intents repo, modeled after existing
   
-  timers:
-    - name: "pizza"
-      start_minutes: 30
-      total_seconds_left: 1505
-      rounded_hours_left: 0
-      rounded_minutes_left: 25
-      rounded_seconds_left: 0
+    NLP test cases for the assistant pipeline.
+  
+  
+    This dataset has been adapted for evaluating the Home Assistant LLM API ([blog post](https://developers.home-assistant.io/blog/2024/05/20/llm-api/))
+  
+    imported from the home assistant intents repo.
+  
+  
+    This is mean to reuse the tests that already exist for the NLP, which turns out
+  
+    to expose some weaknesses or differences of interpretation of tasks. It also is
+  
+    a very large home which is challenging for smaller models given the ~100 or so
+  
+    devices. Lastly, there are some tests that have subtle mismatches that are reasonable
+    (e.g.
+  
+    "minimum brightness" tests)
+  
+  
+    This dataset uses the `assist` format. See the `assist` dataset card and README
+    for
+  
+    additional details about the format and information about running the evaluation.
+  
+  
+    Updated: 2025-04-20T17:20:00
+  
+    '
+  name: intents
+  urls:
+  - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/intents
+  - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist
+  - https://github.com/home-assistant/intents
   
   '''
 # ---
-# name: test_parse_fixtures_as_inventory.2
+# name: test_convert_intent_tests.2
   '''
+  ---
+  language: en
+  areas:
+  - name: Guest Room
+    id: guest_room_id
+    floor: upstairs_id
+  devices: []
+  entities:
+  - name: Shade Left
+    id: cover.shade_left
+    area: guest_room_id
+    state: open
+    attributes:
+      device_class: shade
+  
+  '''
+# ---
+# name: test_convert_intent_tests.3
+  '''
+  ---
   category: cover
   tests:
-  - expect_response:
-    - Opened the garage
-    expect_tool_call:
-      tool_args:
-        device_class: garage
-        domain: cover
-      tool_name: HassTurnOn
-    sentences:
+  - sentences:
     - open the garage door
+    expect_response: Opened the garage
+    expect_tool_call:
+      tool_name: HassTurnOn
+      tool_args:
+        domain: cover
+        device_class: garage
   
   '''
 # ---

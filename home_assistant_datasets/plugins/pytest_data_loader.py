@@ -7,6 +7,7 @@ under test.
 import pathlib
 import logging
 import pytest
+import random
 
 import yaml
 
@@ -32,6 +33,11 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         "--count",
         help="Override the default number of times to run each task in the dataset.",
     )
+    parser.addoption(
+        "--sample",
+        type=int,
+        help="If set, will sample this many records from the datasaet.",
+    )
 
 
 def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
@@ -43,6 +49,7 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
         raise ValueError(
             "Missing required plugin dependency 'home_assistant_datasets.plugins.pytest_dataset'"
         )
+    sample = metafunc.config.getoption("sample")
 
     # The actual "task" that will be scraped is a spoke sentence. We expand the
     # dataset records into these invidiaul tasks.
@@ -66,6 +73,9 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
                 f"Task record file '{str(record.record_source.record_path)}' was invalid: {err}"
             ) from err
         tasks.extend(eval_tasks)
+
+    if sample is not None:
+        tasks = random.sample(tasks, sample)
 
     metafunc.parametrize(
         "eval_task", [pytest.param(task, id=task.task_id) for task in tasks]

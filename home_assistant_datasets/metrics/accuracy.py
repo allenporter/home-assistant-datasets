@@ -40,7 +40,7 @@ class AccuracyTracker:
 
     def finish(self) -> dict[str, Any]:
         """Return the report summary"""
-        good_ratio = self.good / self.total
+        good_ratio = self.good / self.total if self.total > 0 else 0
         ci = confidence_interval(good_ratio, self.total)
         return {
             "good_percent": f"{100*good_ratio:0.1f}%",
@@ -53,10 +53,14 @@ class AccuracyTracker:
 class AccuracySummary(TaskResultWriter):
     """Handles creation of a summarized eval report."""
 
-    def __init__(self, fd: io.TextIOBase | None, summary_key: str) -> None:
+    def __init__(self, fd: io.TextIOBase | None, summary_key: str | list[str]) -> None:
         """Initialize ReportWriter."""
         self._fd = fd
-        self.summary_key = summary_key
+        self.summary_keys = (
+            tuple(summary_key)
+            if isinstance(summary_key, list)
+            else tuple([summary_key])
+        )
         self.accuracy: dict[str, AccuracyTracker] = {}
 
     def start(self) -> None:
@@ -65,7 +69,12 @@ class AccuracySummary(TaskResultWriter):
 
     def row(self, scrape: ScrapeRecord, result: TaskResult) -> None:
         """Handle a report row collecting the # of good labels for each model."""
-        key = getattr(scrape, self.summary_key)
+        key = "-".join(
+            [
+                getattr(scrape, summary_key, getattr(result, summary_key, "unknown"))
+                for summary_key in self.summary_keys
+            ]
+        )
         if key not in self.accuracy:
             self.accuracy[key] = AccuracyTracker()
         self.accuracy[key].row(result)
@@ -74,10 +83,11 @@ class AccuracySummary(TaskResultWriter):
         """Print the report summary"""
         sorted_keys = sorted(self.accuracy.keys())
         items = []
+        summary_key_name = "-".join(self.summary_keys)
         for key in sorted_keys:
             accuracy = self.accuracy[key]
             data = {
-                self.summary_key: key,
+                summary_key_name: key,
                 **accuracy.finish(),
             }
             items.append(data)
