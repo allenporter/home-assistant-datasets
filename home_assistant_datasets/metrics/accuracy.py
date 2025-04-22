@@ -74,15 +74,16 @@ class AccuracySummary(TaskResultWriter):
         # multiple categories.
         key_iters = []
         for summary_key in self.summary_keys:
-            report_data = scrape.as_report_data()
-
-            key_value = getattr(scrape, summary_key, getattr(result, summary_key, None))
-            if key_value is None:
-                key_value = scrape.as_report_data().get(summary_key)
-            if key_value is None:
-                key_value = result.as_report_data().get(summary_key)
-            if key_value is None:
-                key_value = "unknown"
+            if (
+                key_value := getattr(
+                    scrape, summary_key, getattr(result, summary_key, None)
+                )
+            ) is None:
+                report_data = {
+                    **scrape.as_report_data(),
+                    **result.as_report_data(),
+                }
+                key_value = report_data.get(summary_key, "unknown")
 
             if isinstance(key_value, list):
                 key_iters.append(key_value)
