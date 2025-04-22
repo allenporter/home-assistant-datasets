@@ -37,9 +37,11 @@ def test_expect_response(model_output: ModelOutput) -> None:
     assert len(expect_response) > 0, "Expect response should not be empty"
     # Check if the response contains any of the expected words
     text = model_output.response.lower()
-    assert any(
-        word.lower() in text for word in expect_response
-    ), f"Response does not contain expected words '{model_output.response}' did not contain any of {expect_response}"
+    if not any(
+        word.lower() in text
+        for word in expect_response
+    ):
+        raise ValueError(f"Response '{model_output.response}' did not contain any of {expect_response}")
 
 
 @pytest.mark.eval_model_outputs
