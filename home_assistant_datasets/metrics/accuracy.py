@@ -1,6 +1,7 @@
 """Module for tracking model response accuracy."""
 
 import math
+import itertools
 import io
 from typing import Any
 import yaml
@@ -69,15 +70,31 @@ class AccuracySummary(TaskResultWriter):
 
     def row(self, scrape: ScrapeRecord, result: TaskResult) -> None:
         """Handle a report row collecting the # of good labels for each model."""
-        key = "-".join(
-            [
-                getattr(scrape, summary_key, getattr(result, summary_key, "unknown"))
-                for summary_key in self.summary_keys
-            ]
-        )
-        if key not in self.accuracy:
-            self.accuracy[key] = AccuracyTracker()
-        self.accuracy[key].row(result)
+        # Build up the iterables that make up the keys. This is primarily to allow
+        # multiple categories.
+        key_iters = []
+        for summary_key in self.summary_keys:
+            if (
+                key_value := getattr(
+                    scrape, summary_key, getattr(result, summary_key, None)
+                )
+            ) is None:
+                report_data = scrape.as_report_data()
+                if more_data := result.as_report_data():
+                    report_data.update(more_data)
+
+                key_value = report_data.get(summary_key, "unknown")
+
+            if isinstance(key_value, list):
+                key_iters.append(key_value)
+            else:
+                key_iters.append([key_value])
+
+        for parts in itertools.product(*key_iters):
+            key = "-".join(parts)
+            if key not in self.accuracy:
+                self.accuracy[key] = AccuracyTracker()
+            self.accuracy[key].row(result)
 
     def finish(self) -> None:
         """Print the report summary"""
