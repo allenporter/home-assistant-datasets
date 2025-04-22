@@ -28,9 +28,11 @@ $ uv pip install -e /workspaces/core
 ## Synthetic Home Custom Component (required)
 
 You will need the [synthetic-home custom component](https://github.com/allenporter/home-assistant-synthetic-home)
-and you can either install it in a separate directory like this:
+and need to configure `PYTHONPATH` so that Home Assistant can find it. This is
+typical setup for a custom component in a spearate directory:
 
 ```bash
+$ git clone https://github.com/allenporter/home-assistant-synthetic-home
 $ export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home/"
 ```
 
