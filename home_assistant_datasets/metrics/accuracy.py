@@ -79,10 +79,10 @@ class AccuracySummary(TaskResultWriter):
                     scrape, summary_key, getattr(result, summary_key, None)
                 )
             ) is None:
-                report_data = {
-                    **scrape.as_report_data(),
-                    **result.as_report_data(),
-                }
+                report_data = scrape.as_report_data()
+                if more_data := result.as_report_data():
+                    report_data.update(more_data)
+
                 key_value = report_data.get(summary_key, "unknown")
 
             if isinstance(key_value, list):
