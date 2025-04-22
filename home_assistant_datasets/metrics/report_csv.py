@@ -39,7 +39,12 @@ class CsvWriter(TaskResultWriter):
         vals = []
         for col in self._cols:
             raw_value = item_row[col]
-            val = str(raw_value) if raw_value is not None else ""
+            val = ""
+            if raw_value is not None:
+                if isinstance(raw_value, list):
+                    val = ",".join(raw_value)
+                else:
+                    val = str(raw_value)
             # Quote/escape characters
             val = val.replace('"', "'")
             val = val.replace("\n", "\\n")

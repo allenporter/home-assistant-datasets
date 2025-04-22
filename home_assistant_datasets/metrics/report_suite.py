@@ -49,6 +49,11 @@ def create_model_test_name_accuracy(fd: io.TextIOBase | None) -> AccuracySummary
     return AccuracySummary(fd, summary_key=["model_id", "task_name"])
 
 
+def create_model_category_accuracy(fd: io.TextIOBase | None) -> AccuracySummary:
+    """Create an accuracy summary report aggregated by model id."""
+    return AccuracySummary(fd, summary_key=["model_id", "category"])
+
+
 DEFAULT_SCRAPE_REPORTS: list[tuple[str, Callable[[Any], ScrapeRecordWriter]]] = [
     ("reports-token-stats.yaml", create_model_token_stats),
 ]
@@ -56,6 +61,7 @@ DEFAULT_SCRAPE_REPORTS: list[tuple[str, Callable[[Any], ScrapeRecordWriter]]] = 
 DEFAULT_TASK_REPORTS: list[tuple[str, Callable[[Any], TaskResultWriter]]] = [
     ("reports.yaml", create_model_accuracy),
     ("reports-by-model-test-name.yaml", create_model_test_name_accuracy),
+    ("reports-by-model-category.yaml", create_model_category_accuracy),
     ("reports-by-test-name.yaml", create_test_name_accuracy),
     ("reports-by-task-id.yaml", create_task_id_accuracy),
     ("report.csv", create_csv_writer),
