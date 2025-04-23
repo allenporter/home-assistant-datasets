@@ -1,0 +1,262 @@
+---
+uuid: c44777c9-f24b-4582-9550-f8ec9f162272
+task_id: home1_us_lock_smart_lock-lock_smart_lock-1
+model_id: claude-3-5-haiku
+category: lock
+task:
+  input_text: Lock smart lock
+  expect_changes:
+    lock.smart_lock:
+      state: locked
+      attributes: null
+response: I apologize for the persistent error. The lock is currently unlocked, but
+  I'm having difficulty executing the lock command through the standard tool. This
+  might require direct intervention or checking the system's specific lock mechanism.
+  I recommend manually locking the Smart Lock or consulting with your smart home system
+  administrator to resolve the locking issue.
+context:
+  unexpected_states:
+    lock.smart_lock:
+      expected:
+        state: locked
+      got:
+        state: unlocked
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Lock smart lock
+      context:
+        id: 01JSGGT07ABD5R81F0KH5QHQXT
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 05:09:24.330955+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          Current time is 22:09:24. Today's date is 2025-04-22.
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Smart Lock
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Tamper
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock
+            domain: lock
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: sensor
+            areas: Entry
+      - role: user
+        content: Lock smart lock
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: I'll help you lock the Smart Lock in the Entry area.
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            name: '["Smart Lock"]'
+            domain:
+            - lock
+          id: toolu_01CwkBYqZWPYscFF4z4qh6eH
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: toolu_01CwkBYqZWPYscFF4z4qh6eH
+        tool_name: HassTurnOn
+        tool_result:
+          error: MatchFailedError
+          error_text: '<MatchFailedError result=MatchTargetsResult(is_match=False,
+            no_match_reason=<MatchFailedReason.NAME: 1>, states=[], no_match_name=None,
+            areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''["Smart
+            Lock"]'', area_name=None, floor_name=None, domains={''lock''}, device_classes=None,
+            features=None, states=None, assistant=''conversation'', allow_duplicate_names=False,
+            single_target=False), preferences=MatchTargetsPreferences(area_id=None,
+            floor_id=None)>'
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: 'I apologize for the error. Let me try again by specifying the area:'
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            name: '["Smart Lock"]'
+            domain:
+            - lock
+            area: '["Entry"]'
+          id: toolu_01Uif5NQa2Z9EVVWUYJ6upMN
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: toolu_01Uif5NQa2Z9EVVWUYJ6upMN
+        tool_name: HassTurnOn
+        tool_result:
+          error: MatchFailedError
+          error_text: '<MatchFailedError result=MatchTargetsResult(is_match=False,
+            no_match_reason=<MatchFailedReason.NAME: 1>, states=[], no_match_name=None,
+            areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''["Smart
+            Lock"]'', area_name=''["Entry"]'', floor_name=None, domains={''lock''},
+            device_classes=None, features=None, states=None, assistant=''conversation'',
+            allow_duplicate_names=False, single_target=False), preferences=MatchTargetsPreferences(area_id=None,
+            floor_id=None)>'
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: 'I''ll verify the current state of the lock first:'
+        tool_calls:
+        - tool_name: GetLiveContext
+          tool_args: {}
+          id: toolu_01XrAb65VQVGAnvnEJbZhXcP
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: toolu_01XrAb65VQVGAnvnEJbZhXcP
+        tool_name: GetLiveContext
+        tool_result:
+          success: true
+          result: |
+            Live Context: An overview of the areas and the devices in this smart home:
+            - names: Smart Lock
+              domain: binary_sensor
+              state: 'off'
+              areas: Entry
+              attributes:
+                device_class: lock
+            - names: Smart Lock Tamper
+              domain: binary_sensor
+              state: 'off'
+              areas: Entry
+              attributes:
+                device_class: tamper
+            - names: Smart Lock Battery
+              domain: binary_sensor
+              state: 'off'
+              areas: Entry
+              attributes:
+                device_class: battery
+            - names: Smart Lock
+              domain: lock
+              state: unlocked
+              areas: Entry
+            - names: Smart Lock Battery
+              domain: sensor
+              state: '90'
+              areas: Entry
+              attributes:
+                unit_of_measurement: '%'
+                device_class: battery
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: 'Now, I''ll lock the Smart Lock:'
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            name: '["Smart Lock"]'
+            domain:
+            - lock
+          id: toolu_01EtQzEsiksvvsokGf3VcHwU
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: toolu_01EtQzEsiksvvsokGf3VcHwU
+        tool_name: HassTurnOn
+        tool_result:
+          error: MatchFailedError
+          error_text: '<MatchFailedError result=MatchTargetsResult(is_match=False,
+            no_match_reason=<MatchFailedReason.NAME: 1>, states=[], no_match_name=None,
+            areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''["Smart
+            Lock"]'', area_name=None, floor_name=None, domains={''lock''}, device_classes=None,
+            features=None, states=None, assistant=''conversation'', allow_duplicate_names=False,
+            single_target=False), preferences=MatchTargetsPreferences(area_id=None,
+            floor_id=None)>'
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: I apologize for the persistent error. The lock is currently unlocked,
+          but I'm having difficulty executing the lock command through the standard
+          tool. This might require direct intervention or checking the system's specific
+          lock mechanism. I recommend manually locking the Smart Lock or consulting
+          with your smart home system administrator to resolve the locking issue.
+        tool_calls: null
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fb03eb1f100>, ''domain'': All(<function ensure_list at 0x7fb04190a160>,
+          [<function string at 0x7fb04190b7e0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fb04190a160>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''outlet'', ''switch'', ''tv'', ''speaker'', ''receiver''])],
+          msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fb03eb1f100>, ''domain'': All(<function ensure_list at 0x7fb04190a160>,
+          [<function string at 0x7fb04190b7e0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fb04190a160>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''outlet'', ''switch'', ''tv'', ''speaker'', ''receiver''])],
+          msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fb04190b7e0>}'
+      - name: GetLiveContext
+        description: 'Use this tool when the user asks a question about the CURRENT
+          state, value, or mode of a specific device, sensor, entity, or area in the
+          smart home, and the answer can be improved with real-time data not available
+          in the static device overview list. '
+        parameters: '{}'
+    timestamp: 2025-04-23 05:09:24.333532+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        name: '["Smart Lock"]'
+        domain:
+        - lock
+    timestamp: 2025-04-23 05:09:27.301010+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        name: '["Smart Lock"]'
+        domain:
+        - lock
+        area: '["Entry"]'
+    timestamp: 2025-04-23 05:09:29.905359+00:00
+  - event_type: tool_call
+    data:
+      tool_name: GetLiveContext
+      tool_args: {}
+    timestamp: 2025-04-23 05:09:31.968635+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        name: '["Smart Lock"]'
+        domain:
+        - lock
+    timestamp: 2025-04-23 05:09:35.300422+00:00
+  duration_ms: 14681.852
+  tries: 1
