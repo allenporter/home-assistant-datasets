@@ -11,7 +11,7 @@ def test_expected_states(model_output: ModelOutput) -> None:
     """Evaluate the states of the scraped model output."""
 
     # The task is expecting a specific state change to happen
-    if model_output.task.get("expected_states"):
+    if model_output.task.get("expect_changes"):
         unexpected_states = model_output.context["unexpected_states"]
         assert not unexpected_states
         assert (
