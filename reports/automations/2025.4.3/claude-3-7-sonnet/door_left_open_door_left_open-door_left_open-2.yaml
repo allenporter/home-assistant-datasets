@@ -1,0 +1,202 @@
+---
+uuid: cb94ae88-0506-42fb-ae2c-681fc62fc3ef
+task_id: door_left_open_door_left_open-door_left_open-2
+model_id: claude-3-7-sonnet
+category: media_player
+task:
+  input_text: |
+    # Door left open
+
+    ## Problem statement
+
+    Create an blueprint automation to play an alert on the speaker when the door is
+    left open.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+    - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input           | Selector Type | Description                                                                           |
+    | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+    | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+    | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+    | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+    The automation should play the selected media when the door has been open for the specified duration.
+response: "```yaml\n# This blueprint creates an automation that plays an alert on\
+  \ a media player\n# when a door has been left open for a specified duration.\n\n\
+  blueprint:\n  name: \"Door Left Open Alert\"\n  description: \"Play an alert on\
+  \ a speaker when a door has been left open for too long.\"\n  domain: automation\n\
+  \  input:\n    door_sensor:\n      name: Door Sensor\n      description: \"Select\
+  \ the door sensor that will trigger the alert\"\n      selector:\n        entity:\n\
+  \          domain: binary_sensor\n          multiple: false\n    alert_media:\n\
+  \      name: Alert Media\n      description: \"Select the media player and sound\
+  \ to play when the door is left open\"\n      selector:\n        media:\n    open_duration:\n\
+  \      name: Open Duration\n      description: \"Time the door can be open before\
+  \ the alert plays\"\n      default: 300 # 5 minutes\n      selector:\n        duration:\n\
+  \n# Define the automation logic\nmode: single\n# We'll use a reset mode of 'single'\
+  \ to ensure only one instance runs at a time\n\nvariables:\n  # Store our inputs\
+  \ in variables for easier access\n  door_sensor: !input door_sensor\n  alert_media:\
+  \ !input alert_media\n  open_duration: !input open_duration\n  \ntrigger:\n  # This\
+  \ trigger activates when the door state changes to open\n  - platform: state\n \
+  \   entity_id: !input door_sensor\n    to: 'on'\n    # The 'on' state typically\
+  \ represents an open door for most binary sensors\n    \ncondition:\n  # No initial\
+  \ conditions needed as we'll handle timing in the actions\n\naction:\n  # Here's\
+  \ the sequence of actions to take when the door opens\n  - wait_for_trigger:\n \
+  \     # Wait for either the door to close or the specified time to pass\n      -\
+  \ platform: state\n        entity_id: !input door_sensor\n        to: 'off'\n  \
+  \      # 'off' state typically represents a closed door\n    timeout: \"{{ open_duration\
+  \ }}\"\n    continue_on_timeout: true\n    \n  - if:\n      # Check if the door\
+  \ is still open after the wait period\n      - condition: state\n        entity_id:\
+  \ !input door_sensor\n        state: 'on'\n    then:\n      # If door is still open,\
+  \ play the alert media\n      - service: media_player.play_media\n        data:\n\
+  \          entity_id: \"{{ alert_media.entity_id }}\"\n          media_content_id:\
+  \ \"{{ alert_media.media_content_id }}\"\n          media_content_type: \"{{ alert_media.media_content_type\
+  \ }}\"\n        metadata: {}\n      # You might want to add a repeat capability\
+  \ here\n\n      # Optional: repeat the alert every X minutes until the door is closed\n\
+  \      # This is commented out but can be enabled if needed\n      # - repeat:\n\
+  \      #     while:\n      #       - condition: state\n      #         entity_id:\
+  \ !input door_sensor\n      #         state: 'on'\n      #     sequence:\n     \
+  \ #       - delay: 300  # 5 minutes between repeat alerts\n      #       - service:\
+  \ media_player.play_media\n      #         data:\n      #           entity_id: \"\
+  {{ alert_media.entity_id }}\"\n      #           media_content_id: \"{{ alert_media.media_content_id\
+  \ }}\"\n      #           media_content_type: \"{{ alert_media.media_content_type\
+  \ }}\"\n      #         metadata: {}\n```"
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Door left open
+
+        ## Problem statement
+
+        Create an blueprint automation to play an alert on the speaker when the door is
+        left open.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+        - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input           | Selector Type | Description                                                                           |
+        | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+        | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+        | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+        | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+        The automation should play the selected media when the door has been open for the specified duration.
+      context:
+        id: 01JSGD1BV22815A9WT4JH33N8X
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:03:31.299209+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:03:31. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Door left open
+
+          ## Problem statement
+
+          Create an blueprint automation to play an alert on the speaker when the door is
+          left open.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+          - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input           | Selector Type | Description                                                                           |
+          | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+          | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+          | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+          | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+          The automation should play the selected media when the door has been open for the specified duration.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: "```yaml\n# This blueprint creates an automation that plays an alert\
+          \ on a media player\n# when a door has been left open for a specified duration.\n\
+          \nblueprint:\n  name: \"Door Left Open Alert\"\n  description: \"Play an\
+          \ alert on a speaker when a door has been left open for too long.\"\n  domain:\
+          \ automation\n  input:\n    door_sensor:\n      name: Door Sensor\n    \
+          \  description: \"Select the door sensor that will trigger the alert\"\n\
+          \      selector:\n        entity:\n          domain: binary_sensor\n   \
+          \       multiple: false\n    alert_media:\n      name: Alert Media\n   \
+          \   description: \"Select the media player and sound to play when the door\
+          \ is left open\"\n      selector:\n        media:\n    open_duration:\n\
+          \      name: Open Duration\n      description: \"Time the door can be open\
+          \ before the alert plays\"\n      default: 300 # 5 minutes\n      selector:\n\
+          \        duration:\n\n# Define the automation logic\nmode: single\n# We'll\
+          \ use a reset mode of 'single' to ensure only one instance runs at a time\n\
+          \nvariables:\n  # Store our inputs in variables for easier access\n  door_sensor:\
+          \ !input door_sensor\n  alert_media: !input alert_media\n  open_duration:\
+          \ !input open_duration\n  \ntrigger:\n  # This trigger activates when the\
+          \ door state changes to open\n  - platform: state\n    entity_id: !input\
+          \ door_sensor\n    to: 'on'\n    # The 'on' state typically represents an\
+          \ open door for most binary sensors\n    \ncondition:\n  # No initial conditions\
+          \ needed as we'll handle timing in the actions\n\naction:\n  # Here's the\
+          \ sequence of actions to take when the door opens\n  - wait_for_trigger:\n\
+          \      # Wait for either the door to close or the specified time to pass\n\
+          \      - platform: state\n        entity_id: !input door_sensor\n      \
+          \  to: 'off'\n        # 'off' state typically represents a closed door\n\
+          \    timeout: \"{{ open_duration }}\"\n    continue_on_timeout: true\n \
+          \   \n  - if:\n      # Check if the door is still open after the wait period\n\
+          \      - condition: state\n        entity_id: !input door_sensor\n     \
+          \   state: 'on'\n    then:\n      # If door is still open, play the alert\
+          \ media\n      - service: media_player.play_media\n        data:\n     \
+          \     entity_id: \"{{ alert_media.entity_id }}\"\n          media_content_id:\
+          \ \"{{ alert_media.media_content_id }}\"\n          media_content_type:\
+          \ \"{{ alert_media.media_content_type }}\"\n        metadata: {}\n     \
+          \ # You might want to add a repeat capability here\n\n      # Optional:\
+          \ repeat the alert every X minutes until the door is closed\n      # This\
+          \ is commented out but can be enabled if needed\n      # - repeat:\n   \
+          \   #     while:\n      #       - condition: state\n      #         entity_id:\
+          \ !input door_sensor\n      #         state: 'on'\n      #     sequence:\n\
+          \      #       - delay: 300  # 5 minutes between repeat alerts\n      #\
+          \       - service: media_player.play_media\n      #         data:\n    \
+          \  #           entity_id: \"{{ alert_media.entity_id }}\"\n      #     \
+          \      media_content_id: \"{{ alert_media.media_content_id }}\"\n      #\
+          \           media_content_type: \"{{ alert_media.media_content_type }}\"\
+          \n      #         metadata: {}\n```"
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:03:31.305525+00:00
+  duration_ms: 12588.15
+  tries: 1

@@ -1,0 +1,206 @@
+---
+uuid: 733a778b-8549-4090-8bd1-fb0f6fe16205
+task_id: door_left_open_door_left_open-door_left_open-3
+model_id: gemini-2.0-flash-lite
+category: media_player
+task:
+  input_text: |
+    # Door left open
+
+    ## Problem statement
+
+    Create an blueprint automation to play an alert on the speaker when the door is
+    left open.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+    - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input           | Selector Type | Description                                                                           |
+    | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+    | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+    | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+    | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+    The automation should play the selected media when the door has been open for the specified duration.
+response: |-
+  ```yaml
+  blueprint:
+    name: Door Left Open Alert
+    description: Play an alert when a door has been left open for a specified duration.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        selector:
+          entity:
+            domain: binary_sensor
+            device_class: door
+        description: The door sensor to monitor.
+      alert_media:
+        name: Alert Media
+        selector:
+          media: {}
+        description: The media to play as an alert.
+      open_duration:
+        name: Open Duration
+        selector:
+          duration: {}
+        description: The duration the door must be open before playing the alert.
+
+  trigger:
+    - platform: state
+      entity_id: !input 'door_sensor'
+      from: 'off'  # Trigger when the door transitions from closed to open.
+      to: 'on'
+      for: !input 'open_duration'
+
+  action:
+    - alias: "Play Alert"
+      service: media_player.play_media
+      data:
+        entity_id: "{{ alert_media.entity_id }}" # Use the entity_id from the media selector
+        media_content_id: "{{ alert_media.media_content_id }}" # Use the media_content_id from the media selector
+        media_content_type: "{{ alert_media.media_content_type }}" # Use the media_content_type from the media selector
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Door left open
+
+        ## Problem statement
+
+        Create an blueprint automation to play an alert on the speaker when the door is
+        left open.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+        - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input           | Selector Type | Description                                                                           |
+        | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+        | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+        | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+        | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+        The automation should play the selected media when the door has been open for the specified duration.
+      context:
+        id: 01JSGDNRHW28DN189RH0EPFMM9
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:14:39.676770+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:14:39. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Door left open
+
+          ## Problem statement
+
+          Create an blueprint automation to play an alert on the speaker when the door is
+          left open.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+          - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input           | Selector Type | Description                                                                           |
+          | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+          | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+          | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+          | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+          The automation should play the selected media when the door has been open for the specified duration.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Door Left Open Alert
+            description: Play an alert when a door has been left open for a specified duration.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    device_class: door
+                description: The door sensor to monitor.
+              alert_media:
+                name: Alert Media
+                selector:
+                  media: {}
+                description: The media to play as an alert.
+              open_duration:
+                name: Open Duration
+                selector:
+                  duration: {}
+                description: The duration the door must be open before playing the alert.
+
+          trigger:
+            - platform: state
+              entity_id: !input 'door_sensor'
+              from: 'off'  # Trigger when the door transitions from closed to open.
+              to: 'on'
+              for: !input 'open_duration'
+
+          action:
+            - alias: "Play Alert"
+              service: media_player.play_media
+              data:
+                entity_id: "{{ alert_media.entity_id }}" # Use the entity_id from the media selector
+                media_content_id: "{{ alert_media.media_content_id }}" # Use the media_content_id from the media selector
+                media_content_type: "{{ alert_media.media_content_type }}" # Use the media_content_type from the media selector
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:14:39.678334+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 351
+        cached_input_tokens: 0
+        output_tokens: 330
+    timestamp: 2025-04-23 04:14:41.904959+00:00
+  duration_ms: 2228.559
+  tries: 1

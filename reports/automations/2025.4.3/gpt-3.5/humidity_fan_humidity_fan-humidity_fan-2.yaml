@@ -1,0 +1,174 @@
+---
+uuid: ad60d9c6-2627-4207-9af8-3ab6b1102340
+task_id: humidity_fan_humidity_fan-humidity_fan-2
+model_id: gpt-3.5
+category: fan
+task:
+  input_text: |
+    # Humidity Fan
+
+    ## Problem statement
+
+    Create a blueprint automation to turn on the fan based on the value of the humidity sensor.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the bathroom exhaust fan when the bathroom humidty is above 60%
+    - Make sure the garage does not get too humid
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input               | Description                                                           |
+    | ------------------- | --------------------------------------------------------------------- |
+    | `humidity_sensor` | A `sensor` entity that is a humidty sensor that triggers the automation. |
+    | `humidity_level` | A `number` selector to set the value used as the trigger. |
+    | `fan_entity`     | A `fan` entity to turn on when the automation fires. |
+
+    The automation should trigger when the `humidity_sensor` level goes above `humidity_level`. When
+    triggered, the fan should be turned off. The fan should also be stopped when the
+    sensor goes back down below the desired level. The automation should not try to
+    turn the fan on if it is already on, and should not turn the fan off when it is
+    already off.
+response: "```yaml\nblueprint:\n  name: Humidity Controlled Fan\n  description: Turn\
+  \ on a fan based on the value of a humidity sensor.\n  domain: automation\n  input:\n\
+  \    humidity_sensor:\n      name: Humidity Sensor\n      description: The humidity\
+  \ sensor entity that triggers the automation.\n      selector:\n        entity:\n\
+  \          domain: sensor\n    humidity_level:\n      name: Humidity Level\n   \
+  \   description: The humidity level at which to trigger the fan.\n      selector:\n\
+  \        number:\n          min: 0\n          max: 100\n          unit_of_measurement:\
+  \ '%'\n          default: 60\n    fan_entity:\n      name: Fan Entity\n      description:\
+  \ The fan entity to be controlled.\n      selector:\n        entity:\n         \
+  \ domain: fan\ntrigger:\n  platform: numeric_state\n  entity_id: !input humidity_sensor\n\
+  \  above: !input humidity_level\naction:\n  repeat:\n    while:\n      - condition:\
+  \ \n          condition: template\n          value_template: \"{{ states(!input.fan_entity)\
+  \ == 'off' }}\"\n      - condition:\n          - condition: numeric_state\n    \
+  \        entity_id: !input humidity_sensor\n            below: !input humidity_level\n\
+  \    sequence:\n      - service: fan.turn_on\n        target:\n          entity_id:\
+  \ !input fan_entity\n      - wait_for_trigger:\n          - platform: numeric_state\n\
+  \            entity_id: !input humidity_sensor\n            below: !input humidity_level\n\
+  \        continue_on_timeout: false\n  - service: fan.turn_off\n    target:\n  \
+  \    entity_id: !input fan_entity\nmode: restart\n```"
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Humidity Fan
+
+        ## Problem statement
+
+        Create a blueprint automation to turn on the fan based on the value of the humidity sensor.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the bathroom exhaust fan when the bathroom humidty is above 60%
+        - Make sure the garage does not get too humid
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input               | Description                                                           |
+        | ------------------- | --------------------------------------------------------------------- |
+        | `humidity_sensor` | A `sensor` entity that is a humidty sensor that triggers the automation. |
+        | `humidity_level` | A `number` selector to set the value used as the trigger. |
+        | `fan_entity`     | A `fan` entity to turn on when the automation fires. |
+
+        The automation should trigger when the `humidity_sensor` level goes above `humidity_level`. When
+        triggered, the fan should be turned off. The fan should also be stopped when the
+        sensor goes back down below the desired level. The automation should not try to
+        turn the fan on if it is already on, and should not turn the fan off when it is
+        already off.
+      context:
+        id: 01JSGDCT9KD0VT5SVVEMSDG5XR
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:09:46.547247+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:09:46. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Humidity Fan
+
+          ## Problem statement
+
+          Create a blueprint automation to turn on the fan based on the value of the humidity sensor.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the bathroom exhaust fan when the bathroom humidty is above 60%
+          - Make sure the garage does not get too humid
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input               | Description                                                           |
+          | ------------------- | --------------------------------------------------------------------- |
+          | `humidity_sensor` | A `sensor` entity that is a humidty sensor that triggers the automation. |
+          | `humidity_level` | A `number` selector to set the value used as the trigger. |
+          | `fan_entity`     | A `fan` entity to turn on when the automation fires. |
+
+          The automation should trigger when the `humidity_sensor` level goes above `humidity_level`. When
+          triggered, the fan should be turned off. The fan should also be stopped when the
+          sensor goes back down below the desired level. The automation should not try to
+          turn the fan on if it is already on, and should not turn the fan off when it is
+          already off.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: "```yaml\nblueprint:\n  name: Humidity Controlled Fan\n  description:\
+          \ Turn on a fan based on the value of a humidity sensor.\n  domain: automation\n\
+          \  input:\n    humidity_sensor:\n      name: Humidity Sensor\n      description:\
+          \ The humidity sensor entity that triggers the automation.\n      selector:\n\
+          \        entity:\n          domain: sensor\n    humidity_level:\n      name:\
+          \ Humidity Level\n      description: The humidity level at which to trigger\
+          \ the fan.\n      selector:\n        number:\n          min: 0\n       \
+          \   max: 100\n          unit_of_measurement: '%'\n          default: 60\n\
+          \    fan_entity:\n      name: Fan Entity\n      description: The fan entity\
+          \ to be controlled.\n      selector:\n        entity:\n          domain:\
+          \ fan\ntrigger:\n  platform: numeric_state\n  entity_id: !input humidity_sensor\n\
+          \  above: !input humidity_level\naction:\n  repeat:\n    while:\n      -\
+          \ condition: \n          condition: template\n          value_template:\
+          \ \"{{ states(!input.fan_entity) == 'off' }}\"\n      - condition:\n   \
+          \       - condition: numeric_state\n            entity_id: !input humidity_sensor\n\
+          \            below: !input humidity_level\n    sequence:\n      - service:\
+          \ fan.turn_on\n        target:\n          entity_id: !input fan_entity\n\
+          \      - wait_for_trigger:\n          - platform: numeric_state\n      \
+          \      entity_id: !input humidity_sensor\n            below: !input humidity_level\n\
+          \        continue_on_timeout: false\n  - service: fan.turn_off\n    target:\n\
+          \      entity_id: !input fan_entity\nmode: restart\n```"
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:09:46.549083+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 341
+        output_tokens: 332
+    timestamp: 2025-04-23 04:09:50.613483+00:00
+  duration_ms: 4084.45
+  tries: 1

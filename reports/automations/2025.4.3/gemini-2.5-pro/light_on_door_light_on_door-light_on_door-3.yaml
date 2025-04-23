@@ -1,0 +1,218 @@
+---
+uuid: 3a8411a6-a11b-4b83-a702-066b3ea86a4f
+task_id: light_on_door_light_on_door-light_on_door-3
+model_id: gemini-2.5-pro
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  ```yaml
+  # Start YAML output for the Home Assistant blueprint
+  blueprint:
+    # Metadata for the blueprint
+    name: Light On Door Open with Timeout V2
+    description: Turn on one or more lights when a door sensor opens. The light(s) will turn off when the door sensor closes or after a 2-minute timeout, whichever happens first.
+    domain: automation
+    # Optional: Add a source URL if you plan to share this blueprint, e.g., via GitHub Gist or repository.
+    # source_url: https://example.com/url/to/this/blueprint.yaml
+
+    # Define the user-configurable inputs for the blueprint when creating an automation from it.
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: Select the binary sensor that monitors the door state (must be 'on' when open, 'off' when closed).
+        # Use an entity selector, filtered to binary_sensors, ideally with device_class 'door' for semantic correctness.
+        selector:
+          entity:
+            domain: binary_sensor
+            # Specifying device_class 'door' helps users find the right sensor, but doesn't strictly limit the selection.
+            device_class: door
+
+      light_switch:
+        name: Light Target
+        description: Select the light entity or entities to control.
+        # Use a target selector to allow the user to pick one or more entities, devices, or areas containing lights.
+        selector:
+          target:
+            entity:
+              domain: light
+
+  # Define the automation's execution mode.
+  # 'restart' mode ensures that if the door is opened again while the automation is already running
+  # (e.g., during the wait period), the previous run is cancelled and the automation starts over.
+  # This correctly handles scenarios like quickly closing and reopening the door.
+  mode: restart
+
+  # Define the trigger condition(s) that will start the automation.
+  trigger:
+    # Trigger when the state of the selected door sensor changes TO 'on'.
+    - platform: state
+      entity_id: !input door_sensor # Use the entity ID provided by the 'door_sensor' input.
+      to: 'on'                     # The trigger fires specifically when the state becomes 'on' (door opened).
+      # Optional: 'from: 'off'' could be added for more specificity, but 'to: 'on'' is usually sufficient.
+
+  # Define the sequence of actions to be executed when the automation is triggered.
+  action:
+    # Step 1: Turn on the light(s).
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01JSGD3YBW8B42GRK83BTV9NRM
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:04:55.804771+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:04:55. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          # Start YAML output for the Home Assistant blueprint
+          blueprint:
+            # Metadata for the blueprint
+            name: Light On Door Open with Timeout V2
+            description: Turn on one or more lights when a door sensor opens. The light(s) will turn off when the door sensor closes or after a 2-minute timeout, whichever happens first.
+            domain: automation
+            # Optional: Add a source URL if you plan to share this blueprint, e.g., via GitHub Gist or repository.
+            # source_url: https://example.com/url/to/this/blueprint.yaml
+
+            # Define the user-configurable inputs for the blueprint when creating an automation from it.
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: Select the binary sensor that monitors the door state (must be 'on' when open, 'off' when closed).
+                # Use an entity selector, filtered to binary_sensors, ideally with device_class 'door' for semantic correctness.
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    # Specifying device_class 'door' helps users find the right sensor, but doesn't strictly limit the selection.
+                    device_class: door
+
+              light_switch:
+                name: Light Target
+                description: Select the light entity or entities to control.
+                # Use a target selector to allow the user to pick one or more entities, devices, or areas containing lights.
+                selector:
+                  target:
+                    entity:
+                      domain: light
+
+          # Define the automation's execution mode.
+          # 'restart' mode ensures that if the door is opened again while the automation is already running
+          # (e.g., during the wait period), the previous run is cancelled and the automation starts over.
+          # This correctly handles scenarios like quickly closing and reopening the door.
+          mode: restart
+
+          # Define the trigger condition(s) that will start the automation.
+          trigger:
+            # Trigger when the state of the selected door sensor changes TO 'on'.
+            - platform: state
+              entity_id: !input door_sensor # Use the entity ID provided by the 'door_sensor' input.
+              to: 'on'                     # The trigger fires specifically when the state becomes 'on' (door opened).
+              # Optional: 'from: 'off'' could be added for more specificity, but 'to: 'on'' is usually sufficient.
+
+          # Define the sequence of actions to be executed when the automation is triggered.
+          action:
+            # Step 1: Turn on the light(s).
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:04:55.806524+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 275
+        cached_input_tokens: 0
+        output_tokens: 4093
+    timestamp: 2025-04-23 04:05:30.939698+00:00
+  duration_ms: 35135.281
+  tries: 1

@@ -1,0 +1,259 @@
+---
+uuid: 047b8275-f2f5-4639-b660-f023504dd6c5
+task_id: vacuum_pause_vacuum_pause-vacuum_pause-1
+model_id: gemini-2.5-pro
+category: vacuum
+task:
+  input_text: |
+    # Vacuum Pause
+
+    ## Problem statement
+
+    Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Pause the vacuum when I get a phone call from my relatives
+    - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input               | Description                                                           |
+    | ------------------- | --------------------------------------------------------------------- |
+    | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+    | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+    The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+    should be paused (not stopped) and can be resumed manually.
+response: |-
+  ```yaml
+  # Home Assistant Blueprint: Vacuum Pause on Phone Call
+  #
+  # Pauses a specified vacuum cleaner when a phone call is detected via a binary sensor.
+  # This is useful to avoid vacuum noise during phone calls or video conferences.
+  #
+  # Current time: 21:20:50
+  # Date: 2025-04-22
+
+  blueprint:
+    name: Vacuum Pause on Phone Call
+    description: Pause a vacuum cleaner when a specified binary sensor turns 'on' (indicating a phone call). The vacuum must be in the 'cleaning' state to be paused.
+    domain: automation
+    # Define the inputs the user will configure in the UI
+    input:
+      phone_call_sensor:
+        name: Phone Call Sensor
+        description: Select the binary sensor that indicates an active phone call (turns 'on' during a call).
+        selector:
+          entity:
+            # Filter entities to only show binary sensors
+            domain: binary_sensor
+      vacuum_entity:
+        name: Vacuum Cleaner
+        description: Select the vacuum entity that should be paused.
+        selector:
+          entity:
+            # Filter entities to only show vacuums
+            domain: vacuum
+
+    # Specify the source URL for the blueprint (optional, good practice for sharing)
+    # source_url: https://github.com/your_username/your_repo/blob/main/blueprints/automation/vacuum_pause_on_phone_call.yaml
+
+  # Define the trigger for the automation
+  trigger:
+    # Trigger when the state of the phone call sensor changes
+    - platform: state
+      # Use the entity ID provided by the user input 'phone_call_sensor'
+      entity_id: !input phone_call_sensor
+      # Trigger specifically when the sensor turns 'on' (call starts)
+      to: 'on'
+      # Optional: Trigger only when changing from 'off' to 'on'
+      # from: 'off'
+
+  # Define the conditions that must be met for the action to run
+  condition:
+    # Check the state of the vacuum cleaner
+    - condition: state
+      # Use the entity ID provided by the user input 'vacuum_entity'
+      entity_id: !input vacuum_entity
+      # Only proceed if the vacuum's current state is 'cleaning'
+      state: 'cleaning'
+
+  # Define the actions to perform when the trigger occurs and conditions are met
+  action:
+    # Call the 'vacuum.pause' service
+    - service: vacuum.pause
+      # Target the specific vacuum entity selected by the user
+      # Use 'target' for modern HA syntax
+      target:
+        entity_id: !input vacuum_entity
+      # Alternatively, use the older 'entity_id' format directly under the service call
+      # entity_id: !input vacuum_entity
+
+  # Define the execution mode (optional, 'single' is default and suitable here)
+  # mode: single
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Vacuum Pause
+
+        ## Problem statement
+
+        Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Pause the vacuum when I get a phone call from my relatives
+        - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input               | Description                                                           |
+        | ------------------- | --------------------------------------------------------------------- |
+        | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+        | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+        The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+        should be paused (not stopped) and can be resumed manually.
+      context:
+        id: 01JSGE1355JENPACXX1EGABFQB
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:20:50.981342+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:20:50. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Vacuum Pause
+
+          ## Problem statement
+
+          Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Pause the vacuum when I get a phone call from my relatives
+          - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input               | Description                                                           |
+          | ------------------- | --------------------------------------------------------------------- |
+          | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+          | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+          The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+          should be paused (not stopped) and can be resumed manually.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          # Home Assistant Blueprint: Vacuum Pause on Phone Call
+          #
+          # Pauses a specified vacuum cleaner when a phone call is detected via a binary sensor.
+          # This is useful to avoid vacuum noise during phone calls or video conferences.
+          #
+          # Current time: 21:20:50
+          # Date: 2025-04-22
+
+          blueprint:
+            name: Vacuum Pause on Phone Call
+            description: Pause a vacuum cleaner when a specified binary sensor turns 'on' (indicating a phone call). The vacuum must be in the 'cleaning' state to be paused.
+            domain: automation
+            # Define the inputs the user will configure in the UI
+            input:
+              phone_call_sensor:
+                name: Phone Call Sensor
+                description: Select the binary sensor that indicates an active phone call (turns 'on' during a call).
+                selector:
+                  entity:
+                    # Filter entities to only show binary sensors
+                    domain: binary_sensor
+              vacuum_entity:
+                name: Vacuum Cleaner
+                description: Select the vacuum entity that should be paused.
+                selector:
+                  entity:
+                    # Filter entities to only show vacuums
+                    domain: vacuum
+
+            # Specify the source URL for the blueprint (optional, good practice for sharing)
+            # source_url: https://github.com/your_username/your_repo/blob/main/blueprints/automation/vacuum_pause_on_phone_call.yaml
+
+          # Define the trigger for the automation
+          trigger:
+            # Trigger when the state of the phone call sensor changes
+            - platform: state
+              # Use the entity ID provided by the user input 'phone_call_sensor'
+              entity_id: !input phone_call_sensor
+              # Trigger specifically when the sensor turns 'on' (call starts)
+              to: 'on'
+              # Optional: Trigger only when changing from 'off' to 'on'
+              # from: 'off'
+
+          # Define the conditions that must be met for the action to run
+          condition:
+            # Check the state of the vacuum cleaner
+            - condition: state
+              # Use the entity ID provided by the user input 'vacuum_entity'
+              entity_id: !input vacuum_entity
+              # Only proceed if the vacuum's current state is 'cleaning'
+              state: 'cleaning'
+
+          # Define the actions to perform when the trigger occurs and conditions are met
+          action:
+            # Call the 'vacuum.pause' service
+            - service: vacuum.pause
+              # Target the specific vacuum entity selected by the user
+              # Use 'target' for modern HA syntax
+              target:
+                entity_id: !input vacuum_entity
+              # Alternatively, use the older 'entity_id' format directly under the service call
+              # entity_id: !input vacuum_entity
+
+          # Define the execution mode (optional, 'single' is default and suitable here)
+          # mode: single
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:20:50.983317+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 297
+        cached_input_tokens: 0
+        output_tokens: 1573
+    timestamp: 2025-04-23 04:21:06.441562+00:00
+  duration_ms: 15460.556
+  tries: 1
