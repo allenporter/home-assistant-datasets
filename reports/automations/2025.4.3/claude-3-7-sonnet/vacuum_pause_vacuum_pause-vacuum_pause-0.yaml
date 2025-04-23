@@ -1,0 +1,220 @@
+---
+uuid: fcfd51c6-1024-447d-b686-9b52cf85b3ca
+task_id: vacuum_pause_vacuum_pause-vacuum_pause-0
+model_id: claude-3-7-sonnet
+category: vacuum
+task:
+  input_text: |
+    # Vacuum Pause
+
+    ## Problem statement
+
+    Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Pause the vacuum when I get a phone call from my relatives
+    - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input               | Description                                                           |
+    | ------------------- | --------------------------------------------------------------------- |
+    | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+    | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+    The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+    should be paused (not stopped) and can be resumed manually.
+response: |-
+  ```yaml
+  # This blueprint creates an automation that pauses a vacuum when a phone call is detected
+  # The blueprint takes two inputs:
+  # 1. A binary_sensor that detects when a phone call is received
+  # 2. A vacuum entity that should be paused when the call is detected
+
+  blueprint:
+    name: Vacuum Pause During Phone Calls
+    description: Automatically pause your vacuum when you receive a phone call
+    domain: automation
+    input:
+      phone_call_sensor:
+        name: Phone Call Sensor
+        description: A binary sensor that becomes active when a phone call is received
+        selector:
+          entity:
+            domain: binary_sensor
+      vacuum_entity:
+        name: Vacuum
+        description: The vacuum that should be paused during phone calls
+        selector:
+          entity:
+            domain: vacuum
+
+  # The automation will trigger when the phone call sensor becomes active
+  trigger:
+    - platform: state
+      entity_id: !input phone_call_sensor
+      to: "on"
+
+  # We only want to pause the vacuum if it's currently cleaning
+  condition:
+    - condition: state
+      entity_id: !input vacuum_entity
+      state: "cleaning"
+
+  # When triggered and conditions are met, pause the vacuum
+  action:
+    - service: vacuum.pause
+      target:
+        entity_id: !input vacuum_entity
+    - alias: "Log the action"
+      service: system_log.write
+      data:
+        message: "Vacuum paused due to phone call detection"
+        level: info
+
+  # Add some metadata about the blueprint
+  mode: single
+  icon: mdi:vacuum
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Vacuum Pause
+
+        ## Problem statement
+
+        Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Pause the vacuum when I get a phone call from my relatives
+        - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input               | Description                                                           |
+        | ------------------- | --------------------------------------------------------------------- |
+        | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+        | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+        The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+        should be paused (not stopped) and can be resumed manually.
+      context:
+        id: 01JSGDJKNZ4Z73QX78Z8VBFKXH
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:12:56.383426+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:12:56. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Vacuum Pause
+
+          ## Problem statement
+
+          Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Pause the vacuum when I get a phone call from my relatives
+          - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input               | Description                                                           |
+          | ------------------- | --------------------------------------------------------------------- |
+          | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+          | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+          The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+          should be paused (not stopped) and can be resumed manually.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          # This blueprint creates an automation that pauses a vacuum when a phone call is detected
+          # The blueprint takes two inputs:
+          # 1. A binary_sensor that detects when a phone call is received
+          # 2. A vacuum entity that should be paused when the call is detected
+
+          blueprint:
+            name: Vacuum Pause During Phone Calls
+            description: Automatically pause your vacuum when you receive a phone call
+            domain: automation
+            input:
+              phone_call_sensor:
+                name: Phone Call Sensor
+                description: A binary sensor that becomes active when a phone call is received
+                selector:
+                  entity:
+                    domain: binary_sensor
+              vacuum_entity:
+                name: Vacuum
+                description: The vacuum that should be paused during phone calls
+                selector:
+                  entity:
+                    domain: vacuum
+
+          # The automation will trigger when the phone call sensor becomes active
+          trigger:
+            - platform: state
+              entity_id: !input phone_call_sensor
+              to: "on"
+
+          # We only want to pause the vacuum if it's currently cleaning
+          condition:
+            - condition: state
+              entity_id: !input vacuum_entity
+              state: "cleaning"
+
+          # When triggered and conditions are met, pause the vacuum
+          action:
+            - service: vacuum.pause
+              target:
+                entity_id: !input vacuum_entity
+            - alias: "Log the action"
+              service: system_log.write
+              data:
+                message: "Vacuum paused due to phone call detection"
+                level: info
+
+          # Add some metadata about the blueprint
+          mode: single
+          icon: mdi:vacuum
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:12:56.385239+00:00
+  duration_ms: 6471.902
+  tries: 1

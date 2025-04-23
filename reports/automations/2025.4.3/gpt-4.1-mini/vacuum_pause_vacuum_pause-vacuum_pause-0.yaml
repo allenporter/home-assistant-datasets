@@ -1,0 +1,210 @@
+---
+uuid: 53aa79f0-bad6-4803-8d3d-a6eebb057036
+task_id: vacuum_pause_vacuum_pause-vacuum_pause-0
+model_id: gpt-4.1-mini
+category: vacuum
+task:
+  input_text: |
+    # Vacuum Pause
+
+    ## Problem statement
+
+    Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Pause the vacuum when I get a phone call from my relatives
+    - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input               | Description                                                           |
+    | ------------------- | --------------------------------------------------------------------- |
+    | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+    | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+    The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+    should be paused (not stopped) and can be resumed manually.
+response: |-
+  ```yaml
+  blueprint:
+    name: Pause Vacuum on Phone Call
+    description: >
+      Pause the vacuum when a phone call is received, using a phone call binary sensor.
+      The vacuum will be paused only if it is currently running.
+    domain: automation
+    input:
+      phone_call_sensor:
+        name: Phone Call Binary Sensor
+        description: Binary sensor that is 'on' when a phone call is received.
+        selector:
+          entity:
+            domain: binary_sensor
+      vacuum_entity:
+        name: Vacuum Entity
+        description: Vacuum to pause when the phone call is detected.
+        selector:
+          entity:
+            domain: vacuum
+
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: !input phone_call_sensor
+      to: 'on'
+  condition:
+    - condition: template
+      # Check if vacuum is currently running (cleaning)
+      # Common attributes or states indicating running:
+      # state = 'cleaning' is typical, but vacuums vary
+      # Use a state or an attribute to check if the vacuum is running
+      # Here we check if state is cleaning or if state is 'on' (some vacuums)
+      # Common vacuum states: idle, cleaning, returning, paused, docked
+      # So pause only if state is 'cleaning' or possibly 'returning' etc. but for safety just 'cleaning'
+      value_template: >
+        {% set state = states(blueprint.input.vacuum_entity) %}
+        {{ state == 'cleaning' }}
+  action:
+    - service: vacuum.pause
+      target:
+        entity_id: !input vacuum_entity
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Vacuum Pause
+
+        ## Problem statement
+
+        Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Pause the vacuum when I get a phone call from my relatives
+        - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input               | Description                                                           |
+        | ------------------- | --------------------------------------------------------------------- |
+        | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+        | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+        The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+        should be paused (not stopped) and can be resumed manually.
+      context:
+        id: 01JSGD5KY9T5FJ9R8E7RZ2XWVX
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:05:50.665147+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:05:50. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Vacuum Pause
+
+          ## Problem statement
+
+          Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Pause the vacuum when I get a phone call from my relatives
+          - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input               | Description                                                           |
+          | ------------------- | --------------------------------------------------------------------- |
+          | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+          | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+          The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+          should be paused (not stopped) and can be resumed manually.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Pause Vacuum on Phone Call
+            description: >
+              Pause the vacuum when a phone call is received, using a phone call binary sensor.
+              The vacuum will be paused only if it is currently running.
+            domain: automation
+            input:
+              phone_call_sensor:
+                name: Phone Call Binary Sensor
+                description: Binary sensor that is 'on' when a phone call is received.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              vacuum_entity:
+                name: Vacuum Entity
+                description: Vacuum to pause when the phone call is detected.
+                selector:
+                  entity:
+                    domain: vacuum
+
+          mode: single
+          trigger:
+            - platform: state
+              entity_id: !input phone_call_sensor
+              to: 'on'
+          condition:
+            - condition: template
+              # Check if vacuum is currently running (cleaning)
+              # Common attributes or states indicating running:
+              # state = 'cleaning' is typical, but vacuums vary
+              # Use a state or an attribute to check if the vacuum is running
+              # Here we check if state is cleaning or if state is 'on' (some vacuums)
+              # Common vacuum states: idle, cleaning, returning, paused, docked
+              # So pause only if state is 'cleaning' or possibly 'returning' etc. but for safety just 'cleaning'
+              value_template: >
+                {% set state = states(blueprint.input.vacuum_entity) %}
+                {{ state == 'cleaning' }}
+          action:
+            - service: vacuum.pause
+              target:
+                entity_id: !input vacuum_entity
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:05:50.666685+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 278
+        output_tokens: 344
+    timestamp: 2025-04-23 04:05:54.665414+00:00
+  duration_ms: 4001.391
+  tries: 1

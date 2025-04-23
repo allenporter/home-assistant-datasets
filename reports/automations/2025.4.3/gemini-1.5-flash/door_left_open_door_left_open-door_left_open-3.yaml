@@ -1,0 +1,286 @@
+---
+uuid: 1db39407-d194-4d03-957e-2fa07d50fcf8
+task_id: door_left_open_door_left_open-door_left_open-3
+model_id: gemini-1.5-flash
+category: media_player
+task:
+  input_text: |
+    # Door left open
+
+    ## Problem statement
+
+    Create an blueprint automation to play an alert on the speaker when the door is
+    left open.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+    - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input           | Selector Type | Description                                                                           |
+    | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+    | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+    | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+    | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+    The automation should play the selected media when the door has been open for the specified duration.
+response: |-
+  ```yaml
+  blueprint:
+    name: Door Left Open Alert
+    description: Play an alert when a door is left open for a specified duration.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: The binary sensor entity representing the door.
+        selector:
+          entity:
+            domain: binary_sensor
+            device_class: door
+      alert_media:
+        name: Alert Media
+        description: Media player and media to play as an alert.
+        selector:
+          media:
+            type: media-player
+      open_duration:
+        name: Open Duration
+        description: The duration the door must be open before triggering the alert.
+        selector:
+          duration:
+            default: 00:30:00 # 30 minutes
+    variables:
+      # We will use a variable to store the time the door was last opened.
+      last_opened_time: "{{ now().isoformat() }}"
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: !input door_sensor
+        from: "off"
+        to: "on"
+        id: door_opened
+      - platform: state
+        entity_id: !input door_sensor
+        from: "on"
+        to: "off"
+        id: door_closed
+    condition:
+      - condition: template
+        value_template: >
+          {%- set last_opened_time = states('sensor.last_opened_time') -%}
+          {%- if last_opened_time is not none -%}
+            {%- set duration = now() - datetime(last_opened_time) -%}
+            {%- set open_duration = states('input_number.open_duration') -%}
+            {%- if duration >= open_duration -%}
+              true
+            {%- else -%}
+              false
+            {%- endif -%}
+          {%- else -%}
+            false
+          {%- endif -%}
+    action:
+      - service: media_player.play_media
+        target:
+          entity_id: !input alert_media
+        data:
+          media_content_id: !input alert_media
+          media_content_type: 'sound'
+      - service: notify.persistent_notification
+        data:
+          message: >
+            The door was left open for longer than the specified duration of {{ open_duration }}!
+          title: Door Open Alert
+    # This is a sensor to keep the time of last door opened event.
+    # It's crucial for computing the time that has been passed.
+    # This is a hidden sensor that is maintained by the automation.
+    # It's not visible in the UI, the user doesn't need to change it.
+    sensor:
+      - name: last_opened_time
+        state: "{{ trigger.id == 'door_opened' | int(trigger.id) }}"
+        unique_id: door_open_blueprint_last_opened_time
+        attributes:
+          last_opened_time: "{{ now().isoformat() }}"
+
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Door left open
+
+        ## Problem statement
+
+        Create an blueprint automation to play an alert on the speaker when the door is
+        left open.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+        - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input           | Selector Type | Description                                                                           |
+        | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+        | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+        | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+        | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+        The automation should play the selected media when the door has been open for the specified duration.
+      context:
+        id: 01JSGDD0R888F3ESZZKZEJK5TB
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:09:53.160435+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:09:53. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Door left open
+
+          ## Problem statement
+
+          Create an blueprint automation to play an alert on the speaker when the door is
+          left open.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+          - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input           | Selector Type | Description                                                                           |
+          | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+          | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+          | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+          | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+          The automation should play the selected media when the door has been open for the specified duration.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Door Left Open Alert
+            description: Play an alert when a door is left open for a specified duration.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: The binary sensor entity representing the door.
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    device_class: door
+              alert_media:
+                name: Alert Media
+                description: Media player and media to play as an alert.
+                selector:
+                  media:
+                    type: media-player
+              open_duration:
+                name: Open Duration
+                description: The duration the door must be open before triggering the alert.
+                selector:
+                  duration:
+                    default: 00:30:00 # 30 minutes
+            variables:
+              # We will use a variable to store the time the door was last opened.
+              last_opened_time: "{{ now().isoformat() }}"
+            mode: restart
+            trigger:
+              - platform: state
+                entity_id: !input door_sensor
+                from: "off"
+                to: "on"
+                id: door_opened
+              - platform: state
+                entity_id: !input door_sensor
+                from: "on"
+                to: "off"
+                id: door_closed
+            condition:
+              - condition: template
+                value_template: >
+                  {%- set last_opened_time = states('sensor.last_opened_time') -%}
+                  {%- if last_opened_time is not none -%}
+                    {%- set duration = now() - datetime(last_opened_time) -%}
+                    {%- set open_duration = states('input_number.open_duration') -%}
+                    {%- if duration >= open_duration -%}
+                      true
+                    {%- else -%}
+                      false
+                    {%- endif -%}
+                  {%- else -%}
+                    false
+                  {%- endif -%}
+            action:
+              - service: media_player.play_media
+                target:
+                  entity_id: !input alert_media
+                data:
+                  media_content_id: !input alert_media
+                  media_content_type: 'sound'
+              - service: notify.persistent_notification
+                data:
+                  message: >
+                    The door was left open for longer than the specified duration of {{ open_duration }}!
+                  title: Door Open Alert
+            # This is a sensor to keep the time of last door opened event.
+            # It's crucial for computing the time that has been passed.
+            # This is a hidden sensor that is maintained by the automation.
+            # It's not visible in the UI, the user doesn't need to change it.
+            sensor:
+              - name: last_opened_time
+                state: "{{ trigger.id == 'door_opened' | int(trigger.id) }}"
+                unique_id: door_open_blueprint_last_opened_time
+                attributes:
+                  last_opened_time: "{{ now().isoformat() }}"
+
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:09:53.162042+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 351
+        cached_input_tokens: 0
+        output_tokens: 700
+    timestamp: 2025-04-23 04:09:57.717124+00:00
+  duration_ms: 4556.999
+  tries: 1

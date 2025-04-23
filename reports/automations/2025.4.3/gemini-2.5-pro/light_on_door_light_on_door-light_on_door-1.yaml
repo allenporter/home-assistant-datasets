@@ -1,0 +1,292 @@
+---
+uuid: e983b9d5-d7cc-4470-9f1d-9a1ba1534b23
+task_id: light_on_door_light_on_door-light_on_door-1
+model_id: gemini-2.5-pro
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  ```yaml
+  # Home Assistant Blueprint: Light on Door Open with Timeout
+  #
+  # This blueprint automates turning on a light when a door is opened.
+  # The light will automatically turn off when the door is closed,
+  # or after a specified timeout period (2 minutes) if the door remains open.
+  #
+  # For more information and examples, visit:
+  # https://www.home-assistant.io/docs/automation/using_blueprints/
+  blueprint:
+    name: Light on door open with 2-minute timeout
+    description: Turn on a light when a door opens. Turn it off when the door closes or after 2 minutes.
+    domain: automation
+    # Define the inputs required by this blueprint
+    input:
+      # Input for the door sensor entity
+      door_sensor:
+        name: Door Sensor
+        description: The binary sensor that detects if the door is open or closed (e.g., contact sensor). State 'on' means open, 'off' means closed.
+        # Selector to filter for binary sensors, preferably with device class 'door'
+        selector:
+          entity:
+            domain: binary_sensor
+            device_class: door
+      # Input for the light entity/entities to control
+      light_switch:
+        name: Light(s)
+        description: The light(s) to turn on when the door opens and off afterwards.
+        # Selector to target one or more light entities
+        selector:
+          target:
+            entity:
+              domain: light
+
+  # Set the automation mode to 'restart'.
+  # This means if the trigger fires again (door opens again) while the automation is
+  # already running (e.g., waiting for the timeout), the previous run will be cancelled
+  # and the automation will start over. This ensures the timer resets correctly.
+  mode: restart
+  max_exceeded: silent # Optional: Prevents log warnings if the automation restarts frequently.
+
+  # Define the trigger for the automation.
+  # It activates when the state of the selected door_sensor changes from 'off' (closed) to 'on' (open).
+  trigger:
+    - platform: state
+      entity_id: !input door_sensor
+      from: 'off'
+      to: 'on'
+      # Optional: Add duration 'for' if needed to avoid triggering on quick bounces, but usually not necessary for doors.
+      # for:
+      #   seconds: 1
+
+  # Define the sequence of actions to perform when the automation is triggered.
+  action:
+    # Step 1: Turn on the specified light(s).
+    - service: light.turn_on
+      target: !input light_switch
+      # Optional: Add brightness or color settings here if needed.
+      # data:
+      #   brightness_pct: 80
+
+    # Step 2: Wait for one of two conditions to be met:
+    #   a) The door sensor state changes back to 'off' (closed).
+    #   b) A timeout of 2 minutes occurs.
+    - wait_for_trigger:
+        # Condition a) Door closes
+        - platform: state
+          entity_id: !input door_sensor
+          to: 'off'
+          # Optional: Add duration 'for' if needed to ensure the door is properly closed.
+          # for:
+          #   seconds: 1
+      # Condition b) Timeout
+      timeout:
+        # Set the timeout duration to 2 minutes.
+        minutes: 2
+      # Important: Ensure the automation continues to the next step even if the wait times out.
+      # If false (default), the automation would stop here on timeout. We want it to proceed to turn off the light.
+      continue_on_timeout: true
+
+    # Step 3: Turn off the specified light(s).
+    # This step executes after either the door closes or the 2-minute timeout expires.
+    - service: light.turn_off
+      target: !input light_switch
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01JSGDDEMKY7QDJAPK06EMXJJW
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-23 04:10:07.379306+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 21:10:07. Today's date is 2025-04-22.
+
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          # Home Assistant Blueprint: Light on Door Open with Timeout
+          #
+          # This blueprint automates turning on a light when a door is opened.
+          # The light will automatically turn off when the door is closed,
+          # or after a specified timeout period (2 minutes) if the door remains open.
+          #
+          # For more information and examples, visit:
+          # https://www.home-assistant.io/docs/automation/using_blueprints/
+          blueprint:
+            name: Light on door open with 2-minute timeout
+            description: Turn on a light when a door opens. Turn it off when the door closes or after 2 minutes.
+            domain: automation
+            # Define the inputs required by this blueprint
+            input:
+              # Input for the door sensor entity
+              door_sensor:
+                name: Door Sensor
+                description: The binary sensor that detects if the door is open or closed (e.g., contact sensor). State 'on' means open, 'off' means closed.
+                # Selector to filter for binary sensors, preferably with device class 'door'
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    device_class: door
+              # Input for the light entity/entities to control
+              light_switch:
+                name: Light(s)
+                description: The light(s) to turn on when the door opens and off afterwards.
+                # Selector to target one or more light entities
+                selector:
+                  target:
+                    entity:
+                      domain: light
+
+          # Set the automation mode to 'restart'.
+          # This means if the trigger fires again (door opens again) while the automation is
+          # already running (e.g., waiting for the timeout), the previous run will be cancelled
+          # and the automation will start over. This ensures the timer resets correctly.
+          mode: restart
+          max_exceeded: silent # Optional: Prevents log warnings if the automation restarts frequently.
+
+          # Define the trigger for the automation.
+          # It activates when the state of the selected door_sensor changes from 'off' (closed) to 'on' (open).
+          trigger:
+            - platform: state
+              entity_id: !input door_sensor
+              from: 'off'
+              to: 'on'
+              # Optional: Add duration 'for' if needed to avoid triggering on quick bounces, but usually not necessary for doors.
+              # for:
+              #   seconds: 1
+
+          # Define the sequence of actions to perform when the automation is triggered.
+          action:
+            # Step 1: Turn on the specified light(s).
+            - service: light.turn_on
+              target: !input light_switch
+              # Optional: Add brightness or color settings here if needed.
+              # data:
+              #   brightness_pct: 80
+
+            # Step 2: Wait for one of two conditions to be met:
+            #   a) The door sensor state changes back to 'off' (closed).
+            #   b) A timeout of 2 minutes occurs.
+            - wait_for_trigger:
+                # Condition a) Door closes
+                - platform: state
+                  entity_id: !input door_sensor
+                  to: 'off'
+                  # Optional: Add duration 'for' if needed to ensure the door is properly closed.
+                  # for:
+                  #   seconds: 1
+              # Condition b) Timeout
+              timeout:
+                # Set the timeout duration to 2 minutes.
+                minutes: 2
+              # Important: Ensure the automation continues to the next step even if the wait times out.
+              # If false (default), the automation would stop here on timeout. We want it to proceed to turn off the light.
+              continue_on_timeout: true
+
+            # Step 3: Turn off the specified light(s).
+            # This step executes after either the door closes or the 2-minute timeout expires.
+            - service: light.turn_off
+              target: !input light_switch
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-04-23 04:10:07.380897+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 275
+        cached_input_tokens: 0
+        output_tokens: 2265
+    timestamp: 2025-04-23 04:10:26.641444+00:00
+  duration_ms: 19262.46
+  tries: 1
