@@ -1,27 +1,18 @@
 # Home LLM Leaderboard
-| Model | assist $${\color{gray}\small{\textsf{(n=80)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=49)}}}$$ | automations $${\color{gray}\small{\textsf{(n=0)}}}$$ | questions $${\color{gray}\small{\textsf{(n=0)}}}$$ |
-| --- | --- | --- | --- | --- |
-| qwq | $${\textbf{96.2}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.3.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.3.3)}}}$$ |  |  | $${\textbf{96.9}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
-| claude-3-5-sonnet |  | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.0b2)}}}$$ | $${\textbf{81.7}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.0b)}}}$$ | $${57.1\\% \space\color{gray}\tiny{\textsf{(CI: 36.7, 2025.5.0b)}}}$$ | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, avg)}}}$$ |
-| gpt-4o-mini | $${92.5\\% \space\color{gray}\tiny{\textsf{(CI: 7.1, 2025.4.0b)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${50.0\\% \space\color{gray}\tiny{\textsf{(CI: 12.7, 2025.3.0b)}}}$$ | $${45.5\\% \space\color{gray}\tiny{\textsf{(CI: 29.4, 2025.4.1)}}}$$ | $${95.1\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
-| qwen2.5-32b | $${92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.3.3)}}}$$ | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2025.3.3)}}}$$ |  |  | $${93.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
-| gemini-1.5-flash | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2024.6.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2024.8.0dev)}}}$$ | $${30.0\\% \space\color{gray}\tiny{\textsf{(CI: 11.6, 2025.3.0b)}}}$$ | $${27.3\\% \space\color{gray}\tiny{\textsf{(CI: 26.3, 2025.4.1)}}}$$ | $${93.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
-| llama3.3 | $${92.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2025.1.2)}}}$$ | $${91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.1.2)}}}$$ |  |  | $${92.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, avg)}}}$$ |
-| claude-3-5-haiku |  | $${91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, 2025.2.4)}}}$$ | $${63.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.2, 2025.3.0b)}}}$$ |  | $${91.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.7, avg)}}}$$ |
-| llama3.3-awq | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.1.2)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.1.2)}}}$$ |  |  | $${91.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, avg)}}}$$ |
-| gpt-3.5 | $${80.0\\% \space\color{gray}\tiny{\textsf{(CI: 8.8, 2025.2.4)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.0b)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.3.0b)}}}$$ | $${\textbf{63.6}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 28.4, 2025.4.1)}}}$$ | $${87.6\\% \space\color{gray}\tiny{\textsf{(CI: 5.7, avg)}}}$$ |
-| gemma3-27b | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, 2025.3.3)}}}$$ |  |  |  | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, avg)}}}$$ |
-| qwen2.5 | $${81.2\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2024.9.2)}}}$$ | $${89.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, 2025.4.0b)}}}$$ |  |  | $${84.5\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, avg)}}}$$ |
-| mistral-nemo |  | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, avg)}}}$$ |
-| qwen2.5-14b | $${78.8\\% \space\color{gray}\tiny{\textsf{(CI: 9.0, 2025.3.3)}}}$$ | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.3.3)}}}$$ |  |  | $${81.4\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, avg)}}}$$ |
-| gemini-2.0-flash | $${72.5\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.0b)}}}$$ | $${93.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2025.4.0b)}}}$$ | $${68.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.8, 2025.3.0b)}}}$$ | $${36.4\\% \space\color{gray}\tiny{\textsf{(CI: 28.4, 2025.4.1)}}}$$ | $${80.6\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, avg)}}}$$ |
-| llama3.1 | $${66.2\\% \space\color{gray}\tiny{\textsf{(CI: 10.4, 2024.9.0dev)}}}$$ | $${89.8\\% \space\color{gray}\tiny{\textsf{(CI: 8.5, 2025.4.0b)}}}$$ |  | $${18.2\\% \space\color{gray}\tiny{\textsf{(CI: 22.8, 2025.4.1)}}}$$ | $${75.2\\% \space\color{gray}\tiny{\textsf{(CI: 7.5, avg)}}}$$ |
-| llama3.2-3b | $${62.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.9.2)}}}$$ | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 10.8, 2024.9.2)}}}$$ |  |  | $${69.8\\% \space\color{gray}\tiny{\textsf{(CI: 7.9, avg)}}}$$ |
-| gemini-2.5-pro | $${68.4\\% \space\color{gray}\tiny{\textsf{(CI: 20.9, 2025.4.1)}}}$$ |  |  |  | $${68.4\\% \space\color{gray}\tiny{\textsf{(CI: 20.9, avg)}}}$$ |
-| gemini-2.0-flash-lite | $${67.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, 2025.4.1)}}}$$ |  |  |  | $${67.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.3, avg)}}}$$ |
-| gemma3-4b | $${63.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.5, 2025.3.3)}}}$$ |  |  |  | $${63.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.5, avg)}}}$$ |
-| assistant | $${37.5\\% \space\color{gray}\tiny{\textsf{(CI: 10.6, 2024.6.3)}}}$$ | $${63.3\\% \space\color{gray}\tiny{\textsf{(CI: 13.5, 2024.8.0dev)}}}$$ |  |  | $${47.3\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, avg)}}}$$ |
-| llama3.2-1b | $${7.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.8, 2024.9.2)}}}$$ | $${4.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2024.9.2)}}}$$ |  |  | $${6.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, avg)}}}$$ |
+| Model | assist $${\color{gray}\small{\textsf{(n=646)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=196)}}}$$ | automations $${\color{gray}\small{\textsf{(n=60)}}}$$ |
+| --- | --- | --- | --- |
+| gemini-2.5-pro | $${\textbf{89.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${\textbf{91.2}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
+| claude-3-7-sonnet | $${87.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.6, 2025.4.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.3)}}}$$ | $${\textbf{81.7}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.3)}}}$$ | $${90.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
+| claude-3-5-haiku | $${85.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, 2025.4.3)}}}$$ | $${94.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${87.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
+| gpt-4.1-mini | $${84.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, 2025.4.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${87.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
+| gpt-4o-mini | $${82.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${86.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
+| gpt-3.5 | $${82.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${99.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.0, 2025.4.3)}}}$$ | $${66.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.9, 2025.4.3)}}}$$ | $${86.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
+| gemini-2.5-flash | $${83.1\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, 2025.4.3)}}}$$ | $${73.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.2, 2025.4.3)}}}$$ | $${86.1\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
+| gpt-4.1 | $${82.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${85.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
+| gemini-1.5-flash | $${82.3\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.4.3)}}}$$ | $${28.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
+| gpt-4.1-nano | $${72.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.4.3)}}}$$ | $${92.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2025.4.3)}}}$$ | $${46.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${77.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
+| gemini-2.0-flash | $${71.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.4.3)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.4.3)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
+| gemini-2.0-flash-lite | $${63.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -57,25 +48,25 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #f4b400, #ea4335, #fbbc04, #34a853, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #d9ead3, #4285f4, #0f9d58, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #4285f4"
 
 ---
 xychart-beta
   title "assist"
-  x-axis "Model" [qwq, gpt-4o-mini, qwen2.5-32b, gemini-1.5-flash, llama3.3, llama3.3-awq, gpt-3.5, gemma3-27b, qwen2.5, qwen2.5-14b, gemini-2.0-flash, llama3.1, .]
+  x-axis "Model" [gemini-2.5-pro, claude-3-7-sonnet, claude-3-5-haiku, gpt-4.1-mini, gpt-4o-mini, gpt-3.5, gemini-2.5-flash, gpt-4.1, gemini-1.5-flash, gpt-4.1-nano, gemini-2.0-flash, gemini-2.0-flash-lite, .]
   y-axis "Score" 1 --> 100
-  bar [96.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 92.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 92.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 91.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 92.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 86.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.2, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.2, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 78.8, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 72.5, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 66.2, 0.0]
+  bar [89.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 87.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 85.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 84.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 82.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 82.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 82.4, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 82.3, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 72.5, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 71.5, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 63.9, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -83,12 +74,22 @@ xychart-beta
 
 A dataset built to exercise the Home Assistant LLM API. The homes for this
 dataset were synthetically generated using gpt-3.5, and then simplified for
-exercising smaller LLMs. The use cases are not intended to be very tricky or
-complicated and aimed at a smaller context window. The number of devices/entities
-in each test is intentionally small (e.g. typically under 5 entities per test) to focus
-on tool calling capabilities rather than context retrieval.
+exercising smaller LLMs.
+
+This is a variation on the `assist` dataset that tests far fewer entities, devices,
+and areas at once. This is designed given poor performance of local models on the
+`assist` baseline to help with even smaller tasks to focus on to improve quailty.
+
+The use cases are not intended to be very tricky or complicated and aimed at a
+smaller context window. The number of devices/entities in each test is intentionally
+small (e.g. typically under 5 entities per test) to focus on tool calling capabilities
+rather than context retrieval.
+
+This dataset uses the `assist` format. See the `assist` dataset card and README for
+additional details about the format and information about running the evaluation.
 
 More information:
+- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
 
 ```mermaid
@@ -103,25 +104,25 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #6aa84f, #674ea7, #d9ead3, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [qwq, claude-3-5-sonnet, gpt-4o-mini, qwen2.5-32b, gemini-1.5-flash, llama3.3, claude-3-5-haiku, llama3.3-awq, gpt-3.5, qwen2.5, mistral-nemo, qwen2.5-14b, .]
+  x-axis "Model" [gemini-2.5-pro, claude-3-7-sonnet, claude-3-5-haiku, gpt-4.1-mini, gpt-4o-mini, gpt-3.5, gemini-2.5-flash, gpt-4.1, gemini-1.5-flash, gpt-4.1-nano, gemini-2.0-flash, gemini-2.0-flash-lite, .]
   y-axis "Score" 1 --> 100
-  bar [98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 91.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 89.8, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.6, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0]
+  bar [98.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 94.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 98.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 99.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 92.9, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 90.3, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.3, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -153,87 +154,47 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #f4b400, #fbbc04, #ff6d01, #1155cc, #4285f4, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #4285f4"
 
 ---
 xychart-beta
   title "automations"
-  x-axis "Model" [claude-3-5-sonnet, gpt-4o-mini, gemini-1.5-flash, claude-3-5-haiku, gpt-3.5, gemini-2.0-flash, .]
+  x-axis "Model" [gemini-2.5-pro, claude-3-7-sonnet, claude-3-5-haiku, gpt-4.1-mini, gpt-4o-mini, gpt-3.5, gemini-2.5-flash, gpt-4.1, gemini-1.5-flash, gpt-4.1-nano, gemini-2.0-flash, gemini-2.0-flash-lite, .]
   y-axis "Score" 1 --> 100
-  bar [81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 50.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 30.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 63.3, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 53.3, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 68.3, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
-```
-
-### questions
-
-A dataset built to exercise question and answering capabilities of the Home
-Assistant LLM API. The homes for this dataset were synthetically generated
-and then manually curated to exercise the Home Assistant
-intents for querying device state.
-
-This dataset is currently in development and is not yet complete. It may
-contain bugs or incomplete data. We welcome contributions to improve the
-dataset. Please see repo docs for more information on how to contribute.
-
-More information:
-- https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/questions
-
-```mermaid
----
-config:
-    xyChart:
-        width: 1500
-        height: 800
-        xAxis:
-          labelFontSize: 12
-          labelPadding: 8
-    themeVariables:
-        xyChart:
-            titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #f4b400, #fbbc04, #1155cc, #4285f4, #0f9d58, #4285f4"
-
----
-xychart-beta
-  title "questions"
-  x-axis "Model" [claude-3-5-sonnet, gpt-4o-mini, gemini-1.5-flash, gpt-3.5, gemini-2.0-flash, llama3.1, .]
-  y-axis "Score" 1 --> 100
-  bar [57.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 45.5, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 27.3, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 63.6, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 36.4, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 18.2, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
+  bar [76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 56.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 56.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 66.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 73.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 28.3, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 46.7, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 71.7, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 53.3, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
 
-### assistant
-
-The Home Assisatnt NLP assistant pipeline
-
-More information:
-- https://github.com/home-assistant/hassil
-
-
 ### claude-3-5-haiku
 
-Anthropic integration using Claude 3.5 Haiku
+Anthropic integration using Claude 3.5 Haiku, a model with intelligence at
+blazing speeds
+
 
 More information:
 - https://www.anthropic.com/news/3-5-models-and-computer-use
 
 
-### claude-3-5-sonnet
+### claude-3-7-sonnet
 
-Anthropic integration using Claude 3.5 Sonnet
+Anthropic integration using Claude 3.7 Sonnet, high level of intelligence and
+capability with toggleable extended thinking
+
 
 More information:
-- https://www.anthropic.com/news/claude-3-5-sonnet
+- https://www.anthropic.com/news/claude-3-7-sonnet
 
 
 ### gemini-1.5-flash
@@ -260,6 +221,14 @@ More information:
 - https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/
 
 
+### gemini-2.5-flash
+
+Google Generative AI integration using gemini flash (v2.5)
+
+More information:
+- https://developers.googleblog.com/en/start-building-with-gemini-25-flash/
+
+
 ### gemini-2.5-pro
 
 Google Generative AI integration using Gemini 2.5, a thinking model, designed
@@ -267,30 +236,6 @@ to tackle increasingly complex problems.
 
 More information:
 - https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/
-
-
-### gemma3-27b
-
-Gemma3 is a lightweight variant of Gemini 2.0 models. This is a variant
-that has been customized to support tool use since the current ollama
-variant does not yet support tools.
-
-
-More information:
-- https://ollama.com/PetrosStav/gemma3-tools
-- https://blog.google/technology/developers/gemma-3/
-
-
-### gemma3-4b
-
-Gemma3 is a lightweight variant of Gemini 2.0 models. This is a variant
-that has been customized to support tool use since the current ollama
-variant does not yet support tools.
-
-
-More information:
-- https://ollama.com/PetrosStav/gemma3-tools
-- https://blog.google/technology/developers/gemma-3/
 
 
 ### gpt-3.5
@@ -301,98 +246,39 @@ More information:
 - https://platform.openai.com/docs/models/gpt-3-5-turbo
 
 
+### gpt-4.1-mini
+
+Open AI Conversation integration using gpt-4.1-mini. This model is
+balanced for intelligence, speed, and cost.
+
+
+More information:
+- https://platform.openai.com/docs/models/gpt-4.1-mini
+
+
+### gpt-4.1-nano
+
+Open AI Conversation integration using gpt-4.1-minanoni. This model is the
+fastest, most cost-effective GPT-4.1 model
+
+
+More information:
+- https://platform.openai.com/docs/models/gpt-4.1-nano
+
+
+### gpt-4.1
+
+Open AI Conversation integration using gpt-4.1. This is a
+flagship GPT model for complex tasks
+
+
+More information:
+- https://platform.openai.com/docs/models/gpt-4.1
+
+
 ### gpt-4o-mini
 
 Open AI Conversation integration using gpt-4o-mini
 
 More information:
 - https://platform.openai.com/docs/models/gpt-4o-mini
-
-
-### llama3.1
-
-Llama 3.1 (8B) from Meta using Ollama with 8k t window.
-
-More information:
-- https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct
-- https://ollama.com/library/llama3.1
-
-
-### llama3.2-1b
-
-Meta's Llama 3.2 goes small with 1B and 3B models.
-
-More information:
-- https://huggingface.co/meta-llama/Llama-3.2-1B
-- https://ollama.com/library/llama3.2:1b
-
-
-### llama3.2-3b
-
-Meta's Llama 3.2 goes small with 1B and 3B models.
-
-More information:
-- https://huggingface.co/meta-llama/Llama-3.2-3B
-- https://ollama.com/library/llama3.2:3b
-
-
-### llama3.3-awq
-
-Llama 3.3 AWQ running in an OpenAI API-compatible server
-
-More information:
-- https://huggingface.co/casperhansen/llama-3.3-70b-instruct-awq
-- https://huggingface.co/docs/transformers/en/quantization/awq
-
-
-### llama3.3
-
-Llama 3.3 (70B) from Meta using Ollama
-
-More information:
-- https://ollama.com/library/llama3.3
-
-
-### mistral-nemo
-
-A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.
-
-More information:
-- https://mistral.ai/news/mistral-nemo/
-- https://ollama.com/library/mistral-nemo
-
-
-### qwen2.5-14b
-
-Qwen2.5 models are pretrained on Alibaba's latest large-scale dataset, encompassing up to 18 trillion tokens. The model supports up to 128K tokens and has multilingual support.
-
-More information:
-- https://qwenlm.github.io/blog/qwen2.5/
-- https://ollama.com/library/qwen2.5
-
-
-### qwen2.5-32b
-
-Qwen2.5 models are pretrained on Alibaba's latest large-scale dataset, encompassing up to 18 trillion tokens. The model supports up to 128K tokens and has multilingual support.
-
-More information:
-- https://qwenlm.github.io/blog/qwen2.5/
-- https://ollama.com/library/qwen2.5
-
-
-### qwen2.5
-
-Qwen2.5 models are pretrained on Alibaba's latest large-scale dataset, encompassing up to 18 trillion tokens. The model supports up to 128K tokens and has multilingual support.
-
-More information:
-- https://qwenlm.github.io/blog/qwen2.5/
-- https://ollama.com/library/qwen2.5
-
-
-### qwq
-
-QwQ is the reasoning model of the Qwen series.
-
-More information:
-- https://qwenlm.github.io/blog/qwq-32b/
-- https://ollama.com/library/qwq
