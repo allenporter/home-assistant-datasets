@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from collections.abc import Generator
 import logging
 import pathlib
-import yaml
 
 _LOGGER = logging.getLogger(__name__)
 
