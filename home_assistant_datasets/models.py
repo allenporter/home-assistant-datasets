@@ -23,6 +23,19 @@ MODEL_CONFIG_DIR = pathlib.Path("models/")
 
 ARCHIVE_LABEL = "archive"
 
+@dataclass
+class Cost(DataClassYAMLMixin):
+    """Cost metrics."""
+
+    input_tokens: float
+    """Cost for 1M input tokens."""
+
+    output_tokens: float
+    """Cost for 1M output tokens."""
+
+    notes: str | None = None
+    """Additional models about model pricing."""
+
 
 @dataclass
 class EntryConfig:
@@ -71,6 +84,9 @@ class ModelConfig:
 
     categories: list[str] = field(default_factory=list)
     """Arbitrary labels about this model."""
+
+    cost: Cost | None = None
+    """Cost metrics for the model entry."""
 
 
 @dataclass
