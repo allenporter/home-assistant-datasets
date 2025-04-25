@@ -105,22 +105,23 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
         "model_output_file",
         [pytest.param(str(task)) for task in model_outout_files],
         ids=[str(task.relative_to(model_output_path)) for task in model_outout_files],
+        scope="module",
     )
 
 
-@pytest.fixture(name="model_output", autouse=True)
+@pytest.fixture(name="model_output", autouse=True, scope="module")
 def model_output_fixture(model_output_file: str) -> ModelOutput:
     """Fixture to read the ScrapeRecord from a ModelOutput file."""
     return read_model_output(pathlib.Path(model_output_file))
 
 
-@pytest.fixture(name="scrape_record", autouse=True)
+@pytest.fixture(name="scrape_record", autouse=True, scope="module")
 def scrape_record_fixture(model_output: ModelOutput) -> ScrapeRecord:
     """Fixture to read the ScrapeRecord from a ModelOutput file."""
     return scrape_record_from_output(model_output)
 
 
-@pytest.fixture(name="consume_scrape_record", autouse=True)
+@pytest.fixture(name="consume_scrape_record", autouse=True, scope="module")
 def consume_scrape_record_fixture(
     request: FixtureRequest, scrape_record: ScrapeRecord
 ) -> Generator[None]:

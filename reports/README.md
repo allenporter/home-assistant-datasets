@@ -265,10 +265,10 @@ Google Generative AI integration using gemini flash (v1.5)
 #### Assist Eval Performance Metrics
 
 - Average Latency: 1016 (ms)
-- Total Eval Cost: $0.36
+- Total Eval Cost: $0.09
 - Cost breakdown:
-    - 4344436 input tokens, $0.08/1M tokens
-    - 38924 output tokens, $0.30/1M tokens
+    - 1086109 input tokens, $0.08/1M tokens
+    - 9731 output tokens, $0.30/1M tokens
 
 Free tier is available
 
@@ -285,10 +285,10 @@ Google Generative AI integration using gemini flash lite (v2.0) (exp)
 #### Assist Eval Performance Metrics
 
 - Average Latency: 894 (ms)
-- Total Eval Cost: $0.32
+- Total Eval Cost: $0.08
 - Cost breakdown:
-    - 3811336 input tokens, $0.08/1M tokens
-    - 40316 output tokens, $0.30/1M tokens
+    - 952834 input tokens, $0.08/1M tokens
+    - 10079 output tokens, $0.30/1M tokens
 
 Free tier is available
 
@@ -305,10 +305,10 @@ Google Generative AI integration using gemini flash (v2.0)
 #### Assist Eval Performance Metrics
 
 - Average Latency: 963 (ms)
-- Total Eval Cost: $0.41
+- Total Eval Cost: $0.10
 - Cost breakdown:
-    - 3923792 input tokens, $0.10/1M tokens
-    - 37356 output tokens, $0.40/1M tokens
+    - 980948 input tokens, $0.10/1M tokens
+    - 9339 output tokens, $0.40/1M tokens
 
 Free tier is available
 
@@ -325,10 +325,10 @@ Google Generative AI integration using gemini flash (v2.5)
 #### Assist Eval Performance Metrics
 
 - Average Latency: 2262 (ms)
-- Total Eval Cost: $1.56
+- Total Eval Cost: $0.39
 - Cost breakdown:
-    - 8370524 input tokens, $0.15/1M tokens
-    - 506720 output tokens, $0.60/1M tokens
+    - 2092631 input tokens, $0.15/1M tokens
+    - 126680 output tokens, $0.60/1M tokens
 
 Free tier is available
 
@@ -346,10 +346,10 @@ to tackle increasingly complex problems.
 #### Assist Eval Performance Metrics
 
 - Average Latency: 5760 (ms)
-- Total Eval Cost: $18.65
+- Total Eval Cost: $4.66
 - Cost breakdown:
-    - 8965828 input tokens, $1.25/1M tokens
-    - 744200 output tokens, $10.00/1M tokens
+    - 2241457 input tokens, $1.25/1M tokens
+    - 186050 output tokens, $10.00/1M tokens
 
 Free tier is available
 
@@ -366,10 +366,10 @@ Open AI Conversation integration using gpt-3.5 (175B)
 #### Assist Eval Performance Metrics
 
 - Average Latency: 2091 (ms)
-- Total Eval Cost: $3.15
+- Total Eval Cost: $0.79
 - Cost breakdown:
-    - 6111568 input tokens, $0.50/1M tokens
-    - 65752 output tokens, $1.50/1M tokens
+    - 1527892 input tokens, $0.50/1M tokens
+    - 16438 output tokens, $1.50/1M tokens
 
 None
 
@@ -388,10 +388,10 @@ balanced for intelligence, speed, and cost.
 #### Assist Eval Performance Metrics
 
 - Average Latency: 2610 (ms)
-- Total Eval Cost: $2.56
+- Total Eval Cost: $0.64
 - Cost breakdown:
-    - 6131840 input tokens, $0.40/1M tokens
-    - 66144 output tokens, $1.60/1M tokens
+    - 1532960 input tokens, $0.40/1M tokens
+    - 16536 output tokens, $1.60/1M tokens
 
 None
 
@@ -410,10 +410,10 @@ fastest, most cost-effective GPT-4.1 model
 #### Assist Eval Performance Metrics
 
 - Average Latency: 1987 (ms)
-- Total Eval Cost: $0.60
+- Total Eval Cost: $0.15
 - Cost breakdown:
-    - 5783612 input tokens, $0.10/1M tokens
-    - 56740 output tokens, $0.40/1M tokens
+    - 1445903 input tokens, $0.10/1M tokens
+    - 14185 output tokens, $0.40/1M tokens
 
 None
 
@@ -432,10 +432,10 @@ flagship GPT model for complex tasks
 #### Assist Eval Performance Metrics
 
 - Average Latency: 2263 (ms)
-- Total Eval Cost: $12.37
+- Total Eval Cost: $3.09
 - Cost breakdown:
-    - 5920088 input tokens, $2.00/1M tokens
-    - 66244 output tokens, $8.00/1M tokens
+    - 1480022 input tokens, $2.00/1M tokens
+    - 16561 output tokens, $8.00/1M tokens
 
 None
 
@@ -452,10 +452,10 @@ Open AI Conversation integration using gpt-4o-mini
 #### Assist Eval Performance Metrics
 
 - Average Latency: 2519 (ms)
-- Total Eval Cost: $0.94
+- Total Eval Cost: $0.23
 - Cost breakdown:
-    - 6000308 input tokens, $0.15/1M tokens
-    - 64664 output tokens, $0.60/1M tokens
+    - 1500077 input tokens, $0.15/1M tokens
+    - 16166 output tokens, $0.60/1M tokens
 
 None
 
