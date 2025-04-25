@@ -27,8 +27,10 @@ from .config import (
     SCORED_DATASETS,
     AVERAGE_SCORE,
     DATASETS_FOR_AVG,
+    ASSIST_DATASET,
     eval_reports,
 )
+from .eval_cost import compute_model_eval_cost
 from . import table, chart
 
 
@@ -289,6 +291,7 @@ def run(args: argparse.Namespace) -> int:
         for dataset_card in read_dataset_cards()
         if dataset_card.name in DATASETS
     }
+    eval_cost = compute_model_eval_cost(report_dir / ASSIST_DATASET)
 
     # Markdown table with top model results
     leaderboard_table = create_leaderboard_table(best_model_scores)
@@ -329,7 +332,7 @@ def run(args: argparse.Namespace) -> int:
 
     results.append("## Models")
     for model_card in ranked_model_ids.values():
-        results.append(table.format_model_card(model_card))
+        results.append(table.format_model_card(model_card, eval_cost.get(model_card.model_id)))
 
     leaderboard_file = report_dir / LEADERBOARD_FILE
     print(f"Updating {leaderboard_file}")

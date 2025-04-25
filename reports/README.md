@@ -32,6 +32,8 @@ to exercise the Home Assistant intents for controlling devices. The sentences
 were made intentionally more difficult than the existing assistant NLP for
 showcasing larger model reasoning capabilities.
 
+
+
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist
 - https://developers.home-assistant.io/blog/2024/05/20/llm-api/
@@ -88,6 +90,8 @@ rather than context retrieval.
 This dataset uses the `assist` format. See the `assist` dataset card and README for
 additional details about the format and information about running the evaluation.
 
+
+
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist-mini
@@ -136,6 +140,8 @@ intents for querying device state.
 This dataset is currently in development and is not yet complete. It may
 contain bugs or incomplete data. We welcome contributions to improve the
 dataset. Please see repo docs for more information on how to contribute.
+
+
 
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/questions
@@ -187,6 +193,8 @@ run through scenarios that should trigger the automation. It also gives points
 for getting inputs correct and each problem benchmark exercises different
 scenarios that add to the overall score. The various scenarios are not weighted.
 
+
+
 More information:
 - https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/automations
 
@@ -231,6 +239,8 @@ Anthropic integration using Claude 3.5 Haiku, a model with intelligence at
 blazing speeds
 
 
+
+
 More information:
 - https://www.anthropic.com/news/3-5-models-and-computer-use
 
@@ -241,6 +251,8 @@ Anthropic integration using Claude 3.7 Sonnet, high level of intelligence and
 capability with toggleable extended thinking
 
 
+
+
 More information:
 - https://www.anthropic.com/news/claude-3-7-sonnet
 
@@ -248,6 +260,18 @@ More information:
 ### gemini-1.5-flash
 
 Google Generative AI integration using gemini flash (v1.5)
+
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 1016 (ms)
+- Total Eval Cost: $0.36
+- Cost breakdown:
+    - 4344436 input tokens, $0.08/1M tokens
+    - 38924 output tokens, $0.30/1M tokens
+
+Free tier is available
+
 
 More information:
 - https://blog.google/products/gemini/google-gemini-new-features-july-2024/
@@ -257,6 +281,18 @@ More information:
 
 Google Generative AI integration using gemini flash lite (v2.0) (exp)
 
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 894 (ms)
+- Total Eval Cost: $0.32
+- Cost breakdown:
+    - 3811336 input tokens, $0.08/1M tokens
+    - 40316 output tokens, $0.30/1M tokens
+
+Free tier is available
+
+
 More information:
 - https://developers.googleblog.com/en/start-building-with-the-gemini-2-0-flash-family/
 
@@ -265,6 +301,18 @@ More information:
 
 Google Generative AI integration using gemini flash (v2.0)
 
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 963 (ms)
+- Total Eval Cost: $0.41
+- Cost breakdown:
+    - 3923792 input tokens, $0.10/1M tokens
+    - 37356 output tokens, $0.40/1M tokens
+
+Free tier is available
+
+
 More information:
 - https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/
 
@@ -272,6 +320,18 @@ More information:
 ### gemini-2.5-flash
 
 Google Generative AI integration using gemini flash (v2.5)
+
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 2262 (ms)
+- Total Eval Cost: $1.56
+- Cost breakdown:
+    - 8370524 input tokens, $0.15/1M tokens
+    - 506720 output tokens, $0.60/1M tokens
+
+Free tier is available
+
 
 More information:
 - https://developers.googleblog.com/en/start-building-with-gemini-25-flash/
@@ -282,6 +342,18 @@ More information:
 Google Generative AI integration using Gemini 2.5, a thinking model, designed
 to tackle increasingly complex problems.
 
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 5760 (ms)
+- Total Eval Cost: $18.65
+- Cost breakdown:
+    - 8965828 input tokens, $1.25/1M tokens
+    - 744200 output tokens, $10.00/1M tokens
+
+Free tier is available
+
+
 More information:
 - https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/
 
@@ -289,6 +361,18 @@ More information:
 ### gpt-3.5
 
 Open AI Conversation integration using gpt-3.5 (175B)
+
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 2091 (ms)
+- Total Eval Cost: $3.15
+- Cost breakdown:
+    - 6111568 input tokens, $0.50/1M tokens
+    - 65752 output tokens, $1.50/1M tokens
+
+None
+
 
 More information:
 - https://platform.openai.com/docs/models/gpt-3-5-turbo
@@ -298,6 +382,18 @@ More information:
 
 Open AI Conversation integration using gpt-4.1-mini. This model is
 balanced for intelligence, speed, and cost.
+
+
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 2610 (ms)
+- Total Eval Cost: $2.56
+- Cost breakdown:
+    - 6131840 input tokens, $0.40/1M tokens
+    - 66144 output tokens, $1.60/1M tokens
+
+None
 
 
 More information:
@@ -310,6 +406,18 @@ Open AI Conversation integration using gpt-4.1-minanoni. This model is the
 fastest, most cost-effective GPT-4.1 model
 
 
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 1987 (ms)
+- Total Eval Cost: $0.60
+- Cost breakdown:
+    - 5783612 input tokens, $0.10/1M tokens
+    - 56740 output tokens, $0.40/1M tokens
+
+None
+
+
 More information:
 - https://platform.openai.com/docs/models/gpt-4.1-nano
 
@@ -320,6 +428,18 @@ Open AI Conversation integration using gpt-4.1. This is a
 flagship GPT model for complex tasks
 
 
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 2263 (ms)
+- Total Eval Cost: $12.37
+- Cost breakdown:
+    - 5920088 input tokens, $2.00/1M tokens
+    - 66244 output tokens, $8.00/1M tokens
+
+None
+
+
 More information:
 - https://platform.openai.com/docs/models/gpt-4.1
 
@@ -327,6 +447,18 @@ More information:
 ### gpt-4o-mini
 
 Open AI Conversation integration using gpt-4o-mini
+
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 2519 (ms)
+- Total Eval Cost: $0.94
+- Cost breakdown:
+    - 6000308 input tokens, $0.15/1M tokens
+    - 64664 output tokens, $0.60/1M tokens
+
+None
+
 
 More information:
 - https://platform.openai.com/docs/models/gpt-4o-mini

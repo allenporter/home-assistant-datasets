@@ -1,15 +1,17 @@
 """Configuration for the leaderboard."""
 
-import logging
-import pathlib
 from dataclasses import dataclass
 from collections.abc import Generator
+import logging
+import pathlib
+import yaml
 
 _LOGGER = logging.getLogger(__name__)
 
 REPORT_DIR = "reports"
+ASSIST_DATASET = "assist"
 ASSIST_FAMILY_DATASETS = [
-    "assist",
+    ASSIST_DATASET,
     "assist-mini",
     "questions",
 ]
