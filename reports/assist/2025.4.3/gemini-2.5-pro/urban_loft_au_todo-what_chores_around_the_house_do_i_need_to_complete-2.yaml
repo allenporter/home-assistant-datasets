@@ -1,0 +1,292 @@
+---
+uuid: f763c0a6-ad38-4f76-8ec7-9c585e9eec74
+task_id: urban_loft_au_todo-what_chores_around_the_house_do_i_need_to_complete-2
+model_id: gemini-2.5-pro
+category:
+- todo
+- question
+task:
+  input_text: What chores around the house do I need to complete?
+  expect_response:
+  - terrace light
+response: Based on the live context, there are 2 items on your Tasks list.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: What chores around the house do I need to complete?
+      context:
+        id: 01JSJZXJKNM8VKWWDS62ND39SF
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-24 04:11:58.965660+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          Current time is 21:11:58. Today's date is 2025-04-23.
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Living Room
+            domain: light
+            areas: Living Room
+          - names: Bedroom Light
+            domain: light
+            areas: Bedroom
+          - names: Balcony Light
+            domain: light
+            areas: Balcony
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Terrace Light
+            domain: light
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Smart Plug Energy
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Smart Plug
+            domain: switch
+            areas: Rooftop Terrace
+          - names: Weather Service
+            domain: weather
+            areas: Rooftop Terrace
+          - names: Samsung
+            domain: media_player
+            areas: Living Room
+          - names: Tasks
+            domain: todo
+      - role: user
+        content: What chores around the house do I need to complete?
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: Okay, I can check your Tasks list.
+        tool_calls:
+        - tool_name: GetLiveContext
+          tool_args: {}
+          id: 01JSJZXSDW4BGJKHV364MEDN5D
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01JSJZXSDW4BGJKHV364MEDN5D
+        tool_name: GetLiveContext
+        tool_result:
+          success: true
+          result: |
+            Live Context: An overview of the areas and the devices in this smart home:
+            - names: Motion Sensor
+              domain: binary_sensor
+              state: 'on'
+              areas: Rooftop Terrace
+              attributes:
+                device_class: motion
+            - names: Motion Sensor Battery
+              domain: binary_sensor
+              state: 'off'
+              areas: Rooftop Terrace
+              attributes:
+                device_class: battery
+            - names: Living Room
+              domain: light
+              state: 'off'
+              areas: Living Room
+              attributes:
+                brightness:
+            - names: Bedroom Light
+              domain: light
+              state: 'off'
+              areas: Bedroom
+              attributes:
+                brightness:
+            - names: Balcony Light
+              domain: light
+              state: 'off'
+              areas: Balcony
+            - names: Kitchen Light
+              domain: light
+              state: 'off'
+              areas: Kitchen
+              attributes:
+                brightness:
+            - names: Terrace Light
+              domain: light
+              state: 'off'
+              areas: Rooftop Terrace
+            - names: Motion Sensor Battery
+              domain: sensor
+              state: '90'
+              areas: Rooftop Terrace
+              attributes:
+                unit_of_measurement: '%'
+                device_class: battery
+            - names: Smart Plug Energy
+              domain: sensor
+              state: '1'
+              areas: Rooftop Terrace
+              attributes:
+                unit_of_measurement: kWh
+                device_class: energy
+            - names: Smart Plug
+              domain: switch
+              state: 'off'
+              areas: Rooftop Terrace
+              attributes:
+                device_class: outlet
+            - names: Weather Service
+              domain: weather
+              state: sunny
+              areas: Rooftop Terrace
+              attributes:
+                temperature: 22.2
+                temperature_unit: °C
+                humidity: '60'
+            - names: Samsung
+              domain: media_player
+              state: playing
+              areas: Living Room
+              attributes:
+                volume_level: 0.5
+                device_class: tv
+            - names: Tasks
+              domain: todo
+              state: '2'
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: Based on the live context, there are 2 items on your Tasks list.
+        tool_calls: null
+      tools:
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [<function string at 0x7f64494fb7e0>], msg=None), ''color'': <function color_name_to_rgb
+          at 0x7f644827bb00>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f6446113100>, ''name'':
+          <function non_empty_string at 0x7f6446113100>}'
+      - name: HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f6446113100>, ''name'':
+          <function non_empty_string at 0x7f6446113100>}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f64494fa160>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f64494fa160>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f64494fa160>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f64494fa160>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f64494fa160>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7f64005265c0>, msg=None)}'
+      - name: HassTurnOn
+        description: Turns on/opens a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [<function string at 0x7f64494fb7e0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f64494fa160>, [In([''outlet'', ''switch'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window'', ''water'', ''gas'', ''tv'', ''speaker'', ''receiver''])],
+          msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f6446113100>, ''domain'': All(<function ensure_list at 0x7f64494fa160>,
+          [<function string at 0x7f64494fb7e0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f64494fa160>, [In([''outlet'', ''switch'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window'', ''water'', ''gas'', ''tv'', ''speaker'', ''receiver''])],
+          msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f64494fb7e0>}'
+      - name: calendar_get_events
+        description: Get events from a calendar. When asked if something happens,
+          search the whole week. Results are RFC 5545 which means 'end' is exclusive.
+        parameters: '{''calendar'': In([''Personal'']), ''range'': In([''today'',
+          ''week''])}'
+      - name: GetLiveContext
+        description: 'Use this tool when the user asks a question about the CURRENT
+          state, value, or mode of a specific device, sensor, entity, or area in the
+          smart home, and the answer can be improved with real-time data not available
+          in the static device overview list. '
+        parameters: '{}'
+    timestamp: 2025-04-24 04:11:58.969639+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2087
+        cached_input_tokens: 0
+        output_tokens: 372
+    timestamp: 2025-04-24 04:12:05.948931+00:00
+  - event_type: tool_call
+    data:
+      tool_name: GetLiveContext
+      tool_args: {}
+    timestamp: 2025-04-24 04:12:05.949665+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2672
+        cached_input_tokens: 0
+        output_tokens: 483
+    timestamp: 2025-04-24 04:12:10.765389+00:00
+  duration_ms: 11800.246
+  tries: 1
