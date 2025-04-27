@@ -67,6 +67,9 @@ class ModelConfig:
     description: str
     """A detailed description of the model tested."""
 
+    categories: list[str] | None = None
+    """Labels tagged on the model for later slicing."""
+
     urls: list[str] | None = None
     """A list of relevant urls for the model and its serving infrastructure."""
 
