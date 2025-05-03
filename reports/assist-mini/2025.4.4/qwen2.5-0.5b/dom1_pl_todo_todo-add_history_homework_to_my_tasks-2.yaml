@@ -1,0 +1,139 @@
+---
+uuid: 5639965e-1160-465b-8eaf-a22358dc7920
+task_id: dom1_pl_todo_todo-add_history_homework_to_my_tasks-2
+model_id: qwen2.5-0.5b
+category: todo
+task:
+  input_text: Add history homework to my tasks
+  expect_changes:
+    todo.personal_tasks:
+      state: '1'
+      attributes: null
+response: You cannot add a task called "add history homework" to the tasks using this
+  tool. Please check if you entered it correctly or try again with a different name.
+  If you have already added a task under the 'Todo' domain, please let me know so
+  I can assist you further.
+context:
+  unexpected_states:
+    todo.personal_tasks:
+      expected:
+        state: '1'
+      got:
+        state: '0'
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Add history homework to my tasks
+      context:
+        id: 01JSWG2P0XKPF6DG7VESQTS7NX
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-04-27 20:47:33.405913+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          Current time is 13:47:33. Today's date is 2025-04-27.
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Personal Tasks
+            domain: todo
+      - role: user
+        content: Add history homework to my tasks
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        tool_calls:
+        - tool_name: HassListAddItem
+          tool_args:
+            item: add history homework
+            name: add history homework
+          id: 01JSWG2PZ1CDQXSV0N0TBNG4DX
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01JSWG2PZ1CDQXSV0N0TBNG4DX
+        tool_name: HassListAddItem
+        tool_result:
+          error: MatchFailedError
+          error_text: '<MatchFailedError result=MatchTargetsResult(is_match=False,
+            no_match_reason=<MatchFailedReason.NAME: 1>, states=[], no_match_name=None,
+            areas=[], floors=[]), constraints=MatchTargetsConstraints(name=''add history
+            homework'', area_name=None, floor_name=None, domains=[''todo''], device_classes=None,
+            features=None, states=None, assistant=''conversation'', allow_duplicate_names=False,
+            single_target=False), preferences=None>'
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: You cannot add a task called "add history homework" to the tasks
+          using this tool. Please check if you entered it correctly or try again with
+          a different name. If you have already added a task under the 'Todo' domain,
+          please let me know so I can assist you further.
+        tool_calls: null
+      tools:
+      - name: HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fb84942efc0>, ''name'':
+          <function non_empty_string at 0x7fb84942efc0>}'
+      - name: HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fb84942efc0>, ''name'':
+          <function non_empty_string at 0x7fb84942efc0>}'
+      - name: HassTurnOn
+        description: Turns on/opens a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fb84942efc0>, ''domain'': All(<function ensure_list at 0x7fb84c620cc0>,
+          [<function string at 0x7fb84c622340>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fb84c620cc0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver'', ''outlet'', ''switch'', ''water'', ''gas''])],
+          msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fb84942efc0>, ''domain'': All(<function ensure_list at 0x7fb84c620cc0>,
+          [<function string at 0x7fb84c622340>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fb84c620cc0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver'', ''outlet'', ''switch'', ''water'', ''gas''])],
+          msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fb84c622340>}'
+      - name: GetLiveContext
+        description: 'Use this tool when the user asks a question about the CURRENT
+          state, value, or mode of a specific device, sensor, entity, or area in the
+          smart home, and the answer can be improved with real-time data not available
+          in the static device overview list. '
+        parameters: '{}'
+    timestamp: 2025-04-27 20:47:33.407998+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassListAddItem
+      tool_args:
+        item: add history homework
+        name: add history homework
+    timestamp: 2025-04-27 20:47:34.410372+00:00
+  duration_ms: 2528.874
+  tries: 1
