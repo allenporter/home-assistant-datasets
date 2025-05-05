@@ -1,23 +1,24 @@
 # Home LLM Leaderboard
-| Model | assist $${\color{gray}\small{\textsf{(n=0)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=190)}}}$$ | questions $${\color{gray}\small{\textsf{(n=0)}}}$$ | automations $${\color{gray}\small{\textsf{(n=0)}}}$$ |
+| Model | assist $${\color{gray}\small{\textsf{(n=461)}}}$$ | assist-mini $${\color{gray}\small{\textsf{(n=196)}}}$$ | questions $${\color{gray}\small{\textsf{(n=185)}}}$$ | automations $${\color{gray}\small{\textsf{(n=60)}}}$$ |
 | --- | --- | --- | --- | --- |
-| qwen2.5-32b |  | $${97.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.4.4)}}}$$ |  |  | $${\textbf{97.9}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
-| qwen2.5-14b |  | $${95.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.4)}}}$$ |  |  | $${95.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
-| gemini-2.5-pro | $${\textbf{91.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 2.6, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${83.2\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
+| gemini-2.5-pro | $${\textbf{91.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 2.6, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${83.2\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${\textbf{91.2}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
 | claude-3-7-sonnet | $${89.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.3)}}}$$ | $${84.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${\textbf{81.7}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.3)}}}$$ | $${90.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
-| qwen2.5-7b |  | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ |  |  | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, avg)}}}$$ |
+| qwen2.5-32b | $${85.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.4.4)}}}$$ | $${97.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.4.4)}}}$$ |  |  | $${88.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | claude-3-5-haiku | $${85.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${94.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${\textbf{87.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 4.8, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${87.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
 | gpt-4.1-mini | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2025.4.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.4.3)}}}$$ | $${83.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.8, 2025.5.0.dev0)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${87.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
 | gpt-4o-mini | $${85.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${75.1\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${86.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
 | gpt-4.1 | $${81.2\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.4.3)}}}$$ | $${85.4\\% \space\color{gray}\tiny{\textsf{(CI: 5.1, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${85.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
+| qwen2.5-70b | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.4)}}}$$ |  |  |  | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, avg)}}}$$ |
 | gemini-2.5-flash | $${88.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, 2025.4.3)}}}$$ | $${74.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.5.0.dev0)}}}$$ | $${73.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.2, 2025.4.3)}}}$$ | $${85.1\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
 | gpt-3.5 | $${86.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2025.4.3)}}}$$ | $${99.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.0, 2025.4.3)}}}$$ | $${73.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.5.0.dev0)}}}$$ | $${66.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.9, 2025.4.3)}}}$$ | $${84.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
+| qwen2.5-14b | $${79.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2025.4.4)}}}$$ | $${95.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.4)}}}$$ |  |  | $${84.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | gemini-1.5-flash | $${88.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.4.3)}}}$$ | $${70.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, 2025.5.0.dev0)}}}$$ | $${28.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${83.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
+| qwen2.5-7b | $${79.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2025.4.4)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ |  |  | $${82.3\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
 | gpt-4.1-nano | $${74.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.4.3)}}}$$ | $${92.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.5.0.dev0)}}}$$ | $${46.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${78.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | gemini-2.0-flash | $${68.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.4.3)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.4.3)}}}$$ | $${78.4\\% \space\color{gray}\tiny{\textsf{(CI: 5.9, 2025.4.3)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
-| qwen2.5-3b |  | $${70.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.4, 2025.4.4)}}}$$ |  |  | $${70.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.4, avg)}}}$$ |
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
-| qwen2.5-0.5b |  | $${24.5\\% \space\color{gray}\tiny{\textsf{(CI: 6.0, 2025.4.4)}}}$$ |  |  | $${24.5\\% \space\color{gray}\tiny{\textsf{(CI: 6.0, avg)}}}$$ |
+| qwen2.5-3b | $${60.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${70.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.4, 2025.4.4)}}}$$ |  |  | $${63.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, avg)}}}$$ |
+| qwen2.5-0.5b | $${18.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.4.4)}}}$$ | $${24.5\\% \space\color{gray}\tiny{\textsf{(CI: 6.0, 2025.4.4)}}}$$ |  |  | $${20.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -55,25 +56,25 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #ea4335, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #4285f4, #f4b400, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #4285f4"
 
 ---
 xychart-beta
   title "assist"
-  x-axis "Model" [gemini-2.5-pro, claude-3-7-sonnet, claude-3-5-haiku, gpt-4.1-mini, gpt-4o-mini, gpt-4.1, gemini-2.5-flash, gpt-3.5, gemini-1.5-flash, gpt-4.1-nano, gemini-2.0-flash, gemini-2.0-flash-lite, .]
+  x-axis "Model" [gemini-2.5-pro, claude-3-7-sonnet, qwen2.5-32b, claude-3-5-haiku, gpt-4.1-mini, gpt-4o-mini, gpt-4.1, qwen2.5-70b, gemini-2.5-flash, gpt-3.5, qwen2.5-14b, gemini-1.5-flash, .]
   y-axis "Score" 1 --> 100
   bar [91.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 89.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 85.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 86.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 85.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 81.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.5, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 74.7, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 68.7, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 65.9, 0.0]
+  bar [0.0, 0.0, 85.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 85.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 86.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 85.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.7, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.5, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 79.1, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.9, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -113,25 +114,25 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #1155cc, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #4285f4"
 
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [qwen2.5-32b, qwen2.5-14b, gemini-2.5-pro, claude-3-7-sonnet, qwen2.5-7b, claude-3-5-haiku, gpt-4.1-mini, gpt-4o-mini, gpt-4.1, gemini-2.5-flash, gpt-3.5, gemini-1.5-flash, .]
+  x-axis "Model" [gemini-2.5-pro, claude-3-7-sonnet, qwen2.5-32b, claude-3-5-haiku, gpt-4.1-mini, gpt-4o-mini, gpt-4.1, gemini-2.5-flash, gpt-3.5, qwen2.5-14b, gemini-1.5-flash, qwen2.5-7b, .]
   y-axis "Score" 1 --> 100
-  bar [97.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 95.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 98.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 88.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 94.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.5, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 99.5, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0]
+  bar [98.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 97.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 94.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 98.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 99.5, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 95.4, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.3, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -163,7 +164,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #ea4335, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #4285f4, #f4b400, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #ea4335, #fbbc04, #34a853, #ff6d01, #1155cc, #d5a6bd, #674ea7, #4285f4, #0f9d58, #f4b400, #4285f4"
 
 ---
 xychart-beta
@@ -215,7 +216,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#f4b400, #ea4335, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #4285f4, #f4b400, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #ea4335, #fbbc04, #34a853, #ff6d01, #1155cc, #d5a6bd, #674ea7, #4285f4, #0f9d58, #f4b400, #4285f4"
 
 ---
 xychart-beta
@@ -503,6 +504,17 @@ More information:
 
 
 ### qwen2.5-3b
+
+Qwen2.5 models are pretrained on Alibaba's latest large-scale dataset, encompassing up to 18 trillion tokens. The model supports up to 128K tokens and has multilingual support.
+
+
+
+More information:
+- https://qwenlm.github.io/blog/qwen2.5/
+- https://ollama.com/library/qwen2.5
+
+
+### qwen2.5-70b
 
 Qwen2.5 models are pretrained on Alibaba's latest large-scale dataset, encompassing up to 18 trillion tokens. The model supports up to 128K tokens and has multilingual support.
 
