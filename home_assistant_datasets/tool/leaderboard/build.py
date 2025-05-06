@@ -233,7 +233,7 @@ def create_leaderboard_table(
     for model_id, dataset_scores in best_model_scores.items():
         row = [model_id]
         for dataset, best_record in dataset_scores.items():
-            if best_record.good_percent_value() == 0:
+            if best_record.total == 0:
                 row.append("")
                 continue
             ci = best_record.confidence_interval
