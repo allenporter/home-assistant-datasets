@@ -1,0 +1,219 @@
+---
+uuid: 7ed65430-2fd0-459d-8acc-cd20e5d422c7
+task_id: light_on_door_light_on_door-light_on_door-3
+model_id: qwen2.5-14b
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  Here is an example of how you could create a blueprint for turning on a light when a door opens in Home Assistant:
+
+  ```yaml
+  blueprint:
+    name: Turn on light when door opens
+    domain: automation
+    inputs:
+      - variable: door_sensor
+        name: Door Sensor
+        description: "A binary sensor that triggers the automation to start."
+        icon: mdi:door-open
+        required: true
+        selector:
+          entity:
+            integration: binary_sensor
+            device_class: opening
+
+      - variable: light_switch
+        name: Light Switch
+        description: "The light(s) to turn on when the door opens and turn off after a timeout."
+        icon: mdi:lightbulb-on
+        required: true
+        selector:
+          entity:
+            integration: light
+            multiple: true
+
+  automation:
+    alias: Turn on light when door opens
+    description: "Turns on specified lights when a door is opened, and turns them off after closing or timeout."
+    trigger:
+      platform: state
+      entity_id: "{{ door_sensor }}"
+      to: 'on'
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: "{{ light_switch }}"
+      - delay:
+          hours: 0
+          minutes: 2
+          seconds: 0
+      - service: light.turn_off
+        target:
+          entity_id: "{{ light_switch }}"
+  ```
+
+  This blueprint automation does the following:
+
+  1. **Trigger**: When the `door_sensor` changes state to 'on' (indicating that the door is open).
+  2. **Action**: It turns on the specified `light_switch`.
+  3. **Timeout Delay**: After 2 minutes, it will turn off the light.
+
+  This ensures that the light turns on when someone opens the door and stays on for a set period before automatically turning off to save energy or avoid leaving lights unnecessarily lit.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01JTHTDNE7DCRS9G7T9QRCA8EY
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-05-06 03:32:22.087365+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Current time is 20:32:22. Today's date is 2025-05-05.
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Here is an example of how you could create a blueprint for turning on a light when a door opens in Home Assistant:
+
+          ```yaml
+          blueprint:
+            name: Turn on light when door opens
+            domain: automation
+            inputs:
+              - variable: door_sensor
+                name: Door Sensor
+                description: "A binary sensor that triggers the automation to start."
+                icon: mdi:door-open
+                required: true
+                selector:
+                  entity:
+                    integration: binary_sensor
+                    device_class: opening
+
+              - variable: light_switch
+                name: Light Switch
+                description: "The light(s) to turn on when the door opens and turn off after a timeout."
+                icon: mdi:lightbulb-on
+                required: true
+                selector:
+                  entity:
+                    integration: light
+                    multiple: true
+
+          automation:
+            alias: Turn on light when door opens
+            description: "Turns on specified lights when a door is opened, and turns them off after closing or timeout."
+            trigger:
+              platform: state
+              entity_id: "{{ door_sensor }}"
+              to: 'on'
+            action:
+              - service: light.turn_on
+                target:
+                  entity_id: "{{ light_switch }}"
+              - delay:
+                  hours: 0
+                  minutes: 2
+                  seconds: 0
+              - service: light.turn_off
+                target:
+                  entity_id: "{{ light_switch }}"
+          ```
+
+          This blueprint automation does the following:
+
+          1. **Trigger**: When the `door_sensor` changes state to 'on' (indicating that the door is open).
+          2. **Action**: It turns on the specified `light_switch`.
+          3. **Timeout Delay**: After 2 minutes, it will turn off the light.
+
+          This ensures that the light turns on when someone opens the door and stays on for a set period before automatically turning off to save energy or avoid leaving lights unnecessarily lit.
+        tool_calls: null
+      tools: null
+    timestamp: 2025-05-06 03:32:22.089189+00:00
+  duration_ms: 31868.279
+  tries: 1
