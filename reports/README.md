@@ -13,6 +13,7 @@
 | qwen2.5-70b | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.4)}}}$$ | $${94.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.4.4)}}}$$ | $${74.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${83.3\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
 | qwen2.5-32b | $${85.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.4.4)}}}$$ | $${97.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.4.4)}}}$$ | $${70.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${82.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | qwen2.5-14b | $${79.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2025.4.4)}}}$$ | $${95.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.4)}}}$$ | $${71.4\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.4.4)}}}$$ | $${3.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${79.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
+| qwen3-30b-gptq | $${84.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.5.2)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.5.2)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.2)}}}$$ |  | $${79.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | qwen2.5-7b | $${79.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2025.4.4)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${72.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${78.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | gpt-4.1-nano | $${74.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.4.3)}}}$$ | $${92.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.5.0.dev0)}}}$$ | $${46.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${78.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | gemini-2.0-flash | $${68.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.4.3)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.4.3)}}}$$ | $${78.4\\% \space\color{gray}\tiny{\textsf{(CI: 5.9, 2025.4.3)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
@@ -216,7 +217,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #674ea7, #4285f4, #0f9d58, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #34a853, #ff6d01, #46bdc6, #1155cc, #674ea7, #0f9d58, #f4b400, #4285f4"
 
 ---
 xychart-beta
@@ -534,3 +535,14 @@ Qwen2.5 models are pretrained on Alibaba's latest large-scale dataset, encompass
 More information:
 - https://qwenlm.github.io/blog/qwen2.5/
 - https://ollama.com/library/qwen2.5
+
+
+### qwen3-30b-gptq
+
+Qwen3 30B (A3B) running in an OpenAI API-compatible server
+
+
+
+More information:
+- https://huggingface.co/Qwen/Qwen3-30B-A3B-GPTQ-Int4
+- https://huggingface.co/docs/transformers/en/quantization/gptq
