@@ -61,13 +61,13 @@ def pytest_configure(config: Any) -> None:
 
 def _get_output_dir(config: Any) -> str:
     """Get the output directory for the model outputs."""
-    output_dir = config.getoption("model_output_dir")
+    output_dir: str = config.getoption("model_output_dir")
     if not output_dir:
         dataset = config.getoption("dataset")
         if not dataset:
             raise ValueError(
-                f"Unable to determine output directory for model outputs. "
-                f"Please specify a model output directory with "
+                "Unable to determine output directory for model outputs. "
+                "Please specify a model output directory with "
                 "--model_output_dir"
             )
         home_assistant_version = version("homeassistant")
@@ -87,6 +87,7 @@ def _get_output_dir(config: Any) -> str:
         output_path = DEFAULT_OUTPUT_DIR / dataset_card.name / home_assistant_version
         output_dir = str(output_path)
     return output_dir
+
 
 def pytest_generate_tests(metafunc: Any) -> None:
     """Generate test parameters for the evaluation from flags."""
