@@ -12,7 +12,7 @@ from mashumaro.config import BaseConfig
 class ToolCall(DataClassJSONMixin):
     """A ToolCall dataclass.
 
-    When serializing to a converation record, the arguments are dumped as a string so that the
+    When serializing to a conversation record, the arguments are dumped as a string so that the
     conversation can be indexed.  When serializing to a list of tool calls in a message,
     the arguments are preserved as native objects.
     """
