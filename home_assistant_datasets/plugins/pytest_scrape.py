@@ -6,6 +6,7 @@ import pathlib
 import logging
 from typing import Any
 from unittest.mock import patch
+from importlib.metadata import version
 
 import pytest
 from homeassistant.core import HomeAssistant
@@ -35,6 +36,7 @@ pytest_plugins = [
     "home_assistant_datasets.plugins.pytest_dataset",
     "home_assistant_datasets.plugins.pytest_data_loader",
 ]
+DEFAULT_OUTPUT_DIR = pathlib.Path("reports")
 
 
 def pytest_addoption(parser: Any) -> None:
@@ -46,7 +48,7 @@ def pytest_addoption(parser: Any) -> None:
     )
     parser.addoption(
         "--model_output_dir",
-        required=True,
+        required=False,
         help="The path where scraped outputs are written.",
     )
 
@@ -57,13 +59,43 @@ def pytest_configure(config: Any) -> None:
     configure_encoders()
 
 
+def _get_output_dir(config: Any) -> str:
+    """Get the output directory for the model outputs."""
+    output_dir: str = config.getoption("model_output_dir")
+    if not output_dir:
+        dataset = config.getoption("dataset")
+        if not dataset:
+            raise ValueError(
+                "Unable to determine output directory for model outputs. "
+                "Please specify a model output directory with "
+                "--model_output_dir"
+            )
+        home_assistant_version = version("homeassistant")
+        if not home_assistant_version:
+            raise ValueError(
+                "Unable to determine home assistant version. "
+                "Please specify a model output directory with --model_output_dir"
+            )
+        if not DEFAULT_OUTPUT_DIR.exists():
+            raise ValueError(
+                f"Default output directory {DEFAULT_OUTPUT_DIR} does not exist. "
+                "Please create it or specify a different output directory with "
+                "--model_output_dir"
+            )
+        dataset_path = pathlib.Path(dataset)
+        dataset_card = read_dataset_card(dataset_path)
+        output_path = DEFAULT_OUTPUT_DIR / dataset_card.name / home_assistant_version
+        output_dir = str(output_path)
+    return output_dir
+
+
 def pytest_generate_tests(metafunc: Any) -> None:
     """Generate test parameters for the evaluation from flags."""
     # Parameterize tests by the models under development
     models = metafunc.config.getoption("models").split(",")
     metafunc.parametrize("model_id", models, scope="module")
 
-    output_dir = metafunc.config.getoption("model_output_dir")
+    output_dir = _get_output_dir(metafunc.config)
     pathlib.Path(output_dir).mkdir(exist_ok=True)
     metafunc.parametrize("output_path", [output_dir], scope="module")
 
@@ -71,7 +103,7 @@ def pytest_generate_tests(metafunc: Any) -> None:
 @pytest.hookimpl(trylast=True)
 def pytest_terminal_summary(terminalreporter: Any) -> None:
     """Invoked at the end of the test run to output the test summary."""
-    output_dir = terminalreporter.config.getoption("model_output_dir")
+    output_dir = _get_output_dir(terminalreporter.config)
     models = terminalreporter.config.getoption("models").split(",")
     for model_id in models:
         terminalreporter.write_sep(
