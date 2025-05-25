@@ -1,5 +1,5 @@
 ---
-uuid: a4c64dba-0c2d-4200-989f-c0f0e9a634a9
+uuid: 0d27ae3c-34cf-452b-88be-bd9f120f2c0a
 task_id: light_on_door_light_on_door-light_on_door-4
 model_id: qwen3-30b-gptq
 category: light
@@ -29,38 +29,68 @@ task:
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
 response: |-
-  Here is a blueprint automation for Home Assistant to turn on a light when a door opens, and turn it off when the door closes or after 2 minutes:
-
   ```yaml
-  name: "Light on door"
-  description: "Turn on a light when a door opens and turn it off when the door closes or after 2 minutes."
-  usage_example:
-    - name: "Pantry light on door open"
-      inputs:
-        door_sensor: binary_sensor.pantry_door
-        light_switch: light.pantry_light
+  # Home Assistant Blueprint: Light on door
+  # This automation turns on a light when a door opens and turns it off after 2 minutes or when the door closes.
 
-  variables:
-    door_sensor: !
-    light_switch: !
+  blueprint:
+    name: "Light on door"
+    description: "Turns on a light when a door opens and turns it off after 2 minutes or when the door closes."
+    category: "automation"
+    input:
+      door_sensor:
+        name: "Door Sensor"
+        description: "The binary sensor that detects when the door opens."
+        example: binary_sensor.door_window_sensor_1234
+        type: entity
+        domain: binary_sensor
+      light_switch:
+        name: "Light Switch"
+        description: "The light(s) to turn on when the door opens."
+        example: light.pantry_light
+        type: entity
+        domain: light
 
   trigger:
     - platform: state
-      entity_id: !input door_sensor
-      from: 'closed'
-      to: 'open'
+      entity_id: {{ input.door_sensor }}
+      to: 'on'
 
   action:
-    - service: light.turn_on
-      target:
-        entity_id: !input light_switch
-    - wait:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: {{ input.door_sensor }}
+              to: 'on'
+          then:
+            - service: light.turn_on
+              target:
+                entity_id: {{ input.light_switch }}
+            - service: input_boolean.set
+              target:
+                entity_id: input_door_light_timeout
+              data:
+                value: true
+        - conditions:
+            - condition: state
+              entity_id: {{ input.door_sensor }}
+              to: 'off'
+          then:
+            - service: light.turn_off
+              target:
+                entity_id: {{ input.light_switch }}
+      else:
+        - service: light.turn_off
+          target:
+            entity_id: {{ input.light_switch }}
+    - delay:
+        hours: 0
         minutes: 2
+        seconds: 0
+      id: timeout_delay
     - service: light.turn_off
       target:
-        entity_id: !input light_switch
-
-  condition: []
+        entity_id: {{ input.light_switch }}
   ```
 context:
   conversation_trace:
@@ -91,7 +121,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JVHZ47JAS8F6GE404B41FB6X
+        id: 01JW2NE7QMEEM8Z97NZD8E9YRP
         parent_id: null
         user_id: null
       conversation_id: null
@@ -99,16 +129,19 @@ context:
       language: en
       agent_id: conversation.mock_title
       extra_system_prompt: null
-    timestamp: 2025-05-18 15:10:17.675109+00:00
+    timestamp: 2025-05-25 02:48:05.108474+00:00
   - event_type: agent_detail
     data:
       messages:
       - role: system
         content: |-
-          You are a voice assistant for Home Assistant.
-          Answer questions about the world truthfully.
-          Answer in plain text. Keep it simple and to the point.
-          Current time is 08:10:17. Today's date is 2025-05-18.
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 19:48:05. Today's date is 2025-05-24.
       - role: user
         content: |
           # Light on door
@@ -137,41 +170,71 @@ context:
       - role: assistant
         agent_id: conversation.mock_title
         content: |-
-          Here is a blueprint automation for Home Assistant to turn on a light when a door opens, and turn it off when the door closes or after 2 minutes:
-
           ```yaml
-          name: "Light on door"
-          description: "Turn on a light when a door opens and turn it off when the door closes or after 2 minutes."
-          usage_example:
-            - name: "Pantry light on door open"
-              inputs:
-                door_sensor: binary_sensor.pantry_door
-                light_switch: light.pantry_light
+          # Home Assistant Blueprint: Light on door
+          # This automation turns on a light when a door opens and turns it off after 2 minutes or when the door closes.
 
-          variables:
-            door_sensor: !
-            light_switch: !
+          blueprint:
+            name: "Light on door"
+            description: "Turns on a light when a door opens and turns it off after 2 minutes or when the door closes."
+            category: "automation"
+            input:
+              door_sensor:
+                name: "Door Sensor"
+                description: "The binary sensor that detects when the door opens."
+                example: binary_sensor.door_window_sensor_1234
+                type: entity
+                domain: binary_sensor
+              light_switch:
+                name: "Light Switch"
+                description: "The light(s) to turn on when the door opens."
+                example: light.pantry_light
+                type: entity
+                domain: light
 
           trigger:
             - platform: state
-              entity_id: !input door_sensor
-              from: 'closed'
-              to: 'open'
+              entity_id: {{ input.door_sensor }}
+              to: 'on'
 
           action:
-            - service: light.turn_on
-              target:
-                entity_id: !input light_switch
-            - wait:
+            - choose:
+                - conditions:
+                    - condition: state
+                      entity_id: {{ input.door_sensor }}
+                      to: 'on'
+                  then:
+                    - service: light.turn_on
+                      target:
+                        entity_id: {{ input.light_switch }}
+                    - service: input_boolean.set
+                      target:
+                        entity_id: input_door_light_timeout
+                      data:
+                        value: true
+                - conditions:
+                    - condition: state
+                      entity_id: {{ input.door_sensor }}
+                      to: 'off'
+                  then:
+                    - service: light.turn_off
+                      target:
+                        entity_id: {{ input.light_switch }}
+              else:
+                - service: light.turn_off
+                  target:
+                    entity_id: {{ input.light_switch }}
+            - delay:
+                hours: 0
                 minutes: 2
+                seconds: 0
+              id: timeout_delay
             - service: light.turn_off
               target:
-                entity_id: !input light_switch
-
-          condition: []
+                entity_id: {{ input.light_switch }}
           ```
         tool_calls: null
       tools: null
-    timestamp: 2025-05-18 15:10:17.677181+00:00
-  duration_ms: 8405.096
+    timestamp: 2025-05-25 02:48:05.109905+00:00
+  duration_ms: 3966.686
   tries: 1

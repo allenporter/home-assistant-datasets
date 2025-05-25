@@ -1,5 +1,5 @@
 ---
-uuid: 56eb55cb-046d-46d9-b47b-cfc7f86f8f62
+uuid: a54dc834-a12c-4900-90f4-74d5f3684854
 task_id: light_on_door_light_on_door-light_on_door-3
 model_id: qwen3-30b-gptq
 category: light
@@ -29,11 +29,12 @@ task:
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
 response: |-
-  Here is a blueprint automation for Home Assistant to turn on a light when a door opens and turn it off when the door closes or after 2 minutes:
-
   ```yaml
-  name: "Light on door"
+  title: "Light on Door"
   description: "Turn on a light when a door opens and turn it off after 2 minutes or when the door closes."
+  group: "Door Light Automation"
+  icon: "mdi:door"
+
   inputs:
     door_sensor:
       name: "Door Sensor"
@@ -48,31 +49,46 @@ response: |-
         entity:
           domain: light
 
-  trigger:
+  triggers:
     - platform: state
+      to: "open"
+      for:
+        minutes: 0
+      id: door_open
       entity_id: "{{ input_door_sensor }}"
-      to: 'on'
 
-  condition: []
-  action:
-    - service: light.turn_on
-      target:
-        entity_id: "{{ input_light_switch }}"
+  conditions: []
+
+  actions:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.to_state.state == 'open' }}"
+          sequence:
+            - service: light.turn_on
+              target:
+                entity_id: "{{ input_light_switch }}"
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.to_state.state == 'closed' }}"
+          sequence:
+            - service: light.turn_off
+              target:
+                entity_id: "{{ input_light_switch }}"
+        - conditions:
+            - condition: state
+              state: "closed"
+              entity_id: "{{ input_door_sensor }}"
+          sequence:
+            - service: light.turn_off
+              target:
+                entity_id: "{{ input_light_switch }}"
     - delay: '00:02:00'
     - service: light.turn_off
       target:
         entity_id: "{{ input_light_switch }}"
-    - service: homeassistant.turn_off
-      target:
-        entity_id: "{{ input_light_switch }}"
-      data:
-        transition: 5
   ```
-
-  ### How it works:
-  - When the door sensor changes to `on` (door opens), it turns on the specified light.
-  - After 2 minutes, it turns off the light.
-  - The light is also turned off if the door closes (you may need to add another trigger for that, depending on your setup).
 context:
   conversation_trace:
   - event_type: async_process
@@ -102,7 +118,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JVHZ3TVATEYYE6YY8Z40KVNE
+        id: 01JW2NE42CEBFVNEM0MWKW7KKQ
         parent_id: null
         user_id: null
       conversation_id: null
@@ -110,16 +126,19 @@ context:
       language: en
       agent_id: conversation.mock_title
       extra_system_prompt: null
-    timestamp: 2025-05-18 15:10:04.650425+00:00
+    timestamp: 2025-05-25 02:48:01.356985+00:00
   - event_type: agent_detail
     data:
       messages:
       - role: system
         content: |-
-          You are a voice assistant for Home Assistant.
-          Answer questions about the world truthfully.
-          Answer in plain text. Keep it simple and to the point.
-          Current time is 08:10:04. Today's date is 2025-05-18.
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 19:48:01. Today's date is 2025-05-24.
       - role: user
         content: |
           # Light on door
@@ -148,11 +167,12 @@ context:
       - role: assistant
         agent_id: conversation.mock_title
         content: |-
-          Here is a blueprint automation for Home Assistant to turn on a light when a door opens and turn it off when the door closes or after 2 minutes:
-
           ```yaml
-          name: "Light on door"
+          title: "Light on Door"
           description: "Turn on a light when a door opens and turn it off after 2 minutes or when the door closes."
+          group: "Door Light Automation"
+          icon: "mdi:door"
+
           inputs:
             door_sensor:
               name: "Door Sensor"
@@ -167,33 +187,48 @@ context:
                 entity:
                   domain: light
 
-          trigger:
+          triggers:
             - platform: state
+              to: "open"
+              for:
+                minutes: 0
+              id: door_open
               entity_id: "{{ input_door_sensor }}"
-              to: 'on'
 
-          condition: []
-          action:
-            - service: light.turn_on
-              target:
-                entity_id: "{{ input_light_switch }}"
+          conditions: []
+
+          actions:
+            - choose:
+                - conditions:
+                    - condition: template
+                      value_template: "{{ trigger.to_state.state == 'open' }}"
+                  sequence:
+                    - service: light.turn_on
+                      target:
+                        entity_id: "{{ input_light_switch }}"
+            - choose:
+                - conditions:
+                    - condition: template
+                      value_template: "{{ trigger.to_state.state == 'closed' }}"
+                  sequence:
+                    - service: light.turn_off
+                      target:
+                        entity_id: "{{ input_light_switch }}"
+                - conditions:
+                    - condition: state
+                      state: "closed"
+                      entity_id: "{{ input_door_sensor }}"
+                  sequence:
+                    - service: light.turn_off
+                      target:
+                        entity_id: "{{ input_light_switch }}"
             - delay: '00:02:00'
             - service: light.turn_off
               target:
                 entity_id: "{{ input_light_switch }}"
-            - service: homeassistant.turn_off
-              target:
-                entity_id: "{{ input_light_switch }}"
-              data:
-                transition: 5
           ```
-
-          ### How it works:
-          - When the door sensor changes to `on` (door opens), it turns on the specified light.
-          - After 2 minutes, it turns off the light.
-          - The light is also turned off if the door closes (you may need to add another trigger for that, depending on your setup).
         tool_calls: null
       tools: null
-    timestamp: 2025-05-18 15:10:04.651963+00:00
-  duration_ms: 12713.902
+    timestamp: 2025-05-25 02:48:01.358390+00:00
+  duration_ms: 3535.67
   tries: 1

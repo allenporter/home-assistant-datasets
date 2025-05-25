@@ -1,5 +1,5 @@
 ---
-uuid: fb236472-f312-4e3a-8b9f-612cdfa6754d
+uuid: a45048aa-a870-4e15-a716-d55fdd86e703
 task_id: door_left_open_door_left_open-door_left_open-1
 model_id: qwen3-30b-gptq
 category: media_player
@@ -31,43 +31,48 @@ task:
 
     The automation should play the selected media when the door has been open for the specified duration.
 response: |-
-  Here is a blueprint automation to play an alert on the speaker when the door is left open:
-
   ```yaml
-  name: "Play alert when door is left open"
-  description: "Plays an alert on the speaker when the door is left open for a specified duration."
+  # Door left open blueprint
+  name: "Door left open"
+  description: "Play an alert on the speaker when the door is left open."
+  category: "automation"
   input:
     door_sensor:
       name: "Door Sensor"
+      description: "A binary sensor entity that detects if the door is open."
       selector:
         entity:
           domain: binary_sensor
-          device_class: door
     alert_media:
       name: "Alert Media"
+      description: "The media to play on the speaker when the door is left open."
       selector:
-        media: {}
+        media:
+          domain: media_player
     open_duration:
       name: "Open Duration"
+      description: "The duration the door must remain open before the alert is played."
       selector:
         duration: {}
   trigger:
     - platform: state
-      entity_id: !input door_sensor
       to: 'open'
       for:
-        minutes: !input open_duration
+        minutes: 0
+      condition:
+        - condition: state
+          entity_id: '${input.door_sensor}'
+          state: 'open'
   action:
     - service: media_player/play_media
       target:
-        entity_id: !input alert_media
+        entity_id: '${input.alert_media}'
       data:
-        media_content_id: "alert"
-        media_content_type: "audio"
-        media_title: "Door Left Open"
+        media_content_type: 'sound'
+        media_content_id: 'alert'
+        title: 'Door left open'
+      description: "Play the alert media on the specified speaker."
   ```
-
-  This blueprint will play the selected media when the specified door sensor detects the door is open for the defined duration.
 context:
   conversation_trace:
   - event_type: async_process
@@ -99,7 +104,7 @@ context:
 
         The automation should play the selected media when the door has been open for the specified duration.
       context:
-        id: 01JVHYZZF7C9PRT6VB19R3MN5B
+        id: 01JW2NCTQXV9138BYQ4VV5Z42Y
         parent_id: null
         user_id: null
       conversation_id: null
@@ -107,16 +112,19 @@ context:
       language: en
       agent_id: conversation.mock_title
       extra_system_prompt: null
-    timestamp: 2025-05-18 15:07:58.311921+00:00
+    timestamp: 2025-05-25 02:47:19.037976+00:00
   - event_type: agent_detail
     data:
       messages:
       - role: system
         content: |-
-          You are a voice assistant for Home Assistant.
-          Answer questions about the world truthfully.
-          Answer in plain text. Keep it simple and to the point.
-          Current time is 08:07:58. Today's date is 2025-05-18.
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 19:47:19. Today's date is 2025-05-24.
       - role: user
         content: |
           # Door left open
@@ -147,45 +155,50 @@ context:
       - role: assistant
         agent_id: conversation.mock_title
         content: |-
-          Here is a blueprint automation to play an alert on the speaker when the door is left open:
-
           ```yaml
-          name: "Play alert when door is left open"
-          description: "Plays an alert on the speaker when the door is left open for a specified duration."
+          # Door left open blueprint
+          name: "Door left open"
+          description: "Play an alert on the speaker when the door is left open."
+          category: "automation"
           input:
             door_sensor:
               name: "Door Sensor"
+              description: "A binary sensor entity that detects if the door is open."
               selector:
                 entity:
                   domain: binary_sensor
-                  device_class: door
             alert_media:
               name: "Alert Media"
+              description: "The media to play on the speaker when the door is left open."
               selector:
-                media: {}
+                media:
+                  domain: media_player
             open_duration:
               name: "Open Duration"
+              description: "The duration the door must remain open before the alert is played."
               selector:
                 duration: {}
           trigger:
             - platform: state
-              entity_id: !input door_sensor
               to: 'open'
               for:
-                minutes: !input open_duration
+                minutes: 0
+              condition:
+                - condition: state
+                  entity_id: '${input.door_sensor}'
+                  state: 'open'
           action:
             - service: media_player/play_media
               target:
-                entity_id: !input alert_media
+                entity_id: '${input.alert_media}'
               data:
-                media_content_id: "alert"
-                media_content_type: "audio"
-                media_title: "Door Left Open"
+                media_content_type: 'sound'
+                media_content_id: 'alert'
+                title: 'Door left open'
+              description: "Play the alert media on the specified speaker."
           ```
-
-          This blueprint will play the selected media when the specified door sensor detects the door is open for the defined duration.
         tool_calls: null
       tools: null
-    timestamp: 2025-05-18 15:07:58.314131+00:00
-  duration_ms: 8367.345
+    timestamp: 2025-05-25 02:47:19.039436+00:00
+  duration_ms: 2660.714
   tries: 1

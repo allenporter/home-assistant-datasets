@@ -1,5 +1,5 @@
 ---
-uuid: 743a2da8-5faf-44b0-9455-39e73fb5827a
+uuid: fd502244-a6a1-4e09-8177-8ac61721a49f
 task_id: light_on_door_light_on_door-light_on_door-1
 model_id: qwen3-30b-gptq
 category: light
@@ -28,20 +28,44 @@ task:
 
     The automation should trigger when the door opens, and turn the light on. The
     light should be shut off when the door closes or after a 2 minute timeout.
-response: "Here is a blueprint automation for turning on a light when a door opens\
-  \ and turning it off when the door closes or after 2 minutes:\n\n```yaml\nblueprint:\n\
-  \  name: \"Light on door\"\n  description: \"Turn on a light when a door opens and\
-  \ turn it off when the door closes or after 2 minutes.\"\n  input:\n    door_sensor:\n\
-  \      name: \"Door Sensor\"\n      description: \"A binary sensor that detects\
-  \ when the door opens.\"\n      selector:\n        entity:\n          domain: binary_sensor\n\
-  \    light_switch:\n      name: \"Light Switch\"\n      description: \"One or more\
-  \ light entities to turn on when the door opens.\"\n      selector:\n        entity:\n\
-  \          domain: light\n\n  trigger:\n    - platform: state\n      entity_id:\
-  \ !input door_sensor\n      to: 'on'\n\n  condition: []\n\n  action:\n    - service:\
-  \ light.turn_on\n      target:\n        entity_id: !input light_switch\n    - delay:\
-  \ '00:02:00'\n    - service: light.turn_off\n      target:\n        entity_id: !input\
-  \ light_switch\n``` \n\nYou can use this in Home Assistant by creating a new automation\
-  \ and selecting \"Create blueprint\" from the menu."
+response: |-
+  ```yaml
+  # Light on door blueprint
+  blueprint:
+    name: "Light on door"
+    description: "Turns on a light when a door opens and turns it off when the door closes or after a 2-minute timeout."
+    input:
+      door_sensor:
+        name: "Door Sensor"
+        description: "A binary sensor that triggers the automation when the door opens."
+        selector:
+          entity:
+            domain: binary_sensor
+      light_switch:
+        name: "Light Switch"
+        description: "One or more light entities to turn on when the door opens."
+        selector:
+          entity:
+            domain: light
+
+  trigger:
+    - platform: state
+      entity_id: {{ input.door_sensor }}
+      to: 'on'
+
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: {{ input.light_switch }}
+    - service: timer.sleep
+      data:
+        seconds: 120
+    - service: light.turn_off
+      target:
+        entity_id: {{ input.light_switch }}
+
+  condition: []
+  ```
 context:
   conversation_trace:
   - event_type: async_process
@@ -71,7 +95,7 @@ context:
         The automation should trigger when the door opens, and turn the light on. The
         light should be shut off when the door closes or after a 2 minute timeout.
       context:
-        id: 01JVHZ35Y36JDBXNEDZ828FS8X
+        id: 01JW2NDZ0RQM5JC8MYA7FX5A2S
         parent_id: null
         user_id: null
       conversation_id: null
@@ -79,16 +103,19 @@ context:
       language: en
       agent_id: conversation.mock_title
       extra_system_prompt: null
-    timestamp: 2025-05-18 15:09:43.236001+00:00
+    timestamp: 2025-05-25 02:47:56.185073+00:00
   - event_type: agent_detail
     data:
       messages:
       - role: system
         content: |-
-          You are a voice assistant for Home Assistant.
-          Answer questions about the world truthfully.
-          Answer in plain text. Keep it simple and to the point.
-          Current time is 08:09:43. Today's date is 2025-05-18.
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 19:47:56. Today's date is 2025-05-24.
       - role: user
         content: |
           # Light on door
@@ -116,24 +143,46 @@ context:
           light should be shut off when the door closes or after a 2 minute timeout.
       - role: assistant
         agent_id: conversation.mock_title
-        content: "Here is a blueprint automation for turning on a light when a door\
-          \ opens and turning it off when the door closes or after 2 minutes:\n\n\
-          ```yaml\nblueprint:\n  name: \"Light on door\"\n  description: \"Turn on\
-          \ a light when a door opens and turn it off when the door closes or after\
-          \ 2 minutes.\"\n  input:\n    door_sensor:\n      name: \"Door Sensor\"\n\
-          \      description: \"A binary sensor that detects when the door opens.\"\
-          \n      selector:\n        entity:\n          domain: binary_sensor\n  \
-          \  light_switch:\n      name: \"Light Switch\"\n      description: \"One\
-          \ or more light entities to turn on when the door opens.\"\n      selector:\n\
-          \        entity:\n          domain: light\n\n  trigger:\n    - platform:\
-          \ state\n      entity_id: !input door_sensor\n      to: 'on'\n\n  condition:\
-          \ []\n\n  action:\n    - service: light.turn_on\n      target:\n       \
-          \ entity_id: !input light_switch\n    - delay: '00:02:00'\n    - service:\
-          \ light.turn_off\n      target:\n        entity_id: !input light_switch\n\
-          ``` \n\nYou can use this in Home Assistant by creating a new automation\
-          \ and selecting \"Create blueprint\" from the menu."
+        content: |-
+          ```yaml
+          # Light on door blueprint
+          blueprint:
+            name: "Light on door"
+            description: "Turns on a light when a door opens and turns it off when the door closes or after a 2-minute timeout."
+            input:
+              door_sensor:
+                name: "Door Sensor"
+                description: "A binary sensor that triggers the automation when the door opens."
+                selector:
+                  entity:
+                    domain: binary_sensor
+              light_switch:
+                name: "Light Switch"
+                description: "One or more light entities to turn on when the door opens."
+                selector:
+                  entity:
+                    domain: light
+
+          trigger:
+            - platform: state
+              entity_id: {{ input.door_sensor }}
+              to: 'on'
+
+          action:
+            - service: light.turn_on
+              target:
+                entity_id: {{ input.light_switch }}
+            - service: timer.sleep
+              data:
+                seconds: 120
+            - service: light.turn_off
+              target:
+                entity_id: {{ input.light_switch }}
+
+          condition: []
+          ```
         tool_calls: null
       tools: null
-    timestamp: 2025-05-18 15:09:43.238284+00:00
-  duration_ms: 9767.114
+    timestamp: 2025-05-25 02:47:56.186482+00:00
+  duration_ms: 2185.095
   tries: 1
