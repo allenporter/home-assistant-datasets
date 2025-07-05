@@ -1,0 +1,39 @@
+#!/bin/bash
+# This script is used to evaluate the assist dataset using pytest.
+# The arguments are:
+#   - MODEL: The model to use for evaluation.
+
+set -e
+
+DATASET_NAME="assist"
+
+HA_VERSION=$(pip freeze | grep "^homeassistant==" | cut -f 3 -d '=')
+DATASET="datasets/${DATASET_NAME}/"
+OUTPUT_DIR="reports/${DATASET_NAME}/${HA_VERSION}"  # Output based on home assistant version used
+
+if [ -z "$MODEL" ]; then
+  echo "MODEL is not set. Please set the MODEL environment variable."
+  exit 1
+fi
+if [ ! -d "home_assistant_datasets" ]; then
+    echo "home_assistant_datasets directory does not exist. Please run from repo root."
+    exit 1
+fi
+if [ ! -d "${DATASET}" ]; then
+  echo "Dataset directory ${DATASET} does not exist. Please check the dataset name."
+  exit 1
+fi
+if [ ! -d "${OUTPUT_DIR}" ]; then
+  echo "Output directory ${OUTPUT_DIR} does not exist. Creating it."
+  mkdir -p "${OUTPUT_DIR}"
+fi
+
+# Ensure the synthetic home component is setup
+SYNTHETIC_HOME_DIR="/workspaces/home-assistant-synthetic-home/"
+if [ ! -d "${SYNTHETIC_HOME_DIR}" ]; then
+  echo "Synthetic home directory ${SYNTHETIC_HOME_DIR} does not exist. Please check the path."
+  exit 1
+fi
+export PYTHONPATH="${PYTHONPATH}:${SYNTHETIC_HOME_DIR}"
+
+pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
