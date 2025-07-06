@@ -13,6 +13,7 @@
 | gemini-1.5-flash | $${88.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.4.3)}}}$$ | $${70.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, 2025.5.0.dev0)}}}$$ | $${28.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${83.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
 | qwen2.5-70b | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.4)}}}$$ | $${94.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.4.4)}}}$$ | $${74.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${83.3\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
 | qwen2.5-32b | $${85.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.4.4)}}}$$ | $${97.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.4.4)}}}$$ | $${70.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${82.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
+| qwen3-8b | $${82.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2025.7.1)}}}$$ | $${93.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.7.1)}}}$$ | $${70.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.7.1)}}}$$ | $${1.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.7.1)}}}$$ | $${80.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | qwen2.5-14b | $${79.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2025.4.4)}}}$$ | $${95.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.4)}}}$$ | $${71.4\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.4.4)}}}$$ | $${3.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${79.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | qwen3-30b-gptq | $${84.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.5.2)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.5.2)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.2)}}}$$ | $${8.3\\% \space\color{gray}\tiny{\textsf{(CI: 7.0, 2025.5.2)}}}$$ | $${79.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | qwen2.5-7b | $${79.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2025.4.4)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${72.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${78.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
@@ -224,7 +225,7 @@ config:
 ---
 xychart-beta
   title "automations"
-  x-axis "Model" [gemini-2.5-flash, gemini-2.5-pro, claude-3-7-sonnet, claude-3-5-haiku, gpt-4.1-mini, gemini-2.5-flash-lite, gpt-4o-mini, gpt-4.1, gpt-3.5, gemini-1.5-flash, qwen2.5-14b, qwen3-30b-gptq, .]
+  x-axis "Model" [gemini-2.5-flash, gemini-2.5-pro, claude-3-7-sonnet, claude-3-5-haiku, gpt-4.1-mini, gemini-2.5-flash-lite, gpt-4o-mini, gpt-4.1, gpt-3.5, gemini-1.5-flash, qwen3-8b, qwen2.5-14b, .]
   y-axis "Score" 1 --> 100
   bar [73.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -236,8 +237,8 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 66.7, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 28.3, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8.3, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.7, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
@@ -562,6 +563,17 @@ More information:
 
 
 ### qwen3-4b
+
+Qwen3 is the large language model series developed by Qwen team, Alibaba Cloud. Quen improvies on Qwen2.5, with weights of Qwen3 available to the public, including both dense and Mixture-of-Expert (MoE) models.
+
+
+
+More information:
+- https://qwenlm.github.io/blog/qwen3/
+- https://ollama.com/library/qwen3
+
+
+### qwen3-8b
 
 Qwen3 is the large language model series developed by Qwen team, Alibaba Cloud. Quen improvies on Qwen2.5, with weights of Qwen3 available to the public, including both dense and Mixture-of-Expert (MoE) models.
 

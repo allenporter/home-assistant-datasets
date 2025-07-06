@@ -1,8 +1,6 @@
 #!/bin/bash
 # This script is used to compute evaluation metrics on the assist dataset using
 # pytest
-# The arguments are:
-#   - MODEL: The model to use for evaluation.
 
 set -e
 
