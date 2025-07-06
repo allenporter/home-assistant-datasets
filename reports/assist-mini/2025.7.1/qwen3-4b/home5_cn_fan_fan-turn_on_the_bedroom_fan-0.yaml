@@ -1,0 +1,136 @@
+---
+uuid: 4498566a-ced1-4d24-867c-e0f0d714470b
+task_id: home5_cn_fan_fan-turn_on_the_bedroom_fan-0
+model_id: qwen3-4b
+category: fan
+task:
+  input_text: Turn on the bedroom fan
+  expect_changes:
+    fan.bedroom_fan:
+      state: 'on'
+      attributes:
+        percentage: 100
+response: I'm sorry, but I couldn't process your request. Could you please clarify
+  what you'd like me to do?
+context:
+  unexpected_states:
+    fan.bedroom_fan:
+      expected:
+        state: 'on'
+        percentage: 100
+      got:
+        state: 'off'
+        percentage: 0
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Turn on the bedroom fan
+      context:
+        id: 01JZEG5FS35TVEW392TF17MVZG
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-07-05 23:53:54.211209+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Bedroom Fan
+            domain: fan
+            areas: Bedroom 1
+
+          Current time is 16:53:54. Today's date is 2025-07-05.
+      - role: user
+        content: Turn on the bedroom fan
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            area: Bedroom 1
+            device_class:
+            - fan
+            name: Bedroom Fan
+          id: 01JZEG5HSQVMYYNDRFBT3K5YX9
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01JZEG5HSQVMYYNDRFBT3K5YX9
+        tool_name: HassTurnOn
+        tool_result:
+          error: InvalidSlotInfo
+          error_text: Received invalid slot info for HassTurnOn
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: I'm sorry, but I couldn't process your request. Could you please
+          clarify what you'd like me to do?
+        tool_calls: null
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f675d0482c0>, ''domain'': All(<function ensure_list at 0x7f67608ff4c0>,
+          [<function string at 0x7f676071cb80>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f67608ff4c0>, [In([''tv'', ''speaker'', ''receiver'',
+          ''identify'', ''restart'', ''update'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f675d0482c0>, ''domain'': All(<function ensure_list at 0x7f67608ff4c0>,
+          [<function string at 0x7f676071cb80>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f67608ff4c0>, [In([''tv'', ''speaker'', ''receiver'',
+          ''identify'', ''restart'', ''update'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f676071cb80>}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2025-07-05 23:53:54.213042+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        area: Bedroom 1
+        device_class:
+        - fan
+        name: Bedroom Fan
+    timestamp: 2025-07-05 23:53:56.341731+00:00
+  duration_ms: 3141.844
+  tries: 1
