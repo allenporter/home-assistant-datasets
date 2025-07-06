@@ -2,7 +2,7 @@
 # This script is used to compute evaluation metrics on the assist dataset using
 # pytest
 # The arguments are:
-#   - MODEL: The model to use for evaluation.
+#   - DATASET_NAME: The name of the dataset to evaluate (e.g., assist, assist-mini, questions).
 
 set -e
 

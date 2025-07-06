@@ -1,0 +1,198 @@
+---
+uuid: bbfb2eaf-8489-4bd5-b31e-ed5c06208afa
+task_id: light_on_door_light_on_door-light_on_door-3
+model_id: qwen3-8b
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  ```yaml
+  blueprint:
+    name: light_on_door_open
+    description: Turn on a light when a door opens and turn it off when the door closes or after a 2-minute timeout.
+    inputs:
+      door_sensor:
+        description: A binary_sensor that triggers the automation to start.
+        type: binary_sensor
+        required: true
+      light_switch:
+        description: One or more light entity targets to turn on or off when the automation fires.
+        type: list
+        required: true
+        entities:
+          - light
+    sensors:
+      door_state:
+        friendly_name: "Door State"
+        unit_of_measurement: ""
+        value_template: "{{ is_state(door_sensor, 'on') }}"
+    switches:
+      light_switch:
+        friendly_name: "Light Switch"
+        value_template: "{{ is_state(light_switch, 'on') }}"
+    triggers:
+      - platform: state
+        entity_id: !input.door_sensor
+        to: 'on'
+    actions:
+      - service: light.turn_on
+        data:
+          entity_id: !input.light_switch
+    conditions:
+      - condition: template
+        value_template: "{{ is_state(door_sensor, 'on') }}"
+    modes:
+      - platform: state
+        entity_id: !input.door_sensor
+        to: 'off'
+        for:
+          minutes: 2
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01JZEV94EKE03SF15TGJ90C9M2
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-07-06 03:08:08.019139+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 20:08:08. Today's date is 2025-07-05.
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: light_on_door_open
+            description: Turn on a light when a door opens and turn it off when the door closes or after a 2-minute timeout.
+            inputs:
+              door_sensor:
+                description: A binary_sensor that triggers the automation to start.
+                type: binary_sensor
+                required: true
+              light_switch:
+                description: One or more light entity targets to turn on or off when the automation fires.
+                type: list
+                required: true
+                entities:
+                  - light
+            sensors:
+              door_state:
+                friendly_name: "Door State"
+                unit_of_measurement: ""
+                value_template: "{{ is_state(door_sensor, 'on') }}"
+            switches:
+              light_switch:
+                friendly_name: "Light Switch"
+                value_template: "{{ is_state(light_switch, 'on') }}"
+            triggers:
+              - platform: state
+                entity_id: !input.door_sensor
+                to: 'on'
+            actions:
+              - service: light.turn_on
+                data:
+                  entity_id: !input.light_switch
+            conditions:
+              - condition: template
+                value_template: "{{ is_state(door_sensor, 'on') }}"
+            modes:
+              - platform: state
+                entity_id: !input.door_sensor
+                to: 'off'
+                for:
+                  minutes: 2
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-07-06 03:08:08.020555+00:00
+  duration_ms: 11815.696
+  tries: 1

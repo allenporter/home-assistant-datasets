@@ -1,6 +1,7 @@
 #!/bin/bash
 # This script is used to evaluate the assist dataset using pytest.
 # The arguments are:
+#   - DATASET_NAME: The name of the dataset to evaluate (e.g., assist, assist-mini, questions).
 #   - MODEL: The model to use for evaluation.
 
 set -e
@@ -45,4 +46,7 @@ if [ ! -d "${SYNTHETIC_HOME_DIR}" ]; then
 fi
 export PYTHONPATH="${PYTHONPATH}:${SYNTHETIC_HOME_DIR}"
 
-pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
+pytest home_
+
+
+assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
