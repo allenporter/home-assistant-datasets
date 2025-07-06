@@ -1,0 +1,287 @@
+---
+uuid: 0b81b927-e2c9-4f7f-8f60-674d4bd29428
+task_id: humidity_fan_humidity_fan-humidity_fan-1
+model_id: gemini-2.5-flash-lite
+category: fan
+task:
+  input_text: |
+    # Humidity Fan
+
+    ## Problem statement
+
+    Create a blueprint automation to turn on the fan based on the value of the humidity sensor.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the bathroom exhaust fan when the bathroom humidty is above 60%
+    - Make sure the garage does not get too humid
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input               | Description                                                           |
+    | ------------------- | --------------------------------------------------------------------- |
+    | `humidity_sensor` | A `sensor` entity that is a humidty sensor that triggers the automation. |
+    | `humidity_level` | A `number` selector to set the value used as the trigger. |
+    | `fan_entity`     | A `fan` entity to turn on when the automation fires. |
+
+    The automation should trigger when the `humidity_sensor` level goes above `humidity_level`. When
+    triggered, the fan should be turned off. The fan should also be stopped when the
+    sensor goes back down below the desired level. The automation should not try to
+    turn the fan on if it is already on, and should not turn the fan off when it is
+    already off.
+response: |-
+  ```yaml
+  blueprint:
+    name: Humidity Fan Control
+    description: Turns a fan on/off based on humidity sensor readings.
+    domain: automation
+    input:
+      humidity_sensor:
+        name: Humidity Sensor
+        description: The humidity sensor to monitor.
+        selector:
+          entity:
+            domain: sensor
+            # Filter for entities that are likely humidity sensors based on their device class
+            device_class: humidity
+      humidity_level:
+        name: Humidity Threshold
+        description: The humidity percentage above which the fan should turn on.
+        selector:
+          number:
+            min: 0
+            max: 100
+            unit_of_measurement: "%"
+            mode: slider
+      fan_entity:
+        name: Fan Entity
+        description: The fan to control.
+        selector:
+          entity:
+            domain: fan
+  # Define the trigger for the automation
+  # This trigger will fire when the humidity sensor's state changes
+  trigger:
+    - platform: numeric_state
+      entity_id: !input humidity_sensor
+      above: !input humidity_level # Trigger when humidity goes above the set threshold
+  # Define the conditions for the automation to run
+  # This condition ensures the fan is not already on when we want to turn it on
+  condition:
+    # If the automation is triggered because humidity went *above* the threshold,
+    # we want to turn the fan *on*.
+    # We check if the humidity is above the threshold.
+    - condition: numeric_state
+      entity_id: !input humidity_sensor
+      above: !input humidity_level
+  # Define the actions to be performed when the automation triggers and conditions are met
+  action:
+    # Turn on the fan if it's not already on.
+    # The 'service' will be 'turn_on' for the fan entity.
+    - service: fan.turn_on
+      target:
+        entity_id: !input fan_entity
+  # Define a second trigger to turn off the fan when humidity drops
+  # This trigger will fire when the humidity sensor's state changes
+    - platform: numeric_state
+      entity_id: !input humidity_sensor
+      below: !input humidity_level # Trigger when humidity goes below the set threshold
+  # Define the conditions for this second part of the automation
+  # This condition ensures the fan is not already off when we want to turn it off
+  condition:
+    # If the automation is triggered because humidity went *below* the threshold,
+    # we want to turn the fan *off*.
+    # We check if the humidity is below the threshold.
+    - condition: numeric_state
+      entity_id: !input humidity_sensor
+      below: !input humidity_level
+  # Define the actions to be performed when this second trigger fires and conditions are met
+  action:
+    # Turn off the fan if it's not already off.
+    # The 'service' will be 'turn_off' for the fan entity.
+    - service: fan.turn_off
+      target:
+        entity_id: !input fan_entity
+
+  # Note: Home Assistant automatically handles not trying to turn on an already on
+  # device or turn off an already off device for these basic fan services.
+  # The explicit checks for fan state are not strictly necessary with fan.turn_on
+  # and fan.turn_off services, but the conditions based on humidity levels are crucial
+  # for the desired behavior.
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Humidity Fan
+
+        ## Problem statement
+
+        Create a blueprint automation to turn on the fan based on the value of the humidity sensor.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the bathroom exhaust fan when the bathroom humidty is above 60%
+        - Make sure the garage does not get too humid
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input               | Description                                                           |
+        | ------------------- | --------------------------------------------------------------------- |
+        | `humidity_sensor` | A `sensor` entity that is a humidty sensor that triggers the automation. |
+        | `humidity_level` | A `number` selector to set the value used as the trigger. |
+        | `fan_entity`     | A `fan` entity to turn on when the automation fires. |
+
+        The automation should trigger when the `humidity_sensor` level goes above `humidity_level`. When
+        triggered, the fan should be turned off. The fan should also be stopped when the
+        sensor goes back down below the desired level. The automation should not try to
+        turn the fan on if it is already on, and should not turn the fan off when it is
+        already off.
+      context:
+        id: 01JZEJ5KSDDAN306JZFEN7ZFWJ
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-07-06 00:28:55.469590+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 17:28:55. Today's date is 2025-07-05.
+      - role: user
+        content: |
+          # Humidity Fan
+
+          ## Problem statement
+
+          Create a blueprint automation to turn on the fan based on the value of the humidity sensor.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the bathroom exhaust fan when the bathroom humidty is above 60%
+          - Make sure the garage does not get too humid
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input               | Description                                                           |
+          | ------------------- | --------------------------------------------------------------------- |
+          | `humidity_sensor` | A `sensor` entity that is a humidty sensor that triggers the automation. |
+          | `humidity_level` | A `number` selector to set the value used as the trigger. |
+          | `fan_entity`     | A `fan` entity to turn on when the automation fires. |
+
+          The automation should trigger when the `humidity_sensor` level goes above `humidity_level`. When
+          triggered, the fan should be turned off. The fan should also be stopped when the
+          sensor goes back down below the desired level. The automation should not try to
+          turn the fan on if it is already on, and should not turn the fan off when it is
+          already off.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Humidity Fan Control
+            description: Turns a fan on/off based on humidity sensor readings.
+            domain: automation
+            input:
+              humidity_sensor:
+                name: Humidity Sensor
+                description: The humidity sensor to monitor.
+                selector:
+                  entity:
+                    domain: sensor
+                    # Filter for entities that are likely humidity sensors based on their device class
+                    device_class: humidity
+              humidity_level:
+                name: Humidity Threshold
+                description: The humidity percentage above which the fan should turn on.
+                selector:
+                  number:
+                    min: 0
+                    max: 100
+                    unit_of_measurement: "%"
+                    mode: slider
+              fan_entity:
+                name: Fan Entity
+                description: The fan to control.
+                selector:
+                  entity:
+                    domain: fan
+          # Define the trigger for the automation
+          # This trigger will fire when the humidity sensor's state changes
+          trigger:
+            - platform: numeric_state
+              entity_id: !input humidity_sensor
+              above: !input humidity_level # Trigger when humidity goes above the set threshold
+          # Define the conditions for the automation to run
+          # This condition ensures the fan is not already on when we want to turn it on
+          condition:
+            # If the automation is triggered because humidity went *above* the threshold,
+            # we want to turn the fan *on*.
+            # We check if the humidity is above the threshold.
+            - condition: numeric_state
+              entity_id: !input humidity_sensor
+              above: !input humidity_level
+          # Define the actions to be performed when the automation triggers and conditions are met
+          action:
+            # Turn on the fan if it's not already on.
+            # The 'service' will be 'turn_on' for the fan entity.
+            - service: fan.turn_on
+              target:
+                entity_id: !input fan_entity
+          # Define a second trigger to turn off the fan when humidity drops
+          # This trigger will fire when the humidity sensor's state changes
+            - platform: numeric_state
+              entity_id: !input humidity_sensor
+              below: !input humidity_level # Trigger when humidity goes below the set threshold
+          # Define the conditions for this second part of the automation
+          # This condition ensures the fan is not already off when we want to turn it off
+          condition:
+            # If the automation is triggered because humidity went *below* the threshold,
+            # we want to turn the fan *off*.
+            # We check if the humidity is below the threshold.
+            - condition: numeric_state
+              entity_id: !input humidity_sensor
+              below: !input humidity_level
+          # Define the actions to be performed when this second trigger fires and conditions are met
+          action:
+            # Turn off the fan if it's not already off.
+            # The 'service' will be 'turn_off' for the fan entity.
+            - service: fan.turn_off
+              target:
+                entity_id: !input fan_entity
+
+          # Note: Home Assistant automatically handles not trying to turn on an already on
+          # device or turn off an already off device for these basic fan services.
+          # The explicit checks for fan state are not strictly necessary with fan.turn_on
+          # and fan.turn_off services, but the conditions based on humidity levels are crucial
+          # for the desired behavior.
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-07-06 00:28:55.471112+00:00
+  duration_ms: 2338.345
+  tries: 1

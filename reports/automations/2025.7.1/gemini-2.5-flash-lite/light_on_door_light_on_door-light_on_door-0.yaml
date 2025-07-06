@@ -1,0 +1,214 @@
+---
+uuid: 2ba5d84b-8d04-443c-8c17-f7b3188f8209
+task_id: light_on_door_light_on_door-light_on_door-0
+model_id: gemini-2.5-flash-lite
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  ```yaml
+  blueprint:
+    name: Light on door
+    description: Turns on a light when a door opens, and turns it off after a timeout or when the door closes.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: The binary sensor that indicates if the door is open.
+        selector:
+          entity:
+            domain: binary_sensor
+      light_switch:
+        name: Light to control
+        description: The light entity (or entities) to turn on when the door opens.
+        selector:
+          target:
+            entity:
+              domain: light
+
+  # Trigger when the door sensor changes state
+  trigger:
+    - platform: state
+      entity_id: !input door_sensor
+      to: "on" # Trigger when the door sensor state changes to 'on' (representing open)
+
+  # Action to perform when triggered
+  action:
+    - service: light.turn_on
+      target: !input light_switch
+    # Wait for the door to close or for a timeout
+    - wait_for_trigger:
+        - platform: state
+          entity_id: !input door_sensor
+          to: "off" # Wait until the door sensor state changes to 'off' (representing closed)
+      timeout: "00:02:00" # Set a timeout of 2 minutes
+    # Turn off the light
+    - service: light.turn_off
+      target: !input light_switch
+
+  # This condition ensures the blueprint will only run if the door sensor is not already 'on' before the trigger.
+  # Although the trigger explicitly looks for 'on', this can prevent unexpected behavior if the sensor state is changed rapidly.
+  # It's a good practice for robustness.
+  # condition: [] # No specific conditions needed beyond the trigger
+
+  # Mode: single ensures that if the automation is triggered again while it's already running,
+  # the new trigger will be ignored. This is usually desirable for this type of automation
+  # to avoid multiple instances of the light turning on/off erratically.
+  mode: single
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01JZEJ63B0D56ZA37MR9R1BABE
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-07-06 00:29:11.393069+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 17:29:11. Today's date is 2025-07-05.
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Light on door
+            description: Turns on a light when a door opens, and turns it off after a timeout or when the door closes.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: The binary sensor that indicates if the door is open.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              light_switch:
+                name: Light to control
+                description: The light entity (or entities) to turn on when the door opens.
+                selector:
+                  target:
+                    entity:
+                      domain: light
+
+          # Trigger when the door sensor changes state
+          trigger:
+            - platform: state
+              entity_id: !input door_sensor
+              to: "on" # Trigger when the door sensor state changes to 'on' (representing open)
+
+          # Action to perform when triggered
+          action:
+            - service: light.turn_on
+              target: !input light_switch
+            # Wait for the door to close or for a timeout
+            - wait_for_trigger:
+                - platform: state
+                  entity_id: !input door_sensor
+                  to: "off" # Wait until the door sensor state changes to 'off' (representing closed)
+              timeout: "00:02:00" # Set a timeout of 2 minutes
+            # Turn off the light
+            - service: light.turn_off
+              target: !input light_switch
+
+          # This condition ensures the blueprint will only run if the door sensor is not already 'on' before the trigger.
+          # Although the trigger explicitly looks for 'on', this can prevent unexpected behavior if the sensor state is changed rapidly.
+          # It's a good practice for robustness.
+          # condition: [] # No specific conditions needed beyond the trigger
+
+          # Mode: single ensures that if the automation is triggered again while it's already running,
+          # the new trigger will be ignored. This is usually desirable for this type of automation
+          # to avoid multiple instances of the light turning on/off erratically.
+          mode: single
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-07-06 00:29:11.394452+00:00
+  duration_ms: 1686.194
+  tries: 1
