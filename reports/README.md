@@ -22,6 +22,7 @@
 | qwen3-4b | $${68.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.7.1)}}}$$ | $${70.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.4, 2025.7.1)}}}$$ | $${76.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | qwen2.5-3b | $${60.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${70.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.4, 2025.4.4)}}}$$ | $${59.7\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${62.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
+| qwen3-1.7b | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.7.1)}}}$$ | $${60.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, 2025.7.1)}}}$$ | $${59.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${49.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
 | qwen2.5-0.5b | $${18.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.4.4)}}}$$ | $${24.5\\% \space\color{gray}\tiny{\textsf{(CI: 6.0, 2025.4.4)}}}$$ | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${25.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, avg)}}}$$ |
 
 Implementation notes:
@@ -549,6 +550,17 @@ Qwen2.5 models are pretrained on Alibaba's latest large-scale dataset, encompass
 More information:
 - https://qwenlm.github.io/blog/qwen2.5/
 - https://ollama.com/library/qwen2.5
+
+
+### qwen3-1.7b
+
+Qwen3 is the large language model series developed by Qwen team, Alibaba Cloud. Quen improvies on Qwen2.5, with weights of Qwen3 available to the public, including both dense and Mixture-of-Expert (MoE) models.
+
+
+
+More information:
+- https://qwenlm.github.io/blog/qwen3/
+- https://ollama.com/library/qwen3
 
 
 ### qwen3-30b-gptq

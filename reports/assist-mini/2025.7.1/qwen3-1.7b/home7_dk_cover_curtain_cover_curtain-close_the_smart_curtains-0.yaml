@@ -1,0 +1,153 @@
+---
+uuid: 60a02052-ba3d-4d29-b4ca-6e5128cd65eb
+task_id: home7_dk_cover_curtain_cover_curtain-close_the_smart_curtains-0
+model_id: qwen3-1.7b
+category: cover
+task:
+  input_text: Close the smart curtains
+  expect_changes:
+    cover.smart_curtain:
+      state: closed
+      attributes: null
+response: The smart curtains in the Living Room have been turned on.
+context:
+  unexpected_states:
+    cover.smart_curtain:
+      expected:
+        state: closed
+      got:
+        state: open
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Close the smart curtains
+      context:
+        id: 01JZEXP4CET4D78FTNT9H469K8
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-07-06 03:50:11.086814+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Smart Curtain
+            domain: cover
+            areas: Living Room
+          - names: Smart Curtain Battery
+            domain: sensor
+            areas: Living Room
+
+          Current time is 20:50:11. Today's date is 2025-07-05.
+      - role: user
+        content: Close the smart curtains
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            area: Living Room
+            domain: cover
+            name: Smart Curtain
+          id: 01JZEXP5C70ABGGCC78XE2EKAT
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01JZEXP5C70ABGGCC78XE2EKAT
+        tool_name: HassTurnOn
+        tool_result:
+          speech: {}
+          response_type: action_done
+          data:
+            targets: []
+            success:
+            - name: Living Room
+              type:
+              - area
+              id: living_room
+            - name: Smart Curtain
+              type:
+              - entity
+              id: cover.smart_curtain
+            failed: []
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The smart curtains in the Living Room have been turned on.
+        tool_calls: null
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe43a6b42c0>, ''domain'': All(<function ensure_list at 0x7fe43dcbb4c0>,
+          [<function string at 0x7fe43dcd8b80>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fe43dcbb4c0>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe43a6b42c0>, ''domain'': All(<function ensure_list at 0x7fe43dcbb4c0>,
+          [<function string at 0x7fe43dcd8b80>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fe43dcbb4c0>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe43a6b42c0>, ''domain'': All(<function ensure_list at 0x7fe43dcbb4c0>,
+          [<function string at 0x7fe43dcd8b80>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fe43dcbb4c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None), ''position'': All(Coerce(int, msg=None),
+          Range(min=0, max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fe43dcd8b80>}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2025-07-06 03:50:11.088735+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        area: Living Room
+        domain: cover
+        name: Smart Curtain
+    timestamp: 2025-07-06 03:50:12.134723+00:00
+  duration_ms: 1420.107
+  tries: 1
