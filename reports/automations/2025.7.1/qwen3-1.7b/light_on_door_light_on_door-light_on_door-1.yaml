@@ -1,0 +1,200 @@
+---
+uuid: 5d27c47b-688c-4c6d-a5d6-2893610c46eb
+task_id: light_on_door_light_on_door-light_on_door-1
+model_id: qwen3-1.7b
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  ```yaml
+  # Home Assistant Blueprint: Light on door
+
+  # Configuration for the automation
+  automation:
+    # Trigger the automation when the door opens
+    - trigger:
+      - platform: sensor
+        sensor:
+          platform: binary_sensor
+          sensor_id: door_sensor
+          value: true
+
+    # Action to turn on the light when the door opens
+    - action:
+      - platform: template
+        function: turn_on_light
+        data:
+          light_switch: "{{ states('light.pantry_light').state == 'on' ? 'light.pantry_light' : 'light.pantry_light' }"
+
+    # Timeout to shut off the light after 2 minutes
+    - action:
+      - platform: template
+        function: turn_off_light
+        data:
+          light_switch: "{{ states('light.pantry_light').state == 'on' ? 'light.pantry_light' : 'light.pantry_light' }}"
+          timeout: 120
+
+    # Conditional to check if the door is open
+    - condition:
+      - platform: template
+        function: is_door_open
+        data:
+          door_sensor: "{{ states('sensor.door_sensor').state == 'open' }}"
+
+    # Conditional to check if the door is closed or after timeout
+    - condition:
+      - platform: template
+        function: is_door_closed_or_timeout
+        data:
+          door_sensor: "{{ states('sensor.door_sensor').state == 'closed' }}"
+          timeout: 120
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01JZEYV6PEC80T2Z37ZVJBH61F
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2025-07-06 04:10:25.870578+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          Create a Home Assistant blueprint YAML configuration based on the user request.
+
+          Please respond only with markdown that contains yaml. You can
+          add comments inline with your step by step thinking. The response must start
+          with ```yaml and end with ``` because your answer will be parsed by code. It
+          is very important to stick to the format.
+          Current time is 21:10:25. Today's date is 2025-07-05.
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          # Home Assistant Blueprint: Light on door
+
+          # Configuration for the automation
+          automation:
+            # Trigger the automation when the door opens
+            - trigger:
+              - platform: sensor
+                sensor:
+                  platform: binary_sensor
+                  sensor_id: door_sensor
+                  value: true
+
+            # Action to turn on the light when the door opens
+            - action:
+              - platform: template
+                function: turn_on_light
+                data:
+                  light_switch: "{{ states('light.pantry_light').state == 'on' ? 'light.pantry_light' : 'light.pantry_light' }"
+
+            # Timeout to shut off the light after 2 minutes
+            - action:
+              - platform: template
+                function: turn_off_light
+                data:
+                  light_switch: "{{ states('light.pantry_light').state == 'on' ? 'light.pantry_light' : 'light.pantry_light' }}"
+                  timeout: 120
+
+            # Conditional to check if the door is open
+            - condition:
+              - platform: template
+                function: is_door_open
+                data:
+                  door_sensor: "{{ states('sensor.door_sensor').state == 'open' }}"
+
+            # Conditional to check if the door is closed or after timeout
+            - condition:
+              - platform: template
+                function: is_door_closed_or_timeout
+                data:
+                  door_sensor: "{{ states('sensor.door_sensor').state == 'closed' }}"
+                  timeout: 120
+          ```
+        tool_calls: null
+      tools: null
+    timestamp: 2025-07-06 04:10:25.871969+00:00
+  duration_ms: 4441.913
+  tries: 1

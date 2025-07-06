@@ -46,7 +46,4 @@ if [ ! -d "${SYNTHETIC_HOME_DIR}" ]; then
 fi
 export PYTHONPATH="${PYTHONPATH}:${SYNTHETIC_HOME_DIR}"
 
-pytest home_
-
-
-assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
+pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
