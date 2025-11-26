@@ -2,7 +2,6 @@
 
 import logging
 from typing import Any
-import json
 import yaml
 
 from homeassistant.core import HomeAssistant
@@ -42,9 +41,7 @@ class AITask(ConversationAgent):
             instructions=text,
             structure=structure,
         )
-        if isinstance(result, str):
-            return result
-        return yaml.dump(result.data)
+        return yaml.dump(result.data)  # type: ignore[no-any-return]
 
     def trace_context(self) -> dict[str, Any]:
         """Record any relevant trace context captured during the requests."""

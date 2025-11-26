@@ -180,7 +180,7 @@ def rate_limited_ai_task_fixture(
     This is a module level fixture to ensure the rate limit is respected across
     individual test runs.
     """
-    entity_id = f"ai_task.mock_title"
+    entity_id = "ai_task.mock_title"
     return create_ai_task_agent(entity_id, model_config.rpm)
 
 
