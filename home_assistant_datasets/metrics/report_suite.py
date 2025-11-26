@@ -38,9 +38,11 @@ def create_test_name_accuracy(fd: io.TextIOBase | None) -> AccuracySummary:
     """Create an accuracy summary report aggregated by model id."""
     return AccuracySummary(fd, summary_key="task_name")
 
+
 def create_category_accuracy(fd: io.TextIOBase | None) -> AccuracySummary:
     """Create an accuracy summary report aggregated by model id."""
     return AccuracySummary(fd, summary_key="category")
+
 
 def create_model_token_stats(fd: io.TextIOBase | None) -> ScrapeRecordWriter:
     """Create an accuracy summary report aggregated by model id."""

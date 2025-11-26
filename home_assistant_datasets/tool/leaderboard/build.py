@@ -244,7 +244,7 @@ def create_leaderboard_table(
             if model_id in best_dataset_scores[dataset]:
                 best_tag = " * \\space"
             score = best_record.good_percent_value()
-            score_str = f"{score*100:0.1f}"
+            score_str = f"{score * 100:0.1f}"
             if model_id in best_dataset_scores[dataset]:
                 score_str = "\\textbf{" + score_str + "}"
             text_parts.extend(
@@ -268,10 +268,7 @@ def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
     report_dir = pathlib.Path(args.report_dir)
 
-    active_models = {
-        model.model_id: model
-        for model in read_models().models
-    }
+    active_models = {model.model_id: model for model in read_models().models}
     model_scores = parse_model_reports(report_dir)
     model_scores = {
         model_id: v for model_id, v in model_scores.items() if model_id in active_models
@@ -332,7 +329,9 @@ def run(args: argparse.Namespace) -> int:
 
     results.append("## Models")
     for model_card in ranked_model_ids.values():
-        results.append(table.format_model_card(model_card, eval_cost.get(model_card.model_id)))
+        results.append(
+            table.format_model_card(model_card, eval_cost.get(model_card.model_id))
+        )
 
     leaderboard_file = report_dir / LEADERBOARD_FILE
     print(f"Updating {leaderboard_file}")

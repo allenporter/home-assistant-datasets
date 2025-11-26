@@ -40,7 +40,9 @@ def format_dataset_card(dataset_card: DatasetCard) -> str:
     )
 
 
-def format_model_card(model_card: ModelConfig, eval_cost: EvalCost | None = None) -> str:
+def format_model_card(
+    model_card: ModelConfig, eval_cost: EvalCost | None = None
+) -> str:
     """Format a dataset card."""
     eval_cost_str = ""
     if eval_cost is not None:

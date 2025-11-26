@@ -10,25 +10,19 @@ import synthetic_home
 
 
 DEVICE_FILES = [
-    filename
-    for filename in pathlib.Path("datasets/devices/").glob("*.yaml")
+    filename for filename in pathlib.Path("datasets/devices/").glob("*.yaml")
 ]
 
 
 @pytest.mark.parametrize(
     ("filename"),
-    [
-        (filename) for filename in DEVICE_FILES
-    ],
-    ids=(
-        str(filename) for filename in DEVICE_FILES
-    )
+    [(filename) for filename in DEVICE_FILES],
+    ids=(str(filename) for filename in DEVICE_FILES),
 )
 def test_devices(filename: pathlib.Path) -> None:
     """Test that the device datasets are formatted properly."""
 
     registry = synthetic_home.device_types.load_device_type_registry()
-
 
     document = yaml.load(filename.read_text(), Loader=yaml.SafeLoader)
     assert "name" in document
