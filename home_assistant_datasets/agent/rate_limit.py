@@ -33,11 +33,17 @@ class RateLimitedAgent(ConversationAgent):
         self._agent = agent
         self._rate_limiter = rate_limiter
 
-    async def async_process(self, hass: HomeAssistant, text: str) -> str:
+    async def async_process(
+        self,
+        hass: HomeAssistant,
+        text: str,
+        *,
+        structure: Any | None = None,
+    ) -> str:
         """Process a text input and return the response."""
         if self._rate_limiter:
             self._rate_limiter.try_acquire("item")
-        return await self._agent.async_process(hass, text)
+        return await self._agent.async_process(hass, text, structure=structure)
 
     def trace_context(self) -> dict[str, Any]:
         """Record any relevant trace context captured during the requests."""

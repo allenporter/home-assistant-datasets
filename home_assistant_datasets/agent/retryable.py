@@ -30,7 +30,13 @@ class RetryableAgent(ConversationAgent):
         self._agent = agent
         self._tries = 0
 
-    async def async_process(self, hass: HomeAssistant, text: str) -> str:
+    async def async_process(
+        self,
+        hass: HomeAssistant,
+        text: str,
+        *,
+        structure: Any | None = None,
+    ) -> str:
         """Process a text input and return the response."""
         # Run the conversation agent
         self._tries = 0
@@ -42,7 +48,9 @@ class RetryableAgent(ConversationAgent):
             _LOGGER.debug("Prompt: %s", text)
             try:
                 async with asyncio.timeout(TIMEOUT):
-                    response = await self._agent.async_process(hass, text)
+                    response = await self._agent.async_process(
+                        hass, text, structure=structure
+                    )
             except (
                 HomeAssistantError,
                 ServiceValidationError,

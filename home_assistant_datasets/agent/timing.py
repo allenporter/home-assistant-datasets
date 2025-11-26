@@ -25,11 +25,17 @@ class TimedAgent(ConversationAgent):
         self._agent = agent
         self._elapsed: datetime.timedelta | None = None
 
-    async def async_process(self, hass: HomeAssistant, text: str) -> str:
+    async def async_process(
+        self,
+        hass: HomeAssistant,
+        text: str,
+        *,
+        structure: Any | None = None,
+    ) -> str:
         """Process a text input and return the response."""
         start = datetime.datetime.now()
         try:
-            return await self._agent.async_process(hass, text)
+            return await self._agent.async_process(hass, text, structure=structure)
         finally:
             self._elapsed = datetime.datetime.now() - start
 

@@ -22,6 +22,7 @@ from homeassistant.setup import async_setup_component
 from home_assistant_datasets.agent import (
     ConversationAgent,
     create_default_agent,
+    create_ai_task_agent,
 )
 from home_assistant_datasets.datasets.dataset_card import (
     DatasetCard,
@@ -109,6 +110,8 @@ async def mock_conversation_agent_config_entry(
         data=merged_model_config.config_entry_data,
         options=merged_model_config.config_entry_options,
         version=merged_model_config.version or 1,
+        minor_version=merged_model_config.minor_version or 0,
+        subentries_data=merged_model_config.subentries_data,
     )
     _LOGGER.info("Config entry options=%s", config_entry.options)
     config_entry.add_to_hass(hass)
@@ -144,6 +147,7 @@ async def configure_prerequisites_fixture(hass: HomeAssistant) -> None:
 
     assert await async_setup_component(hass, "homeassistant", {})
     assert await async_setup_component(hass, "conversation", {})
+    assert await async_setup_component(hass, "ai_task", {})
 
     for entry in read_prerequisites():
         config_entry = MockConfigEntry(
@@ -165,3 +169,26 @@ def agent_fixture(
 ) -> ConversationAgent:
     """Fixture to ensure the conversation agent and config entry are loaded."""
     return rate_limited_agent
+
+
+@pytest.fixture(name="rate_limited_ai_task", scope="module")
+def rate_limited_ai_task_fixture(
+    model_config: ModelConfig,
+) -> ConversationAgent:
+    """Create the conversation agent.
+
+    This is a module level fixture to ensure the rate limit is respected across
+    individual test runs.
+    """
+    entity_id = f"ai_task.mock_title"
+    return create_ai_task_agent(entity_id, model_config.rpm)
+
+
+@pytest.fixture(name="ai_task")
+def ai_task_fixture(
+    configure_prerequisites: Any,
+    rate_limited_ai_task: ConversationAgent,
+    conversation_agent_config_entry: ConfigEntry,
+) -> ConversationAgent:
+    """Fixture to ensure the conversation agent and config entry are loaded."""
+    return rate_limited_ai_task

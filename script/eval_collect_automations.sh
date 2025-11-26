@@ -15,6 +15,9 @@ fi
 
 
 HA_VERSION=$(pip freeze | grep "^homeassistant==" | cut -f 3 -d '=')
+if [ -z "$HA_VERSION" ]; then
+  HA_VERSION="dev"
+fi
 OUTPUT_DIR="reports/${DATASET_NAME}/${HA_VERSION}"  # Output based on home assistant version used
 
 if [ -z "$MODEL" ]; then
