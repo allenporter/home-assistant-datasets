@@ -38,9 +38,7 @@ def create_default_agent(
     return agent
 
 
-def create_ai_task_agent(
-    entity_id: str, rpm: int | None = None
-) -> ConversationAgent:
+def create_ai_task_agent(entity_id: str, rpm: int | None = None) -> ConversationAgent:
     """Create the conversation agent client id.
 
     Note that this should be long lived in order for rate limiting to be effective.
