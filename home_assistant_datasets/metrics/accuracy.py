@@ -44,7 +44,7 @@ class AccuracyTracker:
         good_ratio = self.good / self.total if self.total > 0 else 0
         ci = confidence_interval(good_ratio, self.total)
         return {
-            "good_percent": f"{100*good_ratio:0.1f}%",
+            "good_percent": f"{100 * good_ratio:0.1f}%",
             "confidence_interval": f"{ci:0.1f}%",
             "good": self.good,
             "total": self.total,

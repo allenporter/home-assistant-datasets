@@ -38,6 +38,7 @@ SCRAPE_CONTEXT_FILE = "_scrape_context.yaml"
 # contents of model scrapes are written together. Rename files model output
 # and eval task to be specific to scrapes.
 
+
 @dataclass(kw_only=True)
 class ScrapeConfig(DataClassYAMLMixin):
     """Details about a collection of model outputs collected by this tooling."""

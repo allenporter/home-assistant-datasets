@@ -24,10 +24,7 @@ class ToolCall(DataClassJSONMixin):
 
     def to_message_dict(self, **kwargs: Any) -> dict[str, Any]:
         """Serialize the ToolCall for the prompt."""
-        return {
-            "type": "function",
-            "function": asdict(self)
-        }
+        return {"type": "function", "function": asdict(self)}
 
     class Config(BaseConfig):
         sort_keys = False
@@ -57,7 +54,9 @@ class Message(DataClassYAMLMixin):
     content: str | dict[str, Any] = ""
     tool_calls: list[ToolCall] | None = field(
         default=None,
-        metadata={"serialize": lambda v: [c.to_message_dict() for c in v] if v else None},
+        metadata={
+            "serialize": lambda v: [c.to_message_dict() for c in v] if v else None
+        },
     )
 
     class Config(BaseConfig):

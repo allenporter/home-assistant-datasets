@@ -63,6 +63,6 @@ def run(args: argparse.Namespace) -> int:
     for task, pct in percent.most_common(TOP_N):
         bad_count = bad.get(task) or 0
         assert bad_count is not None
-        print(f"{task} - {bad_count} - {100-pct}%")
+        print(f"{task} - {bad_count} - {100 - pct}%")
 
     return 0

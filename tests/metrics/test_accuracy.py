@@ -54,7 +54,6 @@ def test_accuracy_summary() -> None:
     )
 
 
-
 def test_categories_list_keys() -> None:
     """Test AccuracySummary with keys that are lists."""
     buf = io.StringIO()
@@ -67,7 +66,7 @@ def test_categories_list_keys() -> None:
             model_id="model-id",
             extra_data={
                 "category": ["one", "two"],
-            }
+            },
         ),
         TaskResult(
             task_name="test",

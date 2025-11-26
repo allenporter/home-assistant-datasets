@@ -23,6 +23,7 @@ MODEL_CONFIG_DIR = pathlib.Path("models/")
 
 ARCHIVE_LABEL = "archive"
 
+
 @dataclass
 class Cost(DataClassYAMLMixin):
     """Cost metrics."""

@@ -70,6 +70,8 @@ class EntityStateFixture:
             assert state.state not in (
                 "unavailable",
                 "unknown",
-            ), f"Entity id has unavailable state {entity_entry.entity_id}: {state.state}"
+            ), (
+                f"Entity id has unavailable state {entity_entry.entity_id}: {state.state}"
+            )
 
         return results

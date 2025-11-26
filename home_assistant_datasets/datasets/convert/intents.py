@@ -20,15 +20,17 @@ __all__ = [
     "convert_intent_tests",
 ]
 
+
 def now() -> datetime.datetime:
     """For mocking for tests."""
     return datetime.datetime.now()
 
+
 def _create_dataset_card() -> DatasetCard:
     """For mocking for tests."""
     return DatasetCard(
-    name="intents",
-    description=f"""
+        name="intents",
+        description=f"""
 A dataset built form the Home Assistant intents repo, modeled after existing
 NLP test cases for the assistant pipeline.
 
@@ -46,12 +48,13 @@ additional details about the format and information about running the evaluation
 
 Updated: {now().isoformat()}
 """,
-    urls=[
-        "https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/intents",
-        "https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist",
-        "https://github.com/home-assistant/intents",
-    ],
-)
+        urls=[
+            "https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/intents",
+            "https://github.com/allenporter/home-assistant-datasets/tree/main/datasets/assist",
+            "https://github.com/home-assistant/intents",
+        ],
+    )
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -116,7 +119,6 @@ UNSUPPORTED_INTENTS = {
     "HassStartTimer",
     "HassTimerStatus",
     "HassUnpauseTimer",
-
     # Other requests that are not supported
     "HassGetCurrentDate",
     "HassGetCurrentTime",
@@ -275,11 +277,11 @@ def convert_intent_tests(
 
     if unknown_domains:
         raise ValueError(
-            f"Found the following domains that were not in the list of supported domains:\n{"\n".join(sorted(unknown_domains))}"
+            f"Found the following domains that were not in the list of supported domains:\n{'\n'.join(sorted(unknown_domains))}"
         )
     if unknown_intents:
         raise ValueError(
-            f"Found the following intents that were not yet in the list of supported intents:\n{"\n".join(sorted(unknown_intents))}"
+            f"Found the following intents that were not yet in the list of supported intents:\n{'\n'.join(sorted(unknown_intents))}"
         )
 
     # Validate all of the dataset contents

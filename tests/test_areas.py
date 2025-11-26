@@ -6,20 +6,13 @@ import pytest
 import yaml
 
 
-AREA_FILES = [
-    filename
-    for filename in pathlib.Path("datasets/areas/").glob("*.yaml")
-]
+AREA_FILES = [filename for filename in pathlib.Path("datasets/areas/").glob("*.yaml")]
 
 
 @pytest.mark.parametrize(
     ("filename"),
-    [
-        (filename) for filename in AREA_FILES
-    ],
-    ids=(
-        str(filename) for filename in AREA_FILES
-    )
+    [(filename) for filename in AREA_FILES],
+    ids=(str(filename) for filename in AREA_FILES),
 )
 def test_areas(filename: pathlib.Path) -> None:
     """Test that the area datasets are formatted properly."""
