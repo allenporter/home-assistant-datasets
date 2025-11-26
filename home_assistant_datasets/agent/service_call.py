@@ -56,9 +56,16 @@ class ServiceCall(ConversationAgent):
         """Initialize the agent."""
         self._agent_id = agent_id
 
-    async def async_process(self, hass: HomeAssistant, text: str) -> str:
+    async def async_process(
+        self,
+        hass: HomeAssistant,
+        text: str,
+        *,
+        structure: Any | None = None,
+    ) -> str:
         """Process a text input and return the response."""
-        _LOGGER.debug("hass.services.async_call=%s", hass.services.async_call)
+        if structure is not None:
+            raise ValueError("Structure is not supported in this agent.")
         service_response = await hass.services.async_call(
             "conversation",
             "process",

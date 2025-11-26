@@ -77,8 +77,14 @@ class ModelConfig:
     config_entry_options: dict[str, Any] | None = None
     """The configuration entry options."""
 
+    subentries_data: list[dict[str, Any]] | None = None
+    """The subentry data for the model."""
+
     version: int | None = None
     """The version number of the config entry."""
+
+    minor_version: int | None = None
+    """The minor version number of the config entry."""
 
     rpm: int | None = None
     """Requests per minute allowed for this model."""

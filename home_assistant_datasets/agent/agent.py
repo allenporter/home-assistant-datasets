@@ -10,7 +10,13 @@ class ConversationAgent(ABC):
     """A simple client library for calling a conversation agent."""
 
     @abstractmethod
-    async def async_process(self, hass: HomeAssistant, text: str) -> str:
+    async def async_process(
+        self,
+        hass: HomeAssistant,
+        text: str,
+        *,
+        structure: Any | None = None,
+    ) -> str:
         """Process a text input and return the response."""
 
     @abstractmethod
