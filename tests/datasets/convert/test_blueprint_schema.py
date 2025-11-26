@@ -1,12 +1,5 @@
 """Tests for blueprint schema conversion."""
 
-from collections.abc import Generator
-import datetime
-import pathlib
-import tempfile
-from unittest.mock import patch
-
-import pytest
 from syrupy import SnapshotAssertion
 
 from home_assistant_datasets.datasets.convert import blueprint_schema
