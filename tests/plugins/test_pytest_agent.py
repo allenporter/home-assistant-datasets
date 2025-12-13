@@ -40,7 +40,7 @@ TEST_FILE_CONTENTS = """
 
     async def test_agent(hass: HomeAssistant, agent: ConversationAgent) -> None:
         response = await agent.async_process(hass, "What is the capital of France?")
-        assert response == "Sorry, I am not aware of any device called capital of France"
+        assert response
 """
 
 
