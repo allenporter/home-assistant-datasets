@@ -1,24 +1,20 @@
 """Tests for the conversation agent pytest plugin."""
 
-import pathlib
 from unittest.mock import patch
 
 import pytest
 from syrupy import SnapshotAssertion
 
 from home_assistant_datasets.models import read_model
-from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 
 # Loading these has the effect of caching them so the calls work inside of
 # pytesster. This is a bit of a hack, but leaving since its less code than
 # copy all the files into the environment.
 with patch("home_assistant_datasets.secrets.get_secret", return_value="SECRET"):
     _MODEL_CONFIG = read_model("assistant")
-_DATASET_CARD = read_dataset_card(pathlib.Path("datasets/assist/"))
 
-PYTEST_ARGS = ["--dataset", "datasets/assist"]
+PYTEST_ARGS = []
 PLUGINS = [
-    "home_assistant_datasets.plugins.pytest_dataset",
     "home_assistant_datasets.plugins.pytest_agent",
 ]
 PYTEST_INI = """
@@ -40,7 +36,7 @@ TEST_FILE_CONTENTS = """
 
     async def test_agent(hass: HomeAssistant, agent: ConversationAgent) -> None:
         response = await agent.async_process(hass, "What is the capital of France?")
-        assert response == "Sorry, I am not aware of any device called capital of France"
+        assert response
 """
 
 

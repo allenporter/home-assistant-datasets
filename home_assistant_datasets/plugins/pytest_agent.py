@@ -18,7 +18,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntryState, ConfigEntry
 from homeassistant.setup import async_setup_component
 
-
 from home_assistant_datasets.agent import (
     ConversationAgent,
     create_default_agent,
@@ -34,6 +33,12 @@ from home_assistant_datasets.models import (
 )
 
 # TODO(#12): Support loading from the custom component or core development environment
+# Ensure commonly used custom comcomponents are loaded first or else pytest_homeassistant_custom_component
+# overrides them all.
+try:
+    from custom_components import synthetic_home  # noqa: F401
+except ImportError:
+    pass
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 
@@ -69,7 +74,7 @@ def system_prompt_fixture() -> None:
 @pytest.fixture(name="merged_model_config")
 def merged_model_config_fixture(
     model_config: ModelConfig,
-    dataset_card: DatasetCard,
+    request: pytest.FixtureRequest,
     system_prompt: str | None,
 ) -> ModelConfig:
     """Fixture that merges in model settings from the DataSet card."""
@@ -81,10 +86,17 @@ def merged_model_config_fixture(
         data.update({**model_config.config_entry_data})
 
     # Override any config entry data from the dataset (e.g. changing LLM API)
-    if dataset_card.config_entry_options:
-        options.update(dataset_card.config_entry_options)
-    if dataset_card.config_entry_data:
-        data.update(dataset_card.config_entry_data)
+    # This is an optional fixture, so we can use the agent plugin independently,
+    # but still allow merging in overrides when available.
+    try:
+        dataset_card: DatasetCard | None = request.getfixturevalue("dataset_card")
+    except pytest.FixtureLookupError:
+        dataset_card = None
+    if dataset_card is not None:
+        if dataset_card.config_entry_options:
+            options.update(dataset_card.config_entry_options)
+        if dataset_card.config_entry_data:
+            data.update(dataset_card.config_entry_data)
 
     # Override the default system prompt with a fixture specific prompt
     if system_prompt:
