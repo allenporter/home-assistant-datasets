@@ -79,8 +79,8 @@ Common datasets to evaluate against are `assist`, `assist-mini`, and `intents`.
 
 ```bash
 $ DATASET="datasets/assist/"
-$ MODEL=llama3.1
-$ OUTPUT_DIR="reports/assist/2024.8.0b"  # Output based on home assistant version used
+$ MODEL=qwen3-4b
+$ OUTPUT_DIR="reports/assist/2025.12.4"  # Output based on home assistant version used
 $ pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
 

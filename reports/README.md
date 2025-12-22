@@ -20,6 +20,7 @@
 | gpt-4.1-nano | $${74.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.4.3)}}}$$ | $${92.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.5.0.dev0)}}}$$ | $${46.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${78.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | gemini-2.0-flash | $${68.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.4.3)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.4.3)}}}$$ | $${78.4\\% \space\color{gray}\tiny{\textsf{(CI: 5.9, 2025.4.3)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
 | qwen3-4b | $${68.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.7.1)}}}$$ | $${70.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.4, 2025.7.1)}}}$$ | $${76.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
+| qwen3-4b-instruct-2507-iq4-nl | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.12.4)}}}$$ |  |  |  | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | qwen2.5-3b | $${60.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.4)}}}$$ | $${70.9\\% \space\color{gray}\tiny{\textsf{(CI: 6.4, 2025.4.4)}}}$$ | $${59.7\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.4.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.4)}}}$$ | $${62.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
 | qwen3-1.7b | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.7.1)}}}$$ | $${60.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, 2025.7.1)}}}$$ | $${59.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${49.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
@@ -572,6 +573,18 @@ Qwen3 30B (A3B) running in an OpenAI API-compatible server
 More information:
 - https://huggingface.co/Qwen/Qwen3-30B-A3B-GPTQ-Int4
 - https://huggingface.co/docs/transformers/en/quantization/gptq
+
+
+### qwen3-4b-instruct-2507-iq4-nl
+
+Qwen3 is the large language model series developed by Qwen team, Alibaba Cloud. Quen improvies on Qwen2.5, with weights of Qwen3 available to the public, including both dense and Mixture-of-Expert (MoE) models.
+
+
+
+More information:
+- https://qwenlm.github.io/blog/qwen3/
+- https://ollama.com/library/qwen3
+- https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF
 
 
 ### qwen3-4b

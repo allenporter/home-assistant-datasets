@@ -135,7 +135,7 @@ underlying framework.
 
 ```bash
 $ DATASET="datasets/assist/"
-$ OUTPUT_DIR="reports/assist/2024.8.0b"  # Output based on home assistant version used
+$ OUTPUT_DIR="reports/assist/2025.12.4"  # Output based on home assistant version used
 $ MODEL=llama3.1
 $ pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
