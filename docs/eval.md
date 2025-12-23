@@ -32,6 +32,7 @@ and need to configure `PYTHONPATH` so that Home Assistant can find it. This is
 typical setup for a custom component in a separate directory:
 
 ```bash
+$ cd /workspaces
 $ git clone https://github.com/allenporter/home-assistant-synthetic-home
 $ export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home/"
 ```
