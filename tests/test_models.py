@@ -1,9 +1,8 @@
 """Tests to validate the datamodel parsers."""
 
-import dataclasses
 from unittest.mock import patch
 
-from syrupy import SnapshotAssertion
+from syrupy.assertion import SnapshotAssertion
 
 from home_assistant_datasets.models import read_models
 
@@ -16,5 +15,9 @@ def test_models(snapshot: SnapshotAssertion) -> None:
 
     # Pick an arbitrary model to validate
     assert len(model_cards.models) > 5
-    model = next(iter(model for model in model_cards.models if model.model_id == "gemini-2.5-pro"))
+    model = next(
+        iter(
+            model for model in model_cards.models if model.model_id == "gemini-2.5-pro"
+        )
+    )
     assert model == snapshot
