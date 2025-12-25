@@ -1,0 +1,4 @@
+- Agents may only modify files in their own folder
+- Agents may not redefine schemas owned by other agents
+- All schemas must be validated before training
+- Additive changes only unless retraining is explicitly planned
