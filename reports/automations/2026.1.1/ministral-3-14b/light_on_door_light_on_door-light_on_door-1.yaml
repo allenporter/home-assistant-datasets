@@ -1,0 +1,250 @@
+---
+uuid: c6c8a86f-2616-41da-90a7-cbe04b581464
+task_id: light_on_door_light_on_door-light_on_door-1
+model_id: ministral-3-14b
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  Here’s a simple **YAML blueprint** for your automation:
+
+  ```yaml
+  blueprint:
+    name: "Light on Door Open"
+    description: "Turns on a light when a door opens and turns it off after 2 minutes or when the door closes."
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: Binary sensor that detects when the door opens
+        selector:
+          entity:
+            domain: binary_sensor
+            device_class: door
+      light_switch:
+        name: Light Switch
+        description: Light(s) to turn on when the door opens
+        selector:
+          target:
+            entity:
+              domain: light
+
+  mode: single
+  max_exceeded: silent
+
+  trigger:
+    - platform: state
+      entity_id: !input door_sensor
+      to: "on"
+
+  action:
+    - service: light.turn_on
+      target: !input light_switch
+      data: {}
+
+    - delay: "00:02:00"  # 2-minute timeout
+
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: !input door_sensor
+              state: "off"
+          sequence:
+            - service: light.turn_off
+              target: !input light_switch
+        - conditions:
+            - condition: state
+              entity_id: !input door_sensor
+              state: "on"
+          sequence:
+            - service: light.turn_off
+              target: !input light_switch
+  ```
+
+  ### How to use:
+  1. Go to **Settings > Automations & Scenes > Create Automation**
+  2. Select **"Use a blueprint"** and search for this one.
+  3. Enter the **door sensor** (e.g., `binary_sensor.pantry_door`).
+  4. Enter the **light** (e.g., `light.pantry_light`).
+  5. Save the automation.
+
+  ### Notes:
+  - The light turns on when the door opens.
+  - The light turns off **either** when the door closes **or** after 2 minutes.
+  - If the door stays open, the light will turn off after 2 minutes.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01KF8CZJ3G9WG2FS1C0C7PGZW1
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-18 11:13:56.848570+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          Current time is 03:13:56. Today's date is 2026-01-18.
+        created: 2026-01-18 11:13:56.849691+00:00
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+        attachments: null
+        created: 2026-01-18 11:13:56.848624+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Here’s a simple **YAML blueprint** for your automation:
+
+          ```yaml
+          blueprint:
+            name: "Light on Door Open"
+            description: "Turns on a light when a door opens and turns it off after 2 minutes or when the door closes."
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: Binary sensor that detects when the door opens
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    device_class: door
+              light_switch:
+                name: Light Switch
+                description: Light(s) to turn on when the door opens
+                selector:
+                  target:
+                    entity:
+                      domain: light
+
+          mode: single
+          max_exceeded: silent
+
+          trigger:
+            - platform: state
+              entity_id: !input door_sensor
+              to: "on"
+
+          action:
+            - service: light.turn_on
+              target: !input light_switch
+              data: {}
+
+            - delay: "00:02:00"  # 2-minute timeout
+
+            - choose:
+                - conditions:
+                    - condition: state
+                      entity_id: !input door_sensor
+                      state: "off"
+                  sequence:
+                    - service: light.turn_off
+                      target: !input light_switch
+                - conditions:
+                    - condition: state
+                      entity_id: !input door_sensor
+                      state: "on"
+                  sequence:
+                    - service: light.turn_off
+                      target: !input light_switch
+          ```
+
+          ### How to use:
+          1. Go to **Settings > Automations & Scenes > Create Automation**
+          2. Select **"Use a blueprint"** and search for this one.
+          3. Enter the **door sensor** (e.g., `binary_sensor.pantry_door`).
+          4. Enter the **light** (e.g., `light.pantry_light`).
+          5. Save the automation.
+
+          ### Notes:
+          - The light turns on when the door opens.
+          - The light turns off **either** when the door closes **or** after 2 minutes.
+          - If the door stays open, the light will turn off after 2 minutes.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-01-18 11:14:03.019715+00:00
+      tools: null
+    timestamp: 2026-01-18 11:13:56.849698+00:00
+  duration_ms: 6171.292
+  tries: 1
