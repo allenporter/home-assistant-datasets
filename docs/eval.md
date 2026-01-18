@@ -94,6 +94,11 @@ a list of the wins and losses for manual inspection.
 ```bash
 $ pytest home_assistant_datasets/tool/assist/eval --model_output_dir=${OUTPUT_DIR}
 ```
+To evaluate `automations` dataset, run the following instead:
+
+```bash
+$ pytest ${DATASET} --model_output_dir=${OUTPUT_DIR}
+```
 
 ### Leaderboard
 
