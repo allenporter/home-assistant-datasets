@@ -1,0 +1,333 @@
+---
+uuid: aa2ac007-cbe0-474c-9cd1-a3def75bf0a9
+task_id: urban_loft_au_calendar-am_i_leaving_the_house_today-1
+model_id: glm-4.7-flash
+category:
+- calendar
+- question
+task:
+  input_text: Am I leaving the house today?
+  expect_response:
+  - 'yes'
+  - dinner
+  - school
+  - class
+response: |-
+  I can see you have some activities scheduled for today:
+
+  - **Chemistry class** at 11:00 AM (no location specified - could be online or at home)
+  - **Dinner with Liza** at 7:00 PM at Peninsula CR Steak & Seafood Grill
+
+  I don't have real-time information about your current location or immediate plans, so I can't tell you if you're leaving the house right now. Based on your calendar, it looks like you have something going on this evening, but I don't have details about your current whereabouts.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Am I leaving the house today?
+      context:
+        id: 01KG034DPJQFQXPYK5JVS4B7P6
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-27 16:03:36.786692+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Balcony Light
+            domain: light
+            areas: Balcony
+          - names: Bedroom Light
+            domain: light
+            areas: Bedroom
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room
+            domain: light
+            areas: Living Room
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Samsung
+            domain: media_player
+            areas: Living Room
+          - names: Smart Plug
+            domain: switch
+            areas: Rooftop Terrace
+          - names: Smart Plug Energy
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Tasks
+            domain: todo
+          - names: Terrace Light
+            domain: light
+            areas: Rooftop Terrace
+          - names: Weather Service
+            domain: weather
+            areas: Rooftop Terrace
+        created: 2026-01-27 16:03:36.788777+00:00
+      - role: user
+        content: Am I leaving the house today?
+        attachments: null
+        created: 2026-01-27 16:03:36.786747+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: "The user is asking if they are leaving the house today.\
+          \ This is asking about their current activities and plans, which is not\
+          \ something I can know from the available tools. I have:\n\n1. Calendar\
+          \ tools to check events\n2. Todo list tools \n3. Device control tools\n\
+          4. Live context tool for current device states\n5. Date/time tool\n\nTo\
+          \ answer this question, I should check their calendar for today's events\
+          \ to see if they have any appointments or activities that would indicate\
+          \ they're leaving the house. Let me use the calendar_get_events function\
+          \ for today."
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Personal
+            range: today
+          id: 01KG034H5Y071AFDN8S60YGS7D
+          external: false
+        native: null
+        created: 2026-01-27 16:03:40.360576+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KG034H5Y071AFDN8S60YGS7D
+        tool_name: calendar_get_events
+        tool_result:
+          success: true
+          result:
+          - start: '2025-04-02T11:00:00+10:00'
+            end: '2025-04-02T11:55:00+10:00'
+            summary: Chemistry class
+            location: None
+          - start: '2025-04-02T19:00:00+10:00'
+            end: '2025-04-02T20:30:00+10:00'
+            summary: Dinner with Liza
+            description: Meet up with Liza, don't forget to bring flowers
+            location: Peninsula CR Steak & Seafood Grill
+        created: 2026-01-27 16:03:40.360613+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |-
+          I can see from the calendar that there are two events today:
+          1. Chemistry class at 11:00 AM - no location specified, so this could be online or at the house
+          2. Dinner with Liza at 7:00 PM at Peninsula CR Steak & Seafood Grill - this is definitely going to be at an off-site location
+
+          However, I still don't know if they're actually leaving the house *right now* or if these events are still in the future. To get a better sense of their current activity, I should check their todo list to see if there are any tasks related to leaving the house or getting ready to go.
+        tool_calls:
+        - tool_name: todo_get_items
+          tool_args:
+            status: needs_action
+            todo_list: Tasks
+          id: 01KG034K4DCMGGV58DQESNNSD9
+          external: false
+        native: null
+        created: 2026-01-27 16:03:42.359567+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KG034K4DCMGGV58DQESNNSD9
+        tool_name: todo_get_items
+        tool_result:
+          success: true
+          result: []
+        created: 2026-01-27 16:03:42.359600+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          I can see you have some activities scheduled for today:
+
+          - **Chemistry class** at 11:00 AM (no location specified - could be online or at home)
+          - **Dinner with Liza** at 7:00 PM at Peninsula CR Steak & Seafood Grill
+
+          I don't have real-time information about your current location or immediate plans, so I can't tell you if you're leaving the house right now. Based on your calendar, it looks like you have something going on this evening, but I don't have details about your current whereabouts.
+        thinking_content: |-
+          I checked the calendar and there are two events today:
+          - Chemistry class at 11:00 AM (no location specified)
+          - Dinner with Liza at 7:00 PM at Peninsula CR Steak & Seafood Grill
+
+          I also checked the todo list but there are no pending tasks.
+
+          From this information, I can tell the user has activities scheduled today, but I don't have specific information about whether they are leaving the house *right now*. The Chemistry class could be online or at the house, and the dinner is definitely going to be at a restaurant.
+
+          I should be honest that I can see they have activities today but I don't have real-time information about their current location or immediate plans.
+        tool_calls: null
+        native: null
+        created: 2026-01-27 16:03:45.273464+00:00
+      tools:
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fe1e9a8d0c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fe1e9a8d0c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fe1e9a8d0c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fe1e9a8d0c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fe1e9a8d0c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7fe1acca9380>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7fe1b53c19b0>, msg=None),
+          msg=None), ''name'': <function string at 0x7fe1e9a8fcc0>, ''area'': <function
+          string at 0x7fe1e9a8fcc0>, ''floor'': <function string at 0x7fe1e9a8fcc0>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fe1e9a8d0c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7fe1accaa090>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fe1e9a8d0c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7fe1acca9dd0>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7fe1e9a8fcc0>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7fe1e9a8fcc0>, ''area'': <function
+          string at 0x7fe1e9a8fcc0>, ''floor'': <function string at 0x7fe1e9a8fcc0>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [<function string at 0x7fe1e9a8fcc0>], msg=None), ''color'': <function color_name_to_rgb
+          at 0x7fe1e330e090>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fe1e0e53110>, ''name'':
+          <function non_empty_string at 0x7fe1e0e53110>}'
+      - name: HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fe1e0e53110>, ''name'':
+          <function non_empty_string at 0x7fe1e0e53110>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [<function string at 0x7fe1e9a8fcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fe1e9a8d0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver'', ''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe1e0e53110>, ''domain'': All(<function ensure_list at 0x7fe1e9a8d0c0>,
+          [<function string at 0x7fe1e9a8fcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fe1e9a8d0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver'', ''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fe1e9a8fcc0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: calendar_get_events
+        description: Get events from a calendar. When asked if something happens,
+          search the whole week. Results are RFC 5545 which means 'end' is exclusive.
+        parameters: '{''calendar'': In([''Personal'']), ''range'': In([''today'',
+          ''week''])}'
+      - name: todo_get_items
+        description: Query a to-do list to find out what items are on it. Use this
+          to answer questions like 'What's on my task list?' or 'Read my grocery list'.
+          Filters items by status (needs_action, completed, all).
+        parameters: '{''todo_list'': In([''Tasks'']), ''status'': In([''needs_action'',
+          ''completed'', ''all''])}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-27 16:03:36.788785+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Personal
+        range: today
+    timestamp: 2026-01-27 16:03:40.350271+00:00
+  - event_type: tool_call
+    data:
+      tool_name: todo_get_items
+      tool_args:
+        status: needs_action
+        todo_list: Tasks
+    timestamp: 2026-01-27 16:03:42.349152+00:00
+  duration_ms: 8486.911
+  tries: 1
