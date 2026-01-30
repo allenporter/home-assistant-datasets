@@ -205,17 +205,17 @@ jobs:
             custom_components
 
       - name: Write secrets file for !secret
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           set -euo pipefail
-          if [ -z "${{ secrets.OPENROUTER_API_KEY }}" ]; then
+          if [ -z "${OPENROUTER_API_KEY}" ]; then
             echo "Missing required GitHub secret: OPENROUTER_API_KEY"
             echo "Set it in the repository's Actions secrets and re-run."
             exit 1
           fi
 
-          cat > "${RUNNER_TEMP}/secrets.yaml" <<EOF
-openrouter_api_key: "${{ secrets.OPENROUTER_API_KEY }}"
-EOF
+          printf 'openrouter_api_key: "%s"' "$OPENROUTER_API_KEY" > "${RUNNER_TEMP}/secrets.yaml"
 
           python3 - <<'PY'
           import os
