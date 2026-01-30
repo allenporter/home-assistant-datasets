@@ -1,0 +1,159 @@
+---
+uuid: 580ecfd5-31bd-4a27-bdd4-157cd4454ce3
+task_id: home1_us_lock_smart_lock-lock_smart_lock-0
+model_id: qwen3-235b-a22b-2507
+category: lock
+task:
+  input_text: Lock smart lock
+  expect_changes:
+    lock.smart_lock:
+      state: locked
+      attributes: null
+response: The smart lock has been locked successfully.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Lock smart lock
+      context:
+        id: 01KG5VFWWDQ3W82E427HFEVDJQ
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.qwen_qwen3_235b_a22b_2507
+      extra_system_prompt: null
+    timestamp: 2026-01-29 21:45:30.765768+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Smart Lock
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock
+            domain: lock
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: sensor
+            areas: Entry
+          - names: Smart Lock Tamper
+            domain: binary_sensor
+            areas: Entry
+        created: 2026-01-29 21:45:30.766274+00:00
+      - role: user
+        content: Lock smart lock
+        attachments: null
+        created: 2026-01-29 21:45:30.765831+00:00
+      - role: assistant
+        agent_id: conversation.qwen_qwen3_235b_a22b_2507
+        content: null
+        thinking_content: null
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            name: Smart Lock
+            domain: lock
+          id: 2bca7cd2ad3146cdb6182501ed3d7fc2
+          external: false
+        native: null
+        created: 2026-01-29 21:45:32.699051+00:00
+      - role: tool_result
+        agent_id: conversation.qwen_qwen3_235b_a22b_2507
+        tool_call_id: 2bca7cd2ad3146cdb6182501ed3d7fc2
+        tool_name: HassTurnOn
+        tool_result:
+          dictitems:
+            speech:
+              plain:
+                speech: The smart lock has been locked successfully.
+                extra_data: null
+            response_type: action_done
+            data:
+              targets: []
+              success:
+              - name: Smart Lock
+                type:
+                - entity
+                id: lock.smart_lock
+              failed: []
+        created: 2026-01-29 21:45:32.703110+00:00
+      - role: assistant
+        agent_id: conversation.qwen_qwen3_235b_a22b_2507
+        content: The smart lock has been locked successfully.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-01-29 21:45:34.541830+00:00
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7f217480>, ''domain'': All(<function ensure_list at 0xffff8427b7f0>,
+          [<function string at 0xffff842924b0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff8427b7f0>, [In([''identify'', ''restart'', ''update'',
+          ''water'', ''gas'', ''awning'', ''blind'', ''curtain'', ''damper'', ''door'',
+          ''garage'', ''gate'', ''shade'', ''shutter'', ''window'', ''outlet'', ''switch'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7f217480>, ''domain'': All(<function ensure_list at 0xffff8427b7f0>,
+          [<function string at 0xffff842924b0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff8427b7f0>, [In([''identify'', ''restart'', ''update'',
+          ''water'', ''gas'', ''awning'', ''blind'', ''curtain'', ''damper'', ''door'',
+          ''garage'', ''gate'', ''shade'', ''shutter'', ''window'', ''outlet'', ''switch'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff842924b0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-29 21:45:30.766281+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        name: Smart Lock
+        domain: lock
+    timestamp: 2026-01-29 21:45:32.699382+00:00
+  duration_ms: 3776.711
+  tries: 1
