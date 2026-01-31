@@ -1,0 +1,427 @@
+---
+uuid: 141c91e2-a8a9-49e0-9f48-069afd0ea318
+task_id: vacuum_pause_vacuum_pause-vacuum_pause-4
+model_id: mistral-large-2512
+category: vacuum
+task:
+  input_text: |
+    # Vacuum Pause
+
+    ## Problem statement
+
+    Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Pause the vacuum when I get a phone call from my relatives
+    - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input               | Description                                                           |
+    | ------------------- | --------------------------------------------------------------------- |
+    | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+    | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+    The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+    should be paused (not stopped) and can be resumed manually.
+response: |-
+  Here’s a **blueprint automation** for Home Assistant to pause your vacuum when you receive a phone call:
+
+  ---
+  ### **Blueprint: Pause Vacuum on Phone Call**
+  ```yaml
+  blueprint:
+    name: Pause Vacuum on Phone Call
+    description: Pause a vacuum when a phone call is detected.
+    domain: automation
+    input:
+      phone_call_sensor:
+        name: Phone Call Sensor
+        description: Binary sensor that triggers when a phone call is received.
+        selector:
+          entity:
+            domain: binary_sensor
+      vacuum_entity:
+        name: Vacuum
+        description: Vacuum to pause when the phone call starts.
+        selector:
+          entity:
+            domain: vacuum
+
+  trigger:
+    - platform: state
+      entity_id: !input phone_call_sensor
+      to: "on"
+
+  condition:
+    - condition: state
+      entity_id: !input vacuum_entity
+      state: "cleaning"
+
+  action:
+    - service: vacuum.pause
+      target:
+        entity_id: !input vacuum_entity
+  ```
+
+  ---
+
+  ### **How It Works**
+  1. **Trigger**: The automation runs when the `phone_call_sensor` turns `on`.
+  2. **Condition**: It checks if the vacuum is currently `cleaning`.
+  3. **Action**: If the vacuum is running, it pauses (not stops) the vacuum.
+
+  ### **How to Use**
+  1. Save the blueprint in your Home Assistant `blueprints/automation` folder.
+  2. Create a new automation using this blueprint.
+  3. Select:
+     - Your **phone call sensor** (e.g., a binary sensor from your phone app).
+     - Your **vacuum entity** (e.g., `vacuum.your_vacuum_name`).
+  4. Save the automation.
+
+  Now, your vacuum will pause automatically when you receive a call! Resume it manually when you're done.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Vacuum Pause
+
+        ## Problem statement
+
+        Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Pause the vacuum when I get a phone call from my relatives
+        - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input               | Description                                                           |
+        | ------------------- | --------------------------------------------------------------------- |
+        | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+        | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+        The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+        should be paused (not stopped) and can be resumed manually.
+      context:
+        id: 01KGAT85J59EP9NFS9PK2MFVJ4
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-31 20:00:01.094041+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Bathroom Light
+            domain: light
+            areas: Bathroom
+          - names: Exhaust Fan
+            domain: fan
+            areas: Bathroom
+          - names: Exhaust Fan Humidity
+            domain: sensor
+            areas: Bathroom
+          - names: Lamp
+            domain: light
+            areas: Living Room/Kitchen/Bedroom
+          - names: Main Light
+            domain: light
+            areas: Living Room/Kitchen/Bedroom
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Bathroom
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Bathroom
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Bathroom
+          - names: Outdoor Light
+            domain: light
+            areas: Rooftop Terrace
+          - names: Rooftop Terrace Motion Sensor
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Rooftop Terrace Motion Sensor Battery
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Rooftop Terrace Motion Sensor Battery
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Smart Speaker
+            domain: media_player
+            areas: Living Room/Kitchen/Bedroom
+          - names: Thermostat
+            domain: climate
+            areas: Living Room/Kitchen/Bedroom
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Living Room/Kitchen/Bedroom
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Living Room/Kitchen/Bedroom
+          - names: Tv
+            domain: media_player
+            areas: Living Room/Kitchen/Bedroom
+          - names: Vacuum Cleaner
+            domain: vacuum
+            areas: Living Room/Kitchen/Bedroom
+        created: 2026-01-31 20:00:01.096849+00:00
+      - role: user
+        content: |
+          # Vacuum Pause
+
+          ## Problem statement
+
+          Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Pause the vacuum when I get a phone call from my relatives
+          - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input               | Description                                                           |
+          | ------------------- | --------------------------------------------------------------------- |
+          | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+          | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+          The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+          should be paused (not stopped) and can be resumed manually.
+        attachments: null
+        created: 2026-01-31 20:00:01.094143+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Here’s a **blueprint automation** for Home Assistant to pause your vacuum when you receive a phone call:
+
+          ---
+          ### **Blueprint: Pause Vacuum on Phone Call**
+          ```yaml
+          blueprint:
+            name: Pause Vacuum on Phone Call
+            description: Pause a vacuum when a phone call is detected.
+            domain: automation
+            input:
+              phone_call_sensor:
+                name: Phone Call Sensor
+                description: Binary sensor that triggers when a phone call is received.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              vacuum_entity:
+                name: Vacuum
+                description: Vacuum to pause when the phone call starts.
+                selector:
+                  entity:
+                    domain: vacuum
+
+          trigger:
+            - platform: state
+              entity_id: !input phone_call_sensor
+              to: "on"
+
+          condition:
+            - condition: state
+              entity_id: !input vacuum_entity
+              state: "cleaning"
+
+          action:
+            - service: vacuum.pause
+              target:
+                entity_id: !input vacuum_entity
+          ```
+
+          ---
+
+          ### **How It Works**
+          1. **Trigger**: The automation runs when the `phone_call_sensor` turns `on`.
+          2. **Condition**: It checks if the vacuum is currently `cleaning`.
+          3. **Action**: If the vacuum is running, it pauses (not stops) the vacuum.
+
+          ### **How to Use**
+          1. Save the blueprint in your Home Assistant `blueprints/automation` folder.
+          2. Create a new automation using this blueprint.
+          3. Select:
+             - Your **phone call sensor** (e.g., a binary sensor from your phone app).
+             - Your **vacuum entity** (e.g., `vacuum.your_vacuum_name`).
+          4. Save the automation.
+
+          Now, your vacuum will pause automatically when you receive a call! Resume it manually when you're done.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-01-31 20:00:07.731579+00:00
+      tools:
+      - name: HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7f4e915e4e00>, ''name'': <function non_empty_string
+          at 0x7f4e915e4e00>, ''floor'': <function non_empty_string at 0x7f4e915e4e00>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [<function string at 0x7f4e9618db10>], msg=None), ''color'': <function color_name_to_rgb
+          at 0x7f4e93c590c0>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassFanSetSpeed
+        description: Sets a fan's speed by percentage
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''fan''])], msg=None), ''percentage'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassVacuumStart
+        description: Starts a vacuum
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''vacuum''])], msg=None)}'
+      - name: HassVacuumReturnToBase
+        description: Returns a vacuum to base
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''vacuum''])], msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f4e961a6e50>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f4e961a6e50>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f4e961a6e50>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f4e961a6e50>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f4e961a6e50>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7f4e7bdf2ae0>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7f4e782da2a0>, msg=None),
+          msg=None), ''name'': <function string at 0x7f4e9618db10>, ''area'': <function
+          string at 0x7f4e9618db10>, ''floor'': <function string at 0x7f4e9618db10>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f4e961a6e50>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f4e7bdf35e0>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f4e961a6e50>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f4e7bff4f60>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7f4e9618db10>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7f4e9618db10>, ''area'': <function
+          string at 0x7f4e9618db10>, ''floor'': <function string at 0x7f4e9618db10>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [<function string at 0x7f4e9618db10>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f4e961a6e50>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''tv'', ''speaker'', ''receiver'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f4e915e4e00>, ''domain'': All(<function ensure_list at 0x7f4e961a6e50>,
+          [<function string at 0x7f4e9618db10>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f4e961a6e50>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''tv'', ''speaker'', ''receiver'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f4e9618db10>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-31 20:00:01.096859+00:00
+  duration_ms: 6637.748
+  tries: 1
