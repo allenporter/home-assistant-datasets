@@ -1,0 +1,377 @@
+---
+uuid: d652b896-996a-4b5f-914b-78500764cf02
+task_id: urban_loft_au_calendar-what_classes_do_i_have_today-1
+model_id: gpt-oss-20b
+category:
+- calendar
+- question
+task:
+  input_text: What classes do I have today?
+  expect_response:
+  - chemistry
+response: You have a Chemistry class today from 11:00 AM to 11:55 AM.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: What classes do I have today?
+      context:
+        id: 01KF8N9T8MKFSNEZA8X87XC7ZK
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-18 13:39:21.492704+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Balcony Light
+            domain: light
+            areas: Balcony
+          - names: Bedroom Light
+            domain: light
+            areas: Bedroom
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room
+            domain: light
+            areas: Living Room
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Samsung
+            domain: media_player
+            areas: Living Room
+          - names: Smart Plug
+            domain: switch
+            areas: Rooftop Terrace
+          - names: Smart Plug Energy
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Tasks
+            domain: todo
+          - names: Terrace Light
+            domain: light
+            areas: Rooftop Terrace
+          - names: Weather Service
+            domain: weather
+            areas: Rooftop Terrace
+        created: 2026-01-18 13:39:21.495786+00:00
+      - role: user
+        content: What classes do I have today?
+        attachments: null
+        created: 2026-01-18 13:39:21.492754+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |-
+          The user: "What classes do I have today?" This question is about the user's calendar. We need to use calendar_get_events to fetch events from the user's calendar for the week range. The user didn't specify a calendar. The tool signature: calendar_get_events accepts calendar (string) and range (string). We need to choose a calendar. Probably default calendar "Calendar" or "Google Calendar"? We don't have a static context for calendars. The user just asks classes. We should call calendar_get_events. We need to choose a calendar: maybe "Calendar". We'll also need a range: "2023-05-01/2023-05-08"? But we should fetch this week's range: probably "now" to "next 7 days". The function signature expects a string for range, e.g., "2023-05-01/2023-05-08". But we need the current date. We can get date via GetDateTime. But maybe we can just pass a generic range: e.g., "2024-01-18/2024-01-25" if today's date is 2026-01-18, but we don't know real date. But we can call GetDateTime to get the current date/time. The user: "What classes do I have today?" So we need to query calendar for events today. Range can be today's date. We'll do calendar_get_events with calendar: "Calendar" or "Personal Calendar". We need to get range string like "2026-01-18/2026-01-19". But we need date. Use GetDateTime to get current date.
+
+          So steps: call GetDateTime to get current date/time. Parse date. Then call calendar_get_events with range "YYYY-MM-DD/YYYY-MM-DD" where second date is next day. Calendar: maybe "Personal Calendar" or "Calendar". If not known, default to "Calendar". Use tool.
+
+          We must call GetLiveContext? No, it's not about live state. It's about calendar events.
+
+          We need to respond after getting the results: read RFC 5545 events and list classes.
+
+          We might need to parse the tool response. Let's assume the tool returns a list of events with summary, start, end. Then we filter those whose summary includes "class" or similar. But we can simply present all events.
+
+          We need to call calendar_get_events. The tool: calendar_get_events requires "calendar" and "range". Provide calendar name: maybe "Calendar". Provide range: "2026-01-18/2026-01-19". We need to get date string: we can call GetDateTime.
+
+          We must call GetDateTime first. Let's do that.
+
+          After getting datetime, call calendar_get_events.
+
+          We'll produce a response listing events that are "classes".
+
+          We should also check if no classes. Then say none.
+
+          Let's go step by step.
+        tool_calls:
+        - tool_name: GetDateTime
+          tool_args: {}
+          id: 01KF8N9YNA3F0YZC059HY8XD70
+          external: false
+        native: null
+        created: 2026-01-18 13:39:25.994479+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8N9YNA3F0YZC059HY8XD70
+        tool_name: GetDateTime
+        tool_result:
+          success: true
+          result:
+            date: '2025-04-02'
+            time: 08:30:00
+            timezone: UTC+10:00
+            weekday: Wednesday
+        created: 2026-01-18 13:39:25.994516+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: 'Now we have date 2025-04-02. So today. Range: "2025-04-02/2025-04-03".
+          Now call calendar_get_events.'
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Calendar
+            range: 2025-04-02/2025-04-03
+          id: 01KF8N9ZFDAGGHV0MXKRFH387B
+          external: false
+        native: null
+        created: 2026-01-18 13:39:26.829612+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8N9ZFDAGGHV0MXKRFH387B
+        tool_name: calendar_get_events
+        tool_result:
+          error: MultipleInvalid
+          error_text: value must be one of ['Personal'] for dictionary value @ data['calendar']
+        created: 2026-01-18 13:39:26.829651+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: It expects calendar name "Personal". Let's try "Personal".
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Personal
+            range: 2025-04-02/2025-04-03
+          id: 01KF8NA0532AC5Q7JTTKQDJWEW
+          external: false
+        native: null
+        created: 2026-01-18 13:39:27.523758+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8NA0532AC5Q7JTTKQDJWEW
+        tool_name: calendar_get_events
+        tool_result:
+          error: MultipleInvalid
+          error_text: value must be one of ['today', 'week'] for dictionary value
+            @ data['range']
+        created: 2026-01-18 13:39:27.523804+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: Range expects "today" or "week". Ok we can use "today".
+          Then get events.
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Personal
+            range: today
+          id: 01KF8NA0TXSQRDBPVCWM6G182J
+          external: false
+        native: null
+        created: 2026-01-18 13:39:28.223061+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8NA0TXSQRDBPVCWM6G182J
+        tool_name: calendar_get_events
+        tool_result:
+          success: true
+          result:
+          - start: '2025-04-02T11:00:00+10:00'
+            end: '2025-04-02T11:55:00+10:00'
+            summary: Chemistry class
+          - start: '2025-04-02T19:00:00+10:00'
+            end: '2025-04-02T20:30:00+10:00'
+            summary: Dinner with Liza
+            description: Meet up with Liza, don't forget to bring flowers
+            location: Butcher's Prime Restaurant
+        created: 2026-01-18 13:39:28.223099+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: You have a Chemistry class today from 11:00 AM to 11:55 AM.
+        thinking_content: 'We have two events: Chemistry class and dinner. The user
+          asks "What classes do I have today?" So answer: "You have a Chemistry class
+          at 11:00-11:55." Optionally mention no other classes. Provide simple answer.'
+        tool_calls: null
+        native: null
+        created: 2026-01-18 13:39:29.240896+00:00
+      tools:
+      - name: HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f138ebcf110>, ''name'':
+          <function non_empty_string at 0x7f138ebcf110>}'
+      - name: HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f138ebcf110>, ''name'':
+          <function non_empty_string at 0x7f138ebcf110>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''color'': <function color_name_to_rgb
+          at 0x7f1391026090>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7f1361ec6820>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7f1348528930>, msg=None),
+          msg=None), ''name'': <function string at 0x7f1397777cc0>, ''area'': <function
+          string at 0x7f1397777cc0>, ''floor'': <function string at 0x7f1397777cc0>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f1361ec5220>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f1361ec7cc0>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7f1397777cc0>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7f1397777cc0>, ''area'': <function
+          string at 0x7f1397777cc0>, ''floor'': <function string at 0x7f1397777cc0>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f13977750c0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f13977750c0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f1397777cc0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: calendar_get_events
+        description: Get events from a calendar. When asked if something happens,
+          search the whole week. Results are RFC 5545 which means 'end' is exclusive.
+        parameters: '{''calendar'': In([''Personal'']), ''range'': In([''today'',
+          ''week''])}'
+      - name: todo_get_items
+        description: Query a to-do list to find out what items are on it. Use this
+          to answer questions like 'What's on my task list?' or 'Read my grocery list'.
+          Filters items by status (needs_action, completed, all).
+        parameters: '{''todo_list'': In([''Tasks'']), ''status'': In([''needs_action'',
+          ''completed'', ''all''])}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-18 13:39:21.495797+00:00
+  - event_type: tool_call
+    data:
+      tool_name: GetDateTime
+      tool_args: {}
+    timestamp: 2026-01-18 13:39:25.994063+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Calendar
+        range: 2025-04-02/2025-04-03
+    timestamp: 2026-01-18 13:39:26.829332+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Personal
+        range: 2025-04-02/2025-04-03
+    timestamp: 2026-01-18 13:39:27.523378+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Personal
+        range: today
+    timestamp: 2026-01-18 13:39:28.222278+00:00
+  duration_ms: 7748.327
+  tries: 1

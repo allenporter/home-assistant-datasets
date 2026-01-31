@@ -1,0 +1,262 @@
+---
+uuid: 96b5ba06-1b0c-40ac-9ec9-0051dd63916f
+task_id: light_on_door_light_on_door-light_on_door-4
+model_id: glm-4.7-flash
+category: light
+task:
+  input_text: |
+    # Light on door
+
+    ## Problem statement
+
+    Create an blueprint automation to turn on a light when the door opens.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Turn on the pantry light when the pantry door opens
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input          | Description                                                                     |
+    | -------------- | ------------------------------------------------------------------------------- |
+    | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+    | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+    The automation should trigger when the door opens, and turn the light on. The
+    light should be shut off when the door closes or after a 2 minute timeout.
+response: |-
+  ```yaml
+  blueprint:
+    name: Light on door
+    description: Turns on a light when a door opens and turns it off when the door closes or after a 2 minute timeout.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: A binary_sensor that triggers when the door opens.
+        selector:
+          entity:
+            domain: binary_sensor
+      light_switch:
+        name: Light Switch
+        description: The light entity to turn on or off.
+        selector:
+          entity:
+            domain: light
+
+  trigger:
+    - platform: state
+      entity_id: !input door_sensor
+      to: "on"
+
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: !input light_switch
+    - wait_until:
+        platform: state
+        entity_id: !input door_sensor
+        to: "off"
+      timeout: "00:02:00"
+    - service: light.turn_off
+      target:
+        entity_id: !input light_switch
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Light on door
+
+        ## Problem statement
+
+        Create an blueprint automation to turn on a light when the door opens.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Turn on the pantry light when the pantry door opens
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input          | Description                                                                     |
+        | -------------- | ------------------------------------------------------------------------------- |
+        | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+        | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+        The automation should trigger when the door opens, and turn the light on. The
+        light should be shut off when the door closes or after a 2 minute timeout.
+      context:
+        id: 01KG08AJNM1B8MVNSTQ2S8ENY8
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-27 17:34:21.364171+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          Current time is 09:34:21. Today's date is 2026-01-27.
+        created: 2026-01-27 17:34:21.365259+00:00
+      - role: user
+        content: |
+          # Light on door
+
+          ## Problem statement
+
+          Create an blueprint automation to turn on a light when the door opens.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Turn on the pantry light when the pantry door opens
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input          | Description                                                                     |
+          | -------------- | ------------------------------------------------------------------------------- |
+          | `door_sensor`  | A `binary_sensor` that triggers the automation to start.                        |
+          | `light_switch` | One or more `light` entity targets to turn on or off when the automation fires. |
+
+          The automation should trigger when the door opens, and turn the light on. The
+          light should be shut off when the door closes or after a 2 minute timeout.
+        attachments: null
+        created: 2026-01-27 17:34:21.364221+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          blueprint:
+            name: Light on door
+            description: Turns on a light when a door opens and turns it off when the door closes or after a 2 minute timeout.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: A binary_sensor that triggers when the door opens.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              light_switch:
+                name: Light Switch
+                description: The light entity to turn on or off.
+                selector:
+                  entity:
+                    domain: light
+
+          trigger:
+            - platform: state
+              entity_id: !input door_sensor
+              to: "on"
+
+          action:
+            - service: light.turn_on
+              target:
+                entity_id: !input light_switch
+            - wait_until:
+                platform: state
+                entity_id: !input door_sensor
+                to: "off"
+              timeout: "00:02:00"
+            - service: light.turn_off
+              target:
+                entity_id: !input light_switch
+          ```
+        thinking_content: "The user wants a Home Assistant Blueprint automation.\n\
+          The goal is to turn on a light when a door opens and turn it off when the\
+          \ door closes or after a 2-minute timeout.\n\n**Inputs required:**\n1. \
+          \ `door_sensor`: A binary_sensor.\n2.  `light_switch`: One or more light\
+          \ entities.\n\n**Logic:**\n1.  **Trigger:** When the door sensor state changes\
+          \ to 'on' (opens).\n2.  **Action (On):** Turn on the specified light(s).\n\
+          3.  **Action (Off):**\n    *   Condition 1: When the door sensor state changes\
+          \ to 'off' (closes).\n    *   Condition 2: After a 2-minute timeout (idle\
+          \ time).\n\n**Structure:**\n*   Alias: Something descriptive like \"Turn\
+          \ on light when door opens\".\n*   Description: Explanation of the automation.\n\
+          *   Variables: Inputs as defined in the prompt.\n*   Triggers:\n    *  \
+          \ State change on `door_sensor` with new_state: 'on'.\n*   Conditions:\n\
+          \    *   Maybe implicit state check (don't turn on if already on? No, usually\
+          \ simple toggles are fine, but the prompt implies specific behavior). The\
+          \ prompt says \"turn the light on\" when opening.\n*   Actions:\n    * \
+          \  Turn on `light_switch`.\n\n**Handling the timeout:**\nTo handle the timeout,\
+          \ I need a \"wait until\" action or a \"trigger\" based on time. Since I\
+          \ need to cancel it if the door closes first, the standard pattern is:\n\
+          1. Turn on light.\n2. Wait until condition met.\n    *   Option A: `wait\
+          \ until: door_sensor: 'off'` -> Turn off light.\n    *   Option B: `wait\
+          \ until: condition: platform: time, at: ...` -> Turn off light.\n    * \
+          \  Option C: `wait until: condition: platform: template, value_template:\
+          \ \"{{ is_state('door_sensor', 'off') or now() > wait_start + timedelta(minutes=2)\
+          \ }}\"` -> Turn off light.\n    \n    Using `wait until` is the cleanest\
+          \ way in a single automation block. If the door closes, the condition is\
+          \ met immediately. If not, it waits 2 minutes.\n\n**Drafting the Blueprint:**\n\
+          \n```yaml\nblueprint:\n  name: Light on door\n  description: Turn on a light\
+          \ when a door opens, and off when it closes or after a timeout.\n  domain:\
+          \ automation\n  input:\n    door_sensor:\n      name: Door Sensor\n    \
+          \  description: Binary sensor to detect door opening/closing.\n      selector:\n\
+          \        entity:\n          domain: binary_sensor\n    light_switch:\n \
+          \     name: Light Switch\n      description: The light to turn on/off.\n\
+          \      selector:\n        entity:\n          domain: light\n\ntrigger:\n\
+          \  - platform: state\n    entity_id: !input door_sensor\n    to: \"on\"\n\
+          \ncondition: []\n\naction:\n  - service: light.turn_on\n    target:\n  \
+          \    entity_id: !input light_switch\n  - delay: \"0s\" # Sometimes helpful\
+          \ to ensure trigger isn't missed immediately by wait, but usually state\
+          \ change trigger + immediate wait is fine.\n  - service: light.turn_off\n\
+          \    target:\n      entity_id: !input light_switch\n    data:\n      transition:\
+          \ 1\n    delay: \"0s\" # Need to set a delay to wait for the timeout condition.\
+          \ Actually, 'wait_until' is better.\n  \n  # Let's try the wait_until approach\
+          \ for timeout\n  - wait_until:\n      platform: state\n      entity_id:\
+          \ !input door_sensor\n      to: \"off\"\n    timeout:\n      seconds: 120\
+          \ # 2 minutes\n  - service: light.turn_off\n    target:\n      entity_id:\
+          \ !input light_switch\n```\n\nRefining the Action block:\n1. Turn on light.\n\
+          2. Wait until the door closes (sensor state 'off'). If it takes longer than\
+          \ 2 minutes, cancel the wait.\n3. Turn off light.\n\n```yaml\naction:\n\
+          \  - service: light.turn_on\n    target:\n      entity_id: !input light_switch\n\
+          \  - wait_until:\n      platform: state\n      entity_id: !input door_sensor\n\
+          \      to: \"off\"\n    timeout: \"00:02:00\"\n  - service: light.turn_off\n\
+          \    target:\n      entity_id: !input light_switch\n```\n\nThis looks solid.\n\
+          \n**Final Check of requirements:**\n- `door_sensor` input (Binary_sensor).\n\
+          - `light_switch` input (Light).\n- Trigger on door open (state = on).\n\
+          - Turn light on.\n- Turn light off when door closes (state = off).\n- Turn\
+          \ light off after 2 minute timeout.\n\nThe logic holds up. I will output\
+          \ the YAML.\n\nOne minor detail: The prompt asks for \"Current time is 09:34:21.\
+          \ Today's date is 2026-01-27.\" but asks for a blueprint. This is just system\
+          \ context. I will ignore the timestamp in the output unless I'm simulating\
+          \ something, but for a generic blueprint, the input variables are sufficient.\n\
+          \nI will add `icon: mdi:door-open` to the blueprint metadata for better\
+          \ UI, and a `max_exceeded: silent` to prevent notifications if the timeout\
+          \ takes too long (though standard behavior is usually okay). I'll stick\
+          \ to the essentials to keep it \"simple and to the point\" as requested\
+          \ in the system prompt.\n\nWait, the system prompt says \"Answer in plain\
+          \ text. Keep it simple and to the point.\" but I am providing code (YAML).\
+          \ The blueprint is a block of text (code). I will format the YAML block\
+          \ clearly.\n\nThe user requested \"Create a blueprint automation\".\nI will\
+          \ provide the YAML content.\n\nVariables:\n`door_sensor`: Binary Sensor\n\
+          `light_switch`: Light\n\nTrigger:\nState change on `door_sensor` to 'on'.\n\
+          \nAction:\n1. Turn on `light_switch`.\n2. Wait until `door_sensor` is 'off'.\
+          \ Timeout: 2 minutes.\n3. Turn off `light_switch`.\n\nLooks good."
+        tool_calls: null
+        native: null
+        created: 2026-01-27 17:34:36.261048+00:00
+      tools: null
+    timestamp: 2026-01-27 17:34:21.365266+00:00
+  duration_ms: 14897.017
+  tries: 1

@@ -1,0 +1,227 @@
+---
+uuid: 55079228-3fa2-4fde-a15d-96d40e83e94b
+task_id: home2_ru_valve_water_valve-open_the_front_yard_valve-0
+model_id: glm-4.7-flash
+category: valve
+task:
+  input_text: open the front yard valve
+  expect_changes:
+    valve.irrigation_valve:
+      state: open
+      attributes:
+        current_position: 100
+response: The front yard irrigation valve has been opened.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: open the front yard valve
+      context:
+        id: 01KFV7GSSNN7KE8FTB7FN0CQ0A
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-25 18:44:04.533366+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Irrigation Valve
+            domain: valve
+            areas: Front yard
+          - names: Irrigation Valve Battery
+            domain: sensor
+            areas: Front yard
+          - names: Irrigation Valve Meter-reading
+            domain: sensor
+            areas: Front yard
+        created: 2026-01-25 18:44:04.533963+00:00
+      - role: user
+        content: open the front yard valve
+        attachments: null
+        created: 2026-01-25 18:44:04.533416+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: I'll open the front yard irrigation valve for you.
+        thinking_content: |-
+          The user wants to "open the front yard valve". This means they want to turn on the irrigation valve in the front yard. Looking at the static context, I can see there's an "Irrigation Valve" in the "Front yard" area with domain "valve".
+
+          To open a valve, I should use the HassTurnOn function. The valve is in the front yard, so I can use the area parameter. The domain would be "valve" and the device class would be "water" (since valves typically control water).
+
+          Let me call HassTurnOn with:
+          - area: "Front yard"
+          - domain: ["valve"]
+          - device_class: ["water"]
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            area: Front yard
+            domain:
+            - valve
+            device_class:
+            - water
+          id: 01KFV7GWN2J6EM2CMWV4NXSF6D
+          external: false
+        native: null
+        created: 2026-01-25 18:44:07.468992+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KFV7GWN2J6EM2CMWV4NXSF6D
+        tool_name: HassTurnOn
+        tool_result:
+          error: MatchFailedError
+          error_text: '<MatchFailedError result=MatchTargetsResult(is_match=False,
+            no_match_reason=<MatchFailedReason.DEVICE_CLASS: 5>, states=[], no_match_name=None,
+            areas=[], floors=[]), constraints=MatchTargetsConstraints(name=None, area_name=''Front
+            yard'', floor_name=None, domains={''valve''}, device_classes={''water''},
+            features=None, states=None, assistant=''conversation'', allow_duplicate_names=False,
+            single_target=False), preferences=MatchTargetsPreferences(area_id=None,
+            floor_id=None)>'
+        created: 2026-01-25 18:44:07.469061+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: It seems there was a match failure. Let me try again without
+          specifying the device_class, just using the domain and area.
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            area: Front yard
+            domain:
+            - valve
+          id: 01KFV7GXDR3J7V6F80CH32YPH6
+          external: false
+        native: null
+        created: 2026-01-25 18:44:08.258868+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KFV7GXDR3J7V6F80CH32YPH6
+        tool_name: HassTurnOn
+        tool_result:
+          dictitems:
+            speech:
+              plain:
+                speech: The front yard irrigation valve has been opened.
+                extra_data: null
+            response_type: action_done
+            data:
+              targets: []
+              success:
+              - name: Front yard
+                type:
+                - area
+                id: front_yard
+              - name: Irrigation Valve
+                type:
+                - entity
+                id: valve.irrigation_valve
+              failed: []
+        created: 2026-01-25 18:44:08.258903+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The front yard irrigation valve has been opened.
+        thinking_content: Perfect! The request was successful. The irrigation valve
+          in the front yard has been opened. I should confirm this to the user.
+        tool_calls: null
+        native: null
+        created: 2026-01-25 18:44:08.910771+00:00
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f2d1230b110>, ''domain'': All(<function ensure_list at 0x7f2d1afcd0c0>,
+          [<function string at 0x7f2d1afcfcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f2d1afcd0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''identify'', ''restart'', ''update'', ''tv'', ''speaker'', ''receiver'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f2d1230b110>, ''domain'': All(<function ensure_list at 0x7f2d1afcd0c0>,
+          [<function string at 0x7f2d1afcfcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f2d1afcd0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''identify'', ''restart'', ''update'', ''tv'', ''speaker'', ''receiver'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f2d1230b110>, ''domain'': All(<function ensure_list at 0x7f2d1afcd0c0>,
+          [<function string at 0x7f2d1afcfcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f2d1afcd0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None), ''position'': All(Coerce(int, msg=None),
+          Range(min=0, max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f2d1230b110>, ''domain'': All(<function ensure_list at 0x7f2d1afcd0c0>,
+          [<function string at 0x7f2d1afcfcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f2d1afcd0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f2d1afcfcc0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-25 18:44:04.533970+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        area: Front yard
+        domain:
+        - valve
+        device_class:
+        - water
+    timestamp: 2026-01-25 18:44:07.458605+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        area: Front yard
+        domain:
+        - valve
+    timestamp: 2026-01-25 18:44:08.248884+00:00
+  duration_ms: 4377.595
+  tries: 1
