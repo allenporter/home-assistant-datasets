@@ -18,6 +18,7 @@
 | gpt-3.5 | $${86.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2025.4.3)}}}$$ | $${99.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.0, 2025.4.3)}}}$$ | $${73.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.5.0.dev0)}}}$$ | $${66.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.9, 2025.4.3)}}}$$ | $${84.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
 | gemini-1.5-flash | $${88.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.4.3)}}}$$ | $${70.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.6, 2025.5.0.dev0)}}}$$ | $${28.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${83.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
 | qwen3-14b | $${79.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.7, 2026.1.1)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.1.1)}}}$$ | $${80.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.1.1)}}}$$ | $${5.0\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2026.1.1)}}}$$ | $${83.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
+| mistral-nemo | $${78.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.8, 2026.2.0b1)}}}$$ | $${89.8\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2026.2.0b1)}}}$$ | $${79.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.2.0b1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.2.0b1)}}}$$ | $${81.1\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | ministral-3-3b | $${72.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.1.1)}}}$$ | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2026.1.1)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${80.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | qwen3-8b | $${82.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2025.7.1)}}}$$ | $${93.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.7.1)}}}$$ | $${70.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.7.1)}}}$$ | $${1.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.7.1)}}}$$ | $${80.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | gpt-4.1-nano | $${74.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.4.3)}}}$$ | $${92.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.5.0.dev0)}}}$$ | $${46.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${78.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
@@ -390,6 +391,7 @@ As the strongest model in the 30B class, GLM-4.7-Flash offers a new option for l
 
 More information:
 - https://huggingface.co/zai-org/GLM-4.7-Flash
+- https://ollama.com/library/glm-4.7-flash
 
 
 ### gpt-3.5
@@ -539,6 +541,16 @@ The Ministral 3 family is designed for edge deployment, capable of running on a 
 More information:
 - https://arxiv.org/abs/2601.08584
 - https://ollama.com/library/ministral-3
+
+
+### mistral-nemo
+
+A 12B parameter model with a 128k token context length built by Mistral in collaboration with NVIDIA.  The model is multilingual, supporting English, French, German, Spanish, Italian, Portuguese, Chinese, Japanese, Korean, Arabic, and Hindi.  It supports function calling and is released under the Apache 2.0 license.
+
+
+
+More information:
+- https://openrouter.ai/mistralai/mistral-nemo
 
 
 ### qwen3-1.7b
