@@ -1,0 +1,370 @@
+---
+uuid: fd461d9a-f39e-4452-81b4-66a208aa5e31
+task_id: door_left_open_door_left_open-door_left_open-0
+model_id: glm-4.7-flash
+category: media_player
+task:
+  input_text: |
+    # Door left open
+
+    ## Problem statement
+
+    Create an blueprint automation to play an alert on the speaker when the door is
+    left open.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+    - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input           | Selector Type | Description                                                                           |
+    | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+    | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+    | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+    | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+    The automation should play the selected media when the door has been open for the specified duration.
+response: |-
+  ```yaml
+  type: automation
+  trigger:
+    - platform: state
+      entity: "{{ door_sensor }}"
+      to: "on"
+      for: "{{ open_duration }}"
+  action:
+    - service: media_player.play_media
+      target:
+        entity_id: "{{ alert_media.media_player }}"
+      data:
+        media_content_id: "{{ alert_media.media_id }}"
+  variables:
+    door_sensor:
+      name: Door Sensor
+      description: The binary sensor entity for the door.
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: door
+    alert_media:
+      name: Alert Media
+      description: The media player to play the sound and the ID of the file.
+      selector:
+        media:
+          media_player: entity
+          media_id: text
+    open_duration:
+      name: Open Duration
+      description: The time the door must remain open.
+      selector:
+        duration:
+  mode: single
+  ```
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Door left open
+
+        ## Problem statement
+
+        Create an blueprint automation to play an alert on the speaker when the door is
+        left open.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+        - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input           | Selector Type | Description                                                                           |
+        | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+        | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+        | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+        | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+        The automation should play the selected media when the door has been open for the specified duration.
+      context:
+        id: 01KG07Y03S1Q2TAR4ET4KHMA4E
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-27 17:27:29.145353+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          Current time is 09:27:29. Today's date is 2026-01-27.
+        created: 2026-01-27 17:27:29.148141+00:00
+      - role: user
+        content: |
+          # Door left open
+
+          ## Problem statement
+
+          Create an blueprint automation to play an alert on the speaker when the door is
+          left open.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+          - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input           | Selector Type | Description                                                                           |
+          | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+          | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+          | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+          | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+          The automation should play the selected media when the door has been open for the specified duration.
+        attachments: null
+        created: 2026-01-27 17:27:29.145421+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          ```yaml
+          type: automation
+          trigger:
+            - platform: state
+              entity: "{{ door_sensor }}"
+              to: "on"
+              for: "{{ open_duration }}"
+          action:
+            - service: media_player.play_media
+              target:
+                entity_id: "{{ alert_media.media_player }}"
+              data:
+                media_content_id: "{{ alert_media.media_id }}"
+          variables:
+            door_sensor:
+              name: Door Sensor
+              description: The binary sensor entity for the door.
+              selector:
+                entity:
+                  domain: binary_sensor
+                  device_class: door
+            alert_media:
+              name: Alert Media
+              description: The media player to play the sound and the ID of the file.
+              selector:
+                media:
+                  media_player: entity
+                  media_id: text
+            open_duration:
+              name: Open Duration
+              description: The time the door must remain open.
+              selector:
+                duration:
+          mode: single
+          ```
+        thinking_content: |-
+          1.  **Analyze the Request:**
+              *   **Goal:** Create a Home Assistant Blueprint automation.
+              *   **Trigger:** A door sensor (binary_sensor) stays "on" (open) for a specific duration (`open_duration`).
+              *   **Action:** Play an alert (media player + media ID) on a speaker.
+              *   **Inputs required:** `door_sensor` (entity), `alert_media` (media), `open_duration` (duration).
+              *   **Constraints:** Answer in plain text, keep it simple, truthful.
+
+          2.  **Understand Home Assistant Blueprints:**
+              *   A blueprint is defined by a header (type, domain, title, description, variables).
+              *   Variables are defined in `variables`.
+              *   Triggers use `trigger`.
+              *   Conditions (optional but good practice for state changes, though not strictly required if logic is purely time-based, here the logic is based on state persistence).
+              *   Action uses `action`.
+              *   Modes (e.g., single, parallel) determine behavior.
+              *   The specific trigger type needed here is `state` for a binary sensor, with a duration constraint. The standard way to handle "stuck open" is using the state trigger on the binary sensor, but checking if the state has been `on` for a while. Actually, Home Assistant has a specific trigger called `state` that allows a condition like `for: <duration>`. Or, one can use `template` triggers, but the standard `state` trigger is simpler for a beginner blueprint.
+
+          3.  **Drafting the Blueprint Structure:**
+
+              *   **Header:**
+                  *   `type: automation`
+                  *   `trigger_type: state`
+                  *   `name: Door Left Open Alert`
+                  *   `description: Play an alert when a door is left open for a specified duration.`
+                  *   `variables:` defining the three inputs.
+
+              *   **Variables:**
+                  ```yaml
+                  variables:
+                    door_sensor:
+                      name: Door Sensor
+                      description: The binary sensor representing the door state.
+                      selector:
+                        entity:
+                          domain: binary_sensor
+                          device_class: door
+                    alert_media:
+                      name: Alert Media
+                      description: The media player to play the sound and the ID of the alert file.
+                      selector:
+                        media: # Note: Home Assistant blueprint 'media' selector usually wraps both player and media ID, or is separate. Let's look at the selector definition in the prompt. It says "media selector for the media player and media id".
+                          # Actually, in HA, `media` selector typically maps to a single media entity or requires a complex structure. Let's look at the selector definition "media selector for the media player and media id".
+                          # Standard HA selector: `media` usually takes a `media_player` and optionally a `media_content_id`.
+                          # The selector definition in the prompt is slightly ambiguous ("media selector for the media player and media id"). I will use the standard media selector format: `media` with nested selectors or a standard definition.
+                          # Actually, looking at HA documentation, `selector` with `media` often allows selecting a media player and a media ID.
+                          # Let's try a standard implementation that combines them.
+                          # Example:
+                          media:
+                            media_player: selector:entity
+                            media_id: selector:text
+                          # Wait, standard `media` selector in YAML for variables:
+                          # `selector: media` usually implies selecting a media player *and* a media id if provided, or just a player.
+                          # Let's use the most robust form:
+                          media: # This selector allows picking a media player and an ID.
+                              # This selector type is not strictly defined as a single type in all versions without customization, but usually, we define:
+                              # `media_player`: selector: entity
+                              # `media_id`: selector: text
+                              # However, the prompt asks for a selector type of `media`. I will stick to the standard variable definition structure often used in examples.
+                              # Let's use:
+                              # media: # This is often the selector name
+                              #   selector:
+                              #     media:
+                              #       media_player: selector:entity
+                              #       media_id: selector:text
+                              # Actually, let's keep it simple based on the prompt's implied structure.
+                              media:
+                                selector:
+                                  media: # The selector type
+                                    media_player: entity
+                                    media_id: text
+                    open_duration:
+                      name: Open Duration
+                      description: The duration the door must remain open.
+                      selector:
+                        duration: # Duration selector
+                  ```
+
+              *   **Trigger:**
+                  *   Needs to trigger when `door_sensor` becomes `on` and stays that way for `open_duration`.
+                  *   Trigger: `state` on `door_sensor`.
+                  *   Conditions: `for: "{{ open_duration }}"`.
+                  *   *Self-Correction:* If the door is open *now*, and the duration is 10 mins, it will trigger immediately if I only check `for`. Wait, if it's already open, the duration check is valid. If I open it now, it waits. That works.
+
+              *   **Action:**
+                  *   `media_player.play_media`.
+                  *   Target: `{{ alert_media.media_player }}` (or `{{ alert_media }}` depending on how the selector returns data. Usually, with `media` selector, it returns an object with `media_player` and `media_id` or it returns a media entity URL. Let's assume standard HA behavior where `media` selector returns `{ media_player: ..., media_id: ... }`).
+                  *   Media ID: `{{ alert_media.media_id }}`.
+
+          4.  **Refining the Blueprint YAML:**
+
+              ```yaml
+              type: automation
+              trigger:
+                - platform: state
+                  entity: "{{ door_sensor }}"
+                  to: "on"
+                  for: "{{ open_duration }}"
+              action:
+                - service: media_player.play_media
+                  target:
+                    entity_id: "{{ alert_media.media_player }}"
+                  data:
+                    media_content_id: "{{ alert_media.media_id }}"
+              variables:
+                door_sensor:
+                  name: Door Sensor
+                  description: The binary_sensor entity that tracks the door state.
+                  selector:
+                    entity:
+                      domain: binary_sensor
+                      device_class: door
+                alert_media:
+                  name: Alert Media
+                  description: The media player and the media ID to play.
+                  selector:
+                    media:
+                      media_player: entity
+                      media_id: text
+                open_duration:
+                  name: Open Duration
+                  description: The duration in which the door must be open.
+                  selector:
+                    duration:
+              mode: single
+              ```
+
+          5.  **Reviewing against constraints:**
+              *   `door_sensor`: entity selector (binary_sensor, door class).
+              *   `alert_media`: media selector (player + id).
+              *   `open_duration`: duration selector.
+              *   Play alert when open for duration.
+
+              *One edge case:* What if the door is already open when the automation is created? The trigger `to: "on"` won't fire because it's already `on`. The user might need a "startup" check or just accept that the blueprint works when the door opens.
+              *However*, the prompt implies "when the door is left open". Usually, this means "while it is open".
+              *Refinement:* If I use `to: "on"` with a duration, if it is already `on`, it won't trigger immediately. This is a common gotcha in HA blueprints.
+              *Alternative Trigger:* Using a template trigger checking state and last changed time.
+              *Simpler Trigger:* Just `platform: state` with `to: "on"`. If the user sets it up while the door is open, it won't trigger *until* the door closes and opens again, OR the user uses a "startup" trigger (which is complex in blueprints).
+              *Strict adherence to prompt:* The prompt asks for a blueprint automation. The simplest implementation that fits the inputs is the `state` trigger with `to: on` and `for`.
+              *To handle the "already open" case:* I can add a condition `{{ (door_sensor.state == 'on') }}`, but that's redundant with the trigger to "on".
+              *Actually*, the safest bet for a general "door left open" logic in a simple blueprint is often just the trigger. If the door is open, the state is 'on'. `for` starts counting. It works.
+
+          6.  **Final Polish of the YAML:**
+
+              I will structure the response as a code block containing the YAML.
+
+              *Variable definitions:*
+              *   `door_sensor`: `selector: entity` (domain: binary_sensor, device_class: door).
+              *   `alert_media`: `selector: media` (media_player: entity, media_id: text).
+              *   `open_duration`: `selector: duration`.
+
+              *Trigger:*
+              *   `platform: state`
+              *   `entity_id`: `{{ door_sensor }}`
+              *   `to`: `"on"`
+              *   `for`: `{{ open_duration }}`
+
+              *Action:*
+              *   `service: media_player.play_media`
+              *   `target`: `{{ alert_media.media_player }}` (Assuming the media selector returns a nested object).
+              *   `data:`
+                  *   `media_content_id`: `{{ alert_media.media_id }}`
+
+              *Note on the media selector:*
+              The standard Home Assistant `media` selector returns `{ media_player: ..., media_id: ... }`.
+              Example: `media: { media_player: entity, media_id: text }`.
+
+              Let's double check the `media` selector definition in HA docs.
+              It defines:
+              ```yaml
+              selector:
+                media:
+                  media_player: entity
+                  media_id: text
+              ```
+              This seems correct for the "player and media id" requirement.
+
+              Let's assemble the final output.
+        tool_calls: null
+        native: null
+        created: 2026-01-27 17:27:59.235212+00:00
+      tools: null
+    timestamp: 2026-01-27 17:27:29.148153+00:00
+  duration_ms: 30090.048
+  tries: 1

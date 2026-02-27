@@ -1,0 +1,387 @@
+---
+uuid: e578037d-90ca-4ce2-83f8-4ba3ed491b1d
+task_id: urban_loft_au_calendar-are_we_leaving_the_house_today-3
+model_id: gpt-oss-20b
+category:
+- calendar
+- question
+task:
+  input_text: Are we leaving the house today?
+  expect_response:
+  - 'no'
+  - nothing
+  - not leaving
+  - may not be leaving
+  - do not have any events
+  - don't have any events
+  - do not see
+  - don't see
+  - does not seem
+  - doesn't seem
+  - at home
+  - no plans
+response: No, there are no scheduled events for leaving the house today. All of your
+  appointments for today are set at home.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Are we leaving the house today?
+      context:
+        id: 01KF8NJD62PAE13X7EV2VVZ9A7
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-18 13:44:03.010600+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Balcony Light
+            domain: light
+            areas: Balcony
+          - names: Bedroom Light
+            domain: light
+            areas: Bedroom
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room
+            domain: light
+            areas: Living Room
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Samsung
+            domain: media_player
+            areas: Living Room
+          - names: Smart Plug
+            domain: switch
+            areas: Rooftop Terrace
+          - names: Smart Plug Energy
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Tasks
+            domain: todo
+          - names: Terrace Light
+            domain: light
+            areas: Rooftop Terrace
+          - names: Weather Service
+            domain: weather
+            areas: Rooftop Terrace
+        created: 2026-01-18 13:44:03.012392+00:00
+      - role: user
+        content: Are we leaving the house today?
+        attachments: null
+        created: 2026-01-18 13:44:03.010649+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |-
+          The user: "Are we leaving the house today?" We need to answer about current state? It's a question about whether we are leaving the house today. That is not a general knowledge question, but it is about the plan. The user likely wants to know if we are leaving or not. This is about schedule? There's no calendar context? The user might ask: are we leaving? That might refer to a calendar event. We could use calendar_get_events. But the instruction: If user asks about "current state" we need to call GetLiveContext. But this question is about the plan for today: maybe check calendar events for today, see if any events for leaving. But there's no mention of calendar. There's calendar_get_events function. So we should call calendar_get_events with calendar = maybe "default"? The static context doesn't include a calendar. There's no calendar name specified. But in tool description: calendar_get_events expects calendar and range. We could guess calendar = "Home Calendar" or just "default". But likely the user wants to know if they are leaving today. We can ask the user: do you mean if you have an event to leave? Or we can call calendar_get_events. But we don't have a calendar name. Might ask the user for calendar name. But guidelines say answer in plain text. But we can ask clarifying question. It's ambiguous. The user didn't specify calendar. We could ask "Which calendar should I check?" But it's a bit redundant. However, the question: "Are we leaving the house today?" We might check if any "leave" event in calendar. Without knowing calendar name, we might ask.
+
+          Alternatively, maybe we interpret as "is there a plan to leave today" meaning if there's a departure event. We could check the default calendar, maybe "Calendar" entity. Let's assume there's a calendar entity named "Calendar" in Home Assistant. So we call calendar_get_events with calendar: "Calendar". For range: we need a date range. We can use GetDateTime to get current date/time, then set range: start of today to end of today. We can get date string. We could ask for date range. Or we can use the tool. We might need to call GetDateTime to get current date. Then we can calculate. But perhaps we can just ask user. But better to be helpful.
+
+          We can call GetDateTime to get date/time. Then compute today's range: from midnight to midnight next day. We can then call calendar_get_events. But the tool expects a string range. Likely RFC 5545? Format like "2026-01-18T00:00:00/2026-01-19T00:00:00". We can compute that. Let's call GetDateTime.
+        tool_calls:
+        - tool_name: GetDateTime
+          tool_args: {}
+          id: 01KF8NJHCBC19PS81YK82771FC
+          external: false
+        native: null
+        created: 2026-01-18 13:44:07.307997+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8NJHCBC19PS81YK82771FC
+        tool_name: GetDateTime
+        tool_result:
+          success: true
+          result:
+            date: '2025-04-02'
+            time: 08:30:00
+            timezone: UTC+10:00
+            weekday: Wednesday
+        created: 2026-01-18 13:44:07.308034+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: 'We got date: 2025-04-02, time 08:30:00. We need today''s
+          range: start: 2025-04-02T00:00:00, end: 2025-04-03T00:00:00. We''ll call
+          calendar_get_events with calendar maybe "Calendar" and that range. We''ll
+          assume calendar name "Calendar".'
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Calendar
+            range: 2025-04-02T00:00:00/2025-04-03T00:00:00
+          id: 01KF8NJJHS1H4ZT2SA9TJR9DVM
+          external: false
+        native: null
+        created: 2026-01-18 13:44:08.505696+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8NJJHS1H4ZT2SA9TJR9DVM
+        tool_name: calendar_get_events
+        tool_result:
+          error: MultipleInvalid
+          error_text: value must be one of ['Personal'] for dictionary value @ data['calendar']
+        created: 2026-01-18 13:44:08.505733+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: The tool only accepts calendar "Personal". So we need to
+          use calendar "Personal". Let's call again.
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Personal
+            range: 2025-04-02T00:00:00/2025-04-03T00:00:00
+          id: 01KF8NJKBD1XWRRK7GHQABPJPT
+          external: false
+        native: null
+        created: 2026-01-18 13:44:09.325978+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8NJKBD1XWRRK7GHQABPJPT
+        tool_name: calendar_get_events
+        tool_result:
+          error: MultipleInvalid
+          error_text: value must be one of ['today', 'week'] for dictionary value
+            @ data['range']
+        created: 2026-01-18 13:44:09.326020+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: The range value must be "today" or "week". So we should
+          use range "today". Then we can get events. Let's call.
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Personal
+            range: today
+          id: 01KF8NJM3BD0ZMS01N52RFZPKN
+          external: false
+        native: null
+        created: 2026-01-18 13:44:10.091888+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8NJM3BD0ZMS01N52RFZPKN
+        tool_name: calendar_get_events
+        tool_result:
+          success: true
+          result:
+          - start: '2025-04-02T08:00:00+10:00'
+            end: '2025-04-02T11:55:00+10:00'
+            summary: Rest & Relax
+            location: Home
+          - start: '2025-04-02T13:00:00+10:00'
+            end: '2025-04-02T14:25:00+10:00'
+            summary: Clean the garage
+            location: Home
+          - start: '2025-04-02T18:00:00+10:00'
+            end: '2025-04-02T18:15:00+10:00'
+            summary: Order delivery
+            location: Home
+          - start: '2025-04-02T18:00:00+10:00'
+            end: '2025-04-02T20:25:00+10:00'
+            summary: Netflix w/ Liza
+            location: Home
+        created: 2026-01-18 13:44:10.091917+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: No, there are no scheduled events for leaving the house today. All
+          of your appointments for today are set at home.
+        thinking_content: 'We have events, but none specifically about leaving. None
+          mention leave. But maybe we have an event "Leave the house" or something.
+          There is no such event. So answer: No, you are not leaving today. Or maybe
+          ask if you plan to leave. The events show staying at home. So we answer:
+          You have events scheduled at home; there''s no plan to leave today.'
+        tool_calls: null
+        native: null
+        created: 2026-01-18 13:44:11.359561+00:00
+      tools:
+      - name: HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f138ebcf110>, ''name'':
+          <function non_empty_string at 0x7f138ebcf110>}'
+      - name: HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f138ebcf110>, ''name'':
+          <function non_empty_string at 0x7f138ebcf110>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''color'': <function color_name_to_rgb
+          at 0x7f1391026090>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7f1361e37cc0>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7f1348528930>, msg=None),
+          msg=None), ''name'': <function string at 0x7f1397777cc0>, ''area'': <function
+          string at 0x7f1397777cc0>, ''floor'': <function string at 0x7f1397777cc0>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f1361e35d20>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f1361e34300>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7f1397777cc0>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7f1397777cc0>, ''area'': <function
+          string at 0x7f1397777cc0>, ''floor'': <function string at 0x7f1397777cc0>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f13977750c0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f13977750c0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f1397777cc0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: calendar_get_events
+        description: Get events from a calendar. When asked if something happens,
+          search the whole week. Results are RFC 5545 which means 'end' is exclusive.
+        parameters: '{''calendar'': In([''Personal'']), ''range'': In([''today'',
+          ''week''])}'
+      - name: todo_get_items
+        description: Query a to-do list to find out what items are on it. Use this
+          to answer questions like 'What's on my task list?' or 'Read my grocery list'.
+          Filters items by status (needs_action, completed, all).
+        parameters: '{''todo_list'': In([''Tasks'']), ''status'': In([''needs_action'',
+          ''completed'', ''all''])}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-18 13:44:03.012400+00:00
+  - event_type: tool_call
+    data:
+      tool_name: GetDateTime
+      tool_args: {}
+    timestamp: 2026-01-18 13:44:07.307594+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Calendar
+        range: 2025-04-02T00:00:00/2025-04-03T00:00:00
+    timestamp: 2026-01-18 13:44:08.505405+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Personal
+        range: 2025-04-02T00:00:00/2025-04-03T00:00:00
+    timestamp: 2026-01-18 13:44:09.325668+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Personal
+        range: today
+    timestamp: 2026-01-18 13:44:10.091148+00:00
+  duration_ms: 8349.109
+  tries: 1

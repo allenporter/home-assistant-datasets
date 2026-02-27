@@ -1,0 +1,301 @@
+---
+uuid: ad9e88da-1a8a-4f74-af37-d57468fc6207
+task_id: urban_loft_au_calendar-do_i_have_any_personal_calendar_events_away_from_home_today-0
+model_id: gpt-oss-20b
+category:
+- calendar
+- question
+task:
+  input_text: Do i have any personal calendar events away from home today?
+  expect_response:
+  - 'yes'
+  - dinner
+  - school
+  - class
+response: "Yes. Today you have two personal events that are not at home:\n\n1. **Chemistry\
+  \ class** (11:00 – 11:55 am) – no specific location listed, but it’s not at home.\
+  \  \n2. **Dinner with Liza** (7:00 – 8:30 pm) – at Peninsula CR Steak & Seafood\
+  \ Grill."
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Do i have any personal calendar events away from home today?
+      context:
+        id: 01KF8NGAR45FDSEGXB6CS4F18Z
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-18 13:42:54.980499+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Balcony Light
+            domain: light
+            areas: Balcony
+          - names: Bedroom Light
+            domain: light
+            areas: Bedroom
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room
+            domain: light
+            areas: Living Room
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Samsung
+            domain: media_player
+            areas: Living Room
+          - names: Smart Plug
+            domain: switch
+            areas: Rooftop Terrace
+          - names: Smart Plug Energy
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Tasks
+            domain: todo
+          - names: Terrace Light
+            domain: light
+            areas: Rooftop Terrace
+          - names: Weather Service
+            domain: weather
+            areas: Rooftop Terrace
+        created: 2026-01-18 13:42:54.982290+00:00
+      - role: user
+        content: Do i have any personal calendar events away from home today?
+        attachments: null
+        created: 2026-01-18 13:42:54.980548+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: 'User: "Do i have any personal calendar events away from
+          home today?" We need to answer about personal calendar events away from
+          home today. We have a calendar tool `calendar_get_events` that returns events.
+          We need to check the calendar for personal events away from home. The calendar
+          is "?" We need to specify the calendar. We have no info. We might assume
+          the calendar is "Personal" or something. But we need to ask or guess. According
+          to guidelines: For calendar queries, we need to call `calendar_get_events`.
+          The request: "Do i have any personal calendar events away from home today?"
+          So we should call calendar_get_events with calendar: maybe "Personal". Range:
+          today. Let''s decide: range: "today". Use tool.'
+        tool_calls:
+        - tool_name: calendar_get_events
+          tool_args:
+            calendar: Personal
+            range: today
+          id: 01KF8NGC789KTFRSKBWWXW0574
+          external: false
+        native: null
+        created: 2026-01-18 13:42:56.489077+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8NGC789KTFRSKBWWXW0574
+        tool_name: calendar_get_events
+        tool_result:
+          success: true
+          result:
+          - start: '2025-04-02T11:00:00+10:00'
+            end: '2025-04-02T11:55:00+10:00'
+            summary: Chemistry class
+            location: None
+          - start: '2025-04-02T19:00:00+10:00'
+            end: '2025-04-02T20:30:00+10:00'
+            summary: Dinner with Liza
+            description: Meet up with Liza, don't forget to bring flowers
+            location: Peninsula CR Steak & Seafood Grill
+        created: 2026-01-18 13:42:56.489114+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: "Yes. Today you have two personal events that are not at home:\n\n\
+          1. **Chemistry class** (11:00 – 11:55 am) – no specific location listed,\
+          \ but it’s not at home.  \n2. **Dinner with Liza** (7:00 – 8:30 pm) – at\
+          \ Peninsula CR Steak & Seafood Grill."
+        thinking_content: 'We have two events: Chemistry class (location None) and
+          dinner with Liza at Peninsula CR Steak & Seafood Grill. We need to determine
+          if any events away from home. The user asks "away from home". We need to
+          interpret what is home? Probably their own home location. The events: one
+          has no location (maybe local?) The other is at a restaurant. That is away
+          from home. So answer: Yes, you have a dinner at Peninsula CR Steak & Seafood
+          Grill. Also mention chemistry class? It''s at location None, which likely
+          at university? Probably not at home. But location None might be at home?
+          No, it''s a class. That could be at school, away from home. The user asked
+          about personal calendar events away from home today. The events list includes
+          two. So answer that they have two events: a chemistry class and a dinner.
+          The dinner is at a restaurant. We should state: Yes, you have a dinner event
+          at Peninsula CR Steak & Seafood Grill. Also, a chemistry class at your school
+          (if location unspecified, it''s away). But answer succinctly: Yes, you have
+          two events: Chemistry class and dinner with Liza at Peninsula CR Steak &
+          Seafood Grill.'
+        tool_calls: null
+        native: null
+        created: 2026-01-18 13:42:59.143376+00:00
+      tools:
+      - name: HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f138ebcf110>, ''name'':
+          <function non_empty_string at 0x7f138ebcf110>}'
+      - name: HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f138ebcf110>, ''name'':
+          <function non_empty_string at 0x7f138ebcf110>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''color'': <function color_name_to_rgb
+          at 0x7f1391026090>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7f1361290eb0>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7f1348528930>, msg=None),
+          msg=None), ''name'': <function string at 0x7f1397777cc0>, ''area'': <function
+          string at 0x7f1397777cc0>, ''floor'': <function string at 0x7f1397777cc0>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f1361290670>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f13977750c0>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f1361292a30>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7f1397777cc0>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7f1397777cc0>, ''area'': <function
+          string at 0x7f1397777cc0>, ''floor'': <function string at 0x7f1397777cc0>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f13977750c0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f138ebcf110>, ''domain'': All(<function ensure_list at 0x7f13977750c0>,
+          [<function string at 0x7f1397777cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f13977750c0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f1397777cc0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: calendar_get_events
+        description: Get events from a calendar. When asked if something happens,
+          search the whole week. Results are RFC 5545 which means 'end' is exclusive.
+        parameters: '{''calendar'': In([''Personal'']), ''range'': In([''today'',
+          ''week''])}'
+      - name: todo_get_items
+        description: Query a to-do list to find out what items are on it. Use this
+          to answer questions like 'What's on my task list?' or 'Read my grocery list'.
+          Filters items by status (needs_action, completed, all).
+        parameters: '{''todo_list'': In([''Tasks'']), ''status'': In([''needs_action'',
+          ''completed'', ''all''])}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-18 13:42:54.982298+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar_get_events
+      tool_args:
+        calendar: Personal
+        range: today
+    timestamp: 2026-01-18 13:42:56.488313+00:00
+  duration_ms: 4163.021
+  tries: 1

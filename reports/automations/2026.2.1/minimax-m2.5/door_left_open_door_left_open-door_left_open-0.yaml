@@ -1,0 +1,490 @@
+---
+uuid: 4a48ca30-9424-4bdd-a158-f3add97a8147
+task_id: door_left_open_door_left_open-door_left_open-0
+model_id: minimax-m2.5
+category: media_player
+task:
+  input_text: |
+    # Door left open
+
+    ## Problem statement
+
+    Create an blueprint automation to play an alert on the speaker when the door is
+    left open.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+    - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input           | Selector Type | Description                                                                           |
+    | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+    | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+    | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+    | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+    The automation should play the selected media when the door has been open for the specified duration.
+response: |-
+  # Door Left Open Alert Blueprint
+
+  Here's the blueprint YAML for your requirement:
+
+  ```yaml
+  blueprint:
+    name: Door Left Open Alert
+    description: Play an alert on a media player when a door has been left open for a specified duration.
+    domain: automation
+    input:
+      door_sensor:
+        name: Door Sensor
+        description: The door sensor binary entity to monitor
+        selector:
+          entity:
+            filter:
+              - domain: binary_sensor
+      alert_media:
+        name: Alert Media
+        description: The media player and media to play
+        selector:
+          media: {}
+      open_duration:
+        name: Open Duration
+        description: How long the door must be open before playing the alert
+        selector:
+          duration: {}
+
+  trigger:
+    - platform: state
+      entity_id: !input door_sensor
+      to: "on"
+      for: !input open_duration
+
+  action:
+    - service: media_player.play_media
+      target: !input alert_media
+      data: {}
+  ```
+
+  ## Usage Notes
+
+  1. **Save the blueprint**: Save this as `door_left_open_alert.yaml` in your `blueprints/automation/` folder
+
+  2. **Create automation from blueprint**:
+     - Go to **Settings** → **Automations & Scenes** → **Blueprints**
+     - Find "Door Left Open Alert" and click "Create Automation"
+
+  3. **Example configurations**:
+     - **Garage door**: Select your garage door sensor, choose living room speaker, set 30 minutes
+     - **Front door**: Select front door sensor, choose kitchen speaker, set 5 minutes
+
+  The trigger uses the `for` duration parameter, so the automation only fires after the door has been continuously open for the specified time. If the door closes before that duration, the trigger resets.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Door left open
+
+        ## Problem statement
+
+        Create an blueprint automation to play an alert on the speaker when the door is
+        left open.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+        - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input           | Selector Type | Description                                                                           |
+        | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+        | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+        | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+        | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+        The automation should play the selected media when the door has been open for the specified duration.
+      context:
+        id: 01KH9XC6AAJ2AN2S045E5R2DYH
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-02-12 21:51:06.058722+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Air Quality Sensor Generic
+            domain: sensor
+            areas: Yoga Studio
+          - names: Bedroom Bedroom Light
+            domain: light
+            areas: Bedroom
+          - names: Bedroom Light
+            domain: light
+            areas: Master Bedroom
+          - names: Bedroom Smart Speaker
+            domain: media_player
+            areas: Bedroom
+          - names: Citrus Grove Light
+            domain: light
+            areas: Citrus Grove
+          - names: Dining Room Light
+            domain: light
+            areas: Dining room
+          - names: Dishwasher
+            domain: switch
+            areas: Kitchen
+          - names: Dishwasher Energy
+            domain: sensor
+            areas: Kitchen
+          - names: Entry Door
+            domain: binary_sensor
+            areas: Entry
+          - names: Entry Door Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Entry Door Battery
+            domain: sensor
+            areas: Entry
+          - names: Guest Bedroom Bedroom Light
+            domain: light
+            areas: Guest Bedroom
+          - names: Guest Bedroom Smart Speaker
+            domain: media_player
+            areas: Guest Bedroom
+          - names: Guest House Light
+            domain: light
+            areas: Guest House
+          - names: Guest House Smart Speaker
+            domain: media_player
+            areas: Guest House
+          - names: Guest House Thermostat
+            domain: climate
+            areas: Guest House
+          - names: Guest House Thermostat Humidity
+            domain: sensor
+            areas: Guest House
+          - names: Guest House Thermostat Temperature
+            domain: sensor
+            areas: Guest House
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living room
+          - names: Master Bedroom Smart Speaker
+            domain: media_player
+            areas: Master Bedroom
+          - names: Master Bedroom Tv
+            domain: media_player
+            areas: Master Bedroom
+          - names: Oven
+            domain: switch
+            areas: Kitchen
+          - names: Oven Energy
+            domain: sensor
+            areas: Kitchen
+          - names: Pool Heater
+            domain: switch
+            areas: Pool
+          - names: Pool Heater Energy
+            domain: sensor
+            areas: Pool
+          - names: Pool Light
+            domain: light
+            areas: Pool
+          - names: Pool Pump
+            domain: switch
+            areas: Pool
+          - names: Pool Pump Energy
+            domain: sensor
+            areas: Pool
+          - names: Refrigerator Generic
+            domain: sensor
+            areas: Kitchen
+          - names: Smart Speaker
+            domain: media_player
+            areas: Living room
+          - names: Sprinkler
+            domain: valve
+            areas: Citrus Grove
+          - names: Terrace Light
+            domain: light
+            areas: Terrace
+          - names: Terrace Smart Speaker
+            domain: media_player
+            areas: Terrace
+          - names: Thermostat
+            domain: climate
+            areas: Master Bedroom
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Master Bedroom
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Master Bedroom
+          - names: Tv
+            domain: media_player
+            areas: Living room
+          - names: Yoga Studio Light
+            domain: light
+            areas: Yoga Studio
+        created: 2026-02-12 21:51:06.060834+00:00
+      - role: user
+        content: |
+          # Door left open
+
+          ## Problem statement
+
+          Create an blueprint automation to play an alert on the speaker when the door is
+          left open.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Play an message on the living room speaker if the garage door has been left open for more than 30 minutes
+          - When the front door is ajar for 5 minutes, play a sound on the kitchen bluetooth speaker.
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input           | Selector Type | Description                                                                           |
+          | --------------- | ------------- | ------------------------------------------------------------------------------------- |
+          | `door_sensor`   | `entity`      | A `binary_sensor` entity selector door sensor that is the target of the automation.   |
+          | `alert_media`   | `media`       | The target for the `media` selector for the media player and media id with the alter. |
+          | `open_duration` | `duration`    | A `duration` selector, the amount of time before playing the alert.                   |
+
+          The automation should play the selected media when the door has been open for the specified duration.
+        attachments: null
+        created: 2026-02-12 21:51:06.058834+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          # Door Left Open Alert Blueprint
+
+          Here's the blueprint YAML for your requirement:
+
+          ```yaml
+          blueprint:
+            name: Door Left Open Alert
+            description: Play an alert on a media player when a door has been left open for a specified duration.
+            domain: automation
+            input:
+              door_sensor:
+                name: Door Sensor
+                description: The door sensor binary entity to monitor
+                selector:
+                  entity:
+                    filter:
+                      - domain: binary_sensor
+              alert_media:
+                name: Alert Media
+                description: The media player and media to play
+                selector:
+                  media: {}
+              open_duration:
+                name: Open Duration
+                description: How long the door must be open before playing the alert
+                selector:
+                  duration: {}
+
+          trigger:
+            - platform: state
+              entity_id: !input door_sensor
+              to: "on"
+              for: !input open_duration
+
+          action:
+            - service: media_player.play_media
+              target: !input alert_media
+              data: {}
+          ```
+
+          ## Usage Notes
+
+          1. **Save the blueprint**: Save this as `door_left_open_alert.yaml` in your `blueprints/automation/` folder
+
+          2. **Create automation from blueprint**:
+             - Go to **Settings** → **Automations & Scenes** → **Blueprints**
+             - Find "Door Left Open Alert" and click "Create Automation"
+
+          3. **Example configurations**:
+             - **Garage door**: Select your garage door sensor, choose living room speaker, set 30 minutes
+             - **Front door**: Select front door sensor, choose kitchen speaker, set 5 minutes
+
+          The trigger uses the `for` duration parameter, so the automation only fires after the door has been continuously open for the specified time. If the door closes before that duration, the trigger resets.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-02-12 21:51:18.992987+00:00
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [<function string at 0x7f0ceaf8ddd0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f0ceaf97110>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''tv'', ''speaker'', ''receiver'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [<function string at 0x7f0ceaf8ddd0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f0ceaf97110>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''outlet'', ''switch'', ''tv'', ''speaker'', ''receiver'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [<function string at 0x7f0ceaf8ddd0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f0ceaf97110>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None), ''position'': All(Coerce(int, msg=None),
+          Range(min=0, max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [<function string at 0x7f0ceaf8ddd0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f0ceaf97110>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f0ceaf8ddd0>}'
+      - name: HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7f0ce6089f30>, ''name'': <function non_empty_string
+          at 0x7f0ce6089f30>, ''floor'': <function non_empty_string at 0x7f0ce6089f30>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [<function string at 0x7f0ceaf8ddd0>], msg=None), ''color'': <function color_name_to_rgb
+          at 0x7f0ce8a314e0>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f0ceaf97110>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f0ceaf97110>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f0ceaf97110>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f0ceaf97110>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f0ceaf97110>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7f0cd4bb2610>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7f0cb4e2f950>, msg=None),
+          msg=None), ''name'': <function string at 0x7f0ceaf8ddd0>, ''area'': <function
+          string at 0x7f0ceaf8ddd0>, ''floor'': <function string at 0x7f0ceaf8ddd0>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f0ceaf97110>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f0cd4a24b40>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f0ce6089f30>, ''domain'': All(<function ensure_list at 0x7f0ceaf97110>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f0ceaf97110>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0x7f0cd4a27b60>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7f0ceaf8ddd0>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7f0ceaf8ddd0>, ''area'': <function
+          string at 0x7f0ceaf8ddd0>, ''floor'': <function string at 0x7f0ceaf8ddd0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-02-12 21:51:06.060851+00:00
+  duration_ms: 12934.54
+  tries: 1

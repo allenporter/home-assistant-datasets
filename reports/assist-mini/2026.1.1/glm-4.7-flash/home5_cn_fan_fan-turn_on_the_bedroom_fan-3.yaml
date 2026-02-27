@@ -1,0 +1,166 @@
+---
+uuid: 24f6e38a-c3f5-45cb-aece-b36fc5417370
+task_id: home5_cn_fan_fan-turn_on_the_bedroom_fan-3
+model_id: glm-4.7-flash
+category: fan
+task:
+  input_text: Turn on the bedroom fan
+  expect_changes:
+    fan.bedroom_fan:
+      state: 'on'
+      attributes:
+        percentage: 100
+response: The bedroom fan is now turned on.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Turn on the bedroom fan
+      context:
+        id: 01KFV7K2EGT7PVNWJDT915ADP0
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-25 18:45:18.928322+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Bedroom Fan
+            domain: fan
+            areas: Bedroom 1
+        created: 2026-01-25 18:45:18.928758+00:00
+      - role: user
+        content: Turn on the bedroom fan
+        attachments: null
+        created: 2026-01-25 18:45:18.928378+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |-
+          The user wants to turn on the bedroom fan. Looking at the context, I can see there's a device called "Bedroom Fan" with domain "fan" in area "Bedroom 1".
+
+          I should use the HassTurnOn function to turn on the fan. I need to specify the name of the device. Let me check the parameters:
+          - name: "Bedroom Fan" (from the context)
+          - area: "Bedroom 1" (optional, but I have this information)
+          - domain: ["fan"] (required)
+          - device_class: not needed for this device
+
+          I'll call the function with the name and domain.
+        tool_calls:
+        - tool_name: HassTurnOn
+          tool_args:
+            name: Bedroom Fan
+            domain:
+            - fan
+          id: 01KFV7K435J26T4Y4PAYMWVD0P
+          external: false
+        native: null
+        created: 2026-01-25 18:45:20.623392+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KFV7K435J26T4Y4PAYMWVD0P
+        tool_name: HassTurnOn
+        tool_result:
+          dictitems:
+            speech:
+              plain:
+                speech: The bedroom fan is now turned on.
+                extra_data: null
+            response_type: action_done
+            data:
+              targets: []
+              success:
+              - name: Bedroom Fan
+                type:
+                - entity
+                id: fan.bedroom_fan
+              failed: []
+        created: 2026-01-25 18:45:20.623426+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The bedroom fan is now turned on.
+        thinking_content: The function call was successful. The bedroom fan has been
+          turned on. I should confirm this to the user in a simple and direct way.
+        tool_calls: null
+        native: null
+        created: 2026-01-25 18:45:21.258036+00:00
+      tools:
+      - name: HassFanSetSpeed
+        description: Sets a fan's speed by percentage
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f2d1230b110>, ''domain'': All(<function ensure_list at 0x7f2d1afcd0c0>,
+          [In([''fan''])], msg=None), ''percentage'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f2d1230b110>, ''domain'': All(<function ensure_list at 0x7f2d1afcd0c0>,
+          [<function string at 0x7f2d1afcfcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f2d1afcd0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''identify'', ''restart'', ''update'', ''tv'', ''speaker'', ''receiver'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f2d1230b110>, ''domain'': All(<function ensure_list at 0x7f2d1afcd0c0>,
+          [<function string at 0x7f2d1afcfcc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f2d1afcd0c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''identify'', ''restart'', ''update'', ''tv'', ''speaker'', ''receiver'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f2d1afcfcc0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-25 18:45:18.928766+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOn
+      tool_args:
+        name: Bedroom Fan
+        domain:
+        - fan
+    timestamp: 2026-01-25 18:45:20.613460+00:00
+  duration_ms: 2329.876
+  tries: 1

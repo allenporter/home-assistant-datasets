@@ -1,0 +1,200 @@
+---
+uuid: 848a745f-1019-4eca-92f8-763fe64ef244
+task_id: home2_ru_valve_water_valve-close_the_front_yard_valve-0
+model_id: gpt-oss-20b
+category: valve
+task:
+  input_text: close the front yard valve
+  expect_changes:
+    valve.irrigation_valve:
+      state: closed
+      attributes:
+        current_position: 0
+response: The front yard valve has been closed.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: close the front yard valve
+      context:
+        id: 01KF8MPH4S8B078VMW2AX941C9
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-01-18 13:28:49.561217+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Irrigation Valve
+            domain: valve
+            areas: Front yard
+          - names: Irrigation Valve Battery
+            domain: sensor
+            areas: Front yard
+          - names: Irrigation Valve Meter-reading
+            domain: sensor
+            areas: Front yard
+        created: 2026-01-18 13:28:49.561758+00:00
+      - role: user
+        content: close the front yard valve
+        attachments: null
+        created: 2026-01-18 13:28:49.561269+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: 'User wants to close front yard valve. Valve likely domain:
+          valve. They want to close. According to instructions: use HassTurnOff to
+          unlock a lock. But for valves, it''s not lock. We use HassTurnOff with domain
+          valve? But instructions: use HassTurnOn to lock and HassTurnOff to unlock
+          a lock. For valves, we probably want to "turn off" which is close. The tool
+          signature: HassTurnOff requires area, device_class, domain, floor, name.
+          We can just pass name and domain. Domain: valve, name: "Front yard valve"?
+          In static context names: Irrigation Valve domain: valve areas: Front yard.
+          But the user said "front yard valve" maybe "Irrigation Valve". So name:
+          "Irrigation Valve". Domain: valve. Area: "Front yard". The tool requires
+          area, domain, name. Also device_class and floor optional. They said prefer
+          passing just name and domain. But tool signature demands area. But instructions
+          say when controlling a device, prefer passing just name and domain. But
+          tool signature shows parameters: area, device_class, domain, floor, name.
+          But maybe we can provide name and domain and leave others unspecified? We''ll
+          include name, domain, area? We can pass area to satisfy signature but the
+          instruction says prefer passing just name and domain. I think we can pass
+          name and domain only. But signature requires area? The tool spec says all
+          those fields. But I think we can pass name and domain only. I''ll include
+          name and domain. Use HassTurnOff.'
+        tool_calls:
+        - tool_name: HassTurnOff
+          tool_args:
+            area: Front yard
+            device_class: []
+            domain:
+            - valve
+            name: Irrigation Valve
+          id: 01KF8MPKV98AYEVC635BJ3TRTM
+          external: false
+        native: null
+        created: 2026-01-18 13:28:52.330606+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01KF8MPKV98AYEVC635BJ3TRTM
+        tool_name: HassTurnOff
+        tool_result:
+          dictitems:
+            speech:
+              plain:
+                speech: The front yard valve has been closed.
+                extra_data: null
+            response_type: action_done
+            data:
+              targets: []
+              success:
+              - name: Front yard
+                type:
+                - area
+                id: front_yard
+              - name: Irrigation Valve
+                type:
+                - entity
+                id: valve.irrigation_valve
+              failed: []
+        created: 2026-01-18 13:28:52.330701+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The front yard valve has been closed.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-01-18 13:28:52.689844+00:00
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f375c55b110>, ''domain'': All(<function ensure_list at 0x7f37651750c0>,
+          [<function string at 0x7f3765177cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f37651750c0>, [In([''tv'', ''speaker'', ''receiver'',
+          ''water'', ''gas'', ''identify'', ''restart'', ''update'', ''outlet'', ''switch'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f375c55b110>, ''domain'': All(<function ensure_list at 0x7f37651750c0>,
+          [<function string at 0x7f3765177cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f37651750c0>, [In([''tv'', ''speaker'', ''receiver'',
+          ''water'', ''gas'', ''identify'', ''restart'', ''update'', ''outlet'', ''switch'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f375c55b110>, ''domain'': All(<function ensure_list at 0x7f37651750c0>,
+          [<function string at 0x7f3765177cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f37651750c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None), ''position'': All(Coerce(int, msg=None),
+          Range(min=0, max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f375c55b110>, ''domain'': All(<function ensure_list at 0x7f37651750c0>,
+          [<function string at 0x7f3765177cc0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f37651750c0>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f3765177cc0>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-01-18 13:28:49.561766+00:00
+  - event_type: tool_call
+    data:
+      tool_name: HassTurnOff
+      tool_args:
+        area: Front yard
+        device_class: []
+        domain:
+        - valve
+        name: Irrigation Valve
+    timestamp: 2026-01-18 13:28:52.329780+00:00
+  duration_ms: 3128.806
+  tries: 1
