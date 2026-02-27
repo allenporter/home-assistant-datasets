@@ -1,0 +1,49 @@
+---
+category: lock
+tests:
+  - sentences:
+      - Vergrendel het slot bij de voordeur
+      - Vergrendel het slot in de hal
+      - Vergrendel het slimme slot
+    setup:
+      lock.smart_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+  - sentences:
+      - Ontgrendel het slot in de hal
+      - Ontgrendel het slimme slot
+    setup:
+      lock.smart_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+  # Dubbelzinnige zin mag geen sloten vergrendelen en moet om een gebied vragen
+  - sentences:
+      - Vergrendel alle sloten alsjeblieft
+      - Vergrendel het slot
+      - Vergrendel de deur
+    setup:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+  - sentences:
+      - Ontgrendel alle deuren
+    setup:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked

@@ -1,0 +1,49 @@
+---
+category: lock
+tests:
+  - sentences:
+      - Verrouille la serrure de la porte d'entrée
+      - Verrouille la serrure de l'entrée
+      - Verrouille la serrure connectée
+    setup:
+      lock.smart_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+  - sentences:
+      - Déverrouille la serrure de l'entrée
+      - Déverrouille la serrure connectée
+    setup:
+      lock.smart_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+  # Une phrase ambiguë ne devrait verrouiller aucune serrure et devrait demander une zone
+  - sentences:
+      - Verrouille toutes les serrures s'il te plaît
+      - Verrouille la serrure
+      - Verrouille la porte
+    setup:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+  - sentences:
+      - Déverrouille toutes les portes
+    setup:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked

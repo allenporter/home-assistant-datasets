@@ -1,0 +1,110 @@
+---
+category: cover
+tests:
+  # Ces appareils n'existent pas dans la maison
+  #
+  # - sentences:
+  #     - "ferme la porte du garage"
+  #   intent:
+  #     name: HassTurnOff
+  #     slots:
+  #       domain: cover
+  #       device_class: garage
+  #   response: "Porte de garage fermée"
+  # - sentences:
+  #     - "ferme les fenêtres de la cuisine"
+  #   intent:
+  #     name: HassTurnOff
+  #     slots:
+  #       area: Cuisine
+  #       domain: cover
+  #       device_class: window
+  #   response: "Fenêtres fermées"
+  # - sentences:
+  #     - "ferme les fenêtres de la cuisine"
+  #   intent:
+  #     name: HassTurnOff
+  #     slots:
+  #       area: Cuisine
+  #       domain: cover
+  #       device_class: window
+  #   response: "Fenêtres fermées"
+
+  - sentences:
+      - "ferme le rideau gauche"
+    setup:
+      cover.curtain_left:
+        state: open
+    expect_changes:
+      cover.curtain_left:
+        state: closed
+    ignore_changes:
+      cover.curtain_left:
+        - current_position
+    # intent:
+    #   name: HassTurnOff
+    #   slots:
+    #     name: Rideau Gauche
+    #   context:
+    #     domain: cover
+    #     device_class: curtain
+    # response: "Fermé"
+
+  - sentences:
+      - "ferme le rideau gauche dans le salon"
+    setup:
+      cover.curtain_left:
+        state: open
+        attributes:
+          current_position: 100
+    expect_changes:
+      cover.curtain_left:
+        state: closed
+    ignore_changes:
+      cover.curtain_left:
+        - current_position
+    # intent:
+    #   name: HassTurnOff
+    #   slots:
+    #     name: Rideau Gauche
+    #     area: Salon
+    #   context:
+    #     domain: cover
+    #     device_class: curtain
+    # response: "Fermé"
+
+  - sentences:
+      - "ferme les stores de la chambre"
+      - "ferme les stores dans la chambre"
+    setup:
+      cover.bedroom:
+        state: "open"
+        attributes:
+          current_position: 100
+    expect_changes:
+      cover.bedroom:
+        state: "closed"
+    ignore_changes:
+      cover.bedroom:
+        - current_position
+    # intent:
+    #   name: HassTurnOff
+    #   slots:
+    #     area: Chambre
+    #     domain: cover
+    #     device_class: blind
+
+  # TODO : Supporter les requêtes contextuelles d'appareil
+  #
+  # - sentences:
+  #     - "ferme les rideaux"
+  #     - "ferme les rideaux ici"
+  #   intent:
+  #     name: HassTurnOff
+  #     context:
+  #       area: Salon
+  #     slots:
+  #       domain: cover
+  #       area: Salon
+  #       device_class: curtain
+  #   response: "Rideaux fermés"

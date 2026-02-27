@@ -1,0 +1,49 @@
+---
+category: lock
+tests:
+  - sentences:
+      - Cierra la cerradura de la puerta principal
+      - Cierra la cerradura de la entrada
+      - Cierra la cerradura inteligente
+    setup:
+      lock.smart_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+  - sentences:
+      - Abre la cerradura de la entrada
+      - Abre la cerradura inteligente
+    setup:
+      lock.smart_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+  # Una frase ambigua no deberia cerrar ninguna cerradura y deberia pedir un area
+  - sentences:
+      - Cierra todas las cerraduras por favor
+      - Cierra la cerradura
+      - Cierra la puerta
+    setup:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+  - sentences:
+      - Abre todas las puertas
+    setup:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked

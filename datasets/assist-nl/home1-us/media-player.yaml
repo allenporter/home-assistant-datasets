@@ -1,0 +1,53 @@
+---
+category: media-player
+tests:
+  # Leid context af van het apparaat
+  - sentences:
+      - Zet het volume op 0%
+    context_device: nest_hub
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.nest_hub:
+        attributes:
+          volume_level: 0.0
+
+  # Leid context af van een ander apparaat
+  - sentences:
+      - Zet het volume op 0%
+    context_device: smart_speaker
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.smart_speaker:
+        attributes:
+          volume_level: 0.0
+
+  # Dit is dubbelzinnig omdat we niet weten welk gebied/apparaat we moeten aansturen. Verwacht
+  # dat apparaten worden bijgewerkt.
+  - sentences:
+      - Zet het volume op 0%
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes: {}

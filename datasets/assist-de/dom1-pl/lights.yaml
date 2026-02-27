@@ -1,0 +1,172 @@
+---
+category: light
+tests:
+  - sentences:
+      - Bitte schalte die Küchenlampe ein
+    setup:
+      light.kitchen_light:
+        state: "off"
+        attributes:
+          brightness: 0
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+    # Helligkeitszustand ignorieren, Integration stellt ihn wieder her
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+  - sentences:
+      - Küchenlampe aus
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.kitchen_light:
+        state: "off"
+    # Helligkeitszustand ignorieren, Integration stellt ihn wieder her
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+
+  # Bereich vom Kontextgerät im Wohnzimmer ableiten
+  - sentences:
+      - Bitte schalte das Licht aus
+    context_device: smart_speaker
+    setup:
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.living_room_light:
+        state: "off"
+    # Helligkeitszustand ignorieren, Integration stellt ihn wieder her
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+
+  # Das ist mehrdeutig und sollte nichts ausschalten
+  - sentences:
+      - Schalte das Licht aus
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  - sentences:
+      - Schalte bitte die Lichter im Obergeschoss aus
+      - Mach die Lichter oben aus
+    setup:
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+
+  - sentences:
+      - Schalte alle Lichter im Obergeschoss ein
+      - Mach alle Schlafzimmerlampen oben an
+    setup:
+      light.bedroom_1_light:
+        state: "off"
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  # Mehrere Befehle testen
+  - sentences:
+      - Schalte die Küchenlampe ein und dann die Wohnzimmerlampe aus
+      - Mach das Licht in der Küche an und dann das Licht im Wohnzimmer aus
+      - Schalte die Wohnzimmerlampe aus und dann die Küchenlampe ein
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "off"
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+  - sentences:
+      - Schalte sowohl die Küchenlampe als auch die Wohnzimmerlampe ein
+      - Mach die Wohnzimmer- und Küchenlampe an
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "off"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "on"

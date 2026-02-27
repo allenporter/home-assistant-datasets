@@ -1,0 +1,53 @@
+---
+category: media-player
+tests:
+  # Inferir contexto desde el dispositivo
+  - sentences:
+      - Pon el volumen al 0%
+    context_device: nest_hub
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.nest_hub:
+        attributes:
+          volume_level: 0.0
+
+  # Inferir contexto desde otro dispositivo
+  - sentences:
+      - Pon el volumen al 0%
+    context_device: smart_speaker
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.smart_speaker:
+        attributes:
+          volume_level: 0.0
+
+  # Esto es ambiguo ya que no sabemos que area/dispositivo apuntar. Esperamos
+  # que los dispositivos se actualicen.
+  - sentences:
+      - Pon el volumen al 0%
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes: {}

@@ -1,0 +1,110 @@
+---
+category: cover
+tests:
+  # Deze apparaten bestaan niet in het huis
+  #
+  # - sentences:
+  #     - "doe de garagedeur dicht"
+  #   intent:
+  #     name: HassTurnOff
+  #     slots:
+  #       domain: cover
+  #       device_class: garage
+  #   response: "Garage gesloten"
+  # - sentences:
+  #     - "sluit de ramen in de keuken"
+  #   intent:
+  #     name: HassTurnOff
+  #     slots:
+  #       area: Kitchen
+  #       domain: cover
+  #       device_class: window
+  #   response: "Ramen gesloten"
+  # - sentences:
+  #     - "sluit de keukenramen"
+  #   intent:
+  #     name: HassTurnOff
+  #     slots:
+  #       area: Kitchen
+  #       domain: cover
+  #       device_class: window
+  #   response: "Ramen gesloten"
+
+  - sentences:
+      - "sluit gordijn links"
+    setup:
+      cover.curtain_left:
+        state: open
+    expect_changes:
+      cover.curtain_left:
+        state: closed
+    ignore_changes:
+      cover.curtain_left:
+        - current_position
+    # intent:
+    #   name: HassTurnOff
+    #   slots:
+    #     name: Curtain Left
+    #   context:
+    #     domain: cover
+    #     device_class: curtain
+    # response: "Gesloten"
+
+  - sentences:
+      - "sluit gordijn links in de woonkamer"
+    setup:
+      cover.curtain_left:
+        state: open
+        attributes:
+          current_position: 100
+    expect_changes:
+      cover.curtain_left:
+        state: closed
+    ignore_changes:
+      cover.curtain_left:
+        - current_position
+    # intent:
+    #   name: HassTurnOff
+    #   slots:
+    #     name: Curtain Left
+    #     area: Living Room
+    #   context:
+    #     domain: cover
+    #     device_class: curtain
+    # response: "Gesloten"
+
+  - sentences:
+      - "sluit de gordijnen in de slaapkamer"
+      - "doe de slaapkamergordijnen dicht"
+    setup:
+      cover.bedroom:
+        state: "open"
+        attributes:
+          current_position: 100
+    expect_changes:
+      cover.bedroom:
+        state: "closed"
+    ignore_changes:
+      cover.bedroom:
+        - current_position
+    # intent:
+    #   name: HassTurnOff
+    #   slots:
+    #     area: Bedroom
+    #     domain: cover
+    #     device_class: blind
+
+  # TODO: Ondersteuning voor contextgebonden apparaatverzoeken
+  #
+  # - sentences:
+  #     - "sluit de gordijnen"
+  #     - "doe de gordijnen hier dicht"
+  #   intent:
+  #     name: HassTurnOff
+  #     context:
+  #       area: Living Room
+  #     slots:
+  #       domain: cover
+  #       area: Living Room
+  #       device_class: curtain
+  #   response: "Gordijnen gesloten"

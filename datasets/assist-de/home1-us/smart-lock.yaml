@@ -1,0 +1,49 @@
+---
+category: lock
+tests:
+  - sentences:
+      - Schließe das Eingangstürschloss ab
+      - Sperre das Eingangsschloss
+      - Sperre das smarte Schloss
+    setup:
+      lock.smart_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+  - sentences:
+      - Entsperre das Eingangsschloss
+      - Entsperre das smarte Schloss
+    setup:
+      lock.smart_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+  # Mehrdeutiger Satz sollte kein Schloss verriegeln und stattdessen nach einem Bereich fragen
+  - sentences:
+      - Schließe bitte alle Schlösser ab
+      - Sperre das Schloss
+      - Schließe die Tür ab
+    setup:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+    expect_changes:
+      lock.smart_lock:
+        state: unlocked
+      lock.rear_door_lock:
+        state: unlocked
+  - sentences:
+      - Entsperre alle Türen
+    setup:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked
+    expect_changes:
+      lock.smart_lock:
+        state: locked
+      lock.rear_door_lock:
+        state: locked

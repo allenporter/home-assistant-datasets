@@ -1,0 +1,68 @@
+---
+category: media-player
+tests:
+  - sentences:
+      - "Mets en pause les enceintes ext\xE9rieures"
+      - Mets en pause la musique de la terrasse sur le toit
+    setup:
+      media_player.outdoor_speakers:
+        state: playing
+    expect_changes:
+      media_player.outdoor_speakers:
+        state: paused
+  - sentences:
+      - "Reprends la lecture sur les enceintes ext\xE9rieures"
+      - Reprends la musique de la terrasse sur le toit
+    setup:
+      media_player.outdoor_speakers:
+        state: paused
+    expect_changes:
+      media_player.outdoor_speakers:
+        state: playing
+  - sentences:
+      - "Passe la chanson sur les enceintes ext\xE9rieures"
+      - "Passe \xE0 la piste suivante sur les enceintes ext\xE9rieures"
+    setup:
+      media_player.outdoor_speakers:
+        state: playing
+        attributes:
+          media_track: 1
+    expect_changes:
+      media_player.outdoor_speakers:
+        attributes:
+          media_track: 2
+  - sentences:
+      - "R\xE8gle le volume des enceintes ext\xE9rieures \xE0 50%"
+      - "Baisse le volume \xE0 50%"
+    setup:
+      media_player.outdoor_speakers:
+        state: playing
+        attributes:
+          volume_level: 0.9
+    expect_changes:
+      media_player.outdoor_speakers:
+        attributes:
+          volume_level: 0.5
+  - sentences:
+      - "Coupe le son des enceintes ext\xE9rieures"
+    setup:
+      media_player.outdoor_speakers:
+        state: playing
+        attributes:
+          volume_level: 0.6
+    expect_changes:
+      media_player.outdoor_speakers:
+        attributes:
+          volume_level: 0.0
+  - sentences:
+      - "\xC9teins les enceintes ext\xE9rieures"
+    setup:
+      media_player.outdoor_speakers:
+        state: playing
+    expect_changes:
+      media_player.outdoor_speakers:
+        state: "off"
+    ignore_changes:
+      media_player.outdoor_speakers:
+        - media_track
+        - volume_level

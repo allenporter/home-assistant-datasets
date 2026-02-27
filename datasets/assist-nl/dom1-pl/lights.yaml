@@ -1,0 +1,172 @@
+---
+category: light
+tests:
+  - sentences:
+      - Doe de keukenlamp aan alsjeblieft
+    setup:
+      light.kitchen_light:
+        state: "off"
+        attributes:
+          brightness: 0
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+    # Maak je geen zorgen over de helderheidsstatus, ga ervan uit dat de integratie deze herstelt
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+  - sentences:
+      - Keukenlamp uit
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.kitchen_light:
+        state: "off"
+    # Maak je geen zorgen over de helderheidsstatus, ga ervan uit dat de integratie deze herstelt
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+
+  # Leid het gebied af van het contextapparaat in de woonkamer
+  - sentences:
+      - Doe het licht uit alsjeblieft
+    context_device: smart_speaker
+    setup:
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.living_room_light:
+        state: "off"
+    # Maak je geen zorgen over de helderheidsstatus, ga ervan uit dat de integratie deze herstelt
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+
+  # Dit is dubbelzinnig en mag niets uitschakelen
+  - sentences:
+      - Doe het licht uit
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  - sentences:
+      - Doe de lampen boven uit alsjeblieft
+      - Zet de lampen op de bovenverdieping uit
+    setup:
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+
+  - sentences:
+      - Doe alle lampen boven aan
+      - Zet alle slaapkamerlampen boven aan
+    setup:
+      light.bedroom_1_light:
+        state: "off"
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  # Meerdere opdrachten testen
+  - sentences:
+      - Doe de keukenlamp aan en doe daarna de woonkamerlamp uit
+      - Zet het licht in de keuken aan en zet daarna het licht in de woonkamer uit
+      - Doe de woonkamerlamp uit en doe dan de keukenlamp aan
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "off"
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+  - sentences:
+      - Doe zowel de keukenlamp als de woonkamerlamp aan
+      - Zet de woonkamer- en keukenlamp aan
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "off"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "on"

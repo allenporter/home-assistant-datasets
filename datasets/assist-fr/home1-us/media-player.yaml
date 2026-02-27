@@ -1,0 +1,53 @@
+---
+category: media-player
+tests:
+  # Déduire le contexte à partir de l'appareil
+  - sentences:
+      - Mets le volume à 0%
+    context_device: nest_hub
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.nest_hub:
+        attributes:
+          volume_level: 0.0
+
+  # Déduire le contexte à partir d'un autre appareil
+  - sentences:
+      - Mets le volume à 0%
+    context_device: smart_speaker
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes:
+      media_player.smart_speaker:
+        attributes:
+          volume_level: 0.0
+
+  # C'est ambigu car on ne sait pas quelle zone/appareil cibler. On s'attend
+  # à ce que les appareils soient mis à jour.
+  - sentences:
+      - Mets le volume à 0%
+    setup:
+      media_player.smart_speaker:
+        state: playing
+        attributes:
+          volume_level: 0.8
+      media_player.nest_hub:
+        state: playing
+        attributes:
+          volume_level: 0.8
+    expect_changes: {}

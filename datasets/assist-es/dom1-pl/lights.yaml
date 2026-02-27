@@ -1,0 +1,172 @@
+---
+category: light
+tests:
+  - sentences:
+      - "Por favor, enciende la luz de la cocina"
+    setup:
+      light.kitchen_light:
+        state: "off"
+        attributes:
+          brightness: 0
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+    # No nos preocupamos por el estado del brillo, asumimos que la integracion lo restaura
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+  - sentences:
+      - Apaga la luz de la cocina
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.kitchen_light:
+        state: "off"
+    # No nos preocupamos por el estado del brillo, asumimos que la integracion lo restaura
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+
+  # Inferir el area desde el dispositivo de contexto en el salon
+  - sentences:
+      - "Por favor, apaga la luz"
+    context_device: smart_speaker
+    setup:
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.living_room_light:
+        state: "off"
+    # No nos preocupamos por el estado del brillo, asumimos que la integracion lo restaura
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+
+  # Esto es ambiguo y no deberia apagar nada
+  - sentences:
+      - Apaga la luz
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  - sentences:
+      - Apaga las luces de la planta alta por favor
+      - Apaga las luces de arriba
+    setup:
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+
+  - sentences:
+      - Enciende todas las luces de la planta alta
+      - Enciende todas las luces de los dormitorios de arriba
+    setup:
+      light.bedroom_1_light:
+        state: "off"
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  # Ejercitar comandos multiples
+  - sentences:
+      - "Enciende la luz de la cocina y luego apaga la luz del sal\xF3n"
+      - "Enciende la luz de la cocina, luego apaga la luz del sal\xF3n"
+      - "Apaga la luz del sal\xF3n y luego enciende la luz de la cocina"
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "off"
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+  - sentences:
+      - "Enciende tanto la luz de la cocina como la del sal\xF3n"
+      - "Enciende las luces del sal\xF3n y de la cocina"
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "off"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "on"
