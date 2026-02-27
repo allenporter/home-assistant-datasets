@@ -28,6 +28,11 @@ from .config import (
     AVERAGE_SCORE,
     DATASETS_FOR_AVG,
     ASSIST_DATASET,
+    ASSIST_FAMILY_DATASETS,
+    LANGUAGES,
+    LANGUAGE_NAMES,
+    MULTILINGUAL_DATASETS,
+    ALL_MULTILINGUAL_DATASET_NAMES,
     eval_reports,
 )
 from .eval_cost import compute_model_eval_cost
@@ -264,6 +269,122 @@ def create_leaderboard_table(
     return table.table(cols, rows)
 
 
+def compute_multilingual_best_scores(
+    report_dir: pathlib.Path,
+    active_model_ids: set[str],
+) -> dict[str, dict[str, ModelRecord]]:
+    """Parse multilingual reports and compute best score per dataset per model.
+
+    Returns a dict keyed by dataset name (e.g. "assist-es") mapping to
+    a dict of model_id -> best ModelRecord for that dataset.
+    """
+    scores: dict[str, dict[str, ModelRecord]] = {}
+    for eval_report in eval_reports(report_dir, ALL_MULTILINGUAL_DATASET_NAMES):
+        report_file = eval_report.report_file
+        if not report_file.exists():
+            continue
+
+        report = yaml.load(report_file.read_text(), Loader=yaml.CSafeLoader)
+        for model_data in report:
+            model_id = model_data["model_id"]
+            if model_id not in active_model_ids:
+                continue
+            dataset = eval_report.dataset
+            record = ModelRecord(
+                model_id=model_id,
+                dataset=dataset,
+                dataset_label=eval_report.dataset_label,
+                good=model_data["good"],
+                total=model_data["total"],
+                good_percent=model_data.get("good_percent"),
+            )
+            if dataset not in scores:
+                scores[dataset] = {}
+            existing = scores[dataset].get(model_id)
+            if existing is None or record.good_percent_value() > existing.good_percent_value():
+                scores[dataset][model_id] = record
+
+    return scores
+
+
+def _format_score_cell(record: ModelRecord) -> str:
+    """Format a score cell for the multilingual table."""
+    score = record.good_percent_value()
+    ci = record.confidence_interval
+    return f"{score * 100:0.1f}% (CI: {ci:0.1f})"
+
+
+def create_multilingual_section(
+    best_model_scores: dict[str, dict[str, ModelRecord]],
+    multilingual_scores: dict[str, dict[str, ModelRecord]],
+) -> str:
+    """Create the multilingual leaderboard section.
+
+    Generates a per-base-dataset table with models as rows and languages as columns.
+    """
+    # Determine which models to show: top models from main leaderboard
+    # that have at least one multilingual score
+    models_with_multilingual = set()
+    for dataset_scores in multilingual_scores.values():
+        models_with_multilingual.update(dataset_scores.keys())
+
+    # Use main leaderboard order, take models that have multilingual results
+    display_models = [
+        model_id
+        for model_id in best_model_scores
+        if model_id in models_with_multilingual
+    ]
+
+    if not display_models:
+        return ""
+
+    sections = ["## Multilingual"]
+
+    for base_dataset in ASSIST_FAMILY_DATASETS:
+        lang_datasets = MULTILINGUAL_DATASETS[base_dataset]
+        # Check if any multilingual scores exist for this base dataset
+        has_scores = any(
+            ds in multilingual_scores and multilingual_scores[ds]
+            for ds in lang_datasets
+        )
+        if not has_scores:
+            continue
+
+        sections.append(f"\n### {base_dataset} (multilingual)\n")
+
+        # Columns: Model, then English, then each language
+        all_langs = ["en"] + LANGUAGES
+        cols = ["Model"] + [
+            f"{lang} ({LANGUAGE_NAMES[lang]})" for lang in all_langs
+        ]
+        rows = []
+
+        for model_id in display_models:
+            row = [model_id]
+            # English score from main leaderboard
+            record = best_model_scores.get(model_id, {}).get(base_dataset)
+            if record and record.total > 0:
+                row.append(_format_score_cell(record))
+            else:
+                row.append("\u2014")
+            # Multilingual scores
+            for lang in LANGUAGES:
+                lang_dataset = f"{base_dataset}-{lang}"
+                record = multilingual_scores.get(lang_dataset, {}).get(model_id)
+                if record and record.total > 0:
+                    row.append(_format_score_cell(record))
+                else:
+                    row.append("\u2014")
+            rows.append(row)
+
+        sections.append(table.table(cols, rows))
+
+    if len(sections) <= 1:
+        return ""
+
+    return "\n".join(sections)
+
+
 def run(args: argparse.Namespace) -> int:
     """Run the command line action."""
     report_dir = pathlib.Path(args.report_dir)
@@ -293,12 +414,24 @@ def run(args: argparse.Namespace) -> int:
     # Markdown table with top model results
     leaderboard_table = create_leaderboard_table(best_model_scores)
 
+    # Multilingual section (only shown if multilingual reports exist)
+    multilingual_scores = compute_multilingual_best_scores(
+        report_dir, set(active_models.keys())
+    )
+    multilingual_section = create_multilingual_section(
+        best_model_scores, multilingual_scores
+    )
+
     results = [
         "# Home LLM Leaderboard",
         leaderboard_table,
         IMPLEMENTATION_NOTES,
-        "## Datasets",
     ]
+
+    if multilingual_section:
+        results.append(multilingual_section)
+
+    results.append("## Datasets")
 
     # Use a fix set of colors for the model
     model_colors = chart.color_map(best_model_scores.keys())

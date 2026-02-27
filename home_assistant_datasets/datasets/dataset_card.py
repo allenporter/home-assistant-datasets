@@ -56,6 +56,9 @@ class DatasetCard(DataClassYAMLMixin):
     config_entry_options: dict[str, Any] | None = field(default=None)
     """Additional config entry options to include in model entry configs for this dataset."""
 
+    language: str | None = field(default=None)
+    """ISO 639-1 language code for this dataset (e.g., 'es', 'fr'). Defaults to English."""
+
     @property
     def dataset_path(self) -> pathlib.Path:
         """Path to use for reading dataset files."""

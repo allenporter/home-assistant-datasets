@@ -34,6 +34,24 @@ IGNORE_REPORTS = {
 REPORT_FILE = "reports.yaml"
 CSV_FILE = "report.csv"
 
+LANGUAGES = ["es", "fr", "de", "nl"]
+LANGUAGE_NAMES: dict[str, str] = {
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "nl": "Dutch",
+}
+
+MULTILINGUAL_DATASETS: dict[str, list[str]] = {
+    dataset: [f"{dataset}-{lang}" for lang in LANGUAGES]
+    for dataset in ASSIST_FAMILY_DATASETS
+}
+
+ALL_MULTILINGUAL_DATASET_NAMES: list[str] = [
+    ds for variants in MULTILINGUAL_DATASETS.values() for ds in variants
+]
+
 
 @dataclass
 class EvalReport:
@@ -56,6 +74,8 @@ def eval_reports(
     """Generate the list of eval reports."""
     for dataset in datasets:
         dataset_dir = report_dir / dataset
+        if not dataset_dir.exists():
+            continue
         for filename in dataset_dir.iterdir():
             if not filename.is_dir():
                 continue

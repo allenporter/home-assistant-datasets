@@ -140,17 +140,32 @@ def mock_conversation_agent_id(model_config: ModelConfig) -> str:
     return "conversation.mock_title"
 
 
+@pytest.fixture(name="dataset_language", scope="module")
+def dataset_language_fixture(request: pytest.FixtureRequest) -> str | None:
+    """Fixture to determine the language for the dataset under test."""
+    try:
+        dataset_card: DatasetCard | None = request.getfixturevalue("dataset_card")
+    except pytest.FixtureLookupError:
+        dataset_card = None
+    if dataset_card and dataset_card.language:
+        return dataset_card.language
+    return None
+
+
 @pytest.fixture(name="rate_limited_agent", scope="module")
 def rate_limited_agent_fixture(
     conversation_agent_id: str,
     model_config: ModelConfig,
+    dataset_language: str | None,
 ) -> ConversationAgent:
     """Create the conversation agent.
 
     This is a module level fixture to ensure the rate limit is respected across
     individual test runs.
     """
-    return create_default_agent(conversation_agent_id, model_config.rpm)
+    return create_default_agent(
+        conversation_agent_id, model_config.rpm, language=dataset_language
+    )
 
 
 @pytest.fixture(name="configure_prerequisites")

@@ -24,13 +24,15 @@ __all__ = [
 
 
 def create_default_agent(
-    conversation_agent_id: str, rpm: int | None = None
+    conversation_agent_id: str,
+    rpm: int | None = None,
+    language: str | None = None,
 ) -> ConversationAgent:
     """Create the conversation agent client id.
 
     Note that this should be long lived in order for rate limiting to be effective.
     """
-    agent = service_call.create_agent(conversation_agent_id)
+    agent = service_call.create_agent(conversation_agent_id, language=language)
     agent = timing.timed_agent(agent)
     if rpm:
         agent = rate_limit.wrap_rate_limit(agent, rpm)
