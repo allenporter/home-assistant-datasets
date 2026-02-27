@@ -45,7 +45,7 @@ LANGUAGE_NAMES: dict[str, str] = {
 
 MULTILINGUAL_DATASETS: dict[str, list[str]] = {
     dataset: [f"{dataset}-{lang}" for lang in LANGUAGES]
-    for dataset in ASSIST_FAMILY_DATASETS
+    for dataset in [*ASSIST_FAMILY_DATASETS, "automations"]
 }
 
 ALL_MULTILINGUAL_DATASET_NAMES: list[str] = [

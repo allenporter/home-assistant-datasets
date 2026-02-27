@@ -28,7 +28,6 @@ from .config import (
     AVERAGE_SCORE,
     DATASETS_FOR_AVG,
     ASSIST_DATASET,
-    ASSIST_FAMILY_DATASETS,
     LANGUAGES,
     LANGUAGE_NAMES,
     MULTILINGUAL_DATASETS,
@@ -340,7 +339,7 @@ def create_multilingual_section(
 
     sections = ["## Multilingual"]
 
-    for base_dataset in ASSIST_FAMILY_DATASETS:
+    for base_dataset in MULTILINGUAL_DATASETS:
         lang_datasets = MULTILINGUAL_DATASETS[base_dataset]
         # Check if any multilingual scores exist for this base dataset
         has_scores = any(
