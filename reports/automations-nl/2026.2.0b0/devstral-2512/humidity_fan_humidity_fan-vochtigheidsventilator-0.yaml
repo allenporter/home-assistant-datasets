@@ -1,0 +1,498 @@
+---
+uuid: 158f1f32-b08b-4687-a06d-f0ae1daf1e91
+task_id: humidity_fan_humidity_fan-vochtigheidsventilator-0
+model_id: devstral-2512
+category: fan
+task:
+  input_text: |
+    # Vochtigheidsventilator
+
+    ## Probleemstelling
+
+    Maak een blueprint-automatisering om de ventilator in te schakelen op basis van de waarde van de vochtigheidssensor.
+
+    ## Voorbeelden van gebruik
+
+    Dit zijn voorbeelden van gebruik die met de blueprint kunnen worden toegepast:
+
+    - Schakel de afzuigventilator van de badkamer in wanneer de vochtigheid in de badkamer boven de 60% komt
+    - Zorg ervoor dat de garage niet te vochtig wordt
+
+    ## Gedetailleerde beschrijving
+
+    De blueprint moet twee invoeren accepteren:
+
+    | Invoer              | Beschrijving                                                                             |
+    | ------------------- | ---------------------------------------------------------------------------------------- |
+    | `humidity_sensor` | Een `sensor`-entiteit die een vochtigheidssensor is die de automatisering activeert.        |
+    | `humidity_level`  | Een `number`-selector om de waarde in te stellen die als trigger wordt gebruikt.            |
+    | `fan_entity`      | Een `fan`-entiteit om in te schakelen wanneer de automatisering wordt geactiveerd.          |
+
+    De automatisering moet worden geactiveerd wanneer het niveau van `humidity_sensor` boven `humidity_level` komt. Wanneer
+    geactiveerd, moet de ventilator worden ingeschakeld. De ventilator moet ook worden uitgeschakeld wanneer de
+    sensor weer onder het gewenste niveau daalt. De automatisering mag niet proberen
+    de ventilator in te schakelen als deze al aan staat, en mag de ventilator niet uitschakelen wanneer deze al uit staat.
+response: |-
+  Hier is een voorbeeld van hoe je een blueprint-automatisering kunt maken in Home Assistant om de ventilator in te schakelen op basis van de vochtigheidssensor:
+
+  ### Blueprint YAML
+
+  ```yaml
+  blueprint:
+    name: Vochtigheidsventilator
+    description: Schakelt een ventilator in op basis van de vochtigheidssensor.
+    domain: automation
+    input:
+      humidity_sensor:
+        name: Vochtigheidssensor
+        description: De sensor die de vochtigheid meet.
+        selector:
+          entity:
+            domain: sensor
+            device_class: humidity
+      humidity_level:
+        name: Vochtigheidsniveau
+        description: Het vochtigheidsniveau (in %) waarbij de ventilator wordt ingeschakeld.
+        default: 60
+        selector:
+          number:
+            min: 0
+            max: 100
+            unit_of_measurement: "%"
+      fan_entity:
+        name: Ventilator
+        description: De ventilator die moet worden ingeschakeld.
+        selector:
+          entity:
+            domain: fan
+
+  trigger:
+    - platform: numeric_state
+      entity_id: !input humidity_sensor
+      above: !input humidity_level
+
+  condition: []
+  action:
+    - service: fan.turn_on
+      target:
+        entity_id: !input fan_entity
+
+  mode: single
+  ```
+
+  ### Automatisering om de ventilator uit te schakelen
+
+  Je hebt ook een tweede automatisering nodig om de ventilator uit te schakelen wanneer de vochtigheid onder het ingestelde niveau daalt:
+
+  ```yaml
+  blueprint:
+    name: Vochtigheidsventilator Uitschakelen
+    description: Schakelt de ventilator uit wanneer de vochtigheid onder het ingestelde niveau daalt.
+    domain: automation
+    input:
+      humidity_sensor:
+        name: Vochtigheidssensor
+        description: De sensor die de vochtigheid meet.
+        selector:
+          entity:
+            domain: sensor
+            device_class: humidity
+      humidity_level:
+        name: Vochtigheidsniveau
+        description: Het vochtigheidsniveau (in %) waarbij de ventilator wordt uitgeschakeld.
+        default: 60
+        selector:
+          number:
+            min: 0
+            max: 100
+            unit_of_measurement: "%"
+      fan_entity:
+        name: Ventilator
+        description: De ventilator die moet worden uitgeschakeld.
+        selector:
+          entity:
+            domain: fan
+
+  trigger:
+    - platform: numeric_state
+      entity_id: !input humidity_sensor
+      below: !input humidity_level
+
+  condition: []
+  action:
+    - service: fan.turn_off
+      target:
+        entity_id: !input fan_entity
+
+  mode: single
+  ```
+
+  ### Hoe te gebruiken
+
+  1. Ga naar **Instellingen** > **Automatiseringen & Scènes** > **Blueprints**.
+  2. Klik op **Blueprint importeren** en plak de bovenstaande YAML-code.
+  3. Maak een nieuwe automatisering aan met de blueprint en vul de vereiste velden in:
+     - **Vochtigheidssensor**: Selecteer de sensor die de vochtigheid meet (bijv. `sensor.vochtigheid_van_de_afzuigventilator_van_de_badkamer`).
+     - **Vochtigheidsniveau**: Stel het gewenste niveau in (bijv. 60%).
+     - **Ventilator**: Selecteer de ventilator die je wilt besturen (bijv. `fan.afzuigventilator_van_de_badkamer`).
+
+  Deze automatisering zorgt ervoor dat de ventilator automatisch wordt ingeschakeld wanneer de vochtigheid boven het ingestelde niveau komt en wordt uitgeschakeld wanneer de vochtigheid weer daalt.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Vochtigheidsventilator
+
+        ## Probleemstelling
+
+        Maak een blueprint-automatisering om de ventilator in te schakelen op basis van de waarde van de vochtigheidssensor.
+
+        ## Voorbeelden van gebruik
+
+        Dit zijn voorbeelden van gebruik die met de blueprint kunnen worden toegepast:
+
+        - Schakel de afzuigventilator van de badkamer in wanneer de vochtigheid in de badkamer boven de 60% komt
+        - Zorg ervoor dat de garage niet te vochtig wordt
+
+        ## Gedetailleerde beschrijving
+
+        De blueprint moet twee invoeren accepteren:
+
+        | Invoer              | Beschrijving                                                                             |
+        | ------------------- | ---------------------------------------------------------------------------------------- |
+        | `humidity_sensor` | Een `sensor`-entiteit die een vochtigheidssensor is die de automatisering activeert.        |
+        | `humidity_level`  | Een `number`-selector om de waarde in te stellen die als trigger wordt gebruikt.            |
+        | `fan_entity`      | Een `fan`-entiteit om in te schakelen wanneer de automatisering wordt geactiveerd.          |
+
+        De automatisering moet worden geactiveerd wanneer het niveau van `humidity_sensor` boven `humidity_level` komt. Wanneer
+        geactiveerd, moet de ventilator worden ingeschakeld. De ventilator moet ook worden uitgeschakeld wanneer de
+        sensor weer onder het gewenste niveau daalt. De automatisering mag niet proberen
+        de ventilator in te schakelen als deze al aan staat, en mag de ventilator niet uitschakelen wanneer deze al uit staat.
+      context:
+        id: 01KJQ0J4TEK5YZ33ZF5653Q8XF
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: nl
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-03-02 10:12:36.303119+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Afzuigventilator van de Badkamer
+            domain: fan
+            areas: Badkamer
+          - names: Badkamerlamp
+            domain: light
+            areas: Badkamer
+          - names: Balkonlamp
+            domain: light
+            areas: Balkon
+          - names: Berginglamp
+            domain: light
+            areas: Berging
+          - names: Energie van het Slim Stopcontact
+            domain: sensor
+            areas: Keuken
+          - names: Keukenlamp
+            domain: light
+            areas: Keuken
+          - names: Slaapkamerlamp
+            domain: light
+            areas: Slaapkamer
+          - names: Slim Stopcontact
+            domain: switch
+            areas: Keuken
+          - names: Slimme Speaker
+            domain: media_player
+            areas: Woonkamer
+          - names: Vochtigheid van de Afzuigventilator van de Badkamer
+            domain: sensor
+            areas: Badkamer
+          - names: Woonkamerlamp
+            domain: light
+            areas: Woonkamer
+        created: 2026-03-02 10:12:36.342325+00:00
+      - role: user
+        content: |
+          # Vochtigheidsventilator
+
+          ## Probleemstelling
+
+          Maak een blueprint-automatisering om de ventilator in te schakelen op basis van de waarde van de vochtigheidssensor.
+
+          ## Voorbeelden van gebruik
+
+          Dit zijn voorbeelden van gebruik die met de blueprint kunnen worden toegepast:
+
+          - Schakel de afzuigventilator van de badkamer in wanneer de vochtigheid in de badkamer boven de 60% komt
+          - Zorg ervoor dat de garage niet te vochtig wordt
+
+          ## Gedetailleerde beschrijving
+
+          De blueprint moet twee invoeren accepteren:
+
+          | Invoer              | Beschrijving                                                                             |
+          | ------------------- | ---------------------------------------------------------------------------------------- |
+          | `humidity_sensor` | Een `sensor`-entiteit die een vochtigheidssensor is die de automatisering activeert.        |
+          | `humidity_level`  | Een `number`-selector om de waarde in te stellen die als trigger wordt gebruikt.            |
+          | `fan_entity`      | Een `fan`-entiteit om in te schakelen wanneer de automatisering wordt geactiveerd.          |
+
+          De automatisering moet worden geactiveerd wanneer het niveau van `humidity_sensor` boven `humidity_level` komt. Wanneer
+          geactiveerd, moet de ventilator worden ingeschakeld. De ventilator moet ook worden uitgeschakeld wanneer de
+          sensor weer onder het gewenste niveau daalt. De automatisering mag niet proberen
+          de ventilator in te schakelen als deze al aan staat, en mag de ventilator niet uitschakelen wanneer deze al uit staat.
+        attachments: null
+        created: 2026-03-02 10:12:36.303522+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Hier is een voorbeeld van hoe je een blueprint-automatisering kunt maken in Home Assistant om de ventilator in te schakelen op basis van de vochtigheidssensor:
+
+          ### Blueprint YAML
+
+          ```yaml
+          blueprint:
+            name: Vochtigheidsventilator
+            description: Schakelt een ventilator in op basis van de vochtigheidssensor.
+            domain: automation
+            input:
+              humidity_sensor:
+                name: Vochtigheidssensor
+                description: De sensor die de vochtigheid meet.
+                selector:
+                  entity:
+                    domain: sensor
+                    device_class: humidity
+              humidity_level:
+                name: Vochtigheidsniveau
+                description: Het vochtigheidsniveau (in %) waarbij de ventilator wordt ingeschakeld.
+                default: 60
+                selector:
+                  number:
+                    min: 0
+                    max: 100
+                    unit_of_measurement: "%"
+              fan_entity:
+                name: Ventilator
+                description: De ventilator die moet worden ingeschakeld.
+                selector:
+                  entity:
+                    domain: fan
+
+          trigger:
+            - platform: numeric_state
+              entity_id: !input humidity_sensor
+              above: !input humidity_level
+
+          condition: []
+          action:
+            - service: fan.turn_on
+              target:
+                entity_id: !input fan_entity
+
+          mode: single
+          ```
+
+          ### Automatisering om de ventilator uit te schakelen
+
+          Je hebt ook een tweede automatisering nodig om de ventilator uit te schakelen wanneer de vochtigheid onder het ingestelde niveau daalt:
+
+          ```yaml
+          blueprint:
+            name: Vochtigheidsventilator Uitschakelen
+            description: Schakelt de ventilator uit wanneer de vochtigheid onder het ingestelde niveau daalt.
+            domain: automation
+            input:
+              humidity_sensor:
+                name: Vochtigheidssensor
+                description: De sensor die de vochtigheid meet.
+                selector:
+                  entity:
+                    domain: sensor
+                    device_class: humidity
+              humidity_level:
+                name: Vochtigheidsniveau
+                description: Het vochtigheidsniveau (in %) waarbij de ventilator wordt uitgeschakeld.
+                default: 60
+                selector:
+                  number:
+                    min: 0
+                    max: 100
+                    unit_of_measurement: "%"
+              fan_entity:
+                name: Ventilator
+                description: De ventilator die moet worden uitgeschakeld.
+                selector:
+                  entity:
+                    domain: fan
+
+          trigger:
+            - platform: numeric_state
+              entity_id: !input humidity_sensor
+              below: !input humidity_level
+
+          condition: []
+          action:
+            - service: fan.turn_off
+              target:
+                entity_id: !input fan_entity
+
+          mode: single
+          ```
+
+          ### Hoe te gebruiken
+
+          1. Ga naar **Instellingen** > **Automatiseringen & Scènes** > **Blueprints**.
+          2. Klik op **Blueprint importeren** en plak de bovenstaande YAML-code.
+          3. Maak een nieuwe automatisering aan met de blueprint en vul de vereiste velden in:
+             - **Vochtigheidssensor**: Selecteer de sensor die de vochtigheid meet (bijv. `sensor.vochtigheid_van_de_afzuigventilator_van_de_badkamer`).
+             - **Vochtigheidsniveau**: Stel het gewenste niveau in (bijv. 60%).
+             - **Ventilator**: Selecteer de ventilator die je wilt besturen (bijv. `fan.afzuigventilator_van_de_badkamer`).
+
+          Deze automatisering zorgt ervoor dat de ventilator automatisch wordt ingeschakeld wanneer de vochtigheid boven het ingestelde niveau komt en wordt uitgeschakeld wanneer de vochtigheid weer daalt.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-03-02 10:12:44.705137+00:00
+      tools:
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0xffff5c7f8eb0>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0xffff44672fb0>, msg=None),
+          msg=None), ''name'': <function string at 0xffff85946610>, ''area'': <function
+          string at 0xffff85946610>, ''floor'': <function string at 0xffff85946610>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff5c8ba980>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff5c8ba8d0>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0xffff85946610>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0xffff85946610>, ''area'': <function
+          string at 0xffff85946610>, ''floor'': <function string at 0xffff85946610>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [<function string at 0xffff85946610>], msg=None), ''color'': <function color_name_to_rgb
+          at 0xffff7ea41380>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassFanSetSpeed
+        description: Sets a fan's speed by percentage
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [In([''fan''])], msg=None), ''percentage'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [<function string at 0xffff85946610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver'',
+          ''water'', ''gas'', ''outlet'', ''switch'', ''identify'', ''restart'', ''update'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7c789e80>, ''domain'': All(<function ensure_list at 0xffff85927950>,
+          [<function string at 0xffff85946610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff85927950>, [In([''tv'', ''speaker'', ''receiver'',
+          ''water'', ''gas'', ''outlet'', ''switch'', ''identify'', ''restart'', ''update'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff85946610>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-03-02 10:12:36.342346+00:00
+  duration_ms: 8404.838
+  tries: 1

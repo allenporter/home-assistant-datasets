@@ -1,0 +1,353 @@
+---
+uuid: b3580654-b190-4a16-8dcb-d1066829d7d2
+task_id: light_on_door_light_on_door-licht_bei_tueroeffnung-0
+model_id: devstral-2512
+category: light
+task:
+  input_text: |
+    # Licht bei Tueroeffnung
+
+    ## Problemstellung
+
+    Erstelle eine Blueprint-Automatisierung, um ein Licht einzuschalten, wenn die Tuer geoeffnet wird.
+
+    ## Anwendungsbeispiele
+
+    Dies sind Anwendungsbeispiele, die mit dem Blueprint verwendet werden koennten:
+
+    - Das Vorratsraumlicht einschalten, wenn die Vorratsraumtuer geoeffnet wird
+
+    ## Detaillierte Beschreibung
+
+    Der Blueprint sollte zwei Eingaben akzeptieren:
+
+    | Eingabe        | Beschreibung                                                                                    |
+    | -------------- | ----------------------------------------------------------------------------------------------- |
+    | `door_sensor`  | Ein `binary_sensor`, der die Automatisierung ausloest.                                          |
+    | `light_switch` | Eine oder mehrere `light`-Entitaeten, die ein- oder ausgeschaltet werden, wenn die Automatisierung ausgeloest wird. |
+
+    Die Automatisierung soll ausgeloest werden, wenn die Tuer geoeffnet wird, und das Licht einschalten. Das
+    Licht soll ausgeschaltet werden, wenn die Tuer geschlossen wird oder nach einer Zeitueberschreitung von 2 Minuten.
+response: |-
+  Hier ist ein Beispiel für eine Blueprint-Automatisierung in YAML, die ein Licht einschaltet, wenn eine Tür geöffnet wird, und es nach 2 Minuten oder beim Schließen der Tür wieder ausschaltet:
+
+  ```yaml
+  blueprint:
+    name: Licht bei Türöffnung
+    description: Schaltet ein Licht ein, wenn eine Tür geöffnet wird, und schaltet es nach 2 Minuten oder beim Schließen der Tür wieder aus.
+    domain: automation
+    input:
+      door_sensor:
+        name: Türsensor
+        description: Der binary_sensor, der die Automatisierung auslöst.
+        selector:
+          entity:
+            domain: binary_sensor
+            device_class: door
+      light_switch:
+        name: Licht
+        description: Das Licht, das ein- oder ausgeschaltet werden soll.
+        selector:
+          entity:
+            domain: light
+
+  trigger:
+    - platform: state
+      entity_id: !input door_sensor
+      to: "on"
+
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: !input light_switch
+    - wait_for_trigger:
+        - platform: state
+          entity_id: !input door_sensor
+          to: "off"
+      timeout: "00:02:00"
+    - service: light.turn_off
+      target:
+        entity_id: !input light_switch
+
+  mode: single
+  ```
+
+  ### Anleitung zur Verwendung:
+  1. **Blueprint erstellen**:
+     - Gehe in Home Assistant zu "Einstellungen" > "Automatisierungen & Szenen" > "Blueprints".
+     - Klicke auf "Blueprint erstellen" und füge den oben stehenden YAML-Code ein.
+
+  2. **Automatisierung aus dem Blueprint erstellen**:
+     - Gehe zu "Einstellungen" > "Automatisierungen & Szenen" > "Automatisierungen".
+     - Klicke auf "Automatisierung hinzufügen" und wähle den Blueprint "Licht bei Türöffnung" aus.
+     - Wähle den Türsensor (z. B. `binary_sensor.vorratsraumtur`) und das Licht (z. B. `light.vorratsraumlampe`) aus.
+
+  3. **Fertig**:
+     - Die Automatisierung wird nun aktiviert und funktioniert wie beschrieben.
+
+  Diese Automatisierung löst aus, wenn die Tür geöffnet wird, schaltet das Licht ein und schaltet es wieder aus, sobald die Tür geschlossen wird oder nach 2 Minuten.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Licht bei Tueroeffnung
+
+        ## Problemstellung
+
+        Erstelle eine Blueprint-Automatisierung, um ein Licht einzuschalten, wenn die Tuer geoeffnet wird.
+
+        ## Anwendungsbeispiele
+
+        Dies sind Anwendungsbeispiele, die mit dem Blueprint verwendet werden koennten:
+
+        - Das Vorratsraumlicht einschalten, wenn die Vorratsraumtuer geoeffnet wird
+
+        ## Detaillierte Beschreibung
+
+        Der Blueprint sollte zwei Eingaben akzeptieren:
+
+        | Eingabe        | Beschreibung                                                                                    |
+        | -------------- | ----------------------------------------------------------------------------------------------- |
+        | `door_sensor`  | Ein `binary_sensor`, der die Automatisierung ausloest.                                          |
+        | `light_switch` | Eine oder mehrere `light`-Entitaeten, die ein- oder ausgeschaltet werden, wenn die Automatisierung ausgeloest wird. |
+
+        Die Automatisierung soll ausgeloest werden, wenn die Tuer geoeffnet wird, und das Licht einschalten. Das
+        Licht soll ausgeschaltet werden, wenn die Tuer geschlossen wird oder nach einer Zeitueberschreitung von 2 Minuten.
+      context:
+        id: 01KJQ0JFQCGNT6X9H6RVY8TH9D
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: de
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-03-02 10:12:47.469088+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Batterie der Vorratsraumtür
+            domain: binary_sensor
+            areas: Küche
+          - names: Batterie der Vorratsraumtür
+            domain: sensor
+            areas: Küche
+          - names: Esszimmerlampe
+            domain: light
+            areas: Esszimmer
+          - names: Garagentoröffner
+            domain: light
+            areas: Garage
+          - names: Garagentoröffner
+            domain: cover
+            areas: Garage
+          - names: Gartenbeleuchtung
+            domain: light
+            areas: Vorgarten
+          - names: Intelligenter Backofen
+            domain: switch
+            areas: Küche
+          - names: Küchenlampe
+            domain: light
+            areas: Küche
+          - names: Schlafzimmer-1-Lampe
+            domain: light
+            areas: Schlafzimmer 1
+          - names: Schlafzimmer-2-Lampe
+            domain: light
+            areas: Schlafzimmer 2
+          - names: Schlafzimmer-3-Lampe
+            domain: light
+            areas: Schlafzimmer 3
+          - names: Schlafzimmer-4-Lampe
+            domain: light
+            areas: Schlafzimmer 4
+          - names: Vorratsraumlampe
+            domain: light
+            areas: Küche
+          - names: Vorratsraumtür
+            domain: binary_sensor
+            areas: Küche
+          - names: Wohnzimmerlampe
+            domain: light
+            areas: Wohnzimmer
+        created: 2026-03-02 10:12:47.470756+00:00
+      - role: user
+        content: |
+          # Licht bei Tueroeffnung
+
+          ## Problemstellung
+
+          Erstelle eine Blueprint-Automatisierung, um ein Licht einzuschalten, wenn die Tuer geoeffnet wird.
+
+          ## Anwendungsbeispiele
+
+          Dies sind Anwendungsbeispiele, die mit dem Blueprint verwendet werden koennten:
+
+          - Das Vorratsraumlicht einschalten, wenn die Vorratsraumtuer geoeffnet wird
+
+          ## Detaillierte Beschreibung
+
+          Der Blueprint sollte zwei Eingaben akzeptieren:
+
+          | Eingabe        | Beschreibung                                                                                    |
+          | -------------- | ----------------------------------------------------------------------------------------------- |
+          | `door_sensor`  | Ein `binary_sensor`, der die Automatisierung ausloest.                                          |
+          | `light_switch` | Eine oder mehrere `light`-Entitaeten, die ein- oder ausgeschaltet werden, wenn die Automatisierung ausgeloest wird. |
+
+          Die Automatisierung soll ausgeloest werden, wenn die Tuer geoeffnet wird, und das Licht einschalten. Das
+          Licht soll ausgeschaltet werden, wenn die Tuer geschlossen wird oder nach einer Zeitueberschreitung von 2 Minuten.
+        attachments: null
+        created: 2026-03-02 10:12:47.469198+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Hier ist ein Beispiel für eine Blueprint-Automatisierung in YAML, die ein Licht einschaltet, wenn eine Tür geöffnet wird, und es nach 2 Minuten oder beim Schließen der Tür wieder ausschaltet:
+
+          ```yaml
+          blueprint:
+            name: Licht bei Türöffnung
+            description: Schaltet ein Licht ein, wenn eine Tür geöffnet wird, und schaltet es nach 2 Minuten oder beim Schließen der Tür wieder aus.
+            domain: automation
+            input:
+              door_sensor:
+                name: Türsensor
+                description: Der binary_sensor, der die Automatisierung auslöst.
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    device_class: door
+              light_switch:
+                name: Licht
+                description: Das Licht, das ein- oder ausgeschaltet werden soll.
+                selector:
+                  entity:
+                    domain: light
+
+          trigger:
+            - platform: state
+              entity_id: !input door_sensor
+              to: "on"
+
+          action:
+            - service: light.turn_on
+              target:
+                entity_id: !input light_switch
+            - wait_for_trigger:
+                - platform: state
+                  entity_id: !input door_sensor
+                  to: "off"
+              timeout: "00:02:00"
+            - service: light.turn_off
+              target:
+                entity_id: !input light_switch
+
+          mode: single
+          ```
+
+          ### Anleitung zur Verwendung:
+          1. **Blueprint erstellen**:
+             - Gehe in Home Assistant zu "Einstellungen" > "Automatisierungen & Szenen" > "Blueprints".
+             - Klicke auf "Blueprint erstellen" und füge den oben stehenden YAML-Code ein.
+
+          2. **Automatisierung aus dem Blueprint erstellen**:
+             - Gehe zu "Einstellungen" > "Automatisierungen & Szenen" > "Automatisierungen".
+             - Klicke auf "Automatisierung hinzufügen" und wähle den Blueprint "Licht bei Türöffnung" aus.
+             - Wähle den Türsensor (z. B. `binary_sensor.vorratsraumtur`) und das Licht (z. B. `light.vorratsraumlampe`) aus.
+
+          3. **Fertig**:
+             - Die Automatisierung wird nun aktiviert und funktioniert wie beschrieben.
+
+          Diese Automatisierung löst aus, wenn die Tür geöffnet wird, schaltet das Licht ein und schaltet es wieder aus, sobald die Tür geschlossen wird oder nach 2 Minuten.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-03-02 10:12:54.088473+00:00
+      tools:
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff96dd5e80>, ''domain'': All(<function ensure_list at 0xffff9ff7b8a0>,
+          [<function string at 0xffff9ff96560>], msg=None), ''color'': <function color_name_to_rgb
+          at 0xffff99091380>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff96dd5e80>, ''domain'': All(<function ensure_list at 0xffff9ff7b8a0>,
+          [<function string at 0xffff9ff96560>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff9ff7b8a0>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff96dd5e80>, ''domain'': All(<function ensure_list at 0xffff9ff7b8a0>,
+          [<function string at 0xffff9ff96560>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff9ff7b8a0>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff96dd5e80>, ''domain'': All(<function ensure_list at 0xffff9ff7b8a0>,
+          [<function string at 0xffff9ff96560>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff9ff7b8a0>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff96dd5e80>, ''domain'': All(<function ensure_list at 0xffff9ff7b8a0>,
+          [<function string at 0xffff9ff96560>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff9ff7b8a0>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff9ff96560>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-03-02 10:12:47.470769+00:00
+  duration_ms: 6624.344
+  tries: 1

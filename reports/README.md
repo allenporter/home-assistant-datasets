@@ -39,6 +39,31 @@ Implementation notes:
 - Most small local models evaluated using a GeForce GTX 1070 (8GB). Larger models were contributed by other hardware mixes.
 - Temperature settings are based on the default values used in integrations.
 
+## Multilingual
+
+### assist (multilingual)
+
+| Model | en (English) | es (Spanish) | fr (French) | de (German) | nl (Dutch) |
+| --- | --- | --- | --- | --- | --- |
+| devstral-2512 | 86.1% (CI: 3.2) | 80.4% (CI: 3.6) | 84.8% (CI: 3.3) | 81.5% (CI: 3.5) | 83.5% (CI: 3.4) |
+
+### assist-mini (multilingual)
+
+| Model | en (English) | es (Spanish) | fr (French) | de (German) | nl (Dutch) |
+| --- | --- | --- | --- | --- | --- |
+| devstral-2512 | 96.9% (CI: 2.4) | 93.9% (CI: 3.4) | 93.9% (CI: 3.4) | 86.7% (CI: 4.7) | 94.4% (CI: 3.2) |
+
+### questions (multilingual)
+
+| Model | en (English) | es (Spanish) | fr (French) | de (German) | nl (Dutch) |
+| --- | --- | --- | --- | --- | --- |
+| devstral-2512 | 88.6% (CI: 3.2) | 58.1% (CI: 5.0) | 61.9% (CI: 5.0) | 46.8% (CI: 5.1) | 50.8% (CI: 5.2) |
+
+### automations (multilingual)
+
+| Model | en (English) | es (Spanish) | fr (French) | de (German) | nl (Dutch) |
+| --- | --- | --- | --- | --- | --- |
+| devstral-2512 | 60.0% (CI: 12.4) | 48.3% (CI: 12.6) | 70.0% (CI: 11.6) | 65.0% (CI: 12.1) | 40.0% (CI: 12.4) |
 ## Datasets
 
 ### assist

@@ -1,0 +1,383 @@
+---
+uuid: 42223106-4ef9-4780-a962-08ecd8e57f6c
+task_id: light_on_door_light_on_door-luz_al_abrir_la_puerta-4
+model_id: devstral-2512
+category: light
+task:
+  input_text: |
+    # Luz al abrir la puerta
+
+    ## Planteamiento del problema
+
+    Crea una automatizacion blueprint para encender una luz cuando se abre la puerta.
+
+    ## Ejemplos de uso
+
+    Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+    - Encender la luz de la despensa cuando se abre la puerta de la despensa
+
+    ## Descripcion detallada
+
+    El blueprint debe aceptar dos entradas:
+
+    | Entrada        | Descripcion                                                                              |
+    | -------------- | ---------------------------------------------------------------------------------------- |
+    | `door_sensor`  | Un `binary_sensor` que activa el inicio de la automatizacion.                            |
+    | `light_switch` | Una o mas entidades `light` objetivo para encender o apagar cuando se active la automatizacion. |
+
+    La automatizacion debe activarse cuando se abre la puerta y encender la luz. La
+    luz debe apagarse cuando se cierre la puerta o despues de un tiempo de espera de 2 minutos.
+response: |-
+  Para crear una automatización en Home Assistant que encienda una luz cuando se abre una puerta y la apague cuando se cierre o después de 2 minutos, puedes seguir estos pasos:
+
+  ### Requisitos previos:
+  1. Asegúrate de tener un `binary_sensor` configurado para la puerta (por ejemplo, `binary_sensor.puerta_de_la_despensa`).
+  2. Asegúrate de tener una entidad `light` configurada para la luz que deseas controlar (por ejemplo, `light.luz_de_la_despensa`).
+
+  ---
+
+  ### Pasos para crear la automatización:
+
+  1. **Ve a la sección de Automatizaciones en Home Assistant**:
+     - Navega a **Configuración** > **Automatizaciones y escenas** > **Automatizaciones**.
+     - Haz clic en el botón **+ Crear automatización** (abajo a la derecha).
+
+  2. **Configura el disparador (Trigger)**:
+     - Haz clic en **+ Añadir disparador**.
+     - Selecciona **Estado** como tipo de disparador.
+     - Elige la entidad del sensor de la puerta (por ejemplo, `binary_sensor.puerta_de_la_despensa`).
+     - Configura el disparador para que se active cuando el estado cambie a `on` (puerta abierta).
+
+  3. **Configura la acción para encender la luz**:
+     - Haz clic en **+ Añadir acción**.
+     - Selecciona **Llamar a servicio**.
+     - Elige el servicio `light.turn_on`.
+     - Selecciona la entidad de la luz (por ejemplo, `light.luz_de_la_despensa`).
+
+  4. **Configura la acción para apagar la luz después de 2 minutos**:
+     - Haz clic en **+ Añadir acción**.
+     - Selecciona **Retraso**.
+     - Configura el retraso a `2 minutos`.
+     - Luego, añade otra acción para llamar al servicio `light.turn_off` y selecciona la misma entidad de la luz.
+
+  5. **Configura la condición para apagar la luz si la puerta se cierra antes de los 2 minutos**:
+     - Haz clic en **+ Añadir condición**.
+     - Selecciona **Estado** como tipo de condición.
+     - Elige la entidad del sensor de la puerta (por ejemplo, `binary_sensor.puerta_de_la_despensa`).
+     - Configura la condición para que se active cuando el estado sea `off` (puerta cerrada).
+     - Si esta condición se cumple, la automatización se detendrá y la luz se apagará.
+
+  6. **Guarda la automatización**:
+     - Dale un nombre descriptivo, como "Encender luz al abrir la puerta de la despensa".
+     - Haz clic en **Guardar**.
+
+  ---
+
+  ### Ejemplo de YAML para la automatización:
+  Si prefieres editar el YAML directamente, puedes usar el siguiente código como base:
+
+  ```yaml
+  alias: "Encender luz al abrir la puerta de la despensa"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.puerta_de_la_despensa
+    to: "on"
+  action:
+    - service: light.turn_on
+      entity_id: light.luz_de_la_despensa
+    - delay: "00:02:00" # Espera 2 minutos
+    - service: light.turn_off
+      entity_id: light.luz_de_la_despensa
+  condition:
+    condition: state
+    entity_id: binary_sensor.puerta_de_la_despensa
+    state: "off"
+  ```
+
+  ---
+
+  ### Notas adicionales:
+  - Asegúrate de que el sensor de la puerta y la luz estén correctamente configurados en Home Assistant.
+  - Puedes ajustar el tiempo de espera (2 minutos) según tus necesidades.
+  - Si deseas usar este blueprint para otras puertas y luces, simplemente repite el proceso con las entidades correspondientes.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Luz al abrir la puerta
+
+        ## Planteamiento del problema
+
+        Crea una automatizacion blueprint para encender una luz cuando se abre la puerta.
+
+        ## Ejemplos de uso
+
+        Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+        - Encender la luz de la despensa cuando se abre la puerta de la despensa
+
+        ## Descripcion detallada
+
+        El blueprint debe aceptar dos entradas:
+
+        | Entrada        | Descripcion                                                                              |
+        | -------------- | ---------------------------------------------------------------------------------------- |
+        | `door_sensor`  | Un `binary_sensor` que activa el inicio de la automatizacion.                            |
+        | `light_switch` | Una o mas entidades `light` objetivo para encender o apagar cuando se active la automatizacion. |
+
+        La automatizacion debe activarse cuando se abre la puerta y encender la luz. La
+        luz debe apagarse cuando se cierre la puerta o despues de un tiempo de espera de 2 minutos.
+      context:
+        id: 01KJPVV76C2XAAEJTGVBTN2RKY
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: es
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-03-02 08:50:10.764557+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Batería de la Puerta de la Despensa
+            domain: binary_sensor
+            areas: Cocina
+          - names: Batería de la Puerta de la Despensa
+            domain: sensor
+            areas: Cocina
+          - names: Horno Inteligente
+            domain: switch
+            areas: Cocina
+          - names: Luces del Jardín
+            domain: light
+            areas: Jardín Delantero
+          - names: Luz de la Cocina
+            domain: light
+            areas: Cocina
+          - names: Luz de la Despensa
+            domain: light
+            areas: Cocina
+          - names: Luz del Comedor
+            domain: light
+            areas: Comedor
+          - names: Luz del Dormitorio 1
+            domain: light
+            areas: Dormitorio 1
+          - names: Luz del Dormitorio 2
+            domain: light
+            areas: Dormitorio 2
+          - names: Luz del Dormitorio 3
+            domain: light
+            areas: Dormitorio 3
+          - names: Luz del Dormitorio 4
+            domain: light
+            areas: Dormitorio 4
+          - names: Luz del Salón
+            domain: light
+            areas: Salón
+          - names: Puerta de la Despensa
+            domain: binary_sensor
+            areas: Cocina
+          - names: Puerta del Garaje
+            domain: cover
+            areas: Garaje
+          - names: Puerta del Garaje
+            domain: light
+            areas: Garaje
+        created: 2026-03-02 08:50:10.765430+00:00
+      - role: user
+        content: |
+          # Luz al abrir la puerta
+
+          ## Planteamiento del problema
+
+          Crea una automatizacion blueprint para encender una luz cuando se abre la puerta.
+
+          ## Ejemplos de uso
+
+          Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+          - Encender la luz de la despensa cuando se abre la puerta de la despensa
+
+          ## Descripcion detallada
+
+          El blueprint debe aceptar dos entradas:
+
+          | Entrada        | Descripcion                                                                              |
+          | -------------- | ---------------------------------------------------------------------------------------- |
+          | `door_sensor`  | Un `binary_sensor` que activa el inicio de la automatizacion.                            |
+          | `light_switch` | Una o mas entidades `light` objetivo para encender o apagar cuando se active la automatizacion. |
+
+          La automatizacion debe activarse cuando se abre la puerta y encender la luz. La
+          luz debe apagarse cuando se cierre la puerta o despues de un tiempo de espera de 2 minutos.
+        attachments: null
+        created: 2026-03-02 08:50:10.764647+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Para crear una automatización en Home Assistant que encienda una luz cuando se abre una puerta y la apague cuando se cierre o después de 2 minutos, puedes seguir estos pasos:
+
+          ### Requisitos previos:
+          1. Asegúrate de tener un `binary_sensor` configurado para la puerta (por ejemplo, `binary_sensor.puerta_de_la_despensa`).
+          2. Asegúrate de tener una entidad `light` configurada para la luz que deseas controlar (por ejemplo, `light.luz_de_la_despensa`).
+
+          ---
+
+          ### Pasos para crear la automatización:
+
+          1. **Ve a la sección de Automatizaciones en Home Assistant**:
+             - Navega a **Configuración** > **Automatizaciones y escenas** > **Automatizaciones**.
+             - Haz clic en el botón **+ Crear automatización** (abajo a la derecha).
+
+          2. **Configura el disparador (Trigger)**:
+             - Haz clic en **+ Añadir disparador**.
+             - Selecciona **Estado** como tipo de disparador.
+             - Elige la entidad del sensor de la puerta (por ejemplo, `binary_sensor.puerta_de_la_despensa`).
+             - Configura el disparador para que se active cuando el estado cambie a `on` (puerta abierta).
+
+          3. **Configura la acción para encender la luz**:
+             - Haz clic en **+ Añadir acción**.
+             - Selecciona **Llamar a servicio**.
+             - Elige el servicio `light.turn_on`.
+             - Selecciona la entidad de la luz (por ejemplo, `light.luz_de_la_despensa`).
+
+          4. **Configura la acción para apagar la luz después de 2 minutos**:
+             - Haz clic en **+ Añadir acción**.
+             - Selecciona **Retraso**.
+             - Configura el retraso a `2 minutos`.
+             - Luego, añade otra acción para llamar al servicio `light.turn_off` y selecciona la misma entidad de la luz.
+
+          5. **Configura la condición para apagar la luz si la puerta se cierra antes de los 2 minutos**:
+             - Haz clic en **+ Añadir condición**.
+             - Selecciona **Estado** como tipo de condición.
+             - Elige la entidad del sensor de la puerta (por ejemplo, `binary_sensor.puerta_de_la_despensa`).
+             - Configura la condición para que se active cuando el estado sea `off` (puerta cerrada).
+             - Si esta condición se cumple, la automatización se detendrá y la luz se apagará.
+
+          6. **Guarda la automatización**:
+             - Dale un nombre descriptivo, como "Encender luz al abrir la puerta de la despensa".
+             - Haz clic en **Guardar**.
+
+          ---
+
+          ### Ejemplo de YAML para la automatización:
+          Si prefieres editar el YAML directamente, puedes usar el siguiente código como base:
+
+          ```yaml
+          alias: "Encender luz al abrir la puerta de la despensa"
+          trigger:
+            platform: state
+            entity_id: binary_sensor.puerta_de_la_despensa
+            to: "on"
+          action:
+            - service: light.turn_on
+              entity_id: light.luz_de_la_despensa
+            - delay: "00:02:00" # Espera 2 minutos
+            - service: light.turn_off
+              entity_id: light.luz_de_la_despensa
+          condition:
+            condition: state
+            entity_id: binary_sensor.puerta_de_la_despensa
+            state: "off"
+          ```
+
+          ---
+
+          ### Notas adicionales:
+          - Asegúrate de que el sensor de la puerta y la luz estén correctamente configurados en Home Assistant.
+          - Puedes ajustar el tiempo de espera (2 minutos) según tus necesidades.
+          - Si deseas usar este blueprint para otras puertas y luces, simplemente repite el proceso con las entidades correspondientes.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-03-02 08:50:20.617448+00:00
+      tools:
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''color'': <function color_name_to_rgb
+          at 0xffff74ab1380>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None), ''position'': All(Coerce(int, msg=None),
+          Range(min=0, max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff7b9b6610>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-03-02 08:50:10.765438+00:00
+  duration_ms: 9860.972
+  tries: 1

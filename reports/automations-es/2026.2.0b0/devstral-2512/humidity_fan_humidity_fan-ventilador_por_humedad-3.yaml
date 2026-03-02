@@ -1,0 +1,438 @@
+---
+uuid: cf123cd0-1f99-4a31-9370-d2a24a41cf35
+task_id: humidity_fan_humidity_fan-ventilador_por_humedad-3
+model_id: devstral-2512
+category: fan
+task:
+  input_text: |
+    # Ventilador por humedad
+
+    ## Planteamiento del problema
+
+    Crea una automatizacion blueprint para encender el ventilador segun el valor del sensor de humedad.
+
+    ## Ejemplos de uso
+
+    Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+    - Encender el extractor del bano cuando la humedad del bano supere el 60%
+    - Asegurarse de que el garaje no se humedezca demasiado
+
+    ## Descripcion detallada
+
+    El blueprint debe aceptar dos entradas:
+
+    | Entrada             | Descripcion                                                                      |
+    | ------------------- | -------------------------------------------------------------------------------- |
+    | `humidity_sensor` | Una entidad `sensor` que es un sensor de humedad que activa la automatizacion.     |
+    | `humidity_level`  | Un selector `number` para establecer el valor utilizado como activador.             |
+    | `fan_entity`      | Una entidad `fan` para encender cuando se active la automatizacion.                |
+
+    La automatizacion debe activarse cuando el nivel de `humidity_sensor` supere `humidity_level`. Cuando
+    se active, el ventilador debe encenderse. El ventilador tambien debe apagarse cuando el
+    sensor baje por debajo del nivel deseado. La automatizacion no debe intentar
+    encender el ventilador si ya esta encendido, ni apagarlo cuando ya esta apagado.
+response: |-
+  Aquí tienes un ejemplo de cómo podría ser el blueprint en YAML para Home Assistant. Este blueprint permite encender un ventilador cuando el nivel de humedad supera un valor específico y apagarlo cuando el nivel de humedad baja por debajo de ese valor:
+
+  ```yaml
+  blueprint:
+    name: Ventilador por Humedad
+    description: Enciende un ventilador cuando la humedad supera un nivel específico y lo apaga cuando la humedad baja.
+    domain: automation
+    input:
+      humidity_sensor:
+        name: Sensor de Humedad
+        description: Sensor de humedad que activará la automatización.
+        selector:
+          entity:
+            domain: sensor
+            device_class: humidity
+      humidity_level:
+        name: Nivel de Humedad
+        description: Nivel de humedad (en %) que activará el ventilador.
+        selector:
+          number:
+            min: 0
+            max: 100
+            unit_of_measurement: "%"
+      fan_entity:
+        name: Ventilador
+        description: Ventilador que se encenderá cuando la humedad supere el nivel establecido.
+        selector:
+          entity:
+            domain: fan
+
+  mode: single
+  trigger:
+    - platform: numeric_state
+      entity_id: !input humidity_sensor
+      above: !input humidity_level
+    - platform: numeric_state
+      entity_id: !input humidity_sensor
+      below: !input humidity_level
+
+  action:
+    - choose:
+        - conditions:
+            - condition: numeric_state
+              entity_id: !input humidity_sensor
+              above: !input humidity_level
+          sequence:
+            - service: fan.turn_on
+              target:
+                entity_id: !input fan_entity
+        - conditions:
+            - condition: numeric_state
+              entity_id: !input humidity_sensor
+              below: !input humidity_level
+          sequence:
+            - service: fan.turn_off
+              target:
+                entity_id: !input fan_entity
+  ```
+
+  ### Explicación:
+  1. **Entradas**:
+     - `humidity_sensor`: Selecciona un sensor de humedad.
+     - `humidity_level`: Establece el nivel de humedad (en porcentaje) que activará el ventilador.
+     - `fan_entity`: Selecciona el ventilador que se controlará.
+
+  2. **Disparadores**:
+     - Se activa cuando el sensor de humedad supera el nivel establecido.
+     - Se activa cuando el sensor de humedad baja por debajo del nivel establecido.
+
+  3. **Acciones**:
+     - Si la humedad supera el nivel, enciende el ventilador.
+     - Si la humedad baja por debajo del nivel, apaga el ventilador.
+
+  Este blueprint asegura que el ventilador solo se encienda o apague cuando sea necesario, evitando acciones redundantes.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Ventilador por humedad
+
+        ## Planteamiento del problema
+
+        Crea una automatizacion blueprint para encender el ventilador segun el valor del sensor de humedad.
+
+        ## Ejemplos de uso
+
+        Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+        - Encender el extractor del bano cuando la humedad del bano supere el 60%
+        - Asegurarse de que el garaje no se humedezca demasiado
+
+        ## Descripcion detallada
+
+        El blueprint debe aceptar dos entradas:
+
+        | Entrada             | Descripcion                                                                      |
+        | ------------------- | -------------------------------------------------------------------------------- |
+        | `humidity_sensor` | Una entidad `sensor` que es un sensor de humedad que activa la automatizacion.     |
+        | `humidity_level`  | Un selector `number` para establecer el valor utilizado como activador.             |
+        | `fan_entity`      | Una entidad `fan` para encender cuando se active la automatizacion.                |
+
+        La automatizacion debe activarse cuando el nivel de `humidity_sensor` supere `humidity_level`. Cuando
+        se active, el ventilador debe encenderse. El ventilador tambien debe apagarse cuando el
+        sensor baje por debajo del nivel deseado. La automatizacion no debe intentar
+        encender el ventilador si ya esta encendido, ni apagarlo cuando ya esta apagado.
+      context:
+        id: 01KJPVSGQ0C1WC56WJV4XVNQFW
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: es
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-03-02 08:49:14.976484+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Altavoz Inteligente
+            domain: media_player
+            areas: Salón
+          - names: Enchufe Inteligente
+            domain: switch
+            areas: Cocina
+          - names: Energía del Enchufe Inteligente
+            domain: sensor
+            areas: Cocina
+          - names: Extractor del Baño
+            domain: fan
+            areas: Baño
+          - names: Humedad del Extractor del Baño
+            domain: sensor
+            areas: Baño
+          - names: Luz de la Cocina
+            domain: light
+            areas: Cocina
+          - names: Luz del Balcón
+            domain: light
+            areas: Balcón
+          - names: Luz del Baño
+            domain: light
+            areas: Baño
+          - names: Luz del Dormitorio
+            domain: light
+            areas: Dormitorio
+          - names: Luz del Salón
+            domain: light
+            areas: Salón
+          - names: Luz del Trastero
+            domain: light
+            areas: Trastero
+        created: 2026-03-02 08:49:14.980035+00:00
+      - role: user
+        content: |
+          # Ventilador por humedad
+
+          ## Planteamiento del problema
+
+          Crea una automatizacion blueprint para encender el ventilador segun el valor del sensor de humedad.
+
+          ## Ejemplos de uso
+
+          Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+          - Encender el extractor del bano cuando la humedad del bano supere el 60%
+          - Asegurarse de que el garaje no se humedezca demasiado
+
+          ## Descripcion detallada
+
+          El blueprint debe aceptar dos entradas:
+
+          | Entrada             | Descripcion                                                                      |
+          | ------------------- | -------------------------------------------------------------------------------- |
+          | `humidity_sensor` | Una entidad `sensor` que es un sensor de humedad que activa la automatizacion.     |
+          | `humidity_level`  | Un selector `number` para establecer el valor utilizado como activador.             |
+          | `fan_entity`      | Una entidad `fan` para encender cuando se active la automatizacion.                |
+
+          La automatizacion debe activarse cuando el nivel de `humidity_sensor` supere `humidity_level`. Cuando
+          se active, el ventilador debe encenderse. El ventilador tambien debe apagarse cuando el
+          sensor baje por debajo del nivel deseado. La automatizacion no debe intentar
+          encender el ventilador si ya esta encendido, ni apagarlo cuando ya esta apagado.
+        attachments: null
+        created: 2026-03-02 08:49:14.976637+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Aquí tienes un ejemplo de cómo podría ser el blueprint en YAML para Home Assistant. Este blueprint permite encender un ventilador cuando el nivel de humedad supera un valor específico y apagarlo cuando el nivel de humedad baja por debajo de ese valor:
+
+          ```yaml
+          blueprint:
+            name: Ventilador por Humedad
+            description: Enciende un ventilador cuando la humedad supera un nivel específico y lo apaga cuando la humedad baja.
+            domain: automation
+            input:
+              humidity_sensor:
+                name: Sensor de Humedad
+                description: Sensor de humedad que activará la automatización.
+                selector:
+                  entity:
+                    domain: sensor
+                    device_class: humidity
+              humidity_level:
+                name: Nivel de Humedad
+                description: Nivel de humedad (en %) que activará el ventilador.
+                selector:
+                  number:
+                    min: 0
+                    max: 100
+                    unit_of_measurement: "%"
+              fan_entity:
+                name: Ventilador
+                description: Ventilador que se encenderá cuando la humedad supere el nivel establecido.
+                selector:
+                  entity:
+                    domain: fan
+
+          mode: single
+          trigger:
+            - platform: numeric_state
+              entity_id: !input humidity_sensor
+              above: !input humidity_level
+            - platform: numeric_state
+              entity_id: !input humidity_sensor
+              below: !input humidity_level
+
+          action:
+            - choose:
+                - conditions:
+                    - condition: numeric_state
+                      entity_id: !input humidity_sensor
+                      above: !input humidity_level
+                  sequence:
+                    - service: fan.turn_on
+                      target:
+                        entity_id: !input fan_entity
+                - conditions:
+                    - condition: numeric_state
+                      entity_id: !input humidity_sensor
+                      below: !input humidity_level
+                  sequence:
+                    - service: fan.turn_off
+                      target:
+                        entity_id: !input fan_entity
+          ```
+
+          ### Explicación:
+          1. **Entradas**:
+             - `humidity_sensor`: Selecciona un sensor de humedad.
+             - `humidity_level`: Establece el nivel de humedad (en porcentaje) que activará el ventilador.
+             - `fan_entity`: Selecciona el ventilador que se controlará.
+
+          2. **Disparadores**:
+             - Se activa cuando el sensor de humedad supera el nivel establecido.
+             - Se activa cuando el sensor de humedad baja por debajo del nivel establecido.
+
+          3. **Acciones**:
+             - Si la humedad supera el nivel, enciende el ventilador.
+             - Si la humedad baja por debajo del nivel, apaga el ventilador.
+
+          Este blueprint asegura que el ventilador solo se encienda o apague cuando sea necesario, evitando acciones redundantes.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-03-02 08:49:22.310233+00:00
+      tools:
+      - name: HassFanSetSpeed
+        description: Sets a fan's speed by percentage
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''fan''])], msg=None), ''percentage'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''color'': <function color_name_to_rgb
+          at 0xffff74ab1380>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0xffff2d721fe0>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0xffff4c50f060>, msg=None),
+          msg=None), ''name'': <function string at 0xffff7b9b6610>, ''area'': <function
+          string at 0xffff7b9b6610>, ''floor'': <function string at 0xffff7b9b6610>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff2d722090>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff2d722140>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0xffff7b9b6610>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0xffff7b9b6610>, ''area'': <function
+          string at 0xffff7b9b6610>, ''floor'': <function string at 0xffff7b9b6610>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff7b9b6610>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-03-02 08:49:14.980047+00:00
+  duration_ms: 7335.54
+  tries: 1

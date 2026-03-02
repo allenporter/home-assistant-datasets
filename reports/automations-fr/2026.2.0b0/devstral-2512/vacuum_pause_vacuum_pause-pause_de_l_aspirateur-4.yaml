@@ -1,0 +1,429 @@
+---
+uuid: 061f78e6-e6fa-43c7-a2da-927a39b5517d
+task_id: vacuum_pause_vacuum_pause-pause_de_l_aspirateur-4
+model_id: devstral-2512
+category: vacuum
+task:
+  input_text: |
+    # Pause de l'aspirateur
+
+    ## Enonce du probleme
+
+    Creez une automatisation blueprint pour mettre en pause l'aspirateur lorsque je recois un appel telephonique.
+
+    ## Exemples d'utilisation
+
+    Voici des exemples d'utilisation qui pourraient etre utilises avec le blueprint :
+
+    - Mettre en pause l'aspirateur lorsque je recois un appel de ma famille
+    - Ne pas interrompre ma videoconference de travail avec le bruit de l'aspirateur en le mettant en pause lorsque l'appel commence
+
+    ## Description detaillee
+
+    Le blueprint doit accepter deux entrees :
+
+    | Entree              | Description                                                                              |
+    | ------------------- | ---------------------------------------------------------------------------------------- |
+    | `phone_call_sensor` | Une entite `binary_sensor` qui se declenche lorsqu'un appel telephonique est recu.       |
+    | `vacuum_entity`     | Une entite `vacuum` a mettre en pause lorsque l'automatisation se declenche.             |
+
+    L'automatisation doit se declencher lorsque le capteur binaire se declenche et que l'aspirateur est en fonctionnement. L'aspirateur
+    doit etre mis en pause (pas arrete) et peut etre repris manuellement.
+response: |-
+  Voici un exemple de blueprint pour mettre en pause l'aspirateur lorsque vous recevez un appel téléphonique :
+
+  ```yaml
+  blueprint:
+    name: Pause Aspirateur lors d'un Appel Téléphonique
+    description: Met en pause l'aspirateur lorsque vous recevez un appel téléphonique.
+    domain: automation
+    input:
+      phone_call_sensor:
+        name: Capteur d'appel téléphonique
+        description: Une entité binary_sensor qui se déclenche lorsqu'un appel téléphonique est reçu.
+        selector:
+          entity:
+            domain: binary_sensor
+      vacuum_entity:
+        name: Aspirateur
+        description: Une entité vacuum à mettre en pause lorsque l'automatisation se déclenche.
+        selector:
+          entity:
+            domain: vacuum
+
+  trigger:
+    - platform: state
+      entity_id: !input phone_call_sensor
+      to: "on"
+
+  condition:
+    - condition: state
+      entity_id: !input vacuum_entity
+      state: "cleaning"
+
+  action:
+    - service: vacuum.pause
+      entity_id: !input vacuum_entity
+  ```
+
+  ### Explications :
+  1. **Entrées** :
+     - `phone_call_sensor` : Sélectionnez un capteur binaire qui se déclenche lors d'un appel téléphonique.
+     - `vacuum_entity` : Sélectionnez votre aspirateur à contrôler.
+
+  2. **Déclencheur** :
+     - L'automatisation se déclenche lorsque le capteur d'appel téléphonique passe à l'état "on".
+
+  3. **Condition** :
+     - L'aspirateur doit être en train de nettoyer (`state: "cleaning"`) pour que l'automatisation s'exécute.
+
+  4. **Action** :
+     - Met en pause l'aspirateur en utilisant le service `vacuum.pause`.
+
+  ### Utilisation :
+  1. Importez ce blueprint dans Home Assistant.
+  2. Créez une automatisation en utilisant ce blueprint.
+  3. Sélectionnez le capteur d'appel téléphonique et l'aspirateur appropriés.
+
+  Cela permettra de mettre en pause l'aspirateur uniquement lorsqu'un appel est reçu et que l'aspirateur est en fonctionnement. Vous pourrez reprendre manuellement l'aspirateur après l'appel.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Pause de l'aspirateur
+
+        ## Enonce du probleme
+
+        Creez une automatisation blueprint pour mettre en pause l'aspirateur lorsque je recois un appel telephonique.
+
+        ## Exemples d'utilisation
+
+        Voici des exemples d'utilisation qui pourraient etre utilises avec le blueprint :
+
+        - Mettre en pause l'aspirateur lorsque je recois un appel de ma famille
+        - Ne pas interrompre ma videoconference de travail avec le bruit de l'aspirateur en le mettant en pause lorsque l'appel commence
+
+        ## Description detaillee
+
+        Le blueprint doit accepter deux entrees :
+
+        | Entree              | Description                                                                              |
+        | ------------------- | ---------------------------------------------------------------------------------------- |
+        | `phone_call_sensor` | Une entite `binary_sensor` qui se declenche lorsqu'un appel telephonique est recu.       |
+        | `vacuum_entity`     | Une entite `vacuum` a mettre en pause lorsque l'automatisation se declenche.             |
+
+        L'automatisation doit se declencher lorsque le capteur binaire se declenche et que l'aspirateur est en fonctionnement. L'aspirateur
+        doit etre mis en pause (pas arrete) et peut etre repris manuellement.
+      context:
+        id: 01KJQ0DKN5C2PF5CYHK81TCK3J
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: fr
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-03-02 10:10:07.653759+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Aspirateur
+            domain: vacuum
+            areas: Salon/Cuisine/Chambre
+          - names: Batterie du Détecteur de Mouvement
+            domain: binary_sensor
+            areas: Salle de bain
+          - names: Batterie du Détecteur de Mouvement
+            domain: sensor
+            areas: Salle de bain
+          - names: Batterie du Détecteur de Mouvement de la Terrasse
+            domain: binary_sensor
+            areas: Terrasse sur le Toit
+          - names: Batterie du Détecteur de Mouvement de la Terrasse
+            domain: sensor
+            areas: Terrasse sur le Toit
+          - names: Détecteur de Mouvement
+            domain: binary_sensor
+            areas: Salle de bain
+          - names: Détecteur de Mouvement de la Terrasse
+            domain: binary_sensor
+            areas: Terrasse sur le Toit
+          - names: Enceinte Connectée
+            domain: media_player
+            areas: Salon/Cuisine/Chambre
+          - names: Extracteur
+            domain: fan
+            areas: Salle de bain
+          - names: Humidité de l'Extracteur
+            domain: sensor
+            areas: Salle de bain
+          - names: Humidité du Thermostat
+            domain: sensor
+            areas: Salon/Cuisine/Chambre
+          - names: Lampe
+            domain: light
+            areas: Salon/Cuisine/Chambre
+          - names: Lumière Extérieure
+            domain: light
+            areas: Terrasse sur le Toit
+          - names: Lumière Principale
+            domain: light
+            areas: Salon/Cuisine/Chambre
+          - names: Lumière de la Salle de Bain
+            domain: light
+            areas: Salle de bain
+          - names: TV
+            domain: media_player
+            areas: Salon/Cuisine/Chambre
+          - names: Température du Thermostat
+            domain: sensor
+            areas: Salon/Cuisine/Chambre
+          - names: Thermostat
+            domain: climate
+            areas: Salon/Cuisine/Chambre
+        created: 2026-03-02 10:10:07.655079+00:00
+      - role: user
+        content: |
+          # Pause de l'aspirateur
+
+          ## Enonce du probleme
+
+          Creez une automatisation blueprint pour mettre en pause l'aspirateur lorsque je recois un appel telephonique.
+
+          ## Exemples d'utilisation
+
+          Voici des exemples d'utilisation qui pourraient etre utilises avec le blueprint :
+
+          - Mettre en pause l'aspirateur lorsque je recois un appel de ma famille
+          - Ne pas interrompre ma videoconference de travail avec le bruit de l'aspirateur en le mettant en pause lorsque l'appel commence
+
+          ## Description detaillee
+
+          Le blueprint doit accepter deux entrees :
+
+          | Entree              | Description                                                                              |
+          | ------------------- | ---------------------------------------------------------------------------------------- |
+          | `phone_call_sensor` | Une entite `binary_sensor` qui se declenche lorsqu'un appel telephonique est recu.       |
+          | `vacuum_entity`     | Une entite `vacuum` a mettre en pause lorsque l'automatisation se declenche.             |
+
+          L'automatisation doit se declencher lorsque le capteur binaire se declenche et que l'aspirateur est en fonctionnement. L'aspirateur
+          doit etre mis en pause (pas arrete) et peut etre repris manuellement.
+        attachments: null
+        created: 2026-03-02 10:10:07.653915+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Voici un exemple de blueprint pour mettre en pause l'aspirateur lorsque vous recevez un appel téléphonique :
+
+          ```yaml
+          blueprint:
+            name: Pause Aspirateur lors d'un Appel Téléphonique
+            description: Met en pause l'aspirateur lorsque vous recevez un appel téléphonique.
+            domain: automation
+            input:
+              phone_call_sensor:
+                name: Capteur d'appel téléphonique
+                description: Une entité binary_sensor qui se déclenche lorsqu'un appel téléphonique est reçu.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              vacuum_entity:
+                name: Aspirateur
+                description: Une entité vacuum à mettre en pause lorsque l'automatisation se déclenche.
+                selector:
+                  entity:
+                    domain: vacuum
+
+          trigger:
+            - platform: state
+              entity_id: !input phone_call_sensor
+              to: "on"
+
+          condition:
+            - condition: state
+              entity_id: !input vacuum_entity
+              state: "cleaning"
+
+          action:
+            - service: vacuum.pause
+              entity_id: !input vacuum_entity
+          ```
+
+          ### Explications :
+          1. **Entrées** :
+             - `phone_call_sensor` : Sélectionnez un capteur binaire qui se déclenche lors d'un appel téléphonique.
+             - `vacuum_entity` : Sélectionnez votre aspirateur à contrôler.
+
+          2. **Déclencheur** :
+             - L'automatisation se déclenche lorsque le capteur d'appel téléphonique passe à l'état "on".
+
+          3. **Condition** :
+             - L'aspirateur doit être en train de nettoyer (`state: "cleaning"`) pour que l'automatisation s'exécute.
+
+          4. **Action** :
+             - Met en pause l'aspirateur en utilisant le service `vacuum.pause`.
+
+          ### Utilisation :
+          1. Importez ce blueprint dans Home Assistant.
+          2. Créez une automatisation en utilisant ce blueprint.
+          3. Sélectionnez le capteur d'appel téléphonique et l'aspirateur appropriés.
+
+          Cela permettra de mettre en pause l'aspirateur uniquement lorsqu'un appel est reçu et que l'aspirateur est en fonctionnement. Vous pourrez reprendre manuellement l'aspirateur après l'appel.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-03-02 10:10:14.491172+00:00
+      tools:
+      - name: HassVacuumStart
+        description: Starts a vacuum
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''vacuum''])], msg=None)}'
+      - name: HassVacuumReturnToBase
+        description: Returns a vacuum to base
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''vacuum''])], msg=None)}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''color'': <function color_name_to_rgb
+          at 0xffff81e21380>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassFanSetSpeed
+        description: Sets a fan's speed by percentage
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''fan''])], msg=None), ''percentage'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0xffff53d2e6c0>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0xffff601480f0>, msg=None),
+          msg=None), ''name'': <function string at 0xffff88d26610>, ''area'': <function
+          string at 0xffff88d26610>, ''floor'': <function string at 0xffff88d26610>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff53d2f8a0>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff53d2e090>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0xffff88d26610>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0xffff88d26610>, ''area'': <function
+          string at 0xffff88d26610>, ''floor'': <function string at 0xffff88d26610>}'
+      - name: HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0xffff7fb69e80>, ''name'': <function non_empty_string
+          at 0xffff7fb69e80>, ''floor'': <function non_empty_string at 0xffff7fb69e80>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff88d07950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''water'', ''gas'', ''identify'', ''restart'', ''update'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff88d07950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''water'', ''gas'', ''identify'', ''restart'', ''update'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff88d26610>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-03-02 10:10:07.655086+00:00
+  duration_ms: 6837.945
+  tries: 1

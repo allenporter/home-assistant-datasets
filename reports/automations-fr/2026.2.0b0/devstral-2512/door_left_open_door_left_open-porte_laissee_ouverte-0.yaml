@@ -1,0 +1,499 @@
+---
+uuid: c98a29bb-ef5c-4609-bacb-80a5704cc8dc
+task_id: door_left_open_door_left_open-porte_laissee_ouverte-0
+model_id: devstral-2512
+category: media_player
+task:
+  input_text: |
+    # Porte laissee ouverte
+
+    ## Enonce du probleme
+
+    Creez une automatisation blueprint pour diffuser une alerte sur l'enceinte lorsque la porte est laissee ouverte.
+
+    ## Exemples d'utilisation
+
+    Voici des exemples d'utilisation qui pourraient etre utilises avec le blueprint :
+
+    - Diffuser un message sur l'enceinte du salon si la porte du garage est restee ouverte pendant plus de 30 minutes
+    - Lorsque la porte d'entree est entrouverte depuis 5 minutes, diffuser un son sur l'enceinte bluetooth de la cuisine.
+
+    ## Description detaillee
+
+    Le blueprint doit accepter deux entrees :
+
+    | Entree          | Type de selecteur | Description                                                                                            |
+    | --------------- | ----------------- | ------------------------------------------------------------------------------------------------------ |
+    | `door_sensor`   | `entity`          | Un selecteur d'entite `binary_sensor` pour le capteur de porte cible de l'automatisation.              |
+    | `alert_media`   | `media`           | La cible du selecteur `media` pour le lecteur multimedia et l'identifiant du media avec l'alerte.      |
+    | `open_duration` | `duration`        | Un selecteur de `duration`, la duree avant de diffuser l'alerte.                                       |
+
+    L'automatisation doit diffuser le media selectionne lorsque la porte est restee ouverte pendant la duree specifiee.
+response: |-
+  Voici un exemple de blueprint pour une automatisation qui diffuse une alerte sur une enceinte lorsque la porte est laissée ouverte pendant une durée spécifiée :
+
+  ```yaml
+  blueprint:
+    name: Alerte Porte Ouverte
+    description: "Diffuse une alerte sur une enceinte lorsque la porte est laissée ouverte pendant une durée spécifiée."
+    domain: automation
+    input:
+      door_sensor:
+        name: Capteur de Porte
+        description: "Sélectionnez le capteur de porte à surveiller."
+        selector:
+          entity:
+            domain: binary_sensor
+            device_class: door
+      alert_media:
+        name: Alerte Media
+        description: "Sélectionnez le média à diffuser pour l'alerte."
+        selector:
+          media:
+      open_duration:
+        name: Durée d'Ouverture
+        description: "Durée pendant laquelle la porte doit rester ouverte avant de déclencher l'alerte."
+        selector:
+          duration:
+
+  trigger:
+    platform: state
+    entity_id: !input door_sensor
+    to: "on"
+    for: !input open_duration
+
+  action:
+    service: media_player.play_media
+    target:
+      entity_id: !input alert_media
+    data:
+      media_content_id: !input alert_media
+      media_content_type: "music"
+  ```
+
+  ### Explications :
+  1. **Entrées** :
+     - `door_sensor` : Sélectionne un capteur de porte (binary_sensor) pour surveiller son état.
+     - `alert_media` : Sélectionne le média à diffuser (par exemple, un son ou un message vocal).
+     - `open_duration` : Définit la durée pendant laquelle la porte doit rester ouverte avant de déclencher l'alerte.
+
+  2. **Déclencheur** :
+     - L'automatisation se déclenche lorsque le capteur de porte passe à l'état "on" (porte ouverte) et reste dans cet état pendant la durée spécifiée (`open_duration`).
+
+  3. **Action** :
+     - Lorsque le déclencheur est activé, le média sélectionné est diffusé sur l'enceinte choisie.
+
+  ### Utilisation :
+  - Dans l'interface Home Assistant, vous pouvez créer une nouvelle automatisation basée sur ce blueprint.
+  - Sélectionnez le capteur de porte, le média à diffuser et la durée d'ouverture souhaitée.
+  - L'automatisation diffusera l'alerte si la porte reste ouverte trop longtemps.
+
+  Ce blueprint est flexible et peut être utilisé pour différentes portes et enceintes dans votre maison.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Porte laissee ouverte
+
+        ## Enonce du probleme
+
+        Creez une automatisation blueprint pour diffuser une alerte sur l'enceinte lorsque la porte est laissee ouverte.
+
+        ## Exemples d'utilisation
+
+        Voici des exemples d'utilisation qui pourraient etre utilises avec le blueprint :
+
+        - Diffuser un message sur l'enceinte du salon si la porte du garage est restee ouverte pendant plus de 30 minutes
+        - Lorsque la porte d'entree est entrouverte depuis 5 minutes, diffuser un son sur l'enceinte bluetooth de la cuisine.
+
+        ## Description detaillee
+
+        Le blueprint doit accepter deux entrees :
+
+        | Entree          | Type de selecteur | Description                                                                                            |
+        | --------------- | ----------------- | ------------------------------------------------------------------------------------------------------ |
+        | `door_sensor`   | `entity`          | Un selecteur d'entite `binary_sensor` pour le capteur de porte cible de l'automatisation.              |
+        | `alert_media`   | `media`           | La cible du selecteur `media` pour le lecteur multimedia et l'identifiant du media avec l'alerte.      |
+        | `open_duration` | `duration`        | Un selecteur de `duration`, la duree avant de diffuser l'alerte.                                       |
+
+        L'automatisation doit diffuser le media selectionne lorsque la porte est restee ouverte pendant la duree specifiee.
+      context:
+        id: 01KJQ08EVS5J1T3HG4YGB9C0KD
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: fr
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-03-02 10:07:18.906136+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Arroseur
+            domain: valve
+            areas: Orangeraie
+          - names: Batterie de la Porte d'Entrée
+            domain: binary_sensor
+            areas: Entrée
+          - names: Batterie de la Porte d'Entrée
+            domain: sensor
+            areas: Entrée
+          - names: Capteur Générique de Qualité de l'Air
+            domain: sensor
+            areas: Studio de Yoga
+          - names: Chauffage de la Piscine
+            domain: switch
+            areas: Piscine
+          - names: Enceinte Connectée
+            domain: media_player
+            areas: Salon
+          - names: Enceinte de la Chambre
+            domain: media_player
+            areas: Chambre
+          - names: Enceinte de la Chambre Principale
+            domain: media_player
+            areas: Chambre Principale
+          - names: Enceinte de la Chambre d'Amis
+            domain: media_player
+            areas: Chambre d'Amis
+          - names: Enceinte de la Maison d'Amis
+            domain: media_player
+            areas: Maison d'Amis
+          - names: Enceinte de la Terrasse
+            domain: media_player
+            areas: Terrasse
+          - names: Four
+            domain: switch
+            areas: Cuisine
+          - names: Humidité du Thermostat
+            domain: sensor
+            areas: Chambre Principale
+          - names: Humidité du Thermostat de la Maison d'Amis
+            domain: sensor
+            areas: Maison d'Amis
+          - names: Lave-vaisselle
+            domain: switch
+            areas: Cuisine
+          - names: Lumière de l'Orangeraie
+            domain: light
+            areas: Orangeraie
+          - names: Lumière de la Chambre
+            domain: light
+            areas: Chambre Principale
+          - names: Lumière de la Chambre
+            domain: light
+            areas: Chambre
+          - names: Lumière de la Chambre d'Amis
+            domain: light
+            areas: Chambre d'Amis
+          - names: Lumière de la Cuisine
+            domain: light
+            areas: Cuisine
+          - names: Lumière de la Maison d'Amis
+            domain: light
+            areas: Maison d'Amis
+          - names: Lumière de la Piscine
+            domain: light
+            areas: Piscine
+          - names: Lumière de la Salle à Manger
+            domain: light
+            areas: Salle à manger
+          - names: Lumière de la Terrasse
+            domain: light
+            areas: Terrasse
+          - names: Lumière du Salon
+            domain: light
+            areas: Salon
+          - names: Lumière du Studio de Yoga
+            domain: light
+            areas: Studio de Yoga
+          - names: Pompe de la Piscine
+            domain: switch
+            areas: Piscine
+          - names: Porte d'Entrée
+            domain: binary_sensor
+            areas: Entrée
+          - names: Réfrigérateur Générique
+            domain: sensor
+            areas: Cuisine
+          - names: TV
+            domain: media_player
+            areas: Salon
+          - names: TV de la Chambre Principale
+            domain: media_player
+            areas: Chambre Principale
+          - names: Température du Thermostat
+            domain: sensor
+            areas: Chambre Principale
+          - names: Température du Thermostat de la Maison d'Amis
+            domain: sensor
+            areas: Maison d'Amis
+          - names: Thermostat
+            domain: climate
+            areas: Chambre Principale
+          - names: Thermostat de la Maison d'Amis
+            domain: climate
+            areas: Maison d'Amis
+          - names: Énergie de la Pompe de la Piscine
+            domain: sensor
+            areas: Piscine
+          - names: Énergie du Chauffage de la Piscine
+            domain: sensor
+            areas: Piscine
+          - names: Énergie du Four
+            domain: sensor
+            areas: Cuisine
+          - names: Énergie du Lave-vaisselle
+            domain: sensor
+            areas: Cuisine
+        created: 2026-03-02 10:07:18.908267+00:00
+      - role: user
+        content: |
+          # Porte laissee ouverte
+
+          ## Enonce du probleme
+
+          Creez une automatisation blueprint pour diffuser une alerte sur l'enceinte lorsque la porte est laissee ouverte.
+
+          ## Exemples d'utilisation
+
+          Voici des exemples d'utilisation qui pourraient etre utilises avec le blueprint :
+
+          - Diffuser un message sur l'enceinte du salon si la porte du garage est restee ouverte pendant plus de 30 minutes
+          - Lorsque la porte d'entree est entrouverte depuis 5 minutes, diffuser un son sur l'enceinte bluetooth de la cuisine.
+
+          ## Description detaillee
+
+          Le blueprint doit accepter deux entrees :
+
+          | Entree          | Type de selecteur | Description                                                                                            |
+          | --------------- | ----------------- | ------------------------------------------------------------------------------------------------------ |
+          | `door_sensor`   | `entity`          | Un selecteur d'entite `binary_sensor` pour le capteur de porte cible de l'automatisation.              |
+          | `alert_media`   | `media`           | La cible du selecteur `media` pour le lecteur multimedia et l'identifiant du media avec l'alerte.      |
+          | `open_duration` | `duration`        | Un selecteur de `duration`, la duree avant de diffuser l'alerte.                                       |
+
+          L'automatisation doit diffuser le media selectionne lorsque la porte est restee ouverte pendant la duree specifiee.
+        attachments: null
+        created: 2026-03-02 10:07:18.906285+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Voici un exemple de blueprint pour une automatisation qui diffuse une alerte sur une enceinte lorsque la porte est laissée ouverte pendant une durée spécifiée :
+
+          ```yaml
+          blueprint:
+            name: Alerte Porte Ouverte
+            description: "Diffuse une alerte sur une enceinte lorsque la porte est laissée ouverte pendant une durée spécifiée."
+            domain: automation
+            input:
+              door_sensor:
+                name: Capteur de Porte
+                description: "Sélectionnez le capteur de porte à surveiller."
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    device_class: door
+              alert_media:
+                name: Alerte Media
+                description: "Sélectionnez le média à diffuser pour l'alerte."
+                selector:
+                  media:
+              open_duration:
+                name: Durée d'Ouverture
+                description: "Durée pendant laquelle la porte doit rester ouverte avant de déclencher l'alerte."
+                selector:
+                  duration:
+
+          trigger:
+            platform: state
+            entity_id: !input door_sensor
+            to: "on"
+            for: !input open_duration
+
+          action:
+            service: media_player.play_media
+            target:
+              entity_id: !input alert_media
+            data:
+              media_content_id: !input alert_media
+              media_content_type: "music"
+          ```
+
+          ### Explications :
+          1. **Entrées** :
+             - `door_sensor` : Sélectionne un capteur de porte (binary_sensor) pour surveiller son état.
+             - `alert_media` : Sélectionne le média à diffuser (par exemple, un son ou un message vocal).
+             - `open_duration` : Définit la durée pendant laquelle la porte doit rester ouverte avant de déclencher l'alerte.
+
+          2. **Déclencheur** :
+             - L'automatisation se déclenche lorsque le capteur de porte passe à l'état "on" (porte ouverte) et reste dans cet état pendant la durée spécifiée (`open_duration`).
+
+          3. **Action** :
+             - Lorsque le déclencheur est activé, le média sélectionné est diffusé sur l'enceinte choisie.
+
+          ### Utilisation :
+          - Dans l'interface Home Assistant, vous pouvez créer une nouvelle automatisation basée sur ce blueprint.
+          - Sélectionnez le capteur de porte, le média à diffuser et la durée d'ouverture souhaitée.
+          - L'automatisation diffusera l'alerte si la porte reste ouverte trop longtemps.
+
+          Ce blueprint est flexible et peut être utilisé pour différentes portes et enceintes dans votre maison.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-03-02 10:07:25.978244+00:00
+      tools:
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff88d07950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''water'', ''gas'', ''identify'', ''restart'', ''update'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff88d07950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''water'', ''gas'', ''identify'', ''restart'', ''update'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff88d07950>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff88d07950>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff88d26610>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [<function string at 0xffff88d26610>], msg=None), ''color'': <function color_name_to_rgb
+          at 0xffff81e21380>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0xffff60301900>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0xffff601480f0>, msg=None),
+          msg=None), ''name'': <function string at 0xffff88d26610>, ''area'': <function
+          string at 0xffff88d26610>, ''floor'': <function string at 0xffff88d26610>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff602db3d0>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff7fb69e80>, ''domain'': All(<function ensure_list at 0xffff88d07950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff88d07950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff602db270>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0xffff88d26610>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0xffff88d26610>, ''area'': <function
+          string at 0xffff88d26610>, ''floor'': <function string at 0xffff88d26610>}'
+      - name: HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0xffff7fb69e80>, ''name'': <function non_empty_string
+          at 0xffff7fb69e80>, ''floor'': <function non_empty_string at 0xffff7fb69e80>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-03-02 10:07:18.908284+00:00
+  duration_ms: 7074.14
+  tries: 1
