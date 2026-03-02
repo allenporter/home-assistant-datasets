@@ -46,6 +46,66 @@ graph LR;
     M --> D
 ```
 
+## Usage
+
+The `script/benchmark` tool provides a unified interface for running the full benchmark pipeline: collecting model outputs, evaluating results, and building the leaderboard.
+
+### Quick start
+
+The process consists of 3 phases:
+1. Collect model outputs `script/benchmark collect`
+2. Evaluate the outputs `script/benchmark eval`
+3. Build the leaderboard `script/benchmark leaderboard`
+
+They can all be run sequentially using `script/benchmark all`.
+
+Below are a few examples on script usage:
+
+```bash
+# Run the full pipeline for a model (collect + eval + leaderboard)
+script/benchmark all --model devstral-2512
+
+# Preview what will run without executing
+script/benchmark all --model devstral-2512 --dry-run
+```
+
+### Running individual phases
+
+```bash
+# Collect model outputs against all datasets
+script/benchmark collect --model devstral-2512
+
+# Evaluate collected outputs
+script/benchmark eval
+
+# Build the leaderboard
+script/benchmark leaderboard
+```
+
+### Multilingual benchmarks
+
+```bash
+# Run all datasets for a specific language
+script/benchmark collect --model devstral-2512 --language es
+script/benchmark eval --language es
+
+# Run a specific dataset
+script/benchmark collect --model devstral-2512 --dataset assist-es
+script/benchmark eval --dataset assist-es
+
+# Available languages: es (Spanish), fr (French), de (German), nl (Dutch)
+```
+
+### Parallel execution
+
+Run all datasets for a language in parallel for faster results:
+
+```bash
+script/benchmark all --model devstral-2512 --language es --parallel
+```
+
+In parallel mode, each dataset runs as a separate process.
+
 ## Synthetic Datasets
 
 See the [datasets README](datasets/README.md) for details on the available
