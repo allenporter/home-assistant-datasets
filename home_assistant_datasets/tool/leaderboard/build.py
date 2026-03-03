@@ -300,7 +300,10 @@ def compute_multilingual_best_scores(
             if dataset not in scores:
                 scores[dataset] = {}
             existing = scores[dataset].get(model_id)
-            if existing is None or record.good_percent_value() > existing.good_percent_value():
+            if (
+                existing is None
+                or record.good_percent_value() > existing.good_percent_value()
+            ):
                 scores[dataset][model_id] = record
 
     return scores
@@ -353,9 +356,7 @@ def create_multilingual_section(
 
         # Columns: Model, then English, then each language
         all_langs = ["en"] + LANGUAGES
-        cols = ["Model"] + [
-            f"{lang} ({LANGUAGE_NAMES[lang]})" for lang in all_langs
-        ]
+        cols = ["Model"] + [f"{lang} ({LANGUAGE_NAMES[lang]})" for lang in all_langs]
         rows = []
 
         for model_id in display_models:
