@@ -108,5 +108,4 @@ class AccuracySummary(TaskResultWriter):
                 **accuracy.finish(),
             }
             items.append(data)
-        if self._fd is not None:
-            self._fd.write(yaml.dump(items, sort_keys=False, explicit_start=True))
+        print(yaml.dump(items, sort_keys=False, explicit_start=True), file=self._fd)

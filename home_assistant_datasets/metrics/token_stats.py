@@ -41,5 +41,4 @@ class ModelTokenStats(ScrapeRecordWriter):
             token_stats = self.token_stats[model_id]
             data = {"model_id": model_id, **token_stats.summary_data()}
             items.append(data)
-        if self._fd is not None:
-            self._fd.write(yaml.dump(items, sort_keys=False, explicit_start=True))
+        print(yaml.dump(items, sort_keys=False, explicit_start=True), file=self._fd)
