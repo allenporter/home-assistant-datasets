@@ -1,0 +1,553 @@
+---
+uuid: 16d28030-533c-4fd6-9ab1-88cc76c54932
+task_id: door_left_open_door_left_open-puerta_dejada_abierta-1
+model_id: devstral-2512
+category: media_player
+task:
+  input_text: |
+    # Puerta dejada abierta
+
+    ## Planteamiento del problema
+
+    Crea una automatizacion blueprint para reproducir una alerta en el altavoz cuando la puerta se deja abierta.
+
+    ## Ejemplos de uso
+
+    Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+    - Reproducir un mensaje en el altavoz del salon si la puerta del garaje se ha dejado abierta durante mas de 30 minutos
+    - Cuando la puerta principal esta entreabierta durante 5 minutos, reproducir un sonido en el altavoz bluetooth de la cocina.
+
+    ## Descripcion detallada
+
+    El blueprint debe aceptar dos entradas:
+
+    | Entrada         | Tipo de selector | Descripcion                                                                                        |
+    | --------------- | ---------------- | -------------------------------------------------------------------------------------------------- |
+    | `door_sensor`   | `entity`         | Un selector de entidad `binary_sensor` para el sensor de puerta objetivo de la automatizacion.     |
+    | `alert_media`   | `media`          | El objetivo del selector `media` para el reproductor multimedia y el id del medio con la alerta.   |
+    | `open_duration` | `duration`       | Un selector de `duration`, la cantidad de tiempo antes de reproducir la alerta.                    |
+
+    La automatizacion debe reproducir el medio seleccionado cuando la puerta ha estado abierta durante el tiempo especificado.
+response: |-
+  Para crear una automatización en Home Assistant que reproduzca una alerta en un altavoz cuando una puerta se deja abierta durante un tiempo específico, puedes seguir estos pasos para crear un **Blueprint**. Aquí tienes un ejemplo de cómo podría ser el código YAML para este blueprint:
+
+  ### Blueprint YAML
+
+  ```yaml
+  blueprint:
+    name: Alerta de Puerta Abierta
+    description: Reproduce una alerta en un altavoz cuando una puerta se deja abierta durante un tiempo específico.
+    domain: automation
+    input:
+      door_sensor:
+        name: Sensor de Puerta
+        description: Sensor binario que detecta si la puerta está abierta.
+        selector:
+          entity:
+            domain: binary_sensor
+            device_class: door
+      alert_media:
+        name: Medio de Alerta
+        description: Selecciona el altavoz y el medio (sonido o mensaje) a reproducir.
+        selector:
+          media:
+      open_duration:
+        name: Duración de Puerta Abierta
+        description: Tiempo que la puerta debe estar abierta antes de reproducir la alerta.
+        default: 30
+        selector:
+          duration:
+
+  mode: single
+  trigger:
+    platform: state
+    entity_id: !input door_sensor
+    to: "on"
+    for: !input open_duration
+
+  action:
+    - service: media_player.play_media
+      target: !input alert_media
+      data:
+        media_content_id: !input alert_media
+        media_content_type: "music"  # Ajusta según el tipo de medio (puede ser "music", "sound", etc.)
+  ```
+
+  ### Explicación del Blueprint
+
+  1. **Entradas (`input`)**:
+     - `door_sensor`: Selecciona un sensor binario de tipo puerta.
+     - `alert_media`: Selecciona el altavoz y el medio (sonido o mensaje) que se reproducirá.
+     - `open_duration`: Define el tiempo que la puerta debe estar abierta antes de activar la alerta.
+
+  2. **Disparador (`trigger`)**:
+     - Se activa cuando el sensor de la puerta (`door_sensor`) cambia a estado `on` (abierta) y permanece así durante el tiempo especificado en `open_duration`.
+
+  3. **Acción (`action`)**:
+     - Reproduce el medio seleccionado en el altavoz especificado usando el servicio `media_player.play_media`.
+
+  ### Cómo Usar el Blueprint
+
+  1. **Guardar el Blueprint**:
+     - Guarda el código YAML en un archivo con extensión `.yaml` en la carpeta `blueprints/automation/` de tu configuración de Home Assistant.
+
+  2. **Crear una Automatización desde el Blueprint**:
+     - Ve a **Configuración** > **Automatizaciones y Escenas** > **Blueprints**.
+     - Selecciona el blueprint "Alerta de Puerta Abierta" y haz clic en **Crear Automatización**.
+     - Configura las entradas:
+       - `door_sensor`: Selecciona el sensor de la puerta que deseas monitorear.
+       - `alert_media`: Selecciona el altavoz y el medio (sonido o mensaje) que se reproducirá.
+       - `open_duration`: Define el tiempo (ejemplo: `30` minutos).
+
+  3. **Guardar la Automatización**:
+     - Guarda la automatización y actívala.
+
+  ### Ejemplo de Uso
+
+  - **Ejemplo 1**:
+    - Sensor de puerta: `binary_sensor.puerta_garaje`
+    - Medio de alerta: Altavoz del salón con un mensaje de voz.
+    - Duración: 30 minutos.
+
+  - **Ejemplo 2**:
+    - Sensor de puerta: `binary_sensor.puerta_principal`
+    - Medio de alerta: Altavoz de la cocina con un sonido de alarma.
+    - Duración: 5 minutos.
+
+  Este blueprint te permitirá reutilizar la lógica para cualquier puerta y altavoz en tu hogar.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Puerta dejada abierta
+
+        ## Planteamiento del problema
+
+        Crea una automatizacion blueprint para reproducir una alerta en el altavoz cuando la puerta se deja abierta.
+
+        ## Ejemplos de uso
+
+        Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+        - Reproducir un mensaje en el altavoz del salon si la puerta del garaje se ha dejado abierta durante mas de 30 minutos
+        - Cuando la puerta principal esta entreabierta durante 5 minutos, reproducir un sonido en el altavoz bluetooth de la cocina.
+
+        ## Descripcion detallada
+
+        El blueprint debe aceptar dos entradas:
+
+        | Entrada         | Tipo de selector | Descripcion                                                                                        |
+        | --------------- | ---------------- | -------------------------------------------------------------------------------------------------- |
+        | `door_sensor`   | `entity`         | Un selector de entidad `binary_sensor` para el sensor de puerta objetivo de la automatizacion.     |
+        | `alert_media`   | `media`          | El objetivo del selector `media` para el reproductor multimedia y el id del medio con la alerta.   |
+        | `open_duration` | `duration`       | Un selector de `duration`, la cantidad de tiempo antes de reproducir la alerta.                    |
+
+        La automatizacion debe reproducir el medio seleccionado cuando la puerta ha estado abierta durante el tiempo especificado.
+      context:
+        id: 01KJPVQ6PE2GY7C5D6H781DPRV
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: es
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-03-02 08:47:59.182800+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          When controlling Home Assistant always call the intent tools. Use HassTurnOn to lock and HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+          You ARE equipped to answer questions about the current state of
+          the home using the `GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Altavoz Inteligente
+            domain: media_player
+            areas: Salón
+          - names: Altavoz de la Casa de Invitados
+            domain: media_player
+            areas: Casa de Invitados
+          - names: Altavoz de la Terraza
+            domain: media_player
+            areas: Terraza
+          - names: Altavoz del Dormitorio
+            domain: media_player
+            areas: Dormitorio
+          - names: Altavoz del Dormitorio Principal
+            domain: media_player
+            areas: Dormitorio Principal
+          - names: Altavoz del Dormitorio de Invitados
+            domain: media_player
+            areas: Dormitorio de Invitados
+          - names: Aspersor
+            domain: valve
+            areas: Huerto de Cítricos
+          - names: Batería de la Puerta de Entrada
+            domain: binary_sensor
+            areas: Entrada
+          - names: Batería de la Puerta de Entrada
+            domain: sensor
+            areas: Entrada
+          - names: Bomba de la Piscina
+            domain: switch
+            areas: Piscina
+          - names: Calentador de la Piscina
+            domain: switch
+            areas: Piscina
+          - names: Energía de la Bomba de la Piscina
+            domain: sensor
+            areas: Piscina
+          - names: Energía del Calentador de la Piscina
+            domain: sensor
+            areas: Piscina
+          - names: Energía del Horno
+            domain: sensor
+            areas: Cocina
+          - names: Energía del Lavavajillas
+            domain: sensor
+            areas: Cocina
+          - names: Horno
+            domain: switch
+            areas: Cocina
+          - names: Humedad del Termostato
+            domain: sensor
+            areas: Dormitorio Principal
+          - names: Humedad del Termostato de la Casa de Invitados
+            domain: sensor
+            areas: Casa de Invitados
+          - names: Lavavajillas
+            domain: switch
+            areas: Cocina
+          - names: Luz de la Casa de Invitados
+            domain: light
+            areas: Casa de Invitados
+          - names: Luz de la Cocina
+            domain: light
+            areas: Cocina
+          - names: Luz de la Piscina
+            domain: light
+            areas: Piscina
+          - names: Luz de la Terraza
+            domain: light
+            areas: Terraza
+          - names: Luz del Comedor
+            domain: light
+            areas: Comedor
+          - names: Luz del Dormitorio
+            domain: light
+            areas: Dormitorio Principal
+          - names: Luz del Dormitorio
+            domain: light
+            areas: Dormitorio
+          - names: Luz del Dormitorio de Invitados
+            domain: light
+            areas: Dormitorio de Invitados
+          - names: Luz del Estudio de Yoga
+            domain: light
+            areas: Estudio de Yoga
+          - names: Luz del Huerto de Cítricos
+            domain: light
+            areas: Huerto de Cítricos
+          - names: Luz del Salón
+            domain: light
+            areas: Salón
+          - names: Puerta de Entrada
+            domain: binary_sensor
+            areas: Entrada
+          - names: Refrigerador Genérico
+            domain: sensor
+            areas: Cocina
+          - names: Sensor Genérico de Calidad del Aire
+            domain: sensor
+            areas: Estudio de Yoga
+          - names: TV
+            domain: media_player
+            areas: Salón
+          - names: TV del Dormitorio Principal
+            domain: media_player
+            areas: Dormitorio Principal
+          - names: Temperatura del Termostato
+            domain: sensor
+            areas: Dormitorio Principal
+          - names: Temperatura del Termostato de la Casa de Invitados
+            domain: sensor
+            areas: Casa de Invitados
+          - names: Termostato
+            domain: climate
+            areas: Dormitorio Principal
+          - names: Termostato de la Casa de Invitados
+            domain: climate
+            areas: Casa de Invitados
+        created: 2026-03-02 08:47:59.189872+00:00
+      - role: user
+        content: |
+          # Puerta dejada abierta
+
+          ## Planteamiento del problema
+
+          Crea una automatizacion blueprint para reproducir una alerta en el altavoz cuando la puerta se deja abierta.
+
+          ## Ejemplos de uso
+
+          Estos son ejemplos de uso que podrian utilizarse con el blueprint:
+
+          - Reproducir un mensaje en el altavoz del salon si la puerta del garaje se ha dejado abierta durante mas de 30 minutos
+          - Cuando la puerta principal esta entreabierta durante 5 minutos, reproducir un sonido en el altavoz bluetooth de la cocina.
+
+          ## Descripcion detallada
+
+          El blueprint debe aceptar dos entradas:
+
+          | Entrada         | Tipo de selector | Descripcion                                                                                        |
+          | --------------- | ---------------- | -------------------------------------------------------------------------------------------------- |
+          | `door_sensor`   | `entity`         | Un selector de entidad `binary_sensor` para el sensor de puerta objetivo de la automatizacion.     |
+          | `alert_media`   | `media`          | El objetivo del selector `media` para el reproductor multimedia y el id del medio con la alerta.   |
+          | `open_duration` | `duration`       | Un selector de `duration`, la cantidad de tiempo antes de reproducir la alerta.                    |
+
+          La automatizacion debe reproducir el medio seleccionado cuando la puerta ha estado abierta durante el tiempo especificado.
+        attachments: null
+        created: 2026-03-02 08:47:59.183049+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Para crear una automatización en Home Assistant que reproduzca una alerta en un altavoz cuando una puerta se deja abierta durante un tiempo específico, puedes seguir estos pasos para crear un **Blueprint**. Aquí tienes un ejemplo de cómo podría ser el código YAML para este blueprint:
+
+          ### Blueprint YAML
+
+          ```yaml
+          blueprint:
+            name: Alerta de Puerta Abierta
+            description: Reproduce una alerta en un altavoz cuando una puerta se deja abierta durante un tiempo específico.
+            domain: automation
+            input:
+              door_sensor:
+                name: Sensor de Puerta
+                description: Sensor binario que detecta si la puerta está abierta.
+                selector:
+                  entity:
+                    domain: binary_sensor
+                    device_class: door
+              alert_media:
+                name: Medio de Alerta
+                description: Selecciona el altavoz y el medio (sonido o mensaje) a reproducir.
+                selector:
+                  media:
+              open_duration:
+                name: Duración de Puerta Abierta
+                description: Tiempo que la puerta debe estar abierta antes de reproducir la alerta.
+                default: 30
+                selector:
+                  duration:
+
+          mode: single
+          trigger:
+            platform: state
+            entity_id: !input door_sensor
+            to: "on"
+            for: !input open_duration
+
+          action:
+            - service: media_player.play_media
+              target: !input alert_media
+              data:
+                media_content_id: !input alert_media
+                media_content_type: "music"  # Ajusta según el tipo de medio (puede ser "music", "sound", etc.)
+          ```
+
+          ### Explicación del Blueprint
+
+          1. **Entradas (`input`)**:
+             - `door_sensor`: Selecciona un sensor binario de tipo puerta.
+             - `alert_media`: Selecciona el altavoz y el medio (sonido o mensaje) que se reproducirá.
+             - `open_duration`: Define el tiempo que la puerta debe estar abierta antes de activar la alerta.
+
+          2. **Disparador (`trigger`)**:
+             - Se activa cuando el sensor de la puerta (`door_sensor`) cambia a estado `on` (abierta) y permanece así durante el tiempo especificado en `open_duration`.
+
+          3. **Acción (`action`)**:
+             - Reproduce el medio seleccionado en el altavoz especificado usando el servicio `media_player.play_media`.
+
+          ### Cómo Usar el Blueprint
+
+          1. **Guardar el Blueprint**:
+             - Guarda el código YAML en un archivo con extensión `.yaml` en la carpeta `blueprints/automation/` de tu configuración de Home Assistant.
+
+          2. **Crear una Automatización desde el Blueprint**:
+             - Ve a **Configuración** > **Automatizaciones y Escenas** > **Blueprints**.
+             - Selecciona el blueprint "Alerta de Puerta Abierta" y haz clic en **Crear Automatización**.
+             - Configura las entradas:
+               - `door_sensor`: Selecciona el sensor de la puerta que deseas monitorear.
+               - `alert_media`: Selecciona el altavoz y el medio (sonido o mensaje) que se reproducirá.
+               - `open_duration`: Define el tiempo (ejemplo: `30` minutos).
+
+          3. **Guardar la Automatización**:
+             - Guarda la automatización y actívala.
+
+          ### Ejemplo de Uso
+
+          - **Ejemplo 1**:
+            - Sensor de puerta: `binary_sensor.puerta_garaje`
+            - Medio de alerta: Altavoz del salón con un mensaje de voz.
+            - Duración: 30 minutos.
+
+          - **Ejemplo 2**:
+            - Sensor de puerta: `binary_sensor.puerta_principal`
+            - Medio de alerta: Altavoz de la cocina con un sonido de alarma.
+            - Duración: 5 minutos.
+
+          Este blueprint te permitirá reutilizar la lógica para cualquier puerta y altavoz en tu hogar.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-03-02 08:48:09.586500+00:00
+      tools:
+      - name: HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0xffff727f9e80>, ''name'': <function non_empty_string
+          at 0xffff727f9e80>, ''floor'': <function non_empty_string at 0xffff727f9e80>}'
+      - name: HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''color'': <function color_name_to_rgb
+          at 0xffff74ab1380>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None)}'
+      - name: HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True,
+          max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0xffff54b6b950>, msg=None)}'
+      - name: HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0xffff4c50f060>, msg=None),
+          msg=None), ''name'': <function string at 0xffff7b9b6610>, ''area'': <function
+          string at 0xffff7b9b6610>, ''floor'': <function string at 0xffff7b9b6610>}'
+      - name: HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff54b6b8a0>}'
+      - name: HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0xffff7b997950>, [In([''tv'', ''speaker'', ''receiver''])], msg=None),
+          ''is_volume_muted'': <function Boolean at 0xffff54b6a6c0>}'
+      - name: HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0xffff7b9b6610>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0xffff7b9b6610>, ''area'': <function
+          string at 0xffff7b9b6610>, ''floor'': <function string at 0xffff7b9b6610>}'
+      - name: HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''outlet'', ''switch'', ''tv'', ''speaker'',
+          ''receiver'', ''identify'', ''restart'', ''update'', ''water'', ''gas'',
+          ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'',
+          ''shade'', ''shutter'', ''window''])], msg=None)}'
+      - name: HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None), ''position'': All(Coerce(int, msg=None),
+          Range(min=0, max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0xffff727f9e80>, ''domain'': All(<function ensure_list at 0xffff7b997950>,
+          [<function string at 0xffff7b9b6610>], msg=None), ''device_class'': All(<function
+          ensure_list at 0xffff7b997950>, [In([''awning'', ''blind'', ''curtain'',
+          ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'', ''window'',
+          ''water'', ''gas''])], msg=None)}'
+      - name: HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0xffff7b9b6610>}'
+      - name: GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first).'
+        parameters: '{}'
+    timestamp: 2026-03-02 08:47:59.189894+00:00
+  duration_ms: 10405.272
+  tries: 1

@@ -1,0 +1,60 @@
+---
+category:
+  - light
+  - question
+tests:
+  - sentences:
+      - "\xBFCu\xE1ntas luces est\xE1n encendidas actualmente?"
+    setup:
+      light.bedroom_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.balcony_light:
+        state: "on"
+    expect_response:
+      - "2"
+      - two
+      # We don't check for both names and assume if either is present that it worked
+      - dormitorio
+      - balcon
+
+  - sentences:
+      - "\xBFEst\xE1 encendida la luz del dormitorio?"
+    setup:
+      light.bedroom_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_response:
+      - "yes"
+      - "on"
+
+  - sentences:
+      - "\xBFEst\xE1 apagada la luz del dormitorio?"
+    setup:
+      light.bedroom_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_response:
+      - "no"
+      - "on"
+
+  - sentences:
+      - "\xBFEst\xE1 encendida la luz del dormitorio? Por favor responde \"s\xED\" o \"no\"."
+    setup:
+      light.bedroom_light:
+        state: "off"
+    expect_response:
+      - "no"
+      - "off"
+
+  - sentences:
+      - "\xBFEst\xE1 apagada la luz del dormitorio? Por favor responde con \"s\xED\" o \"no\"."
+    setup:
+      light.bedroom_light:
+        state: "off"
+    expect_response:
+      - "yes"
+      - "off"

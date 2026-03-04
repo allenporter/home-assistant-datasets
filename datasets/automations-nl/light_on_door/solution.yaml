@@ -1,0 +1,72 @@
+# Solution from https://community.home-assistant.io/t/closet-light-from-door-sensor/522931
+# https://gist.github.com/mkosmo/90b2f06d726c72664230a60048cdf0a4
+---
+blueprint:
+  name: Closet Light from Door Sensor
+  description: >
+    Automatically actitvate a light with a door sensor attached to the door,
+    activating a smart switch or light.  The light will turn off at the end of
+    a timer, or when you close the door.  Logic is also implemented to turn
+    off the light in the event it's manually turned on while the door is open
+    or after the automation has already run.
+  domain: automation
+  input:
+    door_sensor:
+      name: Door Sensor
+      selector:
+        entity:
+          domain: binary_sensor
+          multiple: false
+    light_switch:
+      name: Light
+      selector:
+        entity:
+          domain: light
+          multiple: false
+    light_timeout:
+      name: Light Timeout
+      description: How long to let the light run with the door open.
+      default: 300
+      selector:
+        number:
+          min: 0
+          max: 86400
+          unit_of_measurement: seconds
+          mode: slider
+          step: 60
+
+mode: single
+max_exceeded: silent
+
+trigger:
+  - alias: Door opened
+    platform: state
+    entity_id: !input door_sensor
+    from: "off"
+    to: "on"
+    id: door-open
+  - alias: Door closed
+    platform: state
+    entity_id: !input door_sensor
+    from: "on"
+    to: "off"
+    id: door-closed
+action:
+  - alias: Check door open trigger
+    if:
+      - condition: trigger
+        id: door-open
+    then:
+      - alias: Activating light
+        service: homeassistant.turn_on
+        target: !input light_switch
+      - alias: Door state timeout
+        wait_for_trigger:
+          - platform: state
+            entity_id: !input door_sensor
+            from: "on"
+            to: "off"
+        timeout: !input light_timeout
+  - alias: Deactivate light
+    service: homeassistant.turn_off
+    target: !input light_switch

@@ -1,0 +1,172 @@
+---
+category:
+  - calendar
+  - question
+tests:
+  - sentences:
+      - "\xBFQu\xE9 clases tengo hoy?"
+      - "\xBFQu\xE9 clases hay en mi calendario personal hoy?"
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Dinner with Liza
+              description: Meet up with Liza, don't forget to bring flowers
+              location: Butcher's Prime Restaurant
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    expect_response:
+      - chemistry
+
+  - sentences:
+      - "\xBFCon qui\xE9n voy a cenar?"
+      - "Seg\xFAn mi calendario personal, \xBFcon qui\xE9n voy a cenar?"
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Dinner with Liza
+              description: Don't forget to bring flowers
+              location: Peninsula CR Steak & Seafood Grill
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    expect_response:
+      - Liza
+
+  - sentences:
+      - "\xBFVoy a salir de casa hoy?"
+      - "\xBFTengo alg\xFAn evento en mi calendario personal fuera de casa hoy?"
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+              location:
+            - summary: Dinner with Liza
+              description: Meet up with Liza, don't forget to bring flowers
+              location: Peninsula CR Steak & Seafood Grill
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+    expect_response:
+      - "yes"
+      - cena
+      - escuela
+      - clase
+
+  - sentences:
+      - "\xBFVamos a salir de casa hoy?"
+      - "Seg\xFAn mi calendario personal, \xBFvamos a salir de casa hoy?"
+      - "Seg\xFAn mi calendario personal, \xBFtengo alg\xFAn evento fuera de casa hoy?"
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Rest & Relax
+              location: Home
+              start: 2025-04-02 08:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Clean the garage
+              location: Home
+              start: 2025-04-02 13:00+10:00
+              end: 2025-04-02 14:25+10:00
+            - summary: Order delivery
+              location: Home
+              start: 2025-04-02 18:00+10:00
+              end: 2025-04-02 18:15+10:00
+            - summary: Netflix w/ Liza
+              location: Home
+              start: 2025-04-02 18:00+10:00
+              end: 2025-04-02 20:25+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    # Note: This is simple but likely not accurate
+    expect_response:
+      - "no"
+      - nada
+      - no salir
+      - puede que no salir
+      - no tiene ningun evento
+      - no tienes ningun evento
+      - no veo
+      - no parece
+      - en casa
+      - sin planes
+
+  # Here we're exercising that the prompt asks to search the whole week, not just today
+  - sentences:
+      - "\xBFCu\xE1ntas noches esta semana necesito cocinar?"
+      - "Seg\xFAn mi calendario personal, \xBFcu\xE1ntas noches necesito cocinar esta semana?"
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-04 19:00+10:00
+              end: 2025-04-04 20:30+10:00
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-05 19:00+10:00
+              end: 2025-04-05 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    expect_response:
+      - "3"
+      - tres
+
+  # Here we're exercising that the prompt asks to search the whole week, not just today
+  - sentences:
+      - "\xBFViene alguien de visita?"
+      - "Seg\xFAn mi calendario, \xBFviene alguien de visita?"
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Liza visit
+              location: Home
+              start: 2025-04-05
+              end: 2025-04-07
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-05 19:00+10:00
+              end: 2025-04-05 20:30+10:00
+    expect_response:
+      - liza

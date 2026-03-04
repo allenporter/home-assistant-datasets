@@ -1,0 +1,42 @@
+---
+blueprint:
+  name: Pause the vacuum
+  description: >
+    Pause the vacuum when a phone call is received. This blueprint takes a
+    binary sensor that represents a phone call and a vacuum entity to pause.
+  domain: automation
+  input:
+    phone_call_sensor:
+      name: Phone Call Sensor
+      description: Binary sensor that is on when a phone call is received.
+      selector:
+        entity:
+          domain: binary_sensor
+          multiple: false
+    vacuum_entity:
+      name: Vacuum
+      selector:
+        entity:
+          domain: vacuum
+          multiple: false
+
+mode: single
+max_exceeded: silent
+
+triggers:
+  - alias: Phone call received
+    platform: state
+    entity_id: !input phone_call_sensor
+    from: "off"
+    to: "on"
+    id: phone-call
+conditions:
+  - alias: "Verify vacuum is cleaning"
+    condition: state
+    entity_id: !input vacuum_entity
+    state: "cleaning"
+actions:
+  - alias: Pause the vacuum
+    service: vacuum.pause
+    target:
+      entity_id: !input vacuum_entity

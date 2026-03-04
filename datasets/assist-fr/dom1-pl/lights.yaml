@@ -1,0 +1,171 @@
+---
+category: light
+tests:
+  - sentences:
+      - Allume la lumière de la cuisine s'il te plaît
+    setup:
+      light.kitchen_light:
+        state: "off"
+        attributes:
+          brightness: 0
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+    # Don't worry about brightness state, assume integration restores it
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+  - sentences:
+      - Éteins la lumière de la cuisine
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.kitchen_light:
+        state: "off"
+    # Don't worry about brightness state, assume integration restores it
+    ignore_changes:
+      light.kitchen_light:
+        color_mode: brightness
+        brightness: 100
+
+  # Infer the area from the context device in the living room
+  - sentences:
+      - Éteins la lumière s'il te plaît
+    context_device: smart_speaker
+    setup:
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+    expect_changes:
+      light.living_room_light:
+        state: "off"
+    # Don't worry about brightness state, assume integration restores it
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+  # This is ambiguous and should not turn off anything
+  - sentences:
+      - Éteins la lumière
+    setup:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.living_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.dining_room_light:
+        state: "on"
+        attributes:
+          brightness: 100
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  - sentences:
+      - Éteins les lumières de l'étage s'il te plaît
+      - Éteins les lumières à l'étage
+    setup:
+      light.bedroom_1_light:
+        state: "on"
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+
+  - sentences:
+      - Allume toutes les lumières de l'étage
+      - Allume toutes les lumières des chambres à l'étage
+    setup:
+      light.bedroom_1_light:
+        state: "off"
+      light.bedroom_2_light:
+        state: "off"
+      light.bedroom_3_light:
+        state: "off"
+      light.bedroom_4_light:
+        state: "off"
+    expect_changes:
+      light.bedroom_2_light:
+        state: "on"
+      light.bedroom_3_light:
+        state: "on"
+      light.bedroom_4_light:
+        state: "on"
+
+  # Exercise multiple commands
+  - sentences:
+      - Allume la lumière de la cuisine puis éteins la lumière du salon
+      - Allume la lumière dans la cuisine, puis éteins la lumière dans le salon
+      - Éteins la lumière du salon puis allume la lumière de la cuisine
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "on"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "off"
+    ignore_changes:
+      light.living_room_light:
+        color_mode: brightness
+        brightness: 100
+
+  - sentences:
+      - Allume la lumière de la cuisine et la lumière du salon
+      - Allume les lumières du salon et de la cuisine
+    setup:
+      light.kitchen_light:
+        state: "off"
+      light.living_room_light:
+        state: "off"
+    expect_changes:
+      light.kitchen_light:
+        state: "on"
+      light.living_room_light:
+        state: "on"

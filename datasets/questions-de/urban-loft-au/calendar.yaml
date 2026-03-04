@@ -1,0 +1,172 @@
+---
+category:
+  - calendar
+  - question
+tests:
+  - sentences:
+      - Welche Kurse habe ich heute?
+      - Welche Kurse stehen heute in meinem persönlichen Kalender?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Dinner with Liza
+              description: Meet up with Liza, don't forget to bring flowers
+              location: Butcher's Prime Restaurant
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    expect_response:
+      - chemistry
+
+  - sentences:
+      - Mit wem treffe ich mich zum Abendessen?
+      - Laut meinem persönlichen Kalender, mit wem treffe ich mich zum Abendessen?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Dinner with Liza
+              description: Don't forget to bring flowers
+              location: Peninsula CR Steak & Seafood Grill
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    expect_response:
+      - Liza
+
+  - sentences:
+      - Verlasse ich heute das Haus?
+      - Habe ich laut meinem persönlichen Kalender heute Termine außer Haus?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Chemistry class
+              start: 2025-04-02 11:00+10:00
+              end: 2025-04-02 11:55+10:00
+              location:
+            - summary: Dinner with Liza
+              description: Meet up with Liza, don't forget to bring flowers
+              location: Peninsula CR Steak & Seafood Grill
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+    expect_response:
+      - "yes"
+      - Abendessen
+      - Schule
+      - Kurs
+
+  - sentences:
+      - Verlassen wir heute das Haus?
+      - Laut meinem persönlichen Kalender, verlassen wir heute das Haus?
+      - Laut meinem persönlichen Kalender, habe ich heute Termine außer Haus?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Rest & Relax
+              location: Home
+              start: 2025-04-02 08:00+10:00
+              end: 2025-04-02 11:55+10:00
+            - summary: Clean the garage
+              location: Home
+              start: 2025-04-02 13:00+10:00
+              end: 2025-04-02 14:25+10:00
+            - summary: Order delivery
+              location: Home
+              start: 2025-04-02 18:00+10:00
+              end: 2025-04-02 18:15+10:00
+            - summary: Netflix w/ Liza
+              location: Home
+              start: 2025-04-02 18:00+10:00
+              end: 2025-04-02 20:25+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    # Note: This is simple but likely not accurate
+    expect_response:
+      - "no"
+      - nichts
+      - nicht verlassen
+      - verlassen vielleicht nicht
+      - keine Termine
+      - keine Veranstaltungen
+      - sehe keine
+      - scheint nicht
+      - zu Hause
+      - keine Pläne
+
+  # Here we're exercising that the prompt asks to search the whole week, not just today
+  - sentences:
+      - An wie vielen Abenden muss ich diese Woche kochen?
+      - Laut meinem persönlichen Kalender, an wie vielen Abenden muss ich diese Woche kochen?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-04 19:00+10:00
+              end: 2025-04-04 20:30+10:00
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-05 19:00+10:00
+              end: 2025-04-05 20:30+10:00
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+    expect_response:
+      - "3"
+      - drei
+
+  # Here we're exercising that the prompt asks to search the whole week, not just today
+  - sentences:
+      - Kommt jemand zu Besuch?
+      - Laut meinem Kalender, kommt jemand zu Besuch?
+    context_now: 2025-04-02 08:30+10:00
+    setup:
+      calendar.personal:
+        attributes:
+          events:
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-02 19:00+10:00
+              end: 2025-04-02 20:30+10:00
+            - summary: Liza visit
+              location: Home
+              start: 2025-04-05
+              end: 2025-04-07
+            - summary: Cynthia's Birthday
+              description: Remember to give her a phone call.
+              start: 2025-04-06
+              end: 2025-04-06
+            - summary: Cook Dinner
+              location: Home
+              start: 2025-04-05 19:00+10:00
+              end: 2025-04-05 20:30+10:00
+    expect_response:
+      - liza

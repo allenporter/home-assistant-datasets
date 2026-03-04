@@ -1,0 +1,41 @@
+# sensor.guest_room_thermostat_temperature
+# climate.guest_room_thermostat
+---
+category:
+  - climate
+  - question
+tests:
+  - sentences:
+      - Als de temperatuur in de logeerkamer hoger is dan 23, stel dan de doeltemperatuur in op 22
+    setup:
+      sensor.guest_room_thermostat_temperature:
+        attributes:
+          native_value: 25
+      climate.guest_room_thermostat:
+        state: "cool"
+        attributes:
+          hvac_mode: "cool"
+          current_temperature: 25
+          target_temperature: 26
+    expect_changes:
+      climate.guest_room_thermostat:
+        attributes:
+          temperature: 22.0
+
+  # No change is expected since the temp is below the target
+  - sentences:
+      - Stel de doeltemperatuur in op 22 in de logeerkamer als deze hoger is dan 23
+    setup:
+      sensor.guest_room_thermostat_temperature:
+        attributes:
+          native_value: 21
+      climate.guest_room_thermostat:
+        state: "cool"
+        attributes:
+          hvac_mode: "cool"
+          current_temperature: 21
+          target_temperature: 21
+    expect_changes:
+      # No change
+      climate.guest_room_thermostat:
+        state: "cool"

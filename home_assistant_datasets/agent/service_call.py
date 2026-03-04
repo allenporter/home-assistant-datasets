@@ -52,9 +52,10 @@ def dump_conversation_trace(trace: trace.ConversationTrace) -> list[dict[str, An
 class ServiceCall(ConversationAgent):
     """A client library for a conversation agent service call."""
 
-    def __init__(self, agent_id: str) -> None:
+    def __init__(self, agent_id: str, language: str | None = None) -> None:
         """Initialize the agent."""
         self._agent_id = agent_id
+        self._language = language
 
     async def async_process(
         self,
@@ -66,10 +67,13 @@ class ServiceCall(ConversationAgent):
         """Process a text input and return the response."""
         if structure is not None:
             raise ValueError("Structure is not supported in this agent.")
+        service_data: dict[str, Any] = {"agent_id": self._agent_id, "text": text}
+        if self._language:
+            service_data["language"] = self._language
         service_response = await hass.services.async_call(
             "conversation",
             "process",
-            {"agent_id": self._agent_id, "text": text},
+            service_data,
             blocking=True,
             return_response=True,
         )
@@ -87,6 +91,6 @@ class ServiceCall(ConversationAgent):
         }
 
 
-def create_agent(agent_id: str) -> ConversationAgent:
+def create_agent(agent_id: str, language: str | None = None) -> ConversationAgent:
     """Create a conversation agent service call wrapper."""
-    return ServiceCall(agent_id)
+    return ServiceCall(agent_id, language=language)
