@@ -31,14 +31,13 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from typing import Any
+from typing import Any, NoReturn
 
 
 OPENROUTER_AUTHOR_MODELS_URL = "https://openrouter.ai/api/frontend/author-models"
 
 
-# type: ignore[name-defined]
-def _die(message: str, *, exit_code: int = 2) -> "NoReturn":
+def _die(message: str, *, exit_code: int = 2) -> NoReturn:
     print(message, file=sys.stderr)
     raise SystemExit(exit_code)
 
@@ -68,8 +67,7 @@ def _parse_slug_from_input(value: str) -> str:
     # Typical model pages look like /<author>/<model> (sometimes with extra segments).
     parts = [p for p in parsed.path.split("/") if p]
     if len(parts) < 2:
-        _die(
-            f"Could not derive '<author>/<model>' from URL path: {parsed.path!r}")
+        _die(f"Could not derive '<author>/<model>' from URL path: {parsed.path!r}")
     return f"{parts[0]}/{parts[1]}"
 
 
@@ -113,7 +111,9 @@ def _http_get_json(url: str) -> Any:
         _die(f"Failed to parse JSON response from {url}: {e}")
 
 
-def _extract_cost_per_million_tokens(endpoint: dict[str, Any]) -> tuple[Decimal | None, Decimal | None]:
+def _extract_cost_per_million_tokens(
+    endpoint: dict[str, Any],
+) -> tuple[Decimal | None, Decimal | None]:
     """
     OpenRouter typically provides pricing as $/token strings:
       endpoint.pricing.prompt, endpoint.pricing.completion
@@ -151,9 +151,15 @@ def _format_decimal_for_yaml(value: Decimal) -> str:
     return s
 
 
-def _build_model_yaml(model_id: str, model_slug: str, model_entry: dict[str, Any]) -> str:
-    friendly_name = str(model_entry.get("short_name") or model_entry.get(
-        "name") or model_slug).strip() or model_slug
+def _build_model_yaml(
+    model_id: str, model_slug: str, model_entry: dict[str, Any]
+) -> str:
+    friendly_name = (
+        str(
+            model_entry.get("short_name") or model_entry.get("name") or model_slug
+        ).strip()
+        or model_slug
+    )
 
     description = f"OpenRouter integration using {friendly_name}"
 
@@ -190,11 +196,9 @@ def _build_model_yaml(model_id: str, model_slug: str, model_entry: dict[str, Any
     if in_cost is not None or out_cost is not None:
         lines.append("cost:")
         if in_cost is not None:
-            lines.append(
-                f"  input_tokens: {_format_decimal_for_yaml(in_cost)}")
+            lines.append(f"  input_tokens: {_format_decimal_for_yaml(in_cost)}")
         if out_cost is not None:
-            lines.append(
-                f"  output_tokens: {_format_decimal_for_yaml(out_cost)}")
+            lines.append(f"  output_tokens: {_format_decimal_for_yaml(out_cost)}")
 
     lines.append("")  # trailing newline
     return "\n".join(lines)
@@ -223,8 +227,7 @@ def main(argv: list[str]) -> int:
     data = payload.get("data") if isinstance(payload, dict) else None
     models = data.get("models") if isinstance(data, dict) else None
     if not isinstance(models, list):
-        _die(
-            f"Unexpected response shape from {url}: expected data.models[] list")
+        _die(f"Unexpected response shape from {url}: expected data.models[] list")
 
     for entry in models:
         if not isinstance(entry, dict):
@@ -240,8 +243,7 @@ def main(argv: list[str]) -> int:
             out_path.write_text(yaml_text, encoding="utf-8")
             return 0
 
-    _die(
-        f"Model not found for slug {model_slug!r} under authorSlug={author_slug!r}")
+    _die(f"Model not found for slug {model_slug!r} under authorSlug={author_slug!r}")
     return 2
 
 
