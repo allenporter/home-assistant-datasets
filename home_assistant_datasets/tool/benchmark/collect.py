@@ -12,11 +12,9 @@ import argparse
 from ._common import (
     add_common_args,
     build_collect_tasks,
-    classify_dataset,
     get_ha_version,
     resolve_datasets,
-    run_datasets_parallel,
-    run_pytest,
+    run_tasks,
     validate_dataset_dir,
     validate_model,
 )
@@ -51,20 +49,7 @@ def run(args: argparse.Namespace) -> int:
     print()
 
     tasks = build_collect_tasks(datasets, model, dry_run=dry_run)
-
-    if parallel and len(tasks) > 1:
-        failures = run_datasets_parallel(tasks, dry_run=dry_run)
-    else:
-        failures = []
-        for ds_name, pytest_args in tasks:
-            print(f"{'=' * 60}")
-            print(f"Collecting: {ds_name} (family={classify_dataset(ds_name)})")
-            print(f"{'=' * 60}")
-            rc = run_pytest(pytest_args, dry_run=dry_run)
-            if rc != 0:
-                failures.append(ds_name)
-                print(f"  FAILED: {ds_name}")
-            print()
+    failures = run_tasks(tasks, parallel=parallel, dry_run=dry_run, label="Collecting")
 
     if failures:
         print(f"Failed datasets: {', '.join(failures)}")

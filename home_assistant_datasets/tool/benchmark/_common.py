@@ -187,6 +187,37 @@ def run_datasets_parallel(
     return failures
 
 
+def run_tasks(
+    tasks: list[tuple[str, list[str]]],
+    *,
+    parallel: bool,
+    dry_run: bool,
+    accept_rc: set[int] | None = None,
+    label: str = "Running",
+) -> list[str]:
+    """Run dataset tasks sequentially or in parallel.
+
+    Returns list of failed dataset names.
+    """
+    if accept_rc is None:
+        accept_rc = {0}
+
+    if parallel and len(tasks) > 1:
+        return run_datasets_parallel(tasks, dry_run=dry_run, accept_rc=accept_rc)
+
+    failures: list[str] = []
+    for ds_name, pytest_args in tasks:
+        print(f"{'=' * 60}")
+        print(f"{label}: {ds_name} (family={classify_dataset(ds_name)})")
+        print(f"{'=' * 60}")
+        rc = run_pytest(pytest_args, dry_run=dry_run)
+        if rc not in accept_rc:
+            failures.append(ds_name)
+            print(f"  FAILED: {ds_name} (exit code {rc})")
+        print()
+    return failures
+
+
 def validate_dataset_dir(dataset_name: str) -> None:
     """Check that a dataset directory exists."""
     ds_dir = DATASETS_DIR / dataset_name
