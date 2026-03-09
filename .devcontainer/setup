@@ -5,3 +5,20 @@ set -e
 cd "$(dirname "$0")/.."
 
 python3 -m pip install --requirement requirements_dev.txt
+
+# Link synthetic home custom component into site-packages so pytest
+# can import it without PYTHONPATH hacks.
+SYNTHETIC_HOME_CANDIDATES=(
+  "/workspaces/home-assistant-synthetic-home"
+  "$(pwd)/home-assistant-synthetic-home"
+  "$(cd .. && pwd)/home-assistant-synthetic-home"
+)
+for candidate in "${SYNTHETIC_HOME_CANDIDATES[@]}"; do
+  if [ -d "$candidate/custom_components/synthetic_home" ]; then
+    SITE_PACKAGES=$(python3 -c "import sysconfig; print(sysconfig.get_path('purelib'))")
+    PTH_FILE="${SITE_PACKAGES}/synthetic-home-component.pth"
+    echo "$candidate" > "$PTH_FILE"
+    echo "==> Linked synthetic home: $candidate -> $PTH_FILE"
+    break
+  fi
+done
