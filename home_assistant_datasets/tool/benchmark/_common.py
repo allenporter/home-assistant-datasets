@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import io
-import os
 import pathlib
 import re
 import subprocess
@@ -21,12 +20,6 @@ from home_assistant_datasets.tool.leaderboard.config import (
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 DATASETS_DIR = REPO_ROOT / "datasets"
 REPORTS_DIR = REPO_ROOT / "reports"
-
-DEFAULT_SYNTHETIC_HOME_PATHS = [
-    pathlib.Path("/workspaces/home-assistant-synthetic-home/"),
-    REPO_ROOT / "home-assistant-synthetic-home",
-    REPO_ROOT.parent / "home-assistant-synthetic-home",
-]
 
 # Build the full set of assist-family dataset names (including multilingual)
 _ASSIST_FAMILY_SET: set[str] = set(ASSIST_FAMILY_DATASETS) | {
@@ -68,44 +61,7 @@ def get_output_dir(dataset_name: str) -> pathlib.Path:
     return REPORTS_DIR / dataset_name / get_ha_version()
 
 
-def find_synthetic_home(args: argparse.Namespace) -> pathlib.Path:
-    """Locate the synthetic home directory."""
-    explicit = getattr(args, "synthetic_home_dir", None)
-    if explicit:
-        p = pathlib.Path(explicit)
-        if not p.is_dir():
-            die(f"Synthetic home directory not found: {p}")
-        return p
-
-    env_val = os.environ.get("SYNTHETIC_HOME_DIR")
-    if env_val:
-        p = pathlib.Path(env_val)
-        if p.is_dir():
-            return p
-
-    for candidate in DEFAULT_SYNTHETIC_HOME_PATHS:
-        if candidate.is_dir():
-            return candidate
-
-    die(
-        "Cannot find synthetic home directory.\n"
-        "Set SYNTHETIC_HOME_DIR env var or use --synthetic-home-dir."
-    )
-    raise SystemExit(1)  # unreachable, for type checker
-
-
-def build_env(synthetic_home_dir: pathlib.Path) -> dict[str, str]:
-    """Build environment dict with PYTHONPATH including synthetic home."""
-    env = os.environ.copy()
-    python_path = env.get("PYTHONPATH", "")
-    shd = str(synthetic_home_dir)
-    env["PYTHONPATH"] = f"{python_path}:{shd}" if python_path else shd
-    return env
-
-
-def run_pytest(
-    pytest_args: list[str], env: dict[str, str], *, dry_run: bool = False
-) -> int:
+def run_pytest(pytest_args: list[str], *, dry_run: bool = False) -> int:
     """Run pytest as a subprocess, return exit code."""
     cmd = [sys.executable, "-m", "pytest"] + pytest_args
     cmd_str = " ".join(cmd)
@@ -113,7 +69,7 @@ def run_pytest(
         print(f"  [dry-run] {cmd_str}")
         return 0
     print(f"  Running: {cmd_str}")
-    result = subprocess.run(cmd, env=env, cwd=str(REPO_ROOT))
+    result = subprocess.run(cmd, cwd=str(REPO_ROOT))
     return result.returncode
 
 
@@ -138,7 +94,6 @@ def _read_progress(log_file: pathlib.Path) -> str:
 
 def run_datasets_parallel(
     dataset_tasks: list[tuple[str, list[str]]],
-    env: dict[str, str],
     *,
     dry_run: bool = False,
     accept_rc: set[int] | None = None,
@@ -165,7 +120,7 @@ def run_datasets_parallel(
         log_file = log_dir / f"{ds_name}.log"
         fh = open(log_file, "w")
         proc = subprocess.Popen(
-            cmd, env=env, cwd=str(REPO_ROOT), stdout=fh, stderr=subprocess.STDOUT
+            cmd, cwd=str(REPO_ROOT), stdout=fh, stderr=subprocess.STDOUT
         )
         running.append((ds_name, proc, log_file, fh))
 
@@ -323,10 +278,6 @@ def add_common_args(parser: argparse.ArgumentParser) -> None:
         "--language",
         choices=LANGUAGES,
         help="Run all datasets for a language (e.g., es)",
-    )
-    parser.add_argument(
-        "--synthetic-home-dir",
-        help="Path to synthetic home checkout (default: auto-detect)",
     )
     parser.add_argument(
         "--parallel",

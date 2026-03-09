@@ -3,7 +3,6 @@
 ```
 usage: home-assistant-datasets benchmark collect [-h] --model MODEL
                                                  [--dataset DATASET | --language {es,fr,de,nl}]
-                                                 [--synthetic-home-dir DIR]
                                                  [--parallel] [--dry-run]
 ```
 """
@@ -13,9 +12,7 @@ import argparse
 from ._common import (
     add_common_args,
     build_collect_tasks,
-    build_env,
     classify_dataset,
-    find_synthetic_home,
     get_ha_version,
     resolve_datasets,
     run_datasets_parallel,
@@ -38,8 +35,6 @@ def create_arguments(parser: argparse.ArgumentParser) -> None:
 def run(args: argparse.Namespace) -> int:
     """Run the collect phase: scrape model outputs for datasets."""
     datasets = resolve_datasets(args)
-    synthetic_home = find_synthetic_home(args)
-    env = build_env(synthetic_home)
     model = args.model
     dry_run = args.dry_run
     parallel = getattr(args, "parallel", False)
@@ -52,21 +47,20 @@ def run(args: argparse.Namespace) -> int:
     print(f"Model: {model}")
     print(f"HA version: {ha_version}")
     print(f"Datasets: {', '.join(datasets)}")
-    print(f"Synthetic home: {synthetic_home}")
     print(f"Parallel: {parallel}")
     print()
 
     tasks = build_collect_tasks(datasets, model, dry_run=dry_run)
 
     if parallel and len(tasks) > 1:
-        failures = run_datasets_parallel(tasks, env, dry_run=dry_run)
+        failures = run_datasets_parallel(tasks, dry_run=dry_run)
     else:
         failures = []
         for ds_name, pytest_args in tasks:
             print(f"{'=' * 60}")
             print(f"Collecting: {ds_name} (family={classify_dataset(ds_name)})")
             print(f"{'=' * 60}")
-            rc = run_pytest(pytest_args, env, dry_run=dry_run)
+            rc = run_pytest(pytest_args, dry_run=dry_run)
             if rc != 0:
                 failures.append(ds_name)
                 print(f"  FAILED: {ds_name}")

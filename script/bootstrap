@@ -28,4 +28,28 @@ else
   pre-commit install
 fi
 
+# Link synthetic home custom component into the venv so pytest can
+# import it without PYTHONPATH hacks.  The directory is expected to
+# be a sibling checkout of home-assistant-synthetic-home.
+SYNTHETIC_HOME_CANDIDATES=(
+  "/workspaces/home-assistant-synthetic-home"
+  "$(pwd)/home-assistant-synthetic-home"
+  "$(cd .. && pwd)/home-assistant-synthetic-home"
+)
+for candidate in "${SYNTHETIC_HOME_CANDIDATES[@]}"; do
+  if [ -d "$candidate/custom_components/synthetic_home" ]; then
+    # Prefer venv site-packages, fall back to user site-packages
+    if [ -d ".venv" ]; then
+      SITE_PACKAGES=$(python3 -c "import sysconfig; print(sysconfig.get_path('purelib', vars={'base': '.venv', 'platbase': '.venv'}))")
+    else
+      SITE_PACKAGES=$(python3 -c "import site; print(site.getusersitepackages())")
+    fi
+    mkdir -p "$SITE_PACKAGES"
+    PTH_FILE="${SITE_PACKAGES}/synthetic-home-component.pth"
+    echo "$candidate" > "$PTH_FILE"
+    echo "==> Linked synthetic home: $candidate -> $PTH_FILE"
+    break
+  fi
+done
+
 echo "==> System is ready to go!"
