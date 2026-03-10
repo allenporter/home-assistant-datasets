@@ -21,18 +21,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: codespell-project/actions-codespell@v2.2
-        with:
-          check_hidden: false
-          skip: ./datasets/*,./reports/*,*.ipynb,./generation/seeds/translations-*,./**/snapshots/*
-          ignore_words_list: hass
-
-      - name: Run yamllint
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: "./"
-          config_file: "./.yaml-lint.yaml"
-          strict: true
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -42,17 +30,15 @@ jobs:
           cache-dependency-glob: "requirements_dev.txt"
           activate-environment: true
       - name: Install dependencies
-        run: |
-          uv pip install -r requirements_dev.txt --prerelease=allow
+        run: uv pip install -r requirements_dev.txt --prerelease=allow
 
+      - name: Run codespell
+        run: codespell
+      - name: Run yamllint
+        run: yamllint --strict -c .yaml-lint.yaml .
       - name: Run Ruff Check
-        run: |
-          ruff check --output-format=github .
-
+        run: ruff check --output-format=github .
       - name: Run Ruff Format
-        run: |
-          ruff format --diff .
-
+        run: ruff format --diff .
       - name: Static typing with mypy
-        run: |
-          mypy --install-types --non-interactive --no-warn-unused-ignores home_assistant_datasets
+        run: mypy --install-types --non-interactive home_assistant_datasets
