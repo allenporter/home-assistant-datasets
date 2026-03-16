@@ -34,6 +34,8 @@ IGNORE_REPORTS = {
 REPORT_FILE = "reports.yaml"
 CSV_FILE = "report.csv"
 
+LANGUAGES = ["es", "fr", "de", "nl"]
+
 
 @dataclass
 class EvalReport:

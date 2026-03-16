@@ -18,4 +18,5 @@ options:
 __all__ = [
     "leaderboard",
     "convert",
+    "benchmark",
 ]
