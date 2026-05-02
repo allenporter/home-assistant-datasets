@@ -3,11 +3,11 @@
 | --- | --- | --- | --- | --- |
 | gemini-3.1-flash-lite | $${87.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.2.3)}}}$$ | $${6.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.3, 2026.2.3)}}}$$ | $${\textbf{93.8}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 1.5, avg)}}}$$ |
 | gemini-2.5-flash | $${88.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.7.1)}}}$$ | $${94.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, 2025.7.1)}}}$$ | $${73.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.2, 2025.4.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
-| gemma4-26b-a4b | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.2.3)}}}$$ |  | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
+| gemma4-26b-a4b | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.2.3)}}}$$ | $${\textbf{83.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.4, 2026.2.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
 | minimax-m2.5 | $${88.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2026.2.1)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.1)}}}$$ | $${93.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.6, 2026.2.1)}}}$$ | $${61.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.3, 2026.2.1)}}}$$ | $${92.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | qwen3-30b-a3b-instruct | $${83.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.1.1)}}}$$ | $${97.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, 2026.1.1)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | gemini-2.5-pro | $${\textbf{91.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 2.6, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${83.2\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
-| claude-3-7-sonnet | $${89.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.3)}}}$$ | $${84.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${\textbf{81.7}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.3)}}}$$ | $${90.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
+| claude-3-7-sonnet | $${89.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.3)}}}$$ | $${84.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${81.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.3)}}}$$ | $${90.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
 | glm-4.7-flash | $${82.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2026.1.1)}}}$$ | $${93.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.1.1)}}}$$ | $${96.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, 2026.1.1)}}}$$ | $${17.2\\% \space\color{gray}\tiny{\textsf{(CI: 9.7, 2026.1.1)}}}$$ | $${89.7\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
 | devstral-2512 | $${86.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2026.2.0b1)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2026.2.0b1)}}}$$ | $${88.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2026.2.0b1)}}}$$ | $${60.0\\% \space\color{gray}\tiny{\textsf{(CI: 12.4, 2026.2.0b1)}}}$$ | $${89.1\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
 | claude-3-5-haiku | $${85.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${94.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${87.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${87.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
@@ -229,28 +229,41 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #0f9d58, #ea4335, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #0f9d58, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #f4b400, #ea4335, #34a853, #ff6d01, #46bdc6, #1155cc, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #4285f4"
 
 ---
 xychart-beta
   title "automations"
-  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, minimax-m2.5, gemini-2.5-pro, claude-3-7-sonnet, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, gpt-4.1-mini, gemini-2.5-flash-lite, gpt-4o-mini, .]
+  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, minimax-m2.5, gemini-2.5-pro, claude-3-7-sonnet, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, gpt-4.1-mini, gemini-2.5-flash-lite, .]
   y-axis "Score" 1 --> 100
   bar [6.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 73.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 61.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 17.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 61.7, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 48.3, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0]
+  bar [0.0, 0.0, 83.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 61.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 17.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 61.7, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 48.3, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
+
+### gemma4-26b-a4b
+
+Gemma 4 26B-A4B (instruction-tuned, GGUF) running in llama.cpp behind an
+OpenAI API-compatible server. Gemma 4 models are multimodal, handling text
+and image input and generating text output.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF
+
 
 ### claude-3-5-haiku
 
@@ -406,19 +419,6 @@ Google Generative AI integration using gemini 3.1 flash lite
 
 More information:
 - https://ai.google.dev/gemini-api/docs/models/gemini
-
-
-### gemma4-26b-a4b
-
-Gemma 4 26B-A4B (instruction-tuned, GGUF) running in llama.cpp behind an
-OpenAI API-compatible server. Gemma 4 models are multimodal, handling text
-and image input and generating text output.
-
-
-
-
-More information:
-- https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF
 
 
 ### glm-4.7-flash
