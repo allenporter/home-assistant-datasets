@@ -410,9 +410,9 @@ More information:
 
 ### gemma4-26b-a4b
 
-Gemma 4 26B-A4B (instruction-tuned, GGUF) running 
-in llama.cpp with reasoning disabled behind an 
-OpenAI API-compatible server. Gemma 4 models are 
+Gemma 4 26B-A4B (instruction-tuned, GGUF) running
+in llama.cpp with reasoning disabled behind an
+OpenAI API-compatible server. Gemma 4 models are
 multimodal, handling text and image input and generating text output.
 
 
