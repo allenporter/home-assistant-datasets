@@ -252,19 +252,6 @@ xychart-beta
 ```
 ## Models
 
-### gemma4-26b-a4b
-
-Gemma 4 26B-A4B (instruction-tuned, GGUF) running in llama.cpp behind an
-OpenAI API-compatible server. Gemma 4 models are multimodal, handling text
-and image input and generating text output.
-
-
-
-
-More information:
-- https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF
-
-
 ### claude-3-5-haiku
 
 Anthropic integration using Claude 3.5 Haiku, a model with intelligence at
@@ -419,6 +406,20 @@ Google Generative AI integration using gemini 3.1 flash lite
 
 More information:
 - https://ai.google.dev/gemini-api/docs/models/gemini
+
+
+### gemma4-26b-a4b
+
+Gemma 4 26B-A4B (instruction-tuned, GGUF) running
+in llama.cpp with reasoning disabled behind an
+OpenAI API-compatible server. Gemma 4 models are
+multimodal, handling text and image input and generating text output.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF
 
 
 ### glm-4.7-flash
