@@ -32,6 +32,7 @@
 | qwen3-235b-a22b-2507 | $${73.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2026.2.1)}}}$$ | $${87.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${69.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${5.0\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2026.2.1)}}}$$ | $${74.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, avg)}}}$$ |
 | qwen3-4b-instruct-2507-iq4-nl | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.12.4)}}}$$ |  |  |  | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
+| gemma4-e2b | $${45.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${61.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, 2026.2.3)}}}$$ | $${73.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ |  | $${58.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
 | qwen3-1.7b | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.7.1)}}}$$ | $${60.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, 2025.7.1)}}}$$ | $${59.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${49.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
 
 Implementation notes:
@@ -253,20 +254,6 @@ xychart-beta
 ```
 ## Models
 
-### gemma4-12b
-
-Gemma 4 12B (instruction-tuned, GGUF) running
-in llama.cpp with reasoning disabled behind an
-OpenAI API-compatible server. Gemma 4 models are
-multimodal, handling text and image input and generating text output.
-
-
-
-
-More information:
-- https://huggingface.co/unsloth/gemma-4-12B-it-GGUF
-
-
 ### claude-3-5-haiku
 
 Anthropic integration using Claude 3.5 Haiku, a model with intelligence at
@@ -423,6 +410,20 @@ More information:
 - https://ai.google.dev/gemini-api/docs/models/gemini
 
 
+### gemma4-12b
+
+Gemma 4 12B (instruction-tuned, GGUF) running
+in llama.cpp with reasoning disabled behind an
+OpenAI API-compatible server. Gemma 4 models are
+multimodal, handling text and image input and generating text output.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/gemma-4-12B-it-GGUF
+
+
 ### gemma4-26b-a4b
 
 Gemma 4 26B-A4B (instruction-tuned, GGUF) running
@@ -435,6 +436,20 @@ multimodal, handling text and image input and generating text output.
 
 More information:
 - https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF
+
+
+### gemma4-e2b
+
+Gemma 4 E2B (instruction-tuned, GGUF) running
+in llama.cpp with reasoning disabled behind an
+OpenAI API-compatible server. Gemma 4 models are
+multimodal, handling text and image input and generating text output.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/gemma-4-E2B-it-GGUF
 
 
 ### glm-4.7-flash
