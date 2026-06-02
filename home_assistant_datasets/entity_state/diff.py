@@ -10,6 +10,15 @@ __all__ = [
 ]
 
 
+# get_unexpected_states compares the whole post-action state against the setup
+# snapshot plus the declared expect_changes. Any attribute that changes as a
+# side effect but is not declared gets flagged as unexpected. On covers and
+# valves, is_closed (and is_opening/is_closing) follow from state and position
+# and are never declared, so a correctly actuated device trips a phantom diff.
+# Ignore these; state and position still gate the result.
+DERIVED_STATE_ATTRIBUTES = frozenset({"is_closed", "is_opening", "is_closing"})
+
+
 def compare_state(v: Any, other_v: Any) -> bool:
     """Compare values for equivalence."""
     # Coerce some equivalent types for simpler comparisons
@@ -85,6 +94,7 @@ def get_unexpected_states(
         ignored_attributes = (
             set(ignore_changes.get(entity_id, [])) if ignore_changes else set({})
         )
+        ignored_attributes |= DERIVED_STATE_ATTRIBUTES
         old = states[entity_id]
         new = updated_states[entity_id]
         if diff := compute_entity_diff(old, new, ignored_attributes):

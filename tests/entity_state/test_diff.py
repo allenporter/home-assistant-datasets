@@ -149,3 +149,73 @@ def test_ignore_attributes_changes() -> None:
     }
 
     assert not diff.get_unexpected_changes()
+
+
+def test_derived_is_closed_ignored() -> None:
+    """A correctly opened valve is not reported as a failure (is_closed is ignored)."""
+
+    mock_get_state = Mock()
+    mock_get_state.get_state.return_value = {
+        "valve.irrigation": EntityState(
+            state="closed",
+            attributes={"current_position": 0, "is_closed": True},
+        ),
+    }
+
+    diff = EntityStateDiffFixture(mock_get_state)
+    diff.prepare(
+        {
+            "valve.irrigation": EntityState(
+                state="open",
+                attributes={"current_position": 100},
+            ),
+        },
+        {},
+    )
+
+    mock_get_state.get_state.return_value = {
+        "valve.irrigation": EntityState(
+            state="open",
+            attributes={"current_position": 100, "is_closed": False},
+        ),
+    }
+
+    assert not diff.get_unexpected_changes()
+
+
+def test_derived_attributes_do_not_mask_real_failure() -> None:
+    """A valve that never changed is still reported as a failure."""
+
+    mock_get_state = Mock()
+    mock_get_state.get_state.return_value = {
+        "valve.irrigation": EntityState(
+            state="closed",
+            attributes={"current_position": 0, "is_closed": True},
+        ),
+    }
+
+    diff = EntityStateDiffFixture(mock_get_state)
+    diff.prepare(
+        {
+            "valve.irrigation": EntityState(
+                state="open",
+                attributes={"current_position": 100},
+            ),
+        },
+        {},
+    )
+
+    # Model did not act; the valve is still closed.
+    mock_get_state.get_state.return_value = {
+        "valve.irrigation": EntityState(
+            state="closed",
+            attributes={"current_position": 0, "is_closed": True},
+        ),
+    }
+
+    assert diff.get_unexpected_changes() == {
+        "valve.irrigation": {
+            "expected": {"current_position": 100, "state": "open"},
+            "got": {"current_position": 0, "state": "closed"},
+        }
+    }
