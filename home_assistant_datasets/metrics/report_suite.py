@@ -173,5 +173,13 @@ def extract_task_name(node_id: str) -> str:
         task_prefix = path_parts[-1]
     else:
         task_prefix = path_parts[-2]
+
+    if task_prefix.endswith(".py"):
+        task_prefix = task_prefix[:-3]
+    if task_prefix and task_prefix[-1].isdigit():
+        task_prefix = task_prefix[:-1]
+
+    if task_prefix.startswith("test_verify_report_output_files"):
+        task_prefix = "test_verify_report_output_files"
     test_method = node_parts[-1].split("[")[0]
     return "-".join([task_prefix, test_method])
