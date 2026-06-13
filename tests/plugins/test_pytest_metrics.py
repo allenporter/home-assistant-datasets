@@ -119,6 +119,8 @@ def test_verify_report_output_files(
     result = pytester.runpytest_subprocess(
         "--model_output_dir",
         tmpdir,
+        "-p",
+        "no:homeassistant",
     )
 
     # Parse the output lines for "Generated eval report" filenames
