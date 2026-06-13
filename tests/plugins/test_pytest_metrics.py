@@ -105,7 +105,9 @@ def test_verify_report_output_files(
 ) -> None:
     """Exercise the report plugin."""
 
-    pytester.makepyfile(TEST_FILE_CONTENTS_FORMAT.format(tmpdir=tmpdir))
+    pytester.makepyfile(
+        test_verify_report_output_files=TEST_FILE_CONTENTS_FORMAT.format(tmpdir=tmpdir)
+    )
     pytester.makeini(PYTEST_INI)
 
     # Prepare a fake scraped model output file in the model output directory.
