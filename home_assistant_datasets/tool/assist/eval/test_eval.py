@@ -29,17 +29,26 @@ def test_expected_states(model_output: ModelOutput) -> None:
 def test_expect_response(model_output: ModelOutput) -> None:
     """Evaluate the expected response of the scraped model output."""
 
-    if not (expect_response := model_output.task.get("expect_response")):
+    expect_response_val = model_output.task.get("expect_response")
+    if not expect_response_val:
         pytest.skip()
 
-    if isinstance(expect_response, str):
-        expect_response = [expect_response]
-    assert len(expect_response) > 0, "Expect response should not be empty"
+    expect_response_list: list[str]
+    if isinstance(expect_response_val, str):
+        expect_response_list = [expect_response_val]
+    elif isinstance(expect_response_val, list):
+        expect_response_list = [str(item) for item in expect_response_val]
+    else:
+        raise TypeError(
+            f"Unexpected type for expect_response: {type(expect_response_val)}"
+        )
+
+    assert len(expect_response_list) > 0, "Expect response should not be empty"
     # Check if the response contains any of the expected words
     text = model_output.response.lower()
-    if not any(word.lower() in text for word in expect_response):
+    if not any(word.lower() in text for word in expect_response_list):
         raise ValueError(
-            f"Response '{model_output.response}' did not contain any of {expect_response}"
+            f"Response '{model_output.response}' did not contain any of {expect_response_list}"
         )
 
 
