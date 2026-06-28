@@ -35,7 +35,8 @@ class EntityState(DataClassYAMLMixin):
         if self.state is not None:
             data["state"] = self.state
         if self.attributes:
-            data.update(self.attributes)
+            for k, v in self.attributes.items():
+                data[str(k)] = v
         return data
 
     class Config(BaseConfig):
@@ -65,7 +66,8 @@ class EntityStateFixture:
             assert state
             assert state.state
             results[entity_entry.entity_id] = EntityState(
-                state=state.state, attributes=dict(state.attributes or {})
+                state=state.state,
+                attributes={str(k): v for k, v in (state.attributes or {}).items()},
             )
             assert state.state not in (
                 "unavailable",

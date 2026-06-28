@@ -22,10 +22,10 @@ DERIVED_STATE_ATTRIBUTES = frozenset({"is_closed", "is_opening", "is_closing"})
 def compare_state(v: Any, other_v: Any) -> bool:
     """Compare values for equivalence."""
     # Coerce some equivalent types for simpler comparisons
-    if isinstance(v, tuple) or isinstance(other_v, tuple):
-        v = list(v)
-        other_v = list(v)
-        return cast(bool, v == other_v)
+    if isinstance(v, (tuple, list)) or isinstance(other_v, (tuple, list)):
+        if isinstance(v, (tuple, list)) and isinstance(other_v, (tuple, list)):
+            return list(v) == list(other_v)
+        return False
 
     if isinstance(v, enum.StrEnum) or isinstance(other_v, enum.StrEnum):
         v = str(v)
