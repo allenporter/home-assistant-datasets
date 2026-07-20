@@ -15,6 +15,7 @@
 | ministral-3-14b | $${78.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.8, 2026.1.1)}}}$$ | $${91.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.9, 2026.1.1)}}}$$ | $${97.3\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.1.1)}}}$$ | $${61.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.3, 2026.1.1)}}}$$ | $${87.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
 | gpt-4.1-mini | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2025.4.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2025.4.3)}}}$$ | $${83.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.8, 2025.5.0.dev0)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${87.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
 | gemini-2.5-flash-lite | $${84.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2025.7.1)}}}$$ | $${93.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.7.1)}}}$$ | $${87.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2025.7.1)}}}$$ | $${48.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.7.1)}}}$$ | $${87.3\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
+| qwen3.5-4b | $${81.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2026.2.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${93.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, 2026.2.3)}}}$$ |  | $${87.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.1, avg)}}}$$ |
 | ministral-3-8b | $${78.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.8, 2026.1.1)}}}$$ | $${93.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.1.1)}}}$$ | $${93.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.6, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${86.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.1, avg)}}}$$ |
 | gpt-4o-mini | $${85.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${75.1\\% \space\color{gray}\tiny{\textsf{(CI: 6.2, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${86.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, avg)}}}$$ |
 | gpt-oss-20b | $${87.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, 2026.1.1)}}}$$ | $${95.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2026.1.1)}}}$$ | $${79.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.1.1)}}}$$ | $${66.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.9, 2026.1.1)}}}$$ | $${86.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.1, avg)}}}$$ |
@@ -27,10 +28,10 @@
 | ministral-3-3b | $${72.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.1.1)}}}$$ | $${81.6\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2026.1.1)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${80.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | qwen3-8b | $${82.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2025.7.1)}}}$$ | $${93.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2025.7.1)}}}$$ | $${70.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2025.7.1)}}}$$ | $${1.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.7.1)}}}$$ | $${80.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, avg)}}}$$ |
 | gpt-4.1-nano | $${74.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2025.4.3)}}}$$ | $${92.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.6, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.5.0.dev0)}}}$$ | $${46.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${78.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
+| gemma4-e4b | $${67.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2026.6.0b2)}}}$$ | $${91.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.9, 2026.2.3)}}}$$ | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2026.2.3)}}}$$ |  | $${78.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.5, avg)}}}$$ |
 | gemini-2.0-flash | $${68.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.4.3)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.4.3)}}}$$ | $${78.4\\% \space\color{gray}\tiny{\textsf{(CI: 5.9, 2025.4.3)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
 | qwen3-4b-instruct | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.1.1)}}}$$ | $${86.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.1.1)}}}$$ | $${74.1\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${75.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.6, avg)}}}$$ |
 | qwen3-235b-a22b-2507 | $${73.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2026.2.1)}}}$$ | $${87.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${69.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${5.0\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2026.2.1)}}}$$ | $${74.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, avg)}}}$$ |
-| gemma4-e4b | $${58.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${91.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.9, 2026.2.3)}}}$$ | $${86.2\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2026.2.3)}}}$$ |  | $${74.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, avg)}}}$$ |
 | qwen3-4b-instruct-2507-iq4-nl | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.12.4)}}}$$ |  |  |  | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | gemma4-e2b | $${45.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${61.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, 2026.2.3)}}}$$ | $${73.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ |  | $${58.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
@@ -733,3 +734,16 @@ Qwen3 is the large language model series developed by Qwen team, Alibaba Cloud. 
 More information:
 - https://qwenlm.github.io/blog/qwen3/
 - https://ollama.com/library/qwen3
+
+
+### qwen3.5-4b
+
+Qwen 3.5 4B running behind an 
+OpenAI-compatible server. Developed by Alibaba Cloud, 
+this model is optimized for efficient text processing.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/Qwen3.5-4B
