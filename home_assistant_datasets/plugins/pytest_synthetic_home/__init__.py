@@ -17,7 +17,12 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntryState, ConfigEntry
 from homeassistant.setup import async_setup_component
 import sys
-import pytest_homeassistant_custom_component
+
+sh_dir = (pathlib.Path.cwd() / "home-assistant-synthetic-home").resolve()
+if sh_dir.exists() and str(sh_dir) not in sys.path:
+    sys.path.insert(0, str(sh_dir))
+
+import pytest_homeassistant_custom_component  # noqa: E402
 
 tc_dir = (
     pathlib.Path(pytest_homeassistant_custom_component.__file__).parent
@@ -26,21 +31,15 @@ tc_dir = (
 if str(tc_dir) not in sys.path:
     sys.path.append(str(tc_dir))
 
-sh_dir = pathlib.Path("home-assistant-synthetic-home").resolve()
-if sh_dir.exists():
-    if str(sh_dir) not in sys.path:
-        sys.path.insert(0, str(sh_dir))
-    try:
-        import custom_components
+try:
+    import custom_components
 
+    if sh_dir.exists() and hasattr(custom_components, "__path__"):
         sh_cc_str = str(sh_dir / "custom_components")
-        if (
-            hasattr(custom_components, "__path__")
-            and sh_cc_str not in custom_components.__path__
-        ):
+        if sh_cc_str not in custom_components.__path__:
             custom_components.__path__.insert(0, sh_cc_str)
-    except Exception:
-        pass
+except Exception:
+    pass
 
 from custom_components import synthetic_home  # noqa: E402, F401
 
