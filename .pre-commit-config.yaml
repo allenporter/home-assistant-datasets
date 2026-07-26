@@ -4,8 +4,9 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: \.ambr$
+        exclude: (?x)^(\.ambr$|datasets/.*|generation/.*|reports/.*|train/.*|docs/.*|model_outputs/.*)
       - id: end-of-file-fixer
+        exclude: (?x)^(datasets/.*|generation/.*|reports/.*|train/.*|docs/.*|model_outputs/.*)
       - id: check-yaml
         args:
           - --allow-multiple-documents
@@ -23,40 +24,41 @@ repos:
           (?x)^(
               datasets/.*\.jsonl
           )$
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.0
-    hooks:
-      - id: ruff-check
-        types_or:
-          - python
-          - pyi
-        args:
-          - --fix
-          - --exit-non-zero-on-fix
-      - id: ruff-format
-        types_or:
-          - python
-          - pyi
   - repo: local
     hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run --no-project ruff check --fix --exit-non-zero-on-fix
+        language: system
+        types_or:
+          - python
+          - pyi
+      - id: ruff-format
+        name: ruff format
+        entry: uv run --no-project ruff format
+        language: system
+        types_or:
+          - python
+          - pyi
       - id: ty
         name: ty check
-        entry: ty check . --ignore unresolved-import
-        language: python
+        entry: uv run --no-project ty check . --ignore unresolved-import
+        language: system
         pass_filenames: false
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.3
     hooks:
       - id: codespell
         args:
-          - --ignore-words-list=hass
+          - --ignore-words-list=hass,chambre,manger,provence,confortable
         exclude: >
           (?x)^(
               .*/output/.*|
               model_outputs/.*|
               reports/.*|
-              datasets/device-actions-v2-collect/train/.*|
-              generation/device-actions.ipynb|
+              datasets/.*|
+              generation/.*|
+              .*\.ipynb|
               datasets/homes.yaml|
               .*/snapshots/.*|
               .*/_fixtures.yaml|
@@ -68,7 +70,10 @@ repos:
       - id: yamllint
         exclude: >
           (?x)^(
-              model_outputs/.*
+              model_outputs/.*|
+              reports/.*|
+              datasets/.*|
+              generation/.*|
               model_eval/.*/output/.*
           )$
         args:
@@ -83,5 +88,9 @@ repos:
           (?x)^(
               .*/output/.*|
               model_outputs/.*|
-              reports/.*
+              reports/.*|
+              datasets/.*|
+              generation/.*|
+              docs/.*|
+              train/.*
           )$
