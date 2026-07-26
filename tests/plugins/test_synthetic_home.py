@@ -96,4 +96,5 @@ def test_synthetic_home_fixture(pytester: pytest.Pytester) -> None:
         "home_assistant_datasets.plugins.pytest_synthetic_home",
     )
     stdout = "\n".join(result.stdout.lines)
-    assert "1 passed" in stdout
+    stderr = "\n".join(result.stderr.lines)
+    assert "1 passed" in stdout, f"STDOUT:\n{stdout}\nSTDERR:\n{stderr}"
