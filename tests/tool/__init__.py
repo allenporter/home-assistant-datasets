@@ -14,7 +14,9 @@ def run_cmd(cmds: list[str]) -> int:
         cmds = [sys.executable, "-m", "pytest"] + cmds[1:]
     if _LOGGER.isEnabledFor(logging.DEBUG):
         _LOGGER.debug("Running: %s", " ".join(cmds))
-    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, env=os.environ)
+    p = subprocess.Popen(
+        cmds, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=os.environ
+    )
     (output, _) = p.communicate()
     if p.returncode != 0:
         print(output.decode(), file=sys.stderr)
