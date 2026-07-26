@@ -23,6 +23,21 @@ tc_dir = (
 sh_dir = tc_dir / "custom_components" / "synthetic_home"
 
 sh_dir.mkdir(parents=True, exist_ok=True)
+manifest_file = sh_dir / "manifest.json"
+if not manifest_file.exists():
+    manifest_file.write_text(
+        "{\n"
+        '  "domain": "synthetic_home",\n'
+        '  "name": "Synthetic Home",\n'
+        '  "codeowners": [],\n'
+        '  "config_flow": true,\n'
+        '  "documentation": "https://github.com/allenporter/synthetic-home",\n'
+        '  "iot_class": "local_push",\n'
+        '  "issue_tracker": "https://github.com/allenporter/synthetic-home/issues",\n'
+        '  "requirements": ["synthetic-home==5.0.3"],\n'
+        '  "version": "5.0.3"\n'
+        "}\n"
+    )
 if True:
     cf_file = sh_dir / "config_flow.py"
     if not cf_file.exists():
