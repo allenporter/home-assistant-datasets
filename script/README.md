@@ -11,9 +11,10 @@ See https://doccano.github.io/doccano/ for installation.
 1. Create a new project e.g. `Area Summary`
 1. Create the tags e.g. `Good`, `Bad`, `Neutral`.
 1. We want these options for the project:
-  - Allow single label.
-  - Randomize Document order
-  - Share annotations across users
+
+- Allow single label.
+- Randomize Document order
+- Share annotations across users
 
 ### Import dataset
 
@@ -59,13 +60,13 @@ model output and used for computing metrics:
 uuid: e0fee440-e99d-4ecf-8dc9-8f686e51db3e
 task_id: apartament4-bedroom-1-bedroom-1-light-on
 label:
-- Good
+  - Good
 
 ---
 uuid: c28639af-7184-42c6-a0e5-7de453e8413e
 task_id: apartament4-bedroom-1-bedroom-1-light-off
 label:
-- Neutral
+  - Neutral
 ```
 
 ## Metrics
