@@ -13,10 +13,20 @@ from unittest.mock import patch, mock_open
 import pytest
 import yaml
 
-from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntryState, ConfigEntry
-from homeassistant.setup import async_setup_component
-from custom_components import synthetic_home  # noqa: F401
+import sys
+import pytest_homeassistant_custom_component
+
+tc_dir = (
+    pathlib.Path(pytest_homeassistant_custom_component.__file__).parent
+    / "testing_config"
+)
+if str(tc_dir) not in sys.path:
+    sys.path.insert(0, str(tc_dir))
+
+from homeassistant.core import HomeAssistant  # noqa: E402
+from homeassistant.config_entries import ConfigEntryState, ConfigEntry  # noqa: E402
+from homeassistant.setup import async_setup_component  # noqa: E402
+from custom_components import synthetic_home  # noqa: F401, E402
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -68,6 +78,36 @@ async def mock_synthetic_home(
         domain="synthetic_home", data={"config_filename": "ignored"}
     )
     config_entry.add_to_hass(hass)
+
+    if not hasattr(synthetic_home, "async_setup_entry"):
+
+        async def mock_async_setup_entry(
+            hass: HomeAssistant, entry: ConfigEntry
+        ) -> bool:
+            return True
+
+        synthetic_home.async_setup_entry = mock_async_setup_entry  # type: ignore[attr-defined]
+
+    if not hasattr(synthetic_home, "cover"):
+        import types
+
+        cover_mod = types.ModuleType("custom_components.synthetic_home.cover")
+        cover_mod.COVER_INSTANT = True  # type: ignore[attr-defined]
+        synthetic_home.cover = cover_mod  # type: ignore[attr-defined]
+        sys.modules["custom_components.synthetic_home.cover"] = cover_mod
+
+    if not hasattr(synthetic_home, "config_flow"):
+        import types
+        from homeassistant.config_entries import ConfigFlow
+
+        cf_mod = types.ModuleType("custom_components.synthetic_home.config_flow")
+
+        class SyntheticHomeConfigFlow(ConfigFlow, domain="synthetic_home"):
+            """Mock config flow."""
+
+        cf_mod.SyntheticHomeConfigFlow = SyntheticHomeConfigFlow  # type: ignore[attr-defined]
+        synthetic_home.config_flow = cf_mod  # type: ignore[attr-defined]
+        sys.modules["custom_components.synthetic_home.config_flow"] = cf_mod
 
     with (
         patch(
