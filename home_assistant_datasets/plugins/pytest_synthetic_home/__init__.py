@@ -13,86 +13,24 @@ from unittest.mock import patch, mock_open
 import pytest
 import yaml
 
+from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntryState, ConfigEntry
+from homeassistant.setup import async_setup_component
 import sys
 import pytest_homeassistant_custom_component
+
+sh_dir = pathlib.Path("home-assistant-synthetic-home").resolve()
+if sh_dir.exists() and str(sh_dir) not in sys.path:
+    sys.path.insert(0, str(sh_dir))
 
 tc_dir = (
     pathlib.Path(pytest_homeassistant_custom_component.__file__).parent
     / "testing_config"
 )
-sh_dir = tc_dir / "custom_components" / "synthetic_home"
-
-sh_dir.mkdir(parents=True, exist_ok=True)
-manifest_file = sh_dir / "manifest.json"
-if not manifest_file.exists():
-    manifest_file.write_text(
-        "{\n"
-        '  "domain": "synthetic_home",\n'
-        '  "name": "Synthetic Home",\n'
-        '  "codeowners": [],\n'
-        '  "config_flow": true,\n'
-        '  "documentation": "https://github.com/allenporter/synthetic-home",\n'
-        '  "iot_class": "local_push",\n'
-        '  "issue_tracker": "https://github.com/allenporter/synthetic-home/issues",\n'
-        '  "requirements": ["synthetic-home==5.0.3"],\n'
-        '  "version": "5.0.3"\n'
-        "}\n"
-    )
-if True:
-    cf_file = sh_dir / "config_flow.py"
-    if not cf_file.exists():
-        cf_file.write_text(
-            "from homeassistant.config_entries import ConfigFlow\n\n"
-            'class SyntheticHomeConfigFlow(ConfigFlow, domain="synthetic_home"):\n'
-            '    """Mock config flow."""\n'
-        )
-
-    cover_file = sh_dir / "cover.py"
-    if not cover_file.exists():
-        cover_file.write_text("COVER_INSTANT = True\n")
-
-    init_file = sh_dir / "__init__.py"
-    init_content = init_file.read_text() if init_file.exists() else ""
-    if "async_setup_entry" not in init_content:
-        init_file.write_text(
-            init_content + "\n\nfrom homeassistant.core import HomeAssistant\n"
-            "from homeassistant.config_entries import ConfigEntry\n"
-            "from homeassistant.helpers import device_registry as dr, area_registry as ar\n"
-            "import synthetic_home\n"
-            "import synthetic_home.inventory as inv\n\n"
-            "async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:\n"
-            '    yaml_content = inv.read_config_content(entry.data.get("config_filename", ""))\n'
-            "    inv_obj = inv.decode_inventory(yaml_content)\n"
-            "    area_reg = ar.async_get(hass)\n"
-            "    for area in inv_obj.areas or []:\n"
-            "        area_reg.async_get_or_create(area.name)\n"
-            "    device_reg = dr.async_get(hass)\n"
-            "    for device in inv_obj.devices or []:\n"
-            "        device_reg.async_get_or_create(\n"
-            "            config_entry_id=entry.entry_id,\n"
-            '            identifiers={("synthetic_home", device.id)},\n'
-            "            name=device.name,\n"
-            '            manufacturer=device.info.manufacturer if device.info and hasattr(device.info, "manufacturer") else None,\n'
-            '            model=device.info.model if device.info and hasattr(device.info, "model") else None,\n'
-            '            sw_version=device.info.sw_version if device.info and hasattr(device.info, "sw_version") else None,\n'
-            "            suggested_area=device.area,\n"
-            "        )\n"
-            "    for entity in (inv_obj.entities or []):\n"
-            '        state_val = entity.state.state if entity.state and hasattr(entity.state, "state") and entity.state.state is not None else "on"\n'
-            "        attrs = dict(entity.attributes) if entity.attributes else {}\n"
-            "        if entity.name:\n"
-            '            attrs["friendly_name"] = entity.name\n'
-            "        hass.states.async_set(entity.id, state_val, attrs)\n"
-            "    return True\n"
-        )
-
 if str(tc_dir) not in sys.path:
-    sys.path.insert(0, str(tc_dir))
+    sys.path.append(str(tc_dir))
 
-from homeassistant.core import HomeAssistant  # noqa: E402
-from homeassistant.config_entries import ConfigEntryState, ConfigEntry  # noqa: E402
-from homeassistant.setup import async_setup_component  # noqa: E402
-from custom_components import synthetic_home  # noqa: F401, E402
+from custom_components import synthetic_home  # noqa: E402, F401
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -145,72 +83,6 @@ async def mock_synthetic_home(
     )
     config_entry.add_to_hass(hass)
 
-    import synthetic_home.inventory as inv  # noqa: E402
-    from homeassistant.helpers import device_registry as dr, area_registry as ar  # noqa: E402
-
-    async def mock_async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-        yaml_content = inv.read_config_content(entry.data.get("config_filename", ""))
-        inv_obj = inv.decode_inventory(yaml_content)
-
-        area_reg = ar.async_get(hass)
-        for area in inv_obj.areas or []:
-            area_reg.async_get_or_create(area.name)
-
-        device_reg = dr.async_get(hass)
-        for device in inv_obj.devices or []:
-            device_reg.async_get_or_create(
-                config_entry_id=entry.entry_id,
-                identifiers={("synthetic_home", device.id)},
-                name=device.name,
-                manufacturer=device.info.manufacturer
-                if device.info and hasattr(device.info, "manufacturer")
-                else None,
-                model=device.info.model
-                if device.info and hasattr(device.info, "model")
-                else None,
-                sw_version=device.info.sw_version
-                if device.info and hasattr(device.info, "sw_version")
-                else None,
-                suggested_area=device.area,
-            )
-
-        for entity in inv_obj.entities or []:
-            state_val = (
-                entity.state.state
-                if entity.state
-                and hasattr(entity.state, "state")
-                and entity.state.state is not None
-                else "on"
-            )
-            attrs = dict(entity.attributes) if entity.attributes else {}
-            if entity.name:
-                attrs["friendly_name"] = entity.name
-            hass.states.async_set(entity.id, state_val, attrs)
-        return True
-
-    synthetic_home.async_setup_entry = mock_async_setup_entry  # type: ignore[attr-defined]
-
-    if not hasattr(synthetic_home, "cover"):
-        import types
-
-        cover_mod = types.ModuleType("custom_components.synthetic_home.cover")
-        cover_mod.COVER_INSTANT = True  # type: ignore[attr-defined]
-        synthetic_home.cover = cover_mod  # type: ignore[attr-defined]
-        sys.modules["custom_components.synthetic_home.cover"] = cover_mod
-
-    if not hasattr(synthetic_home, "config_flow"):
-        import types
-        from homeassistant.config_entries import ConfigFlow
-
-        cf_mod = types.ModuleType("custom_components.synthetic_home.config_flow")
-
-        class SyntheticHomeConfigFlow(ConfigFlow, domain="synthetic_home"):
-            """Mock config flow."""
-
-        cf_mod.SyntheticHomeConfigFlow = SyntheticHomeConfigFlow  # type: ignore[attr-defined]
-        synthetic_home.config_flow = cf_mod  # type: ignore[attr-defined]
-        sys.modules["custom_components.synthetic_home.config_flow"] = cf_mod
-
     with (
         patch(
             "synthetic_home.inventory.read_config_content",
@@ -222,14 +94,30 @@ async def mock_synthetic_home(
         await hass.config_entries.async_setup(config_entry.entry_id)
         assert config_entry.state == ConfigEntryState.LOADED
 
+        import synthetic_home.inventory as inv  # noqa: E402
+        from homeassistant.helpers import (  # noqa: E402
+            area_registry as ar,
+            device_registry as dr,
+        )
+
         inv_obj = inv.decode_inventory(synthetic_home_yaml)
 
         area_reg = ar.async_get(hass)
-        for area in inv_obj.areas or []:
+        areas = (
+            inv_obj.areas.values()
+            if isinstance(inv_obj.areas, dict)
+            else (inv_obj.areas or [])
+        )
+        for area in areas:
             area_reg.async_get_or_create(area.name)
 
         device_reg = dr.async_get(hass)
-        for device in inv_obj.devices or []:
+        devices = (
+            inv_obj.devices.values()
+            if isinstance(inv_obj.devices, dict)
+            else (inv_obj.devices or [])
+        )
+        for device in devices:
             device_reg.async_get_or_create(
                 config_entry_id=config_entry.entry_id,
                 identifiers={("synthetic_home", device.id)},
