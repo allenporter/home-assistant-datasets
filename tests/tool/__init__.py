@@ -4,14 +4,19 @@ import logging
 import subprocess
 import sys
 
+import os
+import sys
+
 _LOGGER = logging.getLogger(__name__)
 
 
-def run_cmd(cmds: list[str]) -> None:
+def run_cmd(cmds: list[str]) -> int:
     """Run the specified commands."""
+    if cmds and cmds[0] == "pytest":
+        cmds = [sys.executable, "-m", "pytest"] + cmds[1:]
     if _LOGGER.isEnabledFor(logging.DEBUG):
         _LOGGER.debug("Running: %s", " ".join(cmds))
-    p = subprocess.Popen(cmds, stdout=subprocess.PIPE)
+    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, env=os.environ)
     (output, _) = p.communicate()
     if p.returncode != 0:
         _LOGGER.info("Command failed: %s", p.returncode)
