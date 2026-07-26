@@ -17,7 +17,6 @@ def run_cmd(cmds: list[str]) -> int:
     p = subprocess.Popen(cmds, stdout=subprocess.PIPE, env=os.environ)
     (output, _) = p.communicate()
     if p.returncode != 0:
-        _LOGGER.info("Command failed: %s", p.returncode)
-    if _LOGGER.isEnabledFor(logging.DEBUG):
         print(output.decode(), file=sys.stderr)
+        _LOGGER.info("Command failed: %s", p.returncode)
     return p.returncode
