@@ -3,7 +3,10 @@
 import pytest
 
 
-PLUGINS = ["home_assistant_datasets.plugins.pytest_synthetic_home"]
+PLUGINS = [
+    "pytest_homeassistant_custom_component",
+    "home_assistant_datasets.plugins.pytest_synthetic_home",
+]
 
 PYTEST_INI = """
 [pytest]
@@ -86,6 +89,12 @@ def test_synthetic_home_fixture(pytester: pytest.Pytester) -> None:
     pytester.makepyfile(TEST_FILE_CONTENTS_FORMAT)
     pytester.makeini(PYTEST_INI)
 
-    result = pytester.runpytest(plugins=PLUGINS)
+    result = pytester.runpytest_subprocess(
+        "-p",
+        "pytest_homeassistant_custom_component",
+        "-p",
+        "home_assistant_datasets.plugins.pytest_synthetic_home",
+    )
     stdout = "\n".join(result.stdout.lines)
-    assert "1 passed" in stdout
+    stderr = "\n".join(result.stderr.lines)
+    assert "1 passed" in stdout, f"STDOUT:\n{stdout}\nSTDERR:\n{stderr}"
