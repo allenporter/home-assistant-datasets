@@ -19,6 +19,7 @@ def run_cmd(cmds: list[str]) -> int:
     )
     (output, _) = p.communicate()
     if p.returncode != 0:
-        print(output.decode(), file=sys.stderr)
-        _LOGGER.info("Command failed: %s", p.returncode)
+        out_str = output.decode() if output else ""
+        print(out_str, file=sys.stderr)
+        raise RuntimeError(f"Command failed with code {p.returncode}:\n{out_str}")
     return p.returncode
