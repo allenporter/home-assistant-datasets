@@ -205,6 +205,31 @@ async def mock_synthetic_home(
     ):
         await hass.config_entries.async_setup(config_entry.entry_id)
         assert config_entry.state == ConfigEntryState.LOADED
+
+        inv_obj = inv.decode_inventory(synthetic_home_yaml)
+
+        area_reg = ar.async_get(hass)
+        for area in inv_obj.areas or []:
+            area_reg.async_get_or_create(area.name)
+
+        device_reg = dr.async_get(hass)
+        for device in inv_obj.devices or []:
+            device_reg.async_get_or_create(
+                config_entry_id=config_entry.entry_id,
+                identifiers={("synthetic_home", device.id)},
+                name=device.name,
+                manufacturer=device.info.manufacturer
+                if device.info and hasattr(device.info, "manufacturer")
+                else None,
+                model=device.info.model
+                if device.info and hasattr(device.info, "model")
+                else None,
+                sw_version=device.info.sw_version
+                if device.info and hasattr(device.info, "sw_version")
+                else None,
+                suggested_area=device.area,
+            )
+
         yield config_entry
         await hass.config_entries.async_unload(config_entry.entry_id)
 
