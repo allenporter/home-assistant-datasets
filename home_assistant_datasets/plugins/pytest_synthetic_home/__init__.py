@@ -17,12 +17,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntryState, ConfigEntry
 from homeassistant.setup import async_setup_component
 import sys
-
-sh_dir = (pathlib.Path.cwd() / "home-assistant-synthetic-home").resolve()
-if sh_dir.exists() and str(sh_dir) not in sys.path:
-    sys.path.insert(0, str(sh_dir))
-
-import pytest_homeassistant_custom_component  # noqa: E402
+import pytest_homeassistant_custom_component
 
 tc_dir = (
     pathlib.Path(pytest_homeassistant_custom_component.__file__).parent
@@ -31,15 +26,21 @@ tc_dir = (
 if str(tc_dir) not in sys.path:
     sys.path.append(str(tc_dir))
 
-try:
-    import custom_components
+sh_dir = (pathlib.Path.cwd() / "home-assistant-synthetic-home").resolve()
+sh_cc = str(sh_dir / "custom_components")
+if sh_dir.exists():
+    try:
+        import custom_components
 
-    if sh_dir.exists() and hasattr(custom_components, "__path__"):
-        sh_cc_str = str(sh_dir / "custom_components")
-        if sh_cc_str not in custom_components.__path__:
-            custom_components.__path__.insert(0, sh_cc_str)
-except Exception:
-    pass
+        if hasattr(custom_components, "__path__"):
+            if sh_cc in custom_components.__path__:
+                custom_components.__path__.remove(sh_cc)
+            custom_components.__path__.insert(0, sh_cc)
+    except Exception:
+        pass
+
+if "custom_components.synthetic_home" in sys.modules:
+    del sys.modules["custom_components.synthetic_home"]
 
 from custom_components import synthetic_home  # noqa: E402, F401
 
