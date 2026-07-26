@@ -26,7 +26,7 @@ tc_dir = (
 if str(tc_dir) not in sys.path:
     sys.path.append(str(tc_dir))
 
-sh_dir = (pathlib.Path.cwd() / "home-assistant-synthetic-home").resolve()
+sh_dir = (pathlib.Path(__file__).parents[3] / "home-assistant-synthetic-home").resolve()
 sh_cc = str(sh_dir / "custom_components")
 if sh_dir.exists():
     try:
