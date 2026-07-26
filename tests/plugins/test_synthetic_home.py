@@ -3,7 +3,10 @@
 import pytest
 
 
-PLUGINS = ["home_assistant_datasets.plugins.pytest_synthetic_home"]
+PLUGINS = [
+    "pytest_homeassistant_custom_component",
+    "home_assistant_datasets.plugins.pytest_synthetic_home",
+]
 
 PYTEST_INI = """
 [pytest]
