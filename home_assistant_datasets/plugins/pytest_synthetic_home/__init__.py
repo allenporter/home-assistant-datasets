@@ -22,7 +22,8 @@ tc_dir = (
 )
 sh_dir = tc_dir / "custom_components" / "synthetic_home"
 
-if sh_dir.exists():
+sh_dir.mkdir(parents=True, exist_ok=True)
+if True:
     cf_file = sh_dir / "config_flow.py"
     if not cf_file.exists():
         cf_file.write_text(
