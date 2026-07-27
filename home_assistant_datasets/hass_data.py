@@ -5,6 +5,7 @@ collection tools.
 """
 
 from dataclasses import dataclass
+
 import hass_client
 from hass_client.models import Area, Device, Entity, State
 

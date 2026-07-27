@@ -5,19 +5,18 @@ fixture file. The contents of the synthetic home inventory/fixture will be loade
 into the synthetic home custom component.
 """
 
-from collections.abc import AsyncGenerator, Generator
 import logging
 import pathlib
-from unittest.mock import patch, mock_open
+import sys
+from collections.abc import AsyncGenerator, Generator
+from unittest.mock import mock_open, patch
 
 import pytest
-import yaml
-
-from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntryState, ConfigEntry
-from homeassistant.setup import async_setup_component
-import sys
 import pytest_homeassistant_custom_component
+import yaml
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
+from homeassistant.core import HomeAssistant
+from homeassistant.setup import async_setup_component
 
 tc_dir = (
     pathlib.Path(pytest_homeassistant_custom_component.__file__).parent
@@ -43,7 +42,6 @@ if "custom_components.synthetic_home" in sys.modules:
     del sys.modules["custom_components.synthetic_home"]
 
 from custom_components import synthetic_home  # noqa: E402, F401
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -109,6 +107,8 @@ async def mock_synthetic_home(
         import synthetic_home.inventory as inv  # noqa: E402
         from homeassistant.helpers import (  # noqa: E402
             area_registry as ar,
+        )
+        from homeassistant.helpers import (
             device_registry as dr,
         )
 

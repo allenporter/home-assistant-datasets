@@ -4,9 +4,9 @@ import pathlib
 
 import pytest
 
-from home_assistant_datasets.datasets.dataset_card import read_dataset_card
-from home_assistant_datasets.datasets.assist_eval_task import generate_assist_eval_tasks
 from home_assistant_datasets.datasets.assist_data_loader import read_dataset_records
+from home_assistant_datasets.datasets.assist_eval_task import generate_assist_eval_tasks
+from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 
 DATASETS = [
     "assist",

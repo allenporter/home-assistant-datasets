@@ -12,27 +12,26 @@ options:
 
 import argparse
 import logging
-from dataclasses import dataclass
 import math
 import pathlib
+from dataclasses import dataclass
 
 import yaml
 
 from home_assistant_datasets.datasets.dataset_card import read_dataset_cards
 from home_assistant_datasets.models import read_models
 
+from . import chart, table
 from .config import (
-    REPORT_DIR,
-    DATASETS,
-    SCORED_DATASETS,
-    AVERAGE_SCORE,
-    DATASETS_FOR_AVG,
     ASSIST_DATASET,
+    AVERAGE_SCORE,
+    DATASETS,
+    DATASETS_FOR_AVG,
+    REPORT_DIR,
+    SCORED_DATASETS,
     eval_reports,
 )
 from .eval_cost import compute_model_eval_cost
-from . import table, chart
-
 
 __all__ = []
 

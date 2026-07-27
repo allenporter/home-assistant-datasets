@@ -1,9 +1,10 @@
 """Module for tracking model response accuracy."""
 
-import math
-import itertools
 import io
+import itertools
+import math
 from typing import Any
+
 import yaml
 
 from . import ScrapeRecord, TaskResult

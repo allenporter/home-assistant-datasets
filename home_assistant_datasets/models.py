@@ -1,9 +1,9 @@
 """Module related to reading model configuration files."""
 
+import pathlib
 from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Any
-import pathlib
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
 

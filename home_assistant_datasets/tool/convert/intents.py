@@ -16,6 +16,7 @@ options:
 import argparse
 import logging
 import pathlib
+
 from tqdm import tqdm
 
 from home_assistant_datasets.datasets.convert.intents import convert_intent_tests

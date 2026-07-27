@@ -1,6 +1,7 @@
 """Tests for the blueprint module."""
 
 import textwrap
+
 from home_assistant_datasets.blueprint import (
     extract_blueprint_content,
 )

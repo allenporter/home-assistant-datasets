@@ -8,14 +8,11 @@ import datetime
 from collections.abc import Callable, Generator
 
 import pytest
-
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.event import async_track_state_change_event
 
-
-from home_assistant_datasets.blueprint import BlueprintContentStatus, BlueprintContent
+from home_assistant_datasets.blueprint import BlueprintContent, BlueprintContentStatus
 from home_assistant_datasets.entity_state import EntityState
-
 
 FAN_ENTITY = "fan.bathroom_exhaust_fan"
 HUMIDITY_SENSOR_ENTITY = "sensor.bathroom_exhaust_fan_humidity"

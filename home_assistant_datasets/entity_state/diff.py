@@ -3,7 +3,7 @@
 import enum
 from typing import Any, cast
 
-from home_assistant_datasets.entity_state import EntityStateFixture, EntityState
+from home_assistant_datasets.entity_state import EntityState, EntityStateFixture
 
 __all__ = [
     "EntityStateDiffFixture",

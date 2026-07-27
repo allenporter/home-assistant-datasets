@@ -13,7 +13,6 @@ options:
 
 from . import intents
 
-
 SUBCMDS = {
     "intents": intents,
 }

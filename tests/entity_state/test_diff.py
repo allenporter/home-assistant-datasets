@@ -5,7 +5,6 @@ from unittest.mock import Mock
 from home_assistant_datasets.entity_state import EntityState
 from home_assistant_datasets.entity_state.diff import EntityStateDiffFixture
 
-
 ENTITY1_ON = EntityState(
     state="on",
     attributes={

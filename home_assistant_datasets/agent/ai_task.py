@@ -2,15 +2,14 @@
 
 import logging
 from typing import Any
-import yaml
 
-from homeassistant.core import HomeAssistant
-from homeassistant.components.conversation import trace
+import yaml
 from homeassistant.components.ai_task import async_generate_data
+from homeassistant.components.conversation import trace
+from homeassistant.core import HomeAssistant
 
 from .agent import ConversationAgent
 from .service_call import dump_conversation_trace
-
 
 __all__ = [
     "create_ai_task_agent",

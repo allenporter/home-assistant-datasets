@@ -1,10 +1,9 @@
 """Module for computing eval related metrics and reporting."""
 
+from dataclasses import dataclass, field
 from typing import Any
-from dataclasses import field, dataclass
 
 from home_assistant_datasets.agent.trace_events import TokenStats
-
 
 __all__ = [
     "ScrapeRecord",

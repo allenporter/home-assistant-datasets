@@ -2,8 +2,8 @@
 
 import pytest
 
-from home_assistant_datasets.scrape import ModelOutput
 from home_assistant_datasets.agent.trace_events import find_llm_call
+from home_assistant_datasets.scrape import ModelOutput
 
 
 @pytest.mark.eval_model_outputs

@@ -3,7 +3,7 @@
 import io
 from typing import Any
 
-from .report import TaskResultWriter, ScrapeRecord, TaskResult
+from .report import ScrapeRecord, TaskResult, TaskResultWriter
 
 __all__ = [
     "create_csv_writer",

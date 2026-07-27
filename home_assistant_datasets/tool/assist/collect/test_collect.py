@@ -5,7 +5,6 @@ import uuid
 from typing import Any
 
 import pytest
-
 from homeassistant.core import HomeAssistant
 
 from home_assistant_datasets.agent import ConversationAgent

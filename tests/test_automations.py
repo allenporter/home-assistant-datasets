@@ -4,7 +4,6 @@ import pathlib
 
 import pytest
 
-
 DATASET_PATH = pathlib.Path("datasets/automations/")
 IGNORE_FILES = {"__pycache__"}
 PROBLEM_DIRS = [

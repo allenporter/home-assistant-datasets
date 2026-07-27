@@ -2,13 +2,12 @@
 
 from typing import Any
 
+from homeassistant.core import HomeAssistant
 from pyrate_limiter import (
     Duration,
-    Rate,
     Limiter,
+    Rate,
 )
-
-from homeassistant.core import HomeAssistant
 
 from .agent import ConversationAgent
 

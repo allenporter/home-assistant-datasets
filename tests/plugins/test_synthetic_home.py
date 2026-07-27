@@ -2,7 +2,6 @@
 
 import pytest
 
-
 PLUGINS = [
     "pytest_homeassistant_custom_component",
     "home_assistant_datasets.plugins.pytest_synthetic_home",

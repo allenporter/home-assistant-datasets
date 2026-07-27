@@ -4,7 +4,6 @@ import pathlib
 
 from home_assistant_datasets.metrics.scrape_reader import model_output_files
 
-
 TESTDATA = pathlib.Path("tests/metrics/testdata/")
 
 

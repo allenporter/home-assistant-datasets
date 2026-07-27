@@ -3,15 +3,14 @@
 We pick an arbitrary LLM provider to mock out to test the service call.
 """
 
-from collections.abc import Generator
 import logging
+from collections.abc import Generator
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
-
+from homeassistant.components import conversation
 from homeassistant.core import HomeAssistant
 from homeassistant.setup import async_setup_component
-from homeassistant.components import conversation
 
 from home_assistant_datasets.agent import ConversationAgent
 from home_assistant_datasets.agent.service_call import ServiceCall

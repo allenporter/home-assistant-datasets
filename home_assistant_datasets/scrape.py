@@ -4,20 +4,19 @@ The scrape config is also used to record the details of how the scrape
 was performed when recording model outputs.
 """
 
-from dataclasses import dataclass, field
 import datetime
 import getpass
-from importlib.metadata import version
 import logging
 import pathlib
 import sys
-from typing import Any
 import uuid
+from dataclasses import dataclass, field
+from importlib.metadata import version
+from typing import Any
 
-
-from mashumaro.mixins.yaml import DataClassYAMLMixin
-from mashumaro.config import BaseConfig
 import yaml
+from mashumaro.config import BaseConfig
+from mashumaro.mixins.yaml import DataClassYAMLMixin
 
 from .yaml_loaders import yaml_decode
 

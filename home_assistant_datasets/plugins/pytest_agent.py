@@ -13,15 +13,14 @@ from typing import Any
 
 import pytest
 import pytest_socket
-
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntryState, ConfigEntry
 from homeassistant.setup import async_setup_component
 
 from home_assistant_datasets.agent import (
     ConversationAgent,
-    create_default_agent,
     create_ai_task_agent,
+    create_default_agent,
 )
 from home_assistant_datasets.datasets.dataset_card import (
     DatasetCard,
@@ -40,7 +39,6 @@ try:
 except ImportError:
     pass
 from pytest_homeassistant_custom_component.common import MockConfigEntry
-
 
 _LOGGER = logging.getLogger(__name__)
 

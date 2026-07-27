@@ -1,7 +1,7 @@
 """Tests for the eval report generation pytest plugin."""
 
-import tempfile
 import pathlib
+import tempfile
 
 import pytest
 from syrupy import SnapshotAssertion

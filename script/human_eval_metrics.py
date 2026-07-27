@@ -3,9 +3,10 @@
 import argparse
 import logging
 import pathlib
-from typing import Any
-import yaml
 import random
+from typing import Any
+
+import yaml
 
 _LOGGER = logging.getLogger(__name__)
 

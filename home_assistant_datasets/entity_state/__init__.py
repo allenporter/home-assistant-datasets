@@ -3,13 +3,11 @@
 from dataclasses import dataclass
 from typing import Any
 
-from mashumaro.config import BaseConfig
-from mashumaro.mixins.yaml import DataClassYAMLMixin
-
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
-from homeassistant.config_entries import ConfigEntry
-
+from mashumaro.config import BaseConfig
+from mashumaro.mixins.yaml import DataClassYAMLMixin
 
 __all__ = [
     "EntityState",

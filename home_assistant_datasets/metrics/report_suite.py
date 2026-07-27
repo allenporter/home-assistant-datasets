@@ -1,14 +1,13 @@
 """Module for building an entire suite of reports."""
 
-from dataclasses import dataclass
 import io
 import logging
 import pathlib
 from collections.abc import Callable
-from typing import TypeVar, Any
+from dataclasses import dataclass
+from typing import Any, TypeVar
 
-
-from . import TaskResult, ScrapeRecord
+from . import ScrapeRecord, TaskResult
 from .accuracy import AccuracySummary
 from .report import ScrapeRecordWriter, TaskResultWriter
 from .report_csv import create_csv_writer

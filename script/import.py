@@ -1,8 +1,9 @@
 """Convert model output records into doccano dataset json."""
 
-import yaml
 import json
 import sys
+
+import yaml
 
 
 def main() -> None:
