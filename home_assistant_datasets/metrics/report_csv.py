@@ -3,7 +3,7 @@
 import io
 from typing import Any
 
-from .report import TaskResultWriter, ScrapeRecord, TaskResult
+from .report import ScrapeRecord, TaskResult, TaskResultWriter
 
 __all__ = [
     "create_csv_writer",
@@ -53,7 +53,6 @@ class CsvWriter(TaskResultWriter):
 
     def finish(self) -> None:
         """Finish writing the csv file."""
-        pass
 
 
 def create_csv_writer(fd: io.TextIOBase | None = None) -> TaskResultWriter:

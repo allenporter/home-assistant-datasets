@@ -4,12 +4,11 @@ import datetime
 import logging
 from typing import Any
 
-from homeassistant.core import HomeAssistant, Context
 from homeassistant.components.conversation import trace
+from homeassistant.core import Context, HomeAssistant
 from homeassistant.helpers import llm
 
 from .agent import ConversationAgent
-
 
 __all__ = [
     "create_agent",

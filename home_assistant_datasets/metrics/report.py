@@ -2,9 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-
 from . import ScrapeRecord, TaskResult
-
 
 __all__ = [
     "ScrapeRecordWriter",

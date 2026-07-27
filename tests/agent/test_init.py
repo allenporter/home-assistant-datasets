@@ -6,7 +6,6 @@ from homeassistant.exceptions import HomeAssistantError
 
 from home_assistant_datasets.agent import create_default_agent
 
-
 RESPONSE = {"response": {"speech": {"plain": {"speech": "Paris."}}}}
 
 

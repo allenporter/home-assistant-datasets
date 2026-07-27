@@ -23,17 +23,16 @@ and create a `TaskResult` that indicates pass or failure.
 
 import logging
 import pathlib
-from typing import Any
 from collections.abc import Generator
+from typing import Any
 
 import pytest
-from pytest import TestReport, Item, CallInfo, FixtureRequest, CollectReport
+from pytest import CallInfo, CollectReport, FixtureRequest, Item, TestReport
 
 from home_assistant_datasets.metrics import (
-    TaskResult,
     ScrapeRecord,
+    TaskResult,
 )
-from home_assistant_datasets.scrape import ModelOutput
 from home_assistant_datasets.metrics.report_suite import (
     ReportSuite,
     ReportSuiteConfig,
@@ -45,6 +44,7 @@ from home_assistant_datasets.metrics.scrape_reader import (
     read_model_output,
     scrape_record_from_output,
 )
+from home_assistant_datasets.scrape import ModelOutput
 
 __all__ = []
 
@@ -155,7 +155,7 @@ class ReportSuitePlugin:
     @pytest.hookimpl(tryfirst=True, hookwrapper=True)
     def pytest_runtest_makereport(
         self, item: Item, call: CallInfo[None]
-    ) -> Generator[None, CollectReport, None]:
+    ) -> Generator[None, CollectReport]:
         """Invoked at the end of each test to record the outcome."""
         _LOGGER.debug("pytest_runtest_makereport")
         outcome = yield
@@ -191,5 +191,5 @@ class ReportSuitePlugin:
         for report_file in self._suite.report_paths:
             terminalreporter.write_sep(
                 "-",
-                f"Generated eval report: {str(report_file)}",
+                f"Generated eval report: {report_file!s}",
             )

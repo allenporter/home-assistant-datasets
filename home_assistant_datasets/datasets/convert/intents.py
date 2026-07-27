@@ -1,20 +1,20 @@
 """Module for converting intent test fixtures to assist dataset format."""
 
 import datetime
-import pathlib
 import logging
+import pathlib
 from typing import Any
 
 import yaml
 from synthetic_home import inventory
 from tqdm import tqdm
 
-from home_assistant_datasets.datasets.dataset_card import DatasetCard, DATASET_CARD_FILE
 from home_assistant_datasets.datasets.assist_data_loader import (
-    Record,
     Action,
+    Record,
     ToolCall,
 )
+from home_assistant_datasets.datasets.dataset_card import DATASET_CARD_FILE, DatasetCard
 
 __all__ = [
     "convert_intent_tests",
@@ -149,7 +149,7 @@ def convert_fixture(
     inv = inventory.load_inventory(src_fixture)
     if not (inv.entities or inv.devices or inv.areas):
         raise ValueError(
-            f"Fixtures filename {str(src_fixture)} contained no home resources"
+            f"Fixtures filename {src_fixture!s} contained no home resources"
         )
     # Filter unsupported domains
     inv.entities = [
@@ -213,9 +213,7 @@ def validate_fixture(filename: pathlib.Path) -> None:
     # Verify the inventory file is valid
     inv = inventory.load_inventory(filename)
     if not (inv.entities or inv.devices or inv.areas):
-        raise ValueError(
-            f"Fixtures filename {str(filename)} contained no home resources"
-        )
+        raise ValueError(f"Fixtures filename {filename!s} contained no home resources")
 
 
 def supported_files(

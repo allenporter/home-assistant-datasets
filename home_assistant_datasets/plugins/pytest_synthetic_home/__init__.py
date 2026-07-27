@@ -5,19 +5,18 @@ fixture file. The contents of the synthetic home inventory/fixture will be loade
 into the synthetic home custom component.
 """
 
-from collections.abc import AsyncGenerator, Generator
 import logging
 import pathlib
-from unittest.mock import patch, mock_open
+import sys
+from collections.abc import AsyncGenerator, Generator
+from unittest.mock import mock_open, patch
 
 import pytest
-import yaml
-
-from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntryState, ConfigEntry
-from homeassistant.setup import async_setup_component
-import sys
 import pytest_homeassistant_custom_component
+import yaml
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
+from homeassistant.core import HomeAssistant
+from homeassistant.setup import async_setup_component
 
 tc_dir = (
     pathlib.Path(pytest_homeassistant_custom_component.__file__).parent
@@ -42,8 +41,7 @@ if sh_dir.exists():
 if "custom_components.synthetic_home" in sys.modules:
     del sys.modules["custom_components.synthetic_home"]
 
-from custom_components import synthetic_home  # noqa: E402, F401
-
+from custom_components import synthetic_home  # noqa: F401
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -51,7 +49,7 @@ _LOGGER = logging.getLogger(__name__)
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(
     enable_custom_integrations: None,
-) -> Generator[None, None, None]:
+) -> Generator[None]:
     """Enable custom integration."""
     _ = enable_custom_integrations  # unused
     yield
@@ -81,7 +79,7 @@ def mock_synthetic_home_content(synthetic_home_config: str | None) -> str | None
 @pytest.fixture(autouse=True, name="synthetic_home_config_entry")
 async def mock_synthetic_home(
     hass: HomeAssistant, synthetic_home_yaml: str | None
-) -> AsyncGenerator[ConfigEntry | None, None]:
+) -> AsyncGenerator[ConfigEntry | None]:
     """Fixture for mock configuration entry."""
     if synthetic_home_yaml is None:
         yield None
@@ -106,9 +104,11 @@ async def mock_synthetic_home(
         await hass.config_entries.async_setup(config_entry.entry_id)
         assert config_entry.state == ConfigEntryState.LOADED
 
-        import synthetic_home.inventory as inv  # noqa: E402
-        from homeassistant.helpers import (  # noqa: E402
+        import synthetic_home.inventory as inv
+        from homeassistant.helpers import (
             area_registry as ar,
+        )
+        from homeassistant.helpers import (
             device_registry as dr,
         )
 

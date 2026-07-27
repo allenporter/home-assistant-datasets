@@ -5,13 +5,12 @@ from the model output.
 """
 
 import re
+import tempfile
+from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass
-import tempfile
-from typing import Generator
 
 import yaml
-
 
 # Regular expression to extract yaml/blueprint from the model output.
 YAML_RESPONSE = re.compile(r".*```yaml\s*(.*?)\s+```.*", re.DOTALL | re.MULTILINE)
@@ -69,7 +68,7 @@ class BlueprintContent:
 
 
 @contextmanager
-def extract_blueprint_content(response: str) -> Generator[BlueprintContent, None, None]:
+def extract_blueprint_content(response: str) -> Generator[BlueprintContent]:
     """Extract the blueprint content from the model output into a temporary file."""
 
     m = YAML_RESPONSE.match(response)

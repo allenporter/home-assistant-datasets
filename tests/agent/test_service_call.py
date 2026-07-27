@@ -3,15 +3,14 @@
 We pick an arbitrary LLM provider to mock out to test the service call.
 """
 
-from collections.abc import Generator
 import logging
+from collections.abc import Generator
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
-
+from homeassistant.components import conversation
 from homeassistant.core import HomeAssistant
 from homeassistant.setup import async_setup_component
-from homeassistant.components import conversation
 
 from home_assistant_datasets.agent import ConversationAgent
 from home_assistant_datasets.agent.service_call import ServiceCall
@@ -24,7 +23,7 @@ pytest_plugins = [
 
 
 @pytest.fixture(name="mock_gemini_client", autouse=True)
-async def mock_gemini_client_fixture() -> Generator[None, None, None]:
+async def mock_gemini_client_fixture() -> Generator[None]:
     """Mock out any calls to the real Gemini Client"""
     with patch(
         "homeassistant.components.google_generative_ai_conversation.Client",
@@ -36,7 +35,7 @@ async def mock_gemini_client_fixture() -> Generator[None, None, None]:
 @pytest.fixture(name="mock_handle_chat_log")
 async def mock_handle_chat_log_fixture(
     hass: HomeAssistant,
-) -> Generator[Mock, None, None]:
+) -> Generator[Mock]:
     """Mock out the chat log handler to return a fixed response."""
     with patch(
         "homeassistant.components.google_generative_ai_conversation.entity.GoogleGenerativeAILLMBaseEntity._async_handle_chat_log"

@@ -8,13 +8,11 @@ import datetime
 from collections.abc import Callable, Generator
 
 import pytest
-
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.event import async_track_state_change_event
-
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from home_assistant_datasets.blueprint import BlueprintContentStatus, BlueprintContent
+from home_assistant_datasets.blueprint import BlueprintContent, BlueprintContentStatus
 from home_assistant_datasets.entity_state import EntityState
 
 DOOR_ENTITY = "binary_sensor.entry_door"

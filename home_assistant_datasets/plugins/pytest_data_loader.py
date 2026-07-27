@@ -4,19 +4,19 @@ This depends on the `pytest_dataset` plugin for configuring the dataset
 under test.
 """
 
-import pathlib
 import logging
-import pytest
+import pathlib
 import random
 
+import pytest
 import yaml
 
-from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 from home_assistant_datasets.datasets.assist_data_loader import read_dataset_records
 from home_assistant_datasets.datasets.assist_eval_task import (
     EvalTask,
     generate_assist_eval_tasks,
 )
+from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -70,7 +70,7 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
             eval_tasks = list(generate_assist_eval_tasks(record, count))
         except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(
-                f"Task record file '{str(record.record_source.record_path)}' was invalid: {err}"
+                f"Task record file '{record.record_source.record_path!s}' was invalid: {err}"
             ) from err
         tasks.extend(eval_tasks)
 

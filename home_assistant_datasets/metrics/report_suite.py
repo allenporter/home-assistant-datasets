@@ -1,14 +1,13 @@
 """Module for building an entire suite of reports."""
 
-from dataclasses import dataclass
 import io
 import logging
 import pathlib
 from collections.abc import Callable
-from typing import TypeVar, Any
+from dataclasses import dataclass
+from typing import Any, TypeVar
 
-
-from . import TaskResult, ScrapeRecord
+from . import ScrapeRecord, TaskResult
 from .accuracy import AccuracySummary
 from .report import ScrapeRecordWriter, TaskResultWriter
 from .report_csv import create_csv_writer
@@ -111,7 +110,7 @@ class ReportSuite:
         """Open the report files for writing."""
         if not self._config.output_dir.exists():
             raise ValueError(
-                f"Model output directory does not exist: {str(self._config.output_dir)}",
+                f"Model output directory does not exist: {self._config.output_dir!s}",
             )
 
         for report_file, scrape_fn in DEFAULT_SCRAPE_REPORTS:
@@ -174,8 +173,7 @@ def extract_task_name(node_id: str) -> str:
     else:
         task_prefix = path_parts[-2]
 
-    if task_prefix.endswith(".py"):
-        task_prefix = task_prefix[:-3]
+    task_prefix = task_prefix.removesuffix(".py")
     if task_prefix and task_prefix[-1].isdigit():
         task_prefix = task_prefix[:-1]
 

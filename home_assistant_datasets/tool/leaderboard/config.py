@@ -1,9 +1,9 @@
 """Configuration for the leaderboard."""
 
-from dataclasses import dataclass
-from collections.abc import Generator
 import logging
 import pathlib
+from collections.abc import Generator
+from dataclasses import dataclass
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,7 +52,7 @@ class EvalReport:
 
 def eval_reports(
     report_dir: pathlib.Path, datasets: list[str]
-) -> Generator[EvalReport, None, None]:
+) -> Generator[EvalReport]:
     """Generate the list of eval reports."""
     for dataset in datasets:
         dataset_dir = report_dir / dataset

@@ -13,15 +13,14 @@ from typing import Any
 
 import pytest
 import pytest_socket
-
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntryState, ConfigEntry
 from homeassistant.setup import async_setup_component
 
 from home_assistant_datasets.agent import (
     ConversationAgent,
-    create_default_agent,
     create_ai_task_agent,
+    create_default_agent,
 )
 from home_assistant_datasets.datasets.dataset_card import (
     DatasetCard,
@@ -41,7 +40,6 @@ except ImportError:
     pass
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -53,7 +51,6 @@ def mock_allow_sockets(socket_enabled: Any) -> None:
     like LLMs.
     """
     pytest_socket.pytest_runtest_teardown()
-    pass
 
 
 @pytest.fixture(scope="module")
@@ -68,7 +65,7 @@ def model_config(model_id: str) -> ModelConfig:
 @pytest.fixture(name="system_prompt")
 def system_prompt_fixture() -> None:
     """Fixture to provide the system prompt or None to use the default."""
-    return None
+    return
 
 
 @pytest.fixture(name="merged_model_config")

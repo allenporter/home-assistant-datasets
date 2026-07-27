@@ -1,13 +1,12 @@
 """Library for computing metrics related to eval costs."""
 
+import pathlib
 from collections.abc import Generator
 from dataclasses import dataclass
-import pathlib
 
 import yaml
 
-from home_assistant_datasets.models import read_models, Cost
-
+from home_assistant_datasets.models import Cost, read_models
 
 TOKEN_STATS_FILE = "reports-token-stats.yaml"
 
@@ -55,7 +54,7 @@ class EvalCost:
 #       output_tokens: 51588
 def token_stats(
     assist_report_dir: pathlib.Path,
-) -> Generator[tuple[str, int, int, int], None, None]:
+) -> Generator[tuple[str, int, int, int]]:
     """Generate the set of models and input and output token costs, plus latency."""
     for token_stats_file in sorted(
         list(assist_report_dir.glob(f"**/{TOKEN_STATS_FILE}"))

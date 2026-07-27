@@ -9,17 +9,17 @@ An individual record contains sentences to scrape the model with. Each sentence
 is expanded into it's own `EvalTask`.
 """
 
-from collections.abc import Generator
 import datetime
-from dataclasses import dataclass, field
 import logging
 import pathlib
-from slugify import slugify
+from collections.abc import Generator
+from dataclasses import dataclass, field
 from typing import Any
 
-from mashumaro.mixins.yaml import DataClassYAMLMixin
 from mashumaro.config import BaseConfig
 from mashumaro.exceptions import MissingField
+from mashumaro.mixins.yaml import DataClassYAMLMixin
+from slugify import slugify
 
 from home_assistant_datasets.entity_state import EntityState
 from home_assistant_datasets.yaml_loaders import yaml_decode

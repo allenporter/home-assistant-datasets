@@ -6,13 +6,12 @@ setup for a scenario, then have multiple text phrases which are the
 tasks to evaluate thatexercise that scenario.
 """
 
-from dataclasses import dataclass
-from collections.abc import Generator
 import logging
-from slugify import slugify
+from collections.abc import Generator
+from dataclasses import dataclass
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
-
+from slugify import slugify
 
 from .assist_data_loader import Action, Record, RecordSource
 
@@ -73,14 +72,14 @@ def _make_slug(text: str) -> str:
 def generate_assist_eval_tasks(
     record: Record,
     count: int | None = None,
-) -> Generator[EvalTask, None, None]:
+) -> Generator[EvalTask]:
     """Generate evaluation tasks for the dataset records."""
     assert record.record_source is not None
     for action in record.tests or ():
         if not action.sentences:
             raise ValueError("No sentences defined for the action")
         for sentence in action.sentences:
-            for task_num in range(0, count) if count is not None else [None]:
+            for task_num in range(count) if count is not None else [None]:
                 yield EvalTask(
                     record_source=record.record_source,
                     category=record.category,

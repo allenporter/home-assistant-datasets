@@ -2,7 +2,7 @@
 
 import io
 
-from home_assistant_datasets.metrics import TaskResult, ScrapeRecord
+from home_assistant_datasets.metrics import ScrapeRecord, TaskResult
 from home_assistant_datasets.metrics.accuracy import AccuracySummary
 
 

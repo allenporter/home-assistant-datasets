@@ -13,7 +13,6 @@ options:
 
 from . import build, task_report
 
-
 SUBCMDS = {
     "build": build,
     "task_report": task_report,

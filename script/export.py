@@ -1,8 +1,9 @@
 """Convert datasets labeled in doccano."""
 
-import yaml
 import json
 import sys
+
+import yaml
 
 
 def main() -> None:

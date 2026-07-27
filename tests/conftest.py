@@ -1,12 +1,11 @@
 """Test fixttures for home-assistant-datasets."""
 
-import pytest
 import pathlib
 
+import pytest
 from syrupy import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.location import PyTestLocation
-
 
 pytest_plugins = ["pytester"]
 

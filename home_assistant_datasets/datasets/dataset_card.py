@@ -1,8 +1,8 @@
 """Module for reading datasets as part of scraping model outputs."""
 
+import pathlib
 from dataclasses import dataclass, field
 from functools import lru_cache
-import pathlib
 from typing import Any
 
 from mashumaro.config import BaseConfig
@@ -75,7 +75,7 @@ class DatasetCard(DataClassYAMLMixin):
         ]
         if not filenames:
             raise ValueError(
-                f"Could not find any dataset files in path: {str(self.dataset_path)}"
+                f"Could not find any dataset files in path: {self.dataset_path!s}"
             )
         return filenames
 

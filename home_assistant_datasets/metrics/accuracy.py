@@ -1,9 +1,10 @@
 """Module for tracking model response accuracy."""
 
-import math
-import itertools
 import io
+import itertools
+import math
 from typing import Any
+
 import yaml
 
 from . import ScrapeRecord, TaskResult
@@ -66,7 +67,6 @@ class AccuracySummary(TaskResultWriter):
 
     def start(self) -> None:
         """Start recording accuracy summary."""
-        pass
 
     def row(self, scrape: ScrapeRecord, result: TaskResult) -> None:
         """Handle a report row collecting the # of good labels for each model."""

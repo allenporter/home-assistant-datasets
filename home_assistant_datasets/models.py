@@ -1,9 +1,9 @@
 """Module related to reading model configuration files."""
 
+import pathlib
 from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Any
-import pathlib
 
 from mashumaro.mixins.yaml import DataClassYAMLMixin
 
@@ -124,7 +124,7 @@ def read_models() -> Models:
 
     if not MODEL_CONFIG_DIR.exists():
         raise ValueError(
-            f"Could not find model configuration directory: {str(MODEL_CONFIG_DIR)}"
+            f"Could not find model configuration directory: {MODEL_CONFIG_DIR!s}"
         )
 
     for model_file in sorted(list(MODEL_CONFIG_DIR.glob("**/*.yaml"))):

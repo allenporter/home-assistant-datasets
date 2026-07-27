@@ -4,8 +4,9 @@ This configures a commandline flag `--dataset` that determines which
 dataset is under test.
 """
 
-import pathlib
 import logging
+import pathlib
+
 import pytest
 
 from home_assistant_datasets.datasets.dataset_card import DatasetCard, read_dataset_card
