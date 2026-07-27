@@ -124,7 +124,7 @@ def read_models() -> Models:
 
     if not MODEL_CONFIG_DIR.exists():
         raise ValueError(
-            f"Could not find model configuration directory: {MODEL_CONFIG_DIR!s}"
+            f"Could not find model configuration directory: {str(MODEL_CONFIG_DIR)}"
         )
 
     for model_file in sorted(list(MODEL_CONFIG_DIR.glob("**/*.yaml"))):

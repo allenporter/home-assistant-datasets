@@ -23,7 +23,7 @@ pytest_plugins = [
 
 
 @pytest.fixture(name="mock_gemini_client", autouse=True)
-async def mock_gemini_client_fixture() -> Generator[None]:
+async def mock_gemini_client_fixture() -> Generator[None, None, None]:
     """Mock out any calls to the real Gemini Client"""
     with patch(
         "homeassistant.components.google_generative_ai_conversation.Client",
@@ -35,7 +35,7 @@ async def mock_gemini_client_fixture() -> Generator[None]:
 @pytest.fixture(name="mock_handle_chat_log")
 async def mock_handle_chat_log_fixture(
     hass: HomeAssistant,
-) -> Generator[Mock]:
+) -> Generator[Mock, None, None]:
     """Mock out the chat log handler to return a fixed response."""
     with patch(
         "homeassistant.components.google_generative_ai_conversation.entity.GoogleGenerativeAILLMBaseEntity._async_handle_chat_log"

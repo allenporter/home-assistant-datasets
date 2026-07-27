@@ -6,9 +6,9 @@ from the model output.
 
 import re
 import tempfile
-from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass
+from typing import Generator
 
 import yaml
 
@@ -68,7 +68,7 @@ class BlueprintContent:
 
 
 @contextmanager
-def extract_blueprint_content(response: str) -> Generator[BlueprintContent]:
+def extract_blueprint_content(response: str) -> Generator[BlueprintContent, None, None]:
     """Extract the blueprint content from the model output into a temporary file."""
 
     m = YAML_RESPONSE.match(response)

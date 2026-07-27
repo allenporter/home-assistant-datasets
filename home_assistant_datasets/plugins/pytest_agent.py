@@ -51,6 +51,7 @@ def mock_allow_sockets(socket_enabled: Any) -> None:
     like LLMs.
     """
     pytest_socket.pytest_runtest_teardown()
+    pass
 
 
 @pytest.fixture(scope="module")
@@ -65,7 +66,7 @@ def model_config(model_id: str) -> ModelConfig:
 @pytest.fixture(name="system_prompt")
 def system_prompt_fixture() -> None:
     """Fixture to provide the system prompt or None to use the default."""
-    return
+    return None
 
 
 @pytest.fixture(name="merged_model_config")

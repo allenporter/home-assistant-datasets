@@ -75,7 +75,7 @@ class DatasetCard(DataClassYAMLMixin):
         ]
         if not filenames:
             raise ValueError(
-                f"Could not find any dataset files in path: {self.dataset_path!s}"
+                f"Could not find any dataset files in path: {str(self.dataset_path)}"
             )
         return filenames
 

@@ -108,7 +108,7 @@ def pytest_terminal_summary(terminalreporter: Any) -> None:
     for model_id in models:
         terminalreporter.write_sep(
             "-",
-            f"Scraped model output: {pathlib.Path(output_dir) / model_id!s}",
+            f"Scraped model output: {str(pathlib.Path(output_dir) / model_id)}",
         )
 
 
@@ -149,7 +149,7 @@ def model_output_writer_fixture(
 @pytest.fixture(name="context_now", autouse=True)
 def context_now_fixture(
     eval_task: EvalTask,
-) -> Generator[datetime.datetime | None]:
+) -> Generator[datetime.datetime | None, None, None]:
     """Fixture to set "now" based on the eval task context."""
     if eval_task.action.context_now is None:
         yield None

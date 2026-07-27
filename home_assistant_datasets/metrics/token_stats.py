@@ -23,6 +23,7 @@ class ModelTokenStats(ScrapeRecordWriter):
 
     def start(self) -> None:
         """Start recording model token stats."""
+        pass
 
     def row(self, scrape: ScrapeRecord) -> None:
         """Handle a report row collecting the # of good labels for each model."""

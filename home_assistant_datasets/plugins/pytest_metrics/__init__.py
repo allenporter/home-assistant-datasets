@@ -155,7 +155,7 @@ class ReportSuitePlugin:
     @pytest.hookimpl(tryfirst=True, hookwrapper=True)
     def pytest_runtest_makereport(
         self, item: Item, call: CallInfo[None]
-    ) -> Generator[None, CollectReport]:
+    ) -> Generator[None, CollectReport, None]:
         """Invoked at the end of each test to record the outcome."""
         _LOGGER.debug("pytest_runtest_makereport")
         outcome = yield
@@ -191,5 +191,5 @@ class ReportSuitePlugin:
         for report_file in self._suite.report_paths:
             terminalreporter.write_sep(
                 "-",
-                f"Generated eval report: {report_file!s}",
+                f"Generated eval report: {str(report_file)}",
             )

@@ -23,7 +23,7 @@ def test_color_map() -> None:
 
 def test_wrap_colors() -> None:
     """Test creating a color map for a set of values."""
-    assert chart.color_map(f"key-{v:02d}" for v in range(15)) == {
+    assert chart.color_map(f"key-{v:02d}" for v in range(0, 15)) == {
         "key-00": "#4285f4",
         "key-01": "#0f9d58",
         "key-02": "#f4b400",

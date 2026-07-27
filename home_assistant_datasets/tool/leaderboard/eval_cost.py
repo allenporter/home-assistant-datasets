@@ -54,7 +54,7 @@ class EvalCost:
 #       output_tokens: 51588
 def token_stats(
     assist_report_dir: pathlib.Path,
-) -> Generator[tuple[str, int, int, int]]:
+) -> Generator[tuple[str, int, int, int], None, None]:
     """Generate the set of models and input and output token costs, plus latency."""
     for token_stats_file in sorted(
         list(assist_report_dir.glob(f"**/{TOKEN_STATS_FILE}"))

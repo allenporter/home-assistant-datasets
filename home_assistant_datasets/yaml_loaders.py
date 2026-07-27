@@ -3,7 +3,7 @@
 import enum
 import logging
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any, Type, TypeVar
 
 import yaml
 from mashumaro.codecs.yaml import YAMLDecoder
@@ -44,7 +44,7 @@ def _default_decoder(stream: Any) -> Any:
     return yaml.load(stream, Loader=FastSafeLoader)
 
 
-def yaml_decode(stream: Any, shape_type: type[T] | Any) -> T:
+def yaml_decode(stream: Any, shape_type: Type[T] | Any) -> T:
     """Decode a YAML document using the custom tag constructors.
 
     This function is comparable to the mashumaro.codecs.yaml.yaml_decode function,
@@ -65,10 +65,10 @@ def _include_file(loader: yaml.SafeLoader, node: yaml.nodes.ScalarNode) -> Path:
         path = loader_path.parent / path
 
     if not path.exists():
-        raise FileNotFoundError(f"File '{path}' does not exist {node.start_mark!s}")
+        raise FileNotFoundError(f"File '{path}' does not exist {str(node.start_mark)}")
 
     if not path.is_file():
-        raise FileNotFoundError(f"File '{path}' is not a file {node.start_mark!s}")
+        raise FileNotFoundError(f"File '{path}' is not a file {str(node.start_mark)}")
     return path
 
 

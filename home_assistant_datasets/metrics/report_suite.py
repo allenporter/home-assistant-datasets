@@ -110,7 +110,7 @@ class ReportSuite:
         """Open the report files for writing."""
         if not self._config.output_dir.exists():
             raise ValueError(
-                f"Model output directory does not exist: {self._config.output_dir!s}",
+                f"Model output directory does not exist: {str(self._config.output_dir)}",
             )
 
         for report_file, scrape_fn in DEFAULT_SCRAPE_REPORTS:
@@ -173,7 +173,8 @@ def extract_task_name(node_id: str) -> str:
     else:
         task_prefix = path_parts[-2]
 
-    task_prefix = task_prefix.removesuffix(".py")
+    if task_prefix.endswith(".py"):
+        task_prefix = task_prefix[:-3]
     if task_prefix and task_prefix[-1].isdigit():
         task_prefix = task_prefix[:-1]
 

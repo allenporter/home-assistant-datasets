@@ -52,7 +52,7 @@ class EvalReport:
 
 def eval_reports(
     report_dir: pathlib.Path, datasets: list[str]
-) -> Generator[EvalReport]:
+) -> Generator[EvalReport, None, None]:
     """Generate the list of eval reports."""
     for dataset in datasets:
         dataset_dir = report_dir / dataset

@@ -53,6 +53,7 @@ class CsvWriter(TaskResultWriter):
 
     def finish(self) -> None:
         """Finish writing the csv file."""
+        pass
 
 
 def create_csv_writer(fd: io.TextIOBase | None = None) -> TaskResultWriter:

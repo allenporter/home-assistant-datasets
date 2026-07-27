@@ -149,7 +149,7 @@ def convert_fixture(
     inv = inventory.load_inventory(src_fixture)
     if not (inv.entities or inv.devices or inv.areas):
         raise ValueError(
-            f"Fixtures filename {src_fixture!s} contained no home resources"
+            f"Fixtures filename {str(src_fixture)} contained no home resources"
         )
     # Filter unsupported domains
     inv.entities = [
@@ -213,7 +213,9 @@ def validate_fixture(filename: pathlib.Path) -> None:
     # Verify the inventory file is valid
     inv = inventory.load_inventory(filename)
     if not (inv.entities or inv.devices or inv.areas):
-        raise ValueError(f"Fixtures filename {filename!s} contained no home resources")
+        raise ValueError(
+            f"Fixtures filename {str(filename)} contained no home resources"
+        )
 
 
 def supported_files(

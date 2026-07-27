@@ -70,7 +70,7 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
             eval_tasks = list(generate_assist_eval_tasks(record, count))
         except (ValueError, AttributeError, LookupError) as err:
             raise ValueError(
-                f"Task record file '{record.record_source.record_path!s}' was invalid: {err}"
+                f"Task record file '{str(record.record_source.record_path)}' was invalid: {err}"
             ) from err
         tasks.extend(eval_tasks)
 
