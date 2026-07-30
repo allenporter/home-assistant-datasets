@@ -9,6 +9,7 @@
 | qwen3-30b-a3b-instruct | $${83.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.1.1)}}}$$ | $${97.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, 2026.1.1)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | gemini-2.5-pro | $${\textbf{91.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 2.6, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${83.2\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
 | claude-3-7-sonnet | $${89.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.4.3)}}}$$ | $${84.1\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${81.7\\% \space\color{gray}\tiny{\textsf{(CI: 9.8, 2025.4.3)}}}$$ | $${90.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, avg)}}}$$ |
+| qwen3.6-27b | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${89.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2026.2.3)}}}$$ | $${89.8\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
 | glm-4.7-flash | $${82.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2026.1.1)}}}$$ | $${93.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.1.1)}}}$$ | $${96.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, 2026.1.1)}}}$$ | $${17.2\\% \space\color{gray}\tiny{\textsf{(CI: 9.7, 2026.1.1)}}}$$ | $${89.7\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
 | devstral-2512 | $${86.1\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2026.2.0b1)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2026.2.0b1)}}}$$ | $${88.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2026.2.0b1)}}}$$ | $${60.0\\% \space\color{gray}\tiny{\textsf{(CI: 12.4, 2026.2.0b1)}}}$$ | $${89.1\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
 | claude-3-5-haiku | $${85.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${94.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2025.4.3)}}}$$ | $${87.0\\% \space\color{gray}\tiny{\textsf{(CI: 4.8, 2025.4.3)}}}$$ | $${56.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.5, 2025.4.3)}}}$$ | $${87.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, avg)}}}$$ |
@@ -78,7 +79,7 @@ config:
 ---
 xychart-beta
   title "assist"
-  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, .]
+  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, glm-4.7-flash, devstral-2512, claude-3-5-haiku, .]
   y-axis "Score" 1 --> 100
   bar [87.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 88.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -88,10 +89,10 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 83.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 89.4, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 82.6, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.1, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.4, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 78.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.3, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 82.6, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.1, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.4, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -136,7 +137,7 @@ config:
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, .]
+  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, glm-4.7-flash, devstral-2512, claude-3-5-haiku, .]
   y-axis "Score" 1 --> 100
   bar [98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -146,10 +147,10 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 94.4, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.3, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.9, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 94.4, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -186,7 +187,7 @@ config:
 ---
 xychart-beta
   title "questions"
-  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, .]
+  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, glm-4.7-flash, devstral-2512, claude-3-5-haiku, .]
   y-axis "Score" 1 --> 100
   bar [100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 94.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -196,10 +197,10 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 84.1, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.2, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.6, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 87.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.3, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 89.7, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.2, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.6, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 87.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -238,7 +239,7 @@ config:
 ---
 xychart-beta
   title "automations"
-  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, minimax-m2.5, gemini-2.5-pro, claude-3-7-sonnet, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, gpt-4.1-mini, gemini-2.5-flash-lite, .]
+  x-axis "Model" [gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, minimax-m2.5, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, gpt-4.1-mini, .]
   y-axis "Score" 1 --> 100
   bar [6.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 73.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -246,15 +247,28 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 61.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 17.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 61.7, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 48.3, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 17.2, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 61.7, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
+
+### qwen3.6-27b
+
+Qwen 3.6 27B (Q6_K) running with reasoning off behind an
+OpenAI-compatible server. Developed by Alibaba Cloud,
+this model is optimized for agentic coding.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/Qwen3.6-27B
+
 
 ### claude-3-5-haiku
 
@@ -738,8 +752,8 @@ More information:
 
 ### qwen3.5-4b
 
-Qwen 3.5 4B running behind an 
-OpenAI-compatible server. Developed by Alibaba Cloud, 
+Qwen 3.5 4B running behind an
+OpenAI-compatible server. Developed by Alibaba Cloud,
 this model is optimized for efficient text processing.
 
 
