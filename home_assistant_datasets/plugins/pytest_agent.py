@@ -9,6 +9,8 @@ specific agent configuration needed.
 
 import dataclasses
 import logging
+import socket
+from collections.abc import Generator
 from typing import Any
 
 import pytest
@@ -16,6 +18,7 @@ import pytest_socket
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.setup import async_setup_component
+from pytest_homeassistant_custom_component import plugins as phcc_plugins
 
 from home_assistant_datasets.agent import (
     ConversationAgent,
@@ -44,14 +47,43 @@ _LOGGER = logging.getLogger(__name__)
 
 
 @pytest.fixture(autouse=True)
-def mock_allow_sockets(socket_enabled: Any) -> None:
+def mock_allow_sockets(socket_enabled: Any) -> Generator[None, None, None]:
     """Remove all restrictions talking to sockets.
 
     This is needed when talking to external data sources
     like LLMs.
+
+    Home Assistant's test harness restricts the network in two independent
+    ways (see `pytest_homeassistant_custom_component.plugins`):
+
+    1. `pytest_socket.socket_allow_hosts(["127.0.0.1"])` plus `disable_socket()`
+    2. since Home Assistant 2026.5.0, `socket.getaddrinfo`, `gethostbyname` and
+       `gethostbyname_ex` are patched to reject any host that is not an IP
+       literal, raising `RuntimeError("DNS resolution disabled in tests")`
+
+    Lifting only (1) leaves every hostname unresolvable, which surfaces from
+    the openai SDK as the generic `APIConnectionError("Connection error.")` and
+    from Home Assistant as `ConfigEntryNotReady` - so the real cause never
+    reaches the logs.
     """
+    saved = (socket.getaddrinfo, socket.gethostbyname, socket.gethostbyname_ex)
+
     pytest_socket.pytest_runtest_teardown()
-    pass
+
+    real_getaddrinfo = phcc_plugins._real_getaddrinfo
+    socket.getaddrinfo = real_getaddrinfo
+    socket.gethostbyname = lambda host, *args, **kwargs: real_getaddrinfo(host, None)[
+        0
+    ][4][0]
+    socket.gethostbyname_ex = lambda host, *args, **kwargs: (
+        host,
+        [],
+        [real_getaddrinfo(host, None)[0][4][0]],
+    )
+    try:
+        yield
+    finally:
+        socket.getaddrinfo, socket.gethostbyname, socket.gethostbyname_ex = saved
 
 
 @pytest.fixture(scope="module")
@@ -109,6 +141,7 @@ def merged_model_config_fixture(
 
 @pytest.fixture(name="conversation_agent_config_entry")
 async def mock_conversation_agent_config_entry(
+    mock_allow_sockets: None,
     hass: HomeAssistant,
     merged_model_config: ModelConfig,
 ) -> MockConfigEntry | None:
