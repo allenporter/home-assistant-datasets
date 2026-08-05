@@ -3,7 +3,7 @@
 | --- | --- | --- | --- | --- |
 | gemini-3.1-flash-lite | $${87.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.2.3)}}}$$ | $${6.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.3, 2026.2.3)}}}$$ | $${\textbf{93.8}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 1.5, avg)}}}$$ |
 | gemini-2.5-flash | $${88.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.7.1)}}}$$ | $${94.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, 2025.7.1)}}}$$ | $${73.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.2, 2025.4.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
-| gemma4-26b-a4b | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.2.3)}}}$$ | $${\textbf{83.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 9.4, 2026.2.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
+| gemma4-26b-a4b | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.2.3)}}}$$ | $${83.3\\% \space\color{gray}\tiny{\textsf{(CI: 9.4, 2026.2.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
 | gemma4-12b | $${83.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.2.3)}}}$$ | $${97.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, 2026.2.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.2.3)}}}$$ |  | $${92.1\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | minimax-m2.5 | $${88.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2026.2.1)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.1)}}}$$ | $${93.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.6, 2026.2.1)}}}$$ | $${61.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.3, 2026.2.1)}}}$$ | $${92.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | qwen3-30b-a3b-instruct | $${83.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.1.1)}}}$$ | $${97.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, 2026.1.1)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
@@ -37,6 +37,8 @@
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | gemma4-e2b | $${45.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${61.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, 2026.2.3)}}}$$ | $${73.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ |  | $${58.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
 | qwen3-1.7b | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.7.1)}}}$$ | $${60.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, 2025.7.1)}}}$$ | $${59.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${49.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
+| gpt-5.6-luna | $${18.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2026.7.4)}}}$$ | $${10.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2026.7.4)}}}$$ | $${94.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, 2026.7.4)}}}$$ | $${\textbf{88.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 8.1, 2026.7.4)}}}$$ | $${44.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
+| assistant | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.7.4)}}}$$ |  |  |  | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, avg)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -257,17 +259,14 @@ xychart-beta
 ```
 ## Models
 
-### qwen3.6-27b
+### assistant
 
-Qwen 3.6 27B (Q6_K) running with reasoning off behind an
-OpenAI-compatible server. Developed by Alibaba Cloud,
-this model is optimized for agentic coding.
-
+The Home Assisatnt NLP assistant pipeline
 
 
 
 More information:
-- https://huggingface.co/unsloth/Qwen3.6-27B
+- https://github.com/home-assistant/hassil
 
 
 ### claude-3-5-haiku
@@ -599,6 +598,16 @@ More information:
 - https://platform.openai.com/docs/models/gpt-4o-mini
 
 
+### gpt-5.6-luna
+
+GPT-5.6 Luna is a fast, cost-efficient model in OpenAI's GPT-5.6 series. It is suited for high-volume, latency-sensitive tasks such as chat, classification, and lightweight agentic workflows, providing capable reasoning for...
+
+
+
+More information:
+- https://openrouter.ai/openai/gpt-5.6-luna
+
+
 ### gpt-oss-120b
 
 gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases. It activates 5.1B parameters per forward pass and is optimized to run on a single H100 GPU with native MXFP4 quantization. The model supports configurable reasoning depth, full chain-of-thought access, and native tool use, including function calling, browsing, and structured output generation.
@@ -761,3 +770,16 @@ this model is optimized for efficient text processing.
 
 More information:
 - https://huggingface.co/unsloth/Qwen3.5-4B
+
+
+### qwen3.6-27b
+
+Qwen 3.6 27B (Q6_K) running with reasoning off behind an
+OpenAI-compatible server. Developed by Alibaba Cloud,
+this model is optimized for agentic coding.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/Qwen3.6-27B
