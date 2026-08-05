@@ -3,8 +3,18 @@
 ```
 usage: home-assistant-datasets benchmark all [-h] --model MODEL
                                              [--dataset DATASET | --language {es,fr,de,nl}]
-                                             [--synthetic-home-dir DIR]
-                                             [--parallel] [--dry-run]
+                                             [--parallel [N]] [--dry-run]
+
+options:
+  -h, --help            show this help message and exit
+  --model MODEL         Model ID to evaluate (e.g., devstral-2512)
+  --dataset DATASET     Run a specific dataset (e.g., assist-es, automations)
+  --language {es,fr,de,nl}
+                        Run all datasets for a language (e.g., es)
+  --parallel [N]        Maximum number of datasets to run at the same time, or
+                        every dataset at once when no value is given (default:
+                        1). Output of concurrent datasets goes to log files.
+  --dry-run             Print commands without executing them
 ```
 """
 

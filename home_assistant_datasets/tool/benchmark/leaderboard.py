@@ -2,10 +2,16 @@
 
 ```
 usage: home-assistant-datasets benchmark leaderboard [-h] [--dry-run]
+
+options:
+  -h, --help  show this help message and exit
+  --dry-run   Print commands without executing them
 ```
 """
 
 import argparse
+
+from home_assistant_datasets.tool.leaderboard import build as leaderboard_build
 
 from ._common import REPORTS_DIR
 
@@ -27,8 +33,6 @@ def run(args: argparse.Namespace) -> int:
     if dry_run:
         print("[dry-run] leaderboard build")
         return 0
-
-    from home_assistant_datasets.tool.leaderboard import build as leaderboard_build
 
     # Synthesize the args that leaderboard.build.run() expects
     leaderboard_args = argparse.Namespace(report_dir=str(REPORTS_DIR))

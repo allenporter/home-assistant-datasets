@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 import argparse
+from dataclasses import dataclass
 import io
+from importlib.metadata import PackageNotFoundError, version
 import pathlib
 import re
 import subprocess
@@ -20,6 +23,17 @@ from home_assistant_datasets.tool.leaderboard.config import (
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 DATASETS_DIR = REPO_ROOT / "datasets"
 REPORTS_DIR = REPO_ROOT / "reports"
+
+# Pytest writes progress lines like: "test_name PASSED  [ 42%]"
+_PROGRESS_RE = re.compile(r"\[\s*(\d+)%\]")
+
+# Number of bytes read from the end of a log file to find the last progress line
+_PROGRESS_TAIL_BYTES = 4096
+
+# Seconds to wait between status updates while tasks are running
+_POLL_INTERVAL = 1.0
+
+_TABLE_WIDTH = 60
 
 # Build the full set of assist-family dataset names (including multilingual)
 _ASSIST_FAMILY_SET: set[str] = set(ASSIST_FAMILY_DATASETS) | {
@@ -46,13 +60,23 @@ def resolve_datasets(args: argparse.Namespace) -> list[str]:
     return list(DATASETS)
 
 
+def resolve_concurrency(args: argparse.Namespace, num_datasets: int) -> int:
+    """Return the maximum number of datasets to run at the same time.
+
+    A bare `--parallel` flag means every dataset at once, otherwise the
+    value passed to `--parallel` is the upper bound (default: one at a time).
+    """
+    parallel = getattr(args, "parallel", 1)
+    if parallel is None or parallel <= 0:
+        return max(1, num_datasets)
+    return max(1, min(parallel, num_datasets))
+
+
 def get_ha_version() -> str:
     """Get the installed Home Assistant version."""
     try:
-        from importlib.metadata import version
-
         return version("homeassistant")
-    except Exception:
+    except PackageNotFoundError:
         return "dev"
 
 
@@ -61,192 +85,305 @@ def get_output_dir(dataset_name: str) -> pathlib.Path:
     return REPORTS_DIR / dataset_name / get_ha_version()
 
 
-def run_pytest(pytest_args: list[str], *, dry_run: bool = False) -> int:
-    """Run pytest as a subprocess, return exit code."""
-    cmd = [sys.executable, "-m", "pytest"] + pytest_args
-    cmd_str = " ".join(cmd)
-    if dry_run:
-        print(f"  [dry-run] {cmd_str}")
-        return 0
-    print(f"  Running: {cmd_str}")
-    result = subprocess.run(cmd, cwd=str(REPO_ROOT))
-    return result.returncode
+def validate_dataset_dir(dataset_name: str) -> None:
+    """Check that a dataset directory exists.
+
+    Raises ValueError if the dataset directory does not exist.
+    """
+    ds_dir = DATASETS_DIR / dataset_name
+    if not ds_dir.is_dir():
+        raise ValueError(f"Dataset directory not found: {ds_dir}")
+
+
+def validate_model(model_id: str) -> None:
+    """Check that a model config exists.
+
+    Raises ValueError if no model configuration file can be found.
+    """
+    model_dir = REPO_ROOT / "models"
+    if (model_dir / f"{model_id}.yaml").is_file():
+        return
+    # Also check subdirectories
+    if not list(model_dir.rglob(f"{model_id}.yaml")):
+        raise ValueError(f"Model config not found: models/{model_id}.yaml")
+
+
+@dataclass
+class Task:
+    """A single pytest invocation for one dataset."""
+
+    dataset: str
+    """Name of the dataset this task operates on."""
+
+    pytest_args: list[str]
+    """Arguments passed to pytest."""
+
+    @property
+    def command(self) -> list[str]:
+        """The command line used to run this task."""
+        return [sys.executable, "-m", "pytest", *self.pytest_args]
+
+
+@dataclass
+class _RunningTask:
+    """A task that has been started as a subprocess."""
+
+    task: Task
+    process: subprocess.Popen
+    log_file: pathlib.Path | None = None
+    log_handle: io.TextIOWrapper | None = None
+
+    def progress(self) -> str:
+        """Return the last pytest progress percentage reported by the task."""
+        if self.log_file is None:
+            return "..."
+        return _read_progress(self.log_file)
+
+    def close(self) -> None:
+        """Release the log file handle."""
+        if self.log_handle is not None:
+            self.log_handle.close()
+            self.log_handle = None
 
 
 def _read_progress(log_file: pathlib.Path) -> str:
     """Read the last pytest progress percentage from a log file."""
     try:
-        with open(log_file, "r") as f:
+        with log_file.open("r") as f:
             # Read from end to find the last progress line efficiently
             f.seek(0, io.SEEK_END)
             size = f.tell()
-            # Read last 4KB (enough to find the last progress line)
-            f.seek(max(0, size - 4096))
+            f.seek(max(0, size - _PROGRESS_TAIL_BYTES))
             tail = f.read()
-        # Pytest outputs lines like: "test_name PASSED  [ 42%]"
-        matches = re.findall(r"\[\s*(\d+)%\]", tail)
-        if matches:
-            return f"{matches[-1]}%"
     except OSError:
-        pass
+        return "..."
+    if matches := _PROGRESS_RE.findall(tail):
+        return f"{matches[-1]}%"
     return "..."
 
 
-def run_datasets_parallel(
-    dataset_tasks: list[tuple[str, list[str]]],
+class StatusWriter(ABC):
+    """Base class for reporting the status of benchmark tasks."""
+
+    @abstractmethod
+    def task_started(self, task: Task, *, dry_run: bool) -> None:
+        """Write that a task has started."""
+
+    @abstractmethod
+    def task_finished(self, task: Task, returncode: int, *, ok: bool) -> None:
+        """Write that a task has exited."""
+
+    @abstractmethod
+    def status(self, rows: list[tuple[str, str]], completed: int, total: int) -> None:
+        """Write the status of every task, called while tasks are running."""
+
+    @abstractmethod
+    def finish(self, log_dir: pathlib.Path | None) -> None:
+        """Write the output summary."""
+
+
+class StreamStatusWriter(StatusWriter):
+    """Status writer for tasks that stream their output to the console.
+
+    Used when tasks run one at a time (or for a dry run), where pytest itself
+    writes progress to the console so there is nothing to poll.
+    """
+
+    def __init__(self, label: str) -> None:
+        """Initialize StreamStatusWriter."""
+        self._label = label
+
+    def task_started(self, task: Task, *, dry_run: bool) -> None:
+        """Write that a task has started."""
+        print("=" * _TABLE_WIDTH)
+        print(
+            f"{self._label}: {task.dataset} (family={classify_dataset(task.dataset)})"
+        )
+        print("=" * _TABLE_WIDTH)
+        prefix = "[dry-run]" if dry_run else "Running:"
+        print(f"  {prefix} {' '.join(task.command)}")
+
+    def task_finished(self, task: Task, returncode: int, *, ok: bool) -> None:
+        """Write that a task has exited."""
+        if not ok:
+            print(f"  FAILED: {task.dataset} (exit code {returncode})")
+        print()
+
+    def status(self, rows: list[tuple[str, str]], completed: int, total: int) -> None:
+        """Write the status of every task, already covered by pytest output."""
+
+    def finish(self, log_dir: pathlib.Path | None) -> None:
+        """Write the output summary."""
+
+
+class TableStatusWriter(StatusWriter):
+    """Base status writer for tasks that write their output to log files."""
+
+    def task_started(self, task: Task, *, dry_run: bool) -> None:
+        """Write that a task has started, shown in the status table instead."""
+
+    def task_finished(self, task: Task, returncode: int, *, ok: bool) -> None:
+        """Write that a task has exited, shown in the status table instead."""
+
+    def finish(self, log_dir: pathlib.Path | None) -> None:
+        """Write the output summary."""
+        if log_dir is not None:
+            print(f"  Logs: {log_dir}")
+
+    def _render(self, rows: list[tuple[str, str]], completed: int, total: int) -> str:
+        """Render the status of every task as a table."""
+        lines = [f"  [{completed}/{total} done]"]
+        lines.extend(f"  {status:>7}  {name}" for name, status in rows)
+        return "\n".join(lines)
+
+
+class TTYStatusWriter(TableStatusWriter):
+    """Status writer that redraws the status table in place on a terminal."""
+
+    def __init__(self) -> None:
+        """Initialize TTYStatusWriter."""
+        self._prev_lines = 0
+
+    def status(self, rows: list[tuple[str, str]], completed: int, total: int) -> None:
+        """Write the status of every task, overwriting the previous table."""
+        display = self._render(rows, completed, total)
+        if self._prev_lines:
+            # Move the cursor up and erase the previously written table
+            sys.stdout.write(f"\033[{self._prev_lines}A\033[J")
+        sys.stdout.write(display + "\n")
+        sys.stdout.flush()
+        self._prev_lines = display.count("\n") + 1
+
+    def finish(self, log_dir: pathlib.Path | None) -> None:
+        """Write the output summary."""
+        print()
+        super().finish(log_dir)
+
+
+class PlainStatusWriter(TableStatusWriter):
+    """Status writer that prints the status table when a task finishes."""
+
+    def __init__(self) -> None:
+        """Initialize PlainStatusWriter."""
+        self._completed = -1
+
+    def status(self, rows: list[tuple[str, str]], completed: int, total: int) -> None:
+        """Write the status of every task when the completed count changes."""
+        if completed == self._completed:
+            return
+        self._completed = completed
+        print(self._render(rows, completed, total))
+
+
+def create_status_writer(label: str, *, capture: bool) -> StatusWriter:
+    """Create the status writer to use for the current console."""
+    if not capture:
+        return StreamStatusWriter(label)
+    if sys.stdout.isatty():
+        return TTYStatusWriter()
+    return PlainStatusWriter()
+
+
+def _start_task(task: Task, log_dir: pathlib.Path | None) -> _RunningTask:
+    """Start a task as a subprocess, writing to a log file when capturing."""
+    if log_dir is None:
+        return _RunningTask(
+            task=task, process=subprocess.Popen(task.command, cwd=str(REPO_ROOT))
+        )
+    log_file = log_dir / f"{task.dataset}.log"
+    log_handle = log_file.open("w")
+    process = subprocess.Popen(
+        task.command,
+        cwd=str(REPO_ROOT),
+        stdout=log_handle,
+        stderr=subprocess.STDOUT,
+    )
+    return _RunningTask(
+        task=task, process=process, log_file=log_file, log_handle=log_handle
+    )
+
+
+def run_tasks(
+    tasks: list[Task],
     *,
+    max_concurrency: int = 1,
     dry_run: bool = False,
     accept_rc: set[int] | None = None,
+    label: str = "Running",
 ) -> list[str]:
-    """Run multiple pytest invocations in parallel.
+    """Run tasks with at most `max_concurrency` of them running at once.
 
-    Returns list of failed dataset names. Exit codes in accept_rc are
+    Returns the list of failed dataset names. Exit codes in `accept_rc` are
     treated as success (default: {0}).
     """
     if accept_rc is None:
         accept_rc = {0}
-    if dry_run:
-        for ds_name, pytest_args in dataset_tasks:
-            cmd = [sys.executable, "-m", "pytest"] + pytest_args
-            print(f"  [dry-run] [parallel] {ds_name}: {' '.join(cmd)}")
+    if not tasks:
         return []
 
-    log_dir = pathlib.Path(tempfile.mkdtemp(prefix="benchmark-"))
+    concurrency = 1 if dry_run else max(1, min(max_concurrency, len(tasks)))
+    # A single task at a time writes straight to the console. Concurrent tasks
+    # would interleave their output, so it is captured in log files and the
+    # console shows a status table instead.
+    capture = concurrency > 1
+    log_dir = pathlib.Path(tempfile.mkdtemp(prefix="benchmark-")) if capture else None
+    writer = create_status_writer(label, capture=capture)
 
-    # Launch all processes
-    running: list[tuple[str, subprocess.Popen, pathlib.Path, io.TextIOWrapper]] = []
-    for ds_name, pytest_args in dataset_tasks:
-        cmd = [sys.executable, "-m", "pytest"] + pytest_args
-        log_file = log_dir / f"{ds_name}.log"
-        fh = open(log_file, "w")
-        proc = subprocess.Popen(
-            cmd, cwd=str(REPO_ROOT), stdout=fh, stderr=subprocess.STDOUT
+    pending = list(tasks)
+    running: dict[str, _RunningTask] = {}
+    finished: dict[str, str] = {}
+    failures: list[str] = []
+
+    while pending or running:
+        while pending and len(running) < concurrency:
+            task = pending.pop(0)
+            writer.task_started(task, dry_run=dry_run)
+            if dry_run:
+                finished[task.dataset] = "OK"
+                writer.task_finished(task, 0, ok=True)
+                continue
+            running[task.dataset] = _start_task(task, log_dir)
+
+        for item in [
+            item for item in running.values() if item.process.poll() is not None
+        ]:
+            del running[item.task.dataset]
+            item.close()
+            returncode = item.process.returncode
+            ok = returncode in accept_rc
+            finished[item.task.dataset] = "OK" if ok else "FAILED"
+            if not ok:
+                failures.append(item.task.dataset)
+            writer.task_finished(item.task, returncode, ok=ok)
+
+        writer.status(
+            [(task.dataset, _task_status(task, finished, running)) for task in tasks],
+            len(finished),
+            len(tasks),
         )
-        running.append((ds_name, proc, log_file, fh))
+        if running:
+            time.sleep(_POLL_INTERVAL)
 
-    total = len(running)
-    is_tty = sys.stdout.isatty()
-
-    # Poll for completion, showing live progress
-    completed = 0
-    failures: list[str] = []
-    results: dict[str, str] = {}
-    remaining = list(running)
-    prev_lines = 0
-
-    while remaining:
-        still_running = []
-        for ds_name, proc, log_file, fh in remaining:
-            if proc.poll() is not None:
-                fh.close()
-                completed += 1
-                status = "OK" if proc.returncode in accept_rc else "FAILED"
-                results[ds_name] = status
-                if proc.returncode not in accept_rc:
-                    failures.append(ds_name)
-            else:
-                still_running.append((ds_name, proc, log_file, fh))
-        remaining = still_running
-
-        # Build status display
-        lines: list[str] = []
-        for ds_name, _, log_file, _ in running:
-            if ds_name in results:
-                lines.append(f"  {results[ds_name]:>6}  {ds_name}")
-            else:
-                pct = _read_progress(log_file)
-                lines.append(f"  {pct:>6}  {ds_name}")
-        header = f"  [{completed}/{total} done]"
-        display = header + "\n" + "\n".join(lines)
-
-        if is_tty:
-            # Move cursor up to overwrite previous output
-            if prev_lines > 0:
-                sys.stdout.write(f"\033[{prev_lines}A\033[J")
-            sys.stdout.write(display + "\n")
-            sys.stdout.flush()
-            prev_lines = display.count("\n") + 1
-        elif completed > (total - len(remaining)):
-            # Non-TTY: only print when something finishes
-            print(display)
-
-        if remaining:
-            time.sleep(1)
-
-    # Final summary (non-TTY or to ensure it's visible)
-    if not is_tty:
-        print(f"\n  [{completed}/{total} done]")
-        for ds_name, _, log_file, _ in running:
-            print(f"  {results[ds_name]:>6}  {ds_name} (log: {log_file})")
-
-    # Always print log paths
-    if is_tty:
-        print()
-    print(f"  Logs: {log_dir}")
-
+    writer.finish(log_dir)
     return failures
 
 
-def run_tasks(
-    tasks: list[tuple[str, list[str]]],
-    *,
-    parallel: bool,
-    dry_run: bool,
-    accept_rc: set[int] | None = None,
-    label: str = "Running",
-) -> list[str]:
-    """Run dataset tasks sequentially or in parallel.
-
-    Returns list of failed dataset names.
-    """
-    if accept_rc is None:
-        accept_rc = {0}
-
-    if parallel and len(tasks) > 1:
-        return run_datasets_parallel(tasks, dry_run=dry_run, accept_rc=accept_rc)
-
-    failures: list[str] = []
-    for ds_name, pytest_args in tasks:
-        print(f"{'=' * 60}")
-        print(f"{label}: {ds_name} (family={classify_dataset(ds_name)})")
-        print(f"{'=' * 60}")
-        rc = run_pytest(pytest_args, dry_run=dry_run)
-        if rc not in accept_rc:
-            failures.append(ds_name)
-            print(f"  FAILED: {ds_name} (exit code {rc})")
-        print()
-    return failures
-
-
-def validate_dataset_dir(dataset_name: str) -> None:
-    """Check that a dataset directory exists."""
-    ds_dir = DATASETS_DIR / dataset_name
-    if not ds_dir.is_dir():
-        die(f"Dataset directory not found: {ds_dir}")
-
-
-def validate_model(model_id: str) -> None:
-    """Check that a model config exists."""
-    model_dir = REPO_ROOT / "models"
-    model_file = model_dir / f"{model_id}.yaml"
-    if not model_file.is_file():
-        # Also check subdirectories
-        matches = list(model_dir.rglob(f"{model_id}.yaml"))
-        if not matches:
-            die(f"Model config not found: models/{model_id}.yaml")
-
-
-def die(msg: str) -> None:
-    """Print error and exit."""
-    print(f"Error: {msg}", file=sys.stderr)
-    sys.exit(1)
+def _task_status(
+    task: Task, finished: dict[str, str], running: dict[str, _RunningTask]
+) -> str:
+    """Return the status text to display for a task."""
+    if (status := finished.get(task.dataset)) is not None:
+        return status
+    if (item := running.get(task.dataset)) is not None:
+        return item.progress()
+    return "queued"
 
 
 def build_collect_tasks(
     datasets: list[str], model: str, *, dry_run: bool = False
-) -> list[tuple[str, list[str]]]:
-    """Build (dataset_name, pytest_args) tuples for the collect phase."""
-    tasks: list[tuple[str, list[str]]] = []
+) -> list[Task]:
+    """Build the list of tasks for the collect phase."""
+    tasks: list[Task] = []
     for ds_name in datasets:
         output_dir = get_output_dir(ds_name)
         if not dry_run:
@@ -258,24 +395,28 @@ def build_collect_tasks(
         else:
             test_dir = "home_assistant_datasets/tool/automation/collect"
 
-        pytest_args = [
-            test_dir,
-            f"--models={model}",
-            f"--dataset=datasets/{ds_name}/",
-            f"--model_output_dir={output_dir}",
-        ]
-        tasks.append((ds_name, pytest_args))
+        tasks.append(
+            Task(
+                dataset=ds_name,
+                pytest_args=[
+                    test_dir,
+                    f"--models={model}",
+                    f"--dataset=datasets/{ds_name}/",
+                    f"--model_output_dir={output_dir}",
+                ],
+            )
+        )
     return tasks
 
 
 def build_eval_tasks(
     datasets: list[str], *, dry_run: bool = False
-) -> tuple[list[tuple[str, list[str]]], list[str]]:
-    """Build (dataset_name, pytest_args) tuples for the eval phase.
+) -> tuple[list[Task], list[str]]:
+    """Build the list of tasks for the eval phase.
 
     Returns (tasks, skipped) where skipped are datasets with no output dir.
     """
-    tasks: list[tuple[str, list[str]]] = []
+    tasks: list[Task] = []
     skipped: list[str] = []
     for ds_name in datasets:
         output_dir = get_output_dir(ds_name)
@@ -294,7 +435,7 @@ def build_eval_tasks(
                 f"datasets/{ds_name}/",
                 f"--model_output_dir={output_dir}",
             ]
-        tasks.append((ds_name, pytest_args))
+        tasks.append(Task(dataset=ds_name, pytest_args=pytest_args))
     return tasks, skipped
 
 
@@ -312,8 +453,16 @@ def add_common_args(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument(
         "--parallel",
-        action="store_true",
-        help="Run all datasets in parallel (output goes to log files)",
+        nargs="?",
+        type=int,
+        const=0,
+        default=1,
+        metavar="N",
+        help=(
+            "Maximum number of datasets to run at the same time, or every "
+            "dataset at once when no value is given (default: 1). Output of "
+            "concurrent datasets goes to log files."
+        ),
     )
     parser.add_argument(
         "--dry-run",

@@ -3,7 +3,18 @@
 ```
 usage: home-assistant-datasets benchmark collect [-h] --model MODEL
                                                  [--dataset DATASET | --language {es,fr,de,nl}]
-                                                 [--parallel] [--dry-run]
+                                                 [--parallel [N]] [--dry-run]
+
+options:
+  -h, --help            show this help message and exit
+  --model MODEL         Model ID to evaluate (e.g., devstral-2512)
+  --dataset DATASET     Run a specific dataset (e.g., assist-es, automations)
+  --language {es,fr,de,nl}
+                        Run all datasets for a language (e.g., es)
+  --parallel [N]        Maximum number of datasets to run at the same time, or
+                        every dataset at once when no value is given (default:
+                        1). Output of concurrent datasets goes to log files.
+  --dry-run             Print commands without executing them
 ```
 """
 
@@ -13,6 +24,7 @@ from ._common import (
     add_common_args,
     build_collect_tasks,
     get_ha_version,
+    resolve_concurrency,
     resolve_datasets,
     run_tasks,
     validate_dataset_dir,
@@ -35,7 +47,7 @@ def run(args: argparse.Namespace) -> int:
     datasets = resolve_datasets(args)
     model = args.model
     dry_run = args.dry_run
-    parallel = getattr(args, "parallel", False)
+    concurrency = resolve_concurrency(args, len(datasets))
 
     validate_model(model)
     for ds in datasets:
@@ -45,11 +57,13 @@ def run(args: argparse.Namespace) -> int:
     print(f"Model: {model}")
     print(f"HA version: {ha_version}")
     print(f"Datasets: {', '.join(datasets)}")
-    print(f"Parallel: {parallel}")
+    print(f"Concurrency: {concurrency}")
     print()
 
     tasks = build_collect_tasks(datasets, model, dry_run=dry_run)
-    failures = run_tasks(tasks, parallel=parallel, dry_run=dry_run, label="Collecting")
+    failures = run_tasks(
+        tasks, max_concurrency=concurrency, dry_run=dry_run, label="Collecting"
+    )
 
     if failures:
         print(f"Failed datasets: {', '.join(failures)}")

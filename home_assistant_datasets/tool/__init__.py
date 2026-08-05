@@ -1,12 +1,12 @@
 """Home Assistant Datasets command line tools.
 
 ```
-usage: home-assistant-datasets [-h] [--debug] {leaderboard,convert} ...
+usage: home-assistant-datasets [-h] [--debug] {leaderboard,convert,benchmark} ...
 
 Home Assistant Datasets Utility
 
 positional arguments:
-  {leaderboard,convert}
+  {leaderboard,convert,benchmark}
                         Action
 
 options:

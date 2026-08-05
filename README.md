@@ -98,13 +98,19 @@ script/benchmark eval --dataset assist-es
 
 ### Parallel execution
 
-Run all datasets for a language in parallel for faster results:
+Datasets run one at a time by default. Use `--parallel` to run more than one at
+once for faster results:
 
 ```bash
+# Run every dataset for the language at the same time
 script/benchmark all --model devstral-2512 --language es --parallel
+
+# Run at most 2 datasets at the same time
+script/benchmark all --model devstral-2512 --language es --parallel 2
 ```
 
-In parallel mode, each dataset runs as a separate process.
+Each dataset runs as a separate process. When more than one runs at a time the
+output is written to log files and the console shows a progress table instead.
 
 ## Synthetic Datasets
 
