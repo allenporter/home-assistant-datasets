@@ -1,0 +1,221 @@
+---
+uuid: d1a215dd-2dfd-4319-bb99-05f89fe64865
+task_id: vacuum_pause_vacuum_pause-vacuum_pause-0
+model_id: qwen3.6-27b
+category: vacuum
+task:
+  input_text: |
+    # Vacuum Pause
+
+    ## Problem statement
+
+    Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+    ## Example use cases
+
+    These are example use cases that could be used with the blueprint:
+
+    - Pause the vacuum when I get a phone call from my relatives
+    - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+    ## Detailed Description
+
+    The blueprint should accept two inputs:
+
+    | Input               | Description                                                           |
+    | ------------------- | --------------------------------------------------------------------- |
+    | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+    | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+    The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+    should be paused (not stopped) and can be resumed manually.
+response: |-
+  Here is the Home Assistant blueprint for pausing the vacuum during a phone call.
+
+  ```yaml
+  blueprint:
+    name: Pause Vacuum on Phone Call
+    description: Pauses the vacuum cleaner when a phone call is detected.
+    domain: automation
+    input:
+      phone_call_sensor:
+        name: Phone Call Sensor
+        description: Binary sensor that indicates an active phone call.
+        selector:
+          entity:
+            domain: binary_sensor
+      vacuum_entity:
+        name: Vacuum Cleaner
+        description: The vacuum cleaner to pause.
+        selector:
+          entity:
+            domain: vacuum
+
+  mode: restart
+  max_exceeded: silent
+
+  trigger:
+    - platform: state
+      entity_id: !input phone_call_sensor
+      to: "on"
+
+  condition:
+    - condition: state
+      entity_id: !input vacuum_entity
+      state: "cleaning"
+
+  action:
+    - service: vacuum.pause
+      target:
+        entity_id: !input vacuum_entity
+  ```
+
+  ### How to use:
+  1. Copy the code above into a file named `pause_vacuum_on_call.yaml` in your `/config/blueprints/automation/` folder.
+  2. Reload blueprints in Home Assistant.
+  3. Create a new automation using this blueprint.
+  4. Select your phone call `binary_sensor` and your `vacuum` entity.
+
+  ### Notes:
+  - The automation uses `mode: restart` so that if multiple calls come in quickly, it doesn't create duplicate actions.
+  - The `condition` ensures the vacuum is only paused if it is currently cleaning, preventing errors if the vacuum is already docked or idle.
+  - The vacuum is paused, not stopped, so you can resume it manually or via another automation when the call ends.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: |
+        # Vacuum Pause
+
+        ## Problem statement
+
+        Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+        ## Example use cases
+
+        These are example use cases that could be used with the blueprint:
+
+        - Pause the vacuum when I get a phone call from my relatives
+        - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+        ## Detailed Description
+
+        The blueprint should accept two inputs:
+
+        | Input               | Description                                                           |
+        | ------------------- | --------------------------------------------------------------------- |
+        | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+        | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+        The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+        should be paused (not stopped) and can be resumed manually.
+      context:
+        id: 01KYQQ1A5J99KFBR4VB0KWYQC3
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-07-29 19:53:43.858602+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Answer in plain text. Keep it simple and to the point.
+          Current time is 12:53:43. Today's date is 2026-07-29.
+        created: 2026-07-29 19:53:43.859466+00:00
+      - role: user
+        content: |
+          # Vacuum Pause
+
+          ## Problem statement
+
+          Create a blueprint automation to pause the vacuum when I receive a phone call.
+
+          ## Example use cases
+
+          These are example use cases that could be used with the blueprint:
+
+          - Pause the vacuum when I get a phone call from my relatives
+          - Don't interrupt my work video convererence call with vacuum noise by pausing it when the call starts
+
+          ## Detailed Description
+
+          The blueprint should accept two inputs:
+
+          | Input               | Description                                                           |
+          | ------------------- | --------------------------------------------------------------------- |
+          | `phone_call_sensor` | A `binary_sensor` entity that triggers when a phone call is received. |
+          | `vacuum_entity`     | A `vacuum` entity to pause when the automation fires.                 |
+
+          The automation should trigger when the binary sensor fires and the vacuum is running. The vacuum
+          should be paused (not stopped) and can be resumed manually.
+        attachments: null
+        created: 2026-07-29 19:53:43.858639+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |-
+          Here is the Home Assistant blueprint for pausing the vacuum during a phone call.
+
+          ```yaml
+          blueprint:
+            name: Pause Vacuum on Phone Call
+            description: Pauses the vacuum cleaner when a phone call is detected.
+            domain: automation
+            input:
+              phone_call_sensor:
+                name: Phone Call Sensor
+                description: Binary sensor that indicates an active phone call.
+                selector:
+                  entity:
+                    domain: binary_sensor
+              vacuum_entity:
+                name: Vacuum Cleaner
+                description: The vacuum cleaner to pause.
+                selector:
+                  entity:
+                    domain: vacuum
+
+          mode: restart
+          max_exceeded: silent
+
+          trigger:
+            - platform: state
+              entity_id: !input phone_call_sensor
+              to: "on"
+
+          condition:
+            - condition: state
+              entity_id: !input vacuum_entity
+              state: "cleaning"
+
+          action:
+            - service: vacuum.pause
+              target:
+                entity_id: !input vacuum_entity
+          ```
+
+          ### How to use:
+          1. Copy the code above into a file named `pause_vacuum_on_call.yaml` in your `/config/blueprints/automation/` folder.
+          2. Reload blueprints in Home Assistant.
+          3. Create a new automation using this blueprint.
+          4. Select your phone call `binary_sensor` and your `vacuum` entity.
+
+          ### Notes:
+          - The automation uses `mode: restart` so that if multiple calls come in quickly, it doesn't create duplicate actions.
+          - The `condition` ensures the vacuum is only paused if it is currently cleaning, preventing errors if the vacuum is already docked or idle.
+          - The vacuum is paused, not stopped, so you can resume it manually or via another automation when the call ends.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-07-29 19:53:57.382324+00:00
+      tools: null
+    timestamp: 2026-07-29 19:53:43.859471+00:00
+  duration_ms: 13524.004
+  tries: 1

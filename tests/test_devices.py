@@ -3,11 +3,10 @@
 import pathlib
 
 import pytest
+import synthetic_home
 import synthetic_home.device_types
 import synthetic_home.synthetic_home
 import yaml
-import synthetic_home
-
 
 DEVICE_FILES = [
     filename for filename in pathlib.Path("datasets/devices/").glob("*.yaml")

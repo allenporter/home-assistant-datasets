@@ -2,13 +2,12 @@
 
 from typing import Any
 
+from homeassistant.core import HomeAssistant
 from pyrate_limiter import (
     Duration,
-    Rate,
     Limiter,
+    Rate,
 )
-
-from homeassistant.core import HomeAssistant
 
 from .agent import ConversationAgent
 
@@ -22,7 +21,12 @@ MAX_DELAY = 60 * 1000  # 1 minute
 def _create_limiter(rpm: int) -> Limiter:
     """Create a rate limiter."""
     rate = Rate(rpm, Duration.MINUTE)
-    return Limiter(rate, max_delay=MAX_DELAY)
+    import inspect
+
+    sig = inspect.signature(Limiter.__init__)
+    if "max_delay" in sig.parameters:
+        return Limiter(rate, max_delay=MAX_DELAY)  # type: ignore[call-arg]
+    return Limiter(rate)
 
 
 class RateLimitedAgent(ConversationAgent):

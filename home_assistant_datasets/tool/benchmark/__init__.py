@@ -24,7 +24,7 @@ options:
 ```
 """
 
-from . import collect, eval, leaderboard, all
+from . import all, collect, eval, leaderboard
 
 SUBCMDS = {
     "collect": collect,

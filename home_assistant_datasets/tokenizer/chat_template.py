@@ -1,14 +1,14 @@
 """Library for building prompts from the tokenizer chat template."""
 
+import json
+import logging
 import pathlib
 from functools import cache
 from typing import Any
-import json
-import logging
 
 from jinja2 import Environment, PackageLoader
 
-from .conversation import Tool, Message
+from .conversation import Message, Tool
 
 __all__ = [
     "build_prompt",

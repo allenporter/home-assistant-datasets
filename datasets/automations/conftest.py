@@ -1,23 +1,23 @@
 """Fixtures for exercising automation solutions."""
 
-from collections.abc import Generator, Callable
 import pathlib
-from slugify import slugify
+from collections.abc import Callable, Generator
 from typing import Any
 
 import pytest
-from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from homeassistant.setup import async_setup_component
+from slugify import slugify
 
-from home_assistant_datasets.entity_state import EntityStateFixture
 from home_assistant_datasets.blueprint import (
     VALID_BLUEPRINT,
     BlueprintContent,
     BlueprintContentStatus,
     extract_blueprint_content,
 )
+from home_assistant_datasets.entity_state import EntityStateFixture
 from home_assistant_datasets.scrape import ModelOutput
 
 FIXTURES = "_fixtures.yaml"

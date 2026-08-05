@@ -1,7 +1,7 @@
 """A client library wrapper for simple model completions."""
 
-from openai import OpenAI
 import google.generativeai as genai
+from openai import OpenAI
 
 
 class OpenAIClient:

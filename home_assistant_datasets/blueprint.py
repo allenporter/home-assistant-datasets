@@ -5,13 +5,12 @@ from the model output.
 """
 
 import re
+import tempfile
 from contextlib import contextmanager
 from dataclasses import dataclass
-import tempfile
 from typing import Generator
 
 import yaml
-
 
 # Regular expression to extract yaml/blueprint from the model output.
 YAML_RESPONSE = re.compile(r".*```yaml\s*(.*?)\s+```.*", re.DOTALL | re.MULTILINE)

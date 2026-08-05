@@ -5,7 +5,6 @@ import pathlib
 import pytest
 import yaml
 
-
 AREA_FILES = [filename for filename in pathlib.Path("datasets/areas/").glob("*.yaml")]
 
 

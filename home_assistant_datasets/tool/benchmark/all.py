@@ -20,8 +20,8 @@ options:
 
 import argparse
 
-from ._common import add_common_args
 from . import collect, eval, leaderboard
+from ._common import add_common_args
 
 __all__ = []
 

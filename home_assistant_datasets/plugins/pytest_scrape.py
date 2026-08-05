@@ -1,32 +1,32 @@
 """Pytest plugin for scraping model outputs."""
 
-from collections.abc import Generator
 import datetime
-import pathlib
 import logging
+import pathlib
+from collections.abc import Generator
+from importlib.metadata import version
 from typing import Any
 from unittest.mock import patch
-from importlib.metadata import version
 
 import pytest
-from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.components.conversation import async_converse
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
 
-from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 from home_assistant_datasets.datasets.assist_eval_task import (
     EvalTask,
 )
+from home_assistant_datasets.datasets.dataset_card import read_dataset_card
 from home_assistant_datasets.entity_state import EntityStateFixture
 from home_assistant_datasets.entity_state.diff import EntityStateDiffFixture
 from home_assistant_datasets.scrape import (
+    ModelOutputWriter,
     ScrapeConfig,
     write_scrape_context,
-    ModelOutputWriter,
 )
 from home_assistant_datasets.yaml_loaders import configure_encoders
-
 
 _LOGGER = logging.getLogger(__name__)
 

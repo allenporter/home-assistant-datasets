@@ -1,9 +1,9 @@
 """Test library for converting intents."""
 
-from collections.abc import Generator
 import datetime
 import pathlib
 import tempfile
+from collections.abc import Generator
 from unittest.mock import patch
 
 import pytest

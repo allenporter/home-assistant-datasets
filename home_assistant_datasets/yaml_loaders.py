@@ -1,9 +1,9 @@
 """Initialize the yaml_loaders extensions."""
 
-import logging
 import enum
+import logging
 from pathlib import Path
-from typing import Any, TypeVar, Type
+from typing import Any, Type, TypeVar
 
 import yaml
 from mashumaro.codecs.yaml import YAMLDecoder

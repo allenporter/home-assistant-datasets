@@ -1,8 +1,8 @@
 """Module for reading datasets as part of scraping model outputs."""
 
+import pathlib
 from dataclasses import dataclass, field
 from functools import lru_cache
-import pathlib
 from typing import Any
 
 from mashumaro.config import BaseConfig

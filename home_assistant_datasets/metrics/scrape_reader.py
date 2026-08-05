@@ -3,10 +3,10 @@
 import pathlib
 
 from home_assistant_datasets.agent.trace_events import (
-    token_stats_from_context,
     find_llm_call,
+    token_stats_from_context,
 )
-from home_assistant_datasets.scrape import ModelOutput, SCRAPE_CONTEXT_FILE
+from home_assistant_datasets.scrape import SCRAPE_CONTEXT_FILE, ModelOutput
 
 from . import ScrapeRecord
 

@@ -23,17 +23,16 @@ and create a `TaskResult` that indicates pass or failure.
 
 import logging
 import pathlib
-from typing import Any
 from collections.abc import Generator
+from typing import Any
 
 import pytest
-from pytest import TestReport, Item, CallInfo, FixtureRequest, CollectReport
+from pytest import CallInfo, CollectReport, FixtureRequest, Item, TestReport
 
 from home_assistant_datasets.metrics import (
-    TaskResult,
     ScrapeRecord,
+    TaskResult,
 )
-from home_assistant_datasets.scrape import ModelOutput
 from home_assistant_datasets.metrics.report_suite import (
     ReportSuite,
     ReportSuiteConfig,
@@ -45,6 +44,7 @@ from home_assistant_datasets.metrics.scrape_reader import (
     read_model_output,
     scrape_record_from_output,
 )
+from home_assistant_datasets.scrape import ModelOutput
 
 __all__ = []
 

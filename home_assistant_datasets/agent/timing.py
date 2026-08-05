@@ -8,7 +8,6 @@ from homeassistant.core import HomeAssistant
 
 from .agent import ConversationAgent
 
-
 __all__ = [
     "timed_agent",
 ]

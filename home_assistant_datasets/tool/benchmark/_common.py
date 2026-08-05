@@ -2,17 +2,17 @@
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 import argparse
-from dataclasses import dataclass
 import io
-from importlib.metadata import PackageNotFoundError, version
 import pathlib
 import re
 import subprocess
 import sys
 import tempfile
 import time
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from importlib.metadata import PackageNotFoundError, version
 
 from home_assistant_datasets.tool.leaderboard.config import (
     ASSIST_FAMILY_DATASETS,

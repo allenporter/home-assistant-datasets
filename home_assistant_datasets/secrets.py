@@ -16,12 +16,13 @@ A secrets file is ignored by `.gitignore` allowing you to check in the code
 for most of your git repo but leaving your secrets local.
 """
 
-import yaml
-import os
-from typing import Any
-import pathlib
 import logging
+import os
+import pathlib
 from functools import cache
+from typing import Any
+
+import yaml
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -7,9 +7,8 @@ and retries.
 This module is primarily used during data collection / scraping.
 """
 
-from . import rate_limit, retryable, service_call, timing, ai_task
+from . import ai_task, rate_limit, retryable, service_call, timing
 from .agent import ConversationAgent
-
 
 __all__ = [
     "ConversatioAgent",

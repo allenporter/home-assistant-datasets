@@ -14,7 +14,6 @@ from typing import Any
 
 from homeassistant.components.conversation import trace
 
-
 __all__ = [
     "TokenStats",
     "TokenStatsBank",

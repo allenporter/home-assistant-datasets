@@ -2,8 +2,7 @@
 
 from syrupy import SnapshotAssertion
 
-from home_assistant_datasets.tokenizer import conversation, chat_template
-
+from home_assistant_datasets.tokenizer import chat_template, conversation
 
 TOOLS = [
     conversation.Tool(

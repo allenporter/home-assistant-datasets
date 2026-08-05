@@ -1,13 +1,12 @@
 """Library for computing metrics related to eval costs."""
 
+import pathlib
 from collections.abc import Generator
 from dataclasses import dataclass
-import pathlib
 
 import yaml
 
-from home_assistant_datasets.models import read_models, Cost
-
+from home_assistant_datasets.models import Cost, read_models
 
 TOKEN_STATS_FILE = "reports-token-stats.yaml"
 

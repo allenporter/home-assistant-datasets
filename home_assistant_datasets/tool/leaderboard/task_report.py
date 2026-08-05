@@ -11,12 +11,12 @@ options:
 """
 
 import argparse
-from collections import Counter
 import csv
 import logging
 import pathlib
+from collections import Counter
 
-from .config import REPORT_DIR, eval_reports, DATASETS
+from .config import DATASETS, REPORT_DIR, eval_reports
 
 __all__ = []
 

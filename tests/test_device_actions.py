@@ -3,11 +3,10 @@
 import pathlib
 
 import pytest
+import synthetic_home
 import synthetic_home.device_types
 import synthetic_home.synthetic_home
 import yaml
-import synthetic_home
-
 
 DEVICES_DIR = pathlib.Path("datasets/devices/")
 DEVICE_ACTION_FILES = [

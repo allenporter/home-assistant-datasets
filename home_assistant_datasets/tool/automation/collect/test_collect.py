@@ -1,13 +1,12 @@
 """An evaluation for calling Device Actions, expected to be used to evaluate intents."""
 
 import logging
-import uuid
 import textwrap
+import uuid
 
 import pytest
-
-from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 
 from home_assistant_datasets.agent import ConversationAgent
 from home_assistant_datasets.datasets.assist_eval_task import EvalTask

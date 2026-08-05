@@ -1,8 +1,8 @@
 """Library for working with chart values."""
 
-from dataclasses import dataclass
-from collections.abc import Iterable
 import itertools
+from collections.abc import Iterable
+from dataclasses import dataclass
 
 import numpy as np
 

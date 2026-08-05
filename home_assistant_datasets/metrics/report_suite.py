@@ -1,14 +1,13 @@
 """Module for building an entire suite of reports."""
 
-from dataclasses import dataclass
 import io
 import logging
 import pathlib
 from collections.abc import Callable
-from typing import TypeVar, Any
+from dataclasses import dataclass
+from typing import Any, TypeVar
 
-
-from . import TaskResult, ScrapeRecord
+from . import ScrapeRecord, TaskResult
 from .accuracy import AccuracySummary
 from .report import ScrapeRecordWriter, TaskResultWriter
 from .report_csv import create_csv_writer
@@ -173,5 +172,13 @@ def extract_task_name(node_id: str) -> str:
         task_prefix = path_parts[-1]
     else:
         task_prefix = path_parts[-2]
+
+    if task_prefix.endswith(".py"):
+        task_prefix = task_prefix[:-3]
+    if task_prefix and task_prefix[-1].isdigit():
+        task_prefix = task_prefix[:-1]
+
+    if task_prefix.startswith("test_verify_report_output_files"):
+        task_prefix = "test_verify_report_output_files"
     test_method = node_parts[-1].split("[")[0]
     return "-".join([task_prefix, test_method])

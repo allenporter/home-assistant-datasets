@@ -1,7 +1,7 @@
 """Tests for the eval report generation pytest plugin."""
 
-import tempfile
 import pathlib
+import tempfile
 
 import pytest
 from syrupy import SnapshotAssertion
@@ -105,7 +105,9 @@ def test_verify_report_output_files(
 ) -> None:
     """Exercise the report plugin."""
 
-    pytester.makepyfile(TEST_FILE_CONTENTS_FORMAT.format(tmpdir=tmpdir))
+    pytester.makepyfile(
+        test_verify_report_output_files=TEST_FILE_CONTENTS_FORMAT.format(tmpdir=tmpdir)
+    )
     pytester.makeini(PYTEST_INI)
 
     # Prepare a fake scraped model output file in the model output directory.
@@ -119,6 +121,8 @@ def test_verify_report_output_files(
     result = pytester.runpytest_subprocess(
         "--model_output_dir",
         tmpdir,
+        "-p",
+        "no:homeassistant",
     )
 
     # Parse the output lines for "Generated eval report" filenames

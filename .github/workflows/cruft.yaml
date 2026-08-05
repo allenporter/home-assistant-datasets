@@ -29,9 +29,9 @@ jobs:
             commit-message: "chore: reject new Cruft update"
             title: Reject new updates detected with Cruft
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -62,6 +62,15 @@ jobs:
           cruft update --skip-apply-ask --refresh-private-variables
           git restore --staged .
 
+          if [ -n "$(find . -name '*.rej')" ]; then
+            echo "Error: Cruft template update produced merge conflicts (.rej files). Please resolve manually."
+            exit 1
+          fi
+
+          if grep -rn 'cookiecutter\.' . --exclude-dir=.git --exclude=.cruft.json; then
+            echo "Error: Unrendered Cookiecutter Jinja tags detected in repository!"
+            exit 1
+          fi
 
       - name: Create pull request
         if: steps.check.outputs.has_changes == '1'

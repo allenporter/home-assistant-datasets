@@ -5,7 +5,6 @@ from home_assistant_datasets.models import ModelConfig
 
 from .eval_cost import EvalCost
 
-
 CARD_MARKDOWN = """
 ### {name}
 

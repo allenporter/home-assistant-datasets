@@ -1,9 +1,9 @@
 """Configuration for the leaderboard."""
 
-from dataclasses import dataclass
-from collections.abc import Generator
 import logging
 import pathlib
+from collections.abc import Generator
+from dataclasses import dataclass
 
 _LOGGER = logging.getLogger(__name__)
 

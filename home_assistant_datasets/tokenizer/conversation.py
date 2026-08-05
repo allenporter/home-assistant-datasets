@@ -1,11 +1,12 @@
 """Library for conversations for use with the chat template."""
 
 import json
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from typing import Any
+
+from mashumaro.config import BaseConfig
 from mashumaro.mixins.json import DataClassJSONMixin
 from mashumaro.mixins.yaml import DataClassYAMLMixin
-from mashumaro.config import BaseConfig
 
 
 @dataclass

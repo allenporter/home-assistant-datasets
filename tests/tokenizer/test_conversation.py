@@ -1,6 +1,7 @@
 """Tests for the conversation serialization library."""
 
 from syrupy import SnapshotAssertion
+
 from home_assistant_datasets.tokenizer import conversation
 
 TOOLS = [
