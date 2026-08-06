@@ -33,10 +33,12 @@
 | gemini-2.0-flash | $${68.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.2, 2025.4.3)}}}$$ | $${90.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.4.3)}}}$$ | $${78.4\\% \space\color{gray}\tiny{\textsf{(CI: 5.9, 2025.4.3)}}}$$ | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 11.4, 2025.4.3)}}}$$ | $${75.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, avg)}}}$$ |
 | qwen3-4b-instruct | $${71.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.1.1)}}}$$ | $${86.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.1.1)}}}$$ | $${74.1\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${75.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.6, avg)}}}$$ |
 | qwen3-235b-a22b-2507 | $${73.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2026.2.1)}}}$$ | $${87.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${69.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${5.0\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2026.2.1)}}}$$ | $${74.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, avg)}}}$$ |
+| mistral-nemo | $${63.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2026.7.4)}}}$$ | $${83.7\\% \space\color{gray}\tiny{\textsf{(CI: 5.2, 2026.7.4)}}}$$ | $${76.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2026.7.4)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.7.4)}}}$$ | $${71.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | qwen3-4b-instruct-2507-iq4-nl | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.12.4)}}}$$ |  |  |  | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
 | gemma4-e2b | $${45.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${61.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, 2026.2.3)}}}$$ | $${73.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ |  | $${58.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
 | qwen3-1.7b | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.7.1)}}}$$ | $${60.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, 2025.7.1)}}}$$ | $${59.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${49.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
+| assistant | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.7.4)}}}$$ |  |  |  | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, avg)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -257,17 +259,14 @@ xychart-beta
 ```
 ## Models
 
-### qwen3.6-27b
+### assistant
 
-Qwen 3.6 27B (Q6_K) running with reasoning off behind an
-OpenAI-compatible server. Developed by Alibaba Cloud,
-this model is optimized for agentic coding.
-
+The Home Assisatnt NLP assistant pipeline
 
 
 
 More information:
-- https://huggingface.co/unsloth/Qwen3.6-27B
+- https://github.com/home-assistant/hassil
 
 
 ### claude-3-5-haiku
@@ -662,6 +661,16 @@ More information:
 - https://ollama.com/library/ministral-3
 
 
+### mistral-nemo
+
+A 12B parameter model with a 128k token context length built by Mistral in collaboration with NVIDIA. The model is multilingual, supporting English, French, German, Spanish, Italian, Portuguese, Chinese, Japanese,...
+
+
+
+More information:
+- https://openrouter.ai/mistralai/mistral-nemo
+
+
 ### qwen3-1.7b
 
 Qwen3 is the large language model series developed by Qwen team, Alibaba Cloud. Quen improvies on Qwen2.5, with weights of Qwen3 available to the public, including both dense and Mixture-of-Expert (MoE) models.
@@ -761,3 +770,16 @@ this model is optimized for efficient text processing.
 
 More information:
 - https://huggingface.co/unsloth/Qwen3.5-4B
+
+
+### qwen3.6-27b
+
+Qwen 3.6 27B (Q6_K) running with reasoning off behind an
+OpenAI-compatible server. Developed by Alibaba Cloud,
+this model is optimized for agentic coding.
+
+
+
+
+More information:
+- https://huggingface.co/unsloth/Qwen3.6-27B
