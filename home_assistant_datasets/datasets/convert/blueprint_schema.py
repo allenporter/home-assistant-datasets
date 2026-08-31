@@ -19,7 +19,7 @@ from homeassistant.const import (
 )
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import llm, selector
-from voluptuous_openapi import convert
+from voluptuous_openapi import UNSUPPORTED, convert
 
 BLUEPRINT_INPUT_SCHEMA = vol.Schema(
     {
@@ -74,7 +74,10 @@ def selector_serializer(value: Any) -> Any:
         # assert value == "A", value
         # return {"type": "duration"}
 
-    return llm.selector_serializer(value)
+    res = llm.selector_serializer(value)
+    if res is llm.UNSUPPORTED:
+        return UNSUPPORTED
+    return res
 
 
 def blueprint_openapi_schema() -> dict[str, Any]:
