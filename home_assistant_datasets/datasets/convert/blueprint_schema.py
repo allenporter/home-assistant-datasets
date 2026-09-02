@@ -4,7 +4,7 @@ import itertools
 from inspect import signature
 from typing import Any
 
-import voluptuous as vol
+import probatio as vol
 from homeassistant.components.blueprint.const import CONF_BLUEPRINT, CONF_INPUT
 from homeassistant.const import (
     CONF_ACTIONS,
@@ -19,7 +19,6 @@ from homeassistant.const import (
 )
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import llm, selector
-from voluptuous_openapi import convert
 
 BLUEPRINT_INPUT_SCHEMA = vol.Schema(
     {
@@ -78,6 +77,6 @@ def selector_serializer(value: Any) -> Any:
 
 
 def blueprint_openapi_schema() -> dict[str, Any]:
-    return convert(  # type: ignore[no-any-return]
+    return llm.to_openapi(  # type: ignore[no-any-return]
         BLUEPRINT_SCHEMA, custom_serializer=selector_serializer
     )
