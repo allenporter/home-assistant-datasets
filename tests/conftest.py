@@ -2,6 +2,7 @@
 
 import pathlib
 
+import homeassistant  # noqa: F401
 import pytest
 from syrupy import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
