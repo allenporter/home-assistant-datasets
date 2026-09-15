@@ -46,6 +46,72 @@ graph LR;
     M --> D
 ```
 
+## Usage
+
+The `script/benchmark` tool provides a unified interface for running the full benchmark pipeline: collecting model outputs, evaluating results, and building the leaderboard.
+
+### Quick start
+
+The process consists of 3 phases:
+1. Collect model outputs `script/benchmark collect`
+2. Evaluate the outputs `script/benchmark eval`
+3. Build the leaderboard `script/benchmark leaderboard`
+
+They can all be run sequentially using `script/benchmark all`.
+
+Below are a few examples on script usage:
+
+```bash
+# Run the full pipeline for a model (collect + eval + leaderboard)
+script/benchmark all --model devstral-2512
+
+# Preview what will run without executing
+script/benchmark all --model devstral-2512 --dry-run
+```
+
+### Running individual phases
+
+```bash
+# Collect model outputs against all datasets
+script/benchmark collect --model devstral-2512
+
+# Evaluate collected outputs
+script/benchmark eval
+
+# Build the leaderboard
+script/benchmark leaderboard
+```
+
+### Multilingual benchmarks
+
+```bash
+# Run all datasets for a specific language
+script/benchmark collect --model devstral-2512 --language es
+script/benchmark eval --language es
+
+# Run a specific dataset
+script/benchmark collect --model devstral-2512 --dataset assist-es
+script/benchmark eval --dataset assist-es
+
+# Available languages: es (Spanish), fr (French), de (German), nl (Dutch)
+```
+
+### Parallel execution
+
+Datasets run one at a time by default. Use `--parallel` to run more than one at
+once for faster results:
+
+```bash
+# Run every dataset for the language at the same time
+script/benchmark all --model devstral-2512 --language es --parallel
+
+# Run at most 2 datasets at the same time
+script/benchmark all --model devstral-2512 --language es --parallel 2
+```
+
+Each dataset runs as a separate process. When more than one runs at a time the
+output is written to log files and the console shows a progress table instead.
+
 ## Synthetic Datasets
 
 See the [datasets README](datasets/README.md) for details on the available
