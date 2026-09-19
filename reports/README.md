@@ -39,7 +39,7 @@
 | gemma4-e2b | $${45.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${61.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, 2026.2.3)}}}$$ | $${73.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ |  | $${58.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
 | qwen3-1.7b | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.7.1)}}}$$ | $${60.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, 2025.7.1)}}}$$ | $${59.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${49.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
 | gpt-5.6-luna | $${18.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2026.7.4)}}}$$ | $${10.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2026.7.4)}}}$$ | $${94.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, 2026.7.4)}}}$$ | $${\textbf{88.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 8.1, 2026.7.4)}}}$$ | $${44.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
-| retrieval-baseline |  | $${36.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2026.9.2)}}}$$ |  |  | $${36.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, avg)}}}$$ |
+| hometiny-retrieval-baseline |  | $${36.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2026.9.2)}}}$$ |  |  | $${36.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, avg)}}}$$ |
 | functiongemma-270m |  | $${9.4\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.9.2)}}}$$ |  |  | $${9.4\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
 | needle3 |  | $${5.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2026.9.2)}}}$$ |  |  | $${5.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, avg)}}}$$ |
 
@@ -641,6 +641,16 @@ More information:
 - https://openai.com/index/introducing-gpt-oss/
 
 
+### hometiny-retrieval-baseline
+
+No model. Picks the Assist API tool whose name and description share the most words with the request and fills its arguments from the exposed entity names, the tool's enums and the first number in the request. Requires the hometiny_retrieval custom component.
+
+
+
+More information:
+- https://github.com/DylanGerloski/hometiny/tree/main/hometiny-run/custom_components/hometiny_retrieval
+
+
 ### minimax-m2.5
 
 MiniMax-M2.5 is a SOTA large language model designed for real-world productivity. Trained in a diverse range of complex real-world digital working environments, M2.5 builds upon the coding expertise of M2.1 to extend into general office work, reaching fluency in generating and operating Word, Excel, and Powerpoint files, context switching between diverse software environments, and working across different agent and human teams. Scoring 80.2% on SWE-Bench Verified, 51.3% on Multi-SWE-Bench, and 76.3% on BrowseComp, M2.5 is also more token efficient than previous generations, having been trained to optimize its actions and output through planning.
@@ -686,11 +696,12 @@ More information:
 
 ### needle3
 
-Cactus Compute Needle 3 (cactus-needle 3.0.1, the published needle3.cact weights), driven as a conversation agent that passes the Assist API's own tools and system prompt unchanged. Run on CPU only on a GitHub-hosted ubuntu runner.
+Cactus Compute Needle 3 (cactus-needle 3.0.1, the published needle3.cact weights), driven as a conversation agent that passes the Assist API's own tools and system prompt unchanged. Run on CPU only on a GitHub-hosted ubuntu runner. Requires the hometiny_needle custom component.
 
 
 
 More information:
+- https://github.com/DylanGerloski/hometiny/tree/main/hometiny-run/custom_components/hometiny_needle
 - https://github.com/cactus-compute/needle
 - https://huggingface.co/Cactus-Compute/needle3
 
@@ -807,13 +818,3 @@ this model is optimized for agentic coding.
 
 More information:
 - https://huggingface.co/unsloth/Qwen3.6-27B
-
-
-### retrieval-baseline
-
-No model. Picks the Assist API tool whose name and description share the most words with the request and fills its arguments from the exposed entity names, the tool's enums and the first number in the request.
-
-
-
-More information:
-- https://github.com/allenporter/home-assistant-datasets
