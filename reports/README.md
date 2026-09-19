@@ -35,10 +35,13 @@
 | qwen3-235b-a22b-2507 | $${73.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.0, 2026.2.1)}}}$$ | $${87.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${69.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.7, 2026.2.1)}}}$$ | $${5.0\\% \space\color{gray}\tiny{\textsf{(CI: 5.5, 2026.2.1)}}}$$ | $${74.8\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, avg)}}}$$ |
 | qwen3-4b-instruct-2507-iq4-nl | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2025.12.4)}}}$$ |  |  |  | $${71.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
 | gemini-2.0-flash-lite | $${65.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2025.4.3)}}}$$ | $${88.3\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2025.4.3)}}}$$ | $${63.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.9, 2025.5.0.dev0)}}}$$ | $${53.3\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2025.4.3)}}}$$ | $${69.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.8, avg)}}}$$ |
+| assistant | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.7.4)}}}$$ | $${65.3\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2026.9.2)}}}$$ |  |  | $${61.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.6, avg)}}}$$ |
 | gemma4-e2b | $${45.2\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ | $${61.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.8, 2026.2.3)}}}$$ | $${73.5\\% \space\color{gray}\tiny{\textsf{(CI: 4.5, 2026.2.3)}}}$$ |  | $${58.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
 | qwen3-1.7b | $${35.9\\% \space\color{gray}\tiny{\textsf{(CI: 4.4, 2025.7.1)}}}$$ | $${60.2\\% \space\color{gray}\tiny{\textsf{(CI: 6.9, 2025.7.1)}}}$$ | $${59.5\\% \space\color{gray}\tiny{\textsf{(CI: 5.0, 2025.7.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2025.7.1)}}}$$ | $${49.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, avg)}}}$$ |
 | gpt-5.6-luna | $${18.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.5, 2026.7.4)}}}$$ | $${10.7\\% \space\color{gray}\tiny{\textsf{(CI: 4.3, 2026.7.4)}}}$$ | $${94.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, 2026.7.4)}}}$$ | $${\textbf{88.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 8.1, 2026.7.4)}}}$$ | $${44.4\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, avg)}}}$$ |
-| assistant | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.7.4)}}}$$ |  |  |  | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, avg)}}}$$ |
+| retrieval-baseline |  | $${36.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, 2026.9.2)}}}$$ |  |  | $${36.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.7, avg)}}}$$ |
+| functiongemma-270m |  | $${9.4\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, 2026.9.2)}}}$$ |  |  | $${9.4\\% \space\color{gray}\tiny{\textsf{(CI: 4.1, avg)}}}$$ |
+| needle3 |  | $${5.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, 2026.9.2)}}}$$ |  |  | $${5.6\\% \space\color{gray}\tiny{\textsf{(CI: 3.2, avg)}}}$$ |
 
 Implementation notes:
 - CI is large given small number of samples in the datasets.
@@ -301,6 +304,16 @@ OpenRouter integration using Devstral 2 2512
 
 More information:
 - https://openrouter.ai/mistralai/devstral-2512
+
+
+### functiongemma-270m
+
+FunctionGemma 270M, Google's function-calling fine-tune of Gemma 3 270M, from the Ollama library at its default tag. Run on CPU only (no GPU) on a GitHub-hosted ubuntu runner.
+
+
+
+More information:
+- https://ollama.com/library/functiongemma
 
 
 ### gemini-1.5-flash
@@ -671,6 +684,17 @@ More information:
 - https://ollama.com/library/ministral-3
 
 
+### needle3
+
+Cactus Compute Needle 3 (cactus-needle 3.0.1, the published needle3.cact weights), driven as a conversation agent that passes the Assist API's own tools and system prompt unchanged. Run on CPU only on a GitHub-hosted ubuntu runner.
+
+
+
+More information:
+- https://github.com/cactus-compute/needle
+- https://huggingface.co/Cactus-Compute/needle3
+
+
 ### qwen3-1.7b
 
 Qwen3 is the large language model series developed by Qwen team, Alibaba Cloud. Quen improvies on Qwen2.5, with weights of Qwen3 available to the public, including both dense and Mixture-of-Expert (MoE) models.
@@ -783,3 +807,13 @@ this model is optimized for agentic coding.
 
 More information:
 - https://huggingface.co/unsloth/Qwen3.6-27B
+
+
+### retrieval-baseline
+
+No model. Picks the Assist API tool whose name and description share the most words with the request and fills its arguments from the exposed entity names, the tool's enums and the first number in the request.
+
+
+
+More information:
+- https://github.com/allenporter/home-assistant-datasets
