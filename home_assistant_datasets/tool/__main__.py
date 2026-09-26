@@ -10,13 +10,14 @@ from pathlib import Path
 # Ensure home assistant recorder is patched before actually loading
 from pytest_homeassistant_custom_component import patch_recorder  # noqa: F401
 
-from . import convert, leaderboard
+from . import benchmark, convert, leaderboard
 
 _LOGGER = logging.getLogger(__name__)
 
 SUBCMDS = {
     "leaderboard": leaderboard,
     "convert": convert,
+    "benchmark": benchmark,
 }
 
 
