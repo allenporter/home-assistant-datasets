@@ -92,6 +92,9 @@ class ModelConfig:
     categories: list[str] = field(default_factory=list)
     """Arbitrary labels about this model."""
 
+    count: int | None = None
+    """Override the default dataset count (e.g. 1 for deterministic models)."""
+
     cost: Cost | None = None
     """Cost metrics for the model entry."""
 

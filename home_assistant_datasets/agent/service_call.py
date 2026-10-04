@@ -73,8 +73,12 @@ class ServiceCall(ConversationAgent):
             return_response=True,
         )
         assert service_response
-        response = service_response["response"]
-        return str(response["speech"]["plain"]["speech"])  # type: ignore[call-overload, index]
+        response = service_response.get("response", {})
+        speech_dict = response.get("speech", {})
+        plain_dict = (
+            speech_dict.get("plain", {}) if isinstance(speech_dict, dict) else {}
+        )
+        return str(plain_dict.get("speech", ""))
 
     def trace_context(self) -> dict[str, Any]:
         """Record any relevant trace context captured during the requests."""
