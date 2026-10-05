@@ -1,0 +1,223 @@
+---
+uuid: 034d3608-88f0-4153-808e-563e05cb906f
+task_id: home1_us_lock_smart_lock-lock_smart_lock-0
+model_id: functiongemma-270m
+category: lock
+task:
+  input_text: Lock smart lock
+  expect_changes:
+    lock.smart_lock:
+      state: locked
+      attributes: null
+response: |2-
+   The requested information could not be retrieved:
+
+  1.  **Live Context:** An overview of the areas and the devices in this smart home.
+  2.  **Current State:** Is the lock locked?
+  3.  **Mode:** Is the fan on?
+  4.  **Device Existence/Type:** Do I have lights in the bedroom?
+context:
+  unexpected_states:
+    lock.smart_lock:
+      expected:
+        state: locked
+      got:
+        state: unlocked
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Lock smart lock
+      context:
+        id: 01M2W3FEZZQ00EH8S2KP4AG0YE
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-09-19 05:50:55.487587+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Smart Lock
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock
+            domain: lock
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: sensor
+            areas: Entry
+          - names: Smart Lock Tamper
+            domain: binary_sensor
+            areas: Entry
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-09-19 05:50:55.488083+00:00
+      - role: user
+        content: Lock smart lock
+        attachments: null
+        created: 2026-09-19 05:50:55.487678+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: " call:intent__HassTurnOff{area: Entry,name: Lock}<end_function_call>\
+          \ call:llm__GetDateTime{}<end_function_call> \n"
+        thinking_content: null
+        tool_calls:
+        - tool_name: homeassistant__GetLiveContext
+          tool_args:
+            area: ' Entry'
+          id: 01M2W3FF80G8CD7T007P386YYM
+          external: false
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            area: ' Entry'
+            device_class:
+            - ' lock'
+            name: ' Lock'
+          id: 01M2W3FFVVG7TYH12XC8B0Y0XH
+          external: false
+        native: null
+        created: 2026-09-19 05:50:56.547399+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M2W3FF80G8CD7T007P386YYM
+        tool_name: homeassistant__GetLiveContext
+        tool_result:
+          success: true
+          result: |
+            Live Context: An overview of the areas and the devices in this smart home:
+            - names: Smart Lock
+              domain: binary_sensor
+              state: 'off'
+              areas: Entry
+              attributes:
+                device_class: lock
+            - names: Smart Lock
+              domain: lock
+              state: unlocked
+              areas: Entry
+            - names: Smart Lock Battery
+              domain: binary_sensor
+              state: 'off'
+              areas: Entry
+              attributes:
+                device_class: battery
+            - names: Smart Lock Battery
+              domain: sensor
+              state: '90'
+              areas: Entry
+              attributes:
+                unit_of_measurement: '%'
+                device_class: battery
+            - names: Smart Lock Tamper
+              domain: binary_sensor
+              state: 'off'
+              areas: Entry
+              attributes:
+                device_class: tamper
+        created: 2026-09-19 05:50:56.548966+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M2W3FFVVG7TYH12XC8B0Y0XH
+        tool_name: intent__HassTurnOn
+        tool_result:
+          error: InvalidSlotInfo
+          error_text: Received invalid slot info for HassTurnOn
+        created: 2026-09-19 05:50:56.549005+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: |2-
+           The requested information could not be retrieved:
+
+          1.  **Live Context:** An overview of the areas and the devices in this smart home.
+          2.  **Current State:** Is the lock locked?
+          3.  **Mode:** Is the fan on?
+          4.  **Device Existence/Type:** Do I have lights in the bedroom?
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-09-19 05:50:58.158862+00:00
+      tools:
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7ff8f1316da0>, ''domain'': Any(<function
+          string at 0x7ff8f1316da0>, [<function string at 0x7ff8f1316da0>], msg=None),
+          ''area'': <function string at 0x7ff8f1316da0>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7ff8ec67a610>, ''domain'': All(<function ensure_list at 0x7ff8f1312da0>,
+          [<function string at 0x7ff8f1316da0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7ff8f1312da0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'',
+          ''gate'', ''shade'', ''shutter'', ''window'', ''tv'', ''speaker'', ''receiver'',
+          ''projector'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7ff8ec67a610>, ''domain'': All(<function ensure_list at 0x7ff8f1312da0>,
+          [<function string at 0x7ff8f1316da0>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7ff8f1312da0>, [In([''water'', ''gas'', ''identify'', ''restart'',
+          ''update'', ''awning'', ''blind'', ''curtain'', ''damper'', ''door'', ''garage'',
+          ''gate'', ''shade'', ''shutter'', ''window'', ''tv'', ''speaker'', ''receiver'',
+          ''projector'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7ff8f1316da0>}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-09-19 05:50:55.488090+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        area: ' Entry'
+        device_class:
+        - ' lock'
+        name: ' Lock'
+    timestamp: 2026-09-19 05:50:56.380727+00:00
+  - event_type: tool_call
+    data:
+      tool_name: homeassistant__GetLiveContext
+      tool_args:
+        area: ' Entry'
+    timestamp: 2026-09-19 05:50:56.548546+00:00
+  duration_ms: 2671.859
+  tries: 2
