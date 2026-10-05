@@ -20,6 +20,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Install uv
         uses: astral-sh/setup-uv@v10.0.1
         with:
@@ -42,6 +44,16 @@ jobs:
           export PYTHONPATH="${PYTHONPATH}:./home-assistant-synthetic-home/"
           touch secrets.yaml
           pytest --cov=home_assistant_datasets --cov-report=term-missing
+      - name: Validate and preview leaderboard
+        run: |
+          home-assistant-datasets leaderboard build --dry-run ${GITHUB_STEP_SUMMARY:+--output-summary-file "$GITHUB_STEP_SUMMARY"}
+      - name: Verify leaderboard README is not modified in PR
+        if: github.event_name == 'pull_request'
+        run: |
+          if git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -q "^reports/README.md$"; then
+            echo "::error file=reports/README.md::reports/README.md should not be modified in pull requests. It is automatically updated upon merge to main."
+            exit 1
+          fi
       - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
