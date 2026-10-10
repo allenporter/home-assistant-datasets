@@ -17,6 +17,7 @@ from home_assistant_datasets.datasets.assist_eval_task import (
     generate_assist_eval_tasks,
 )
 from home_assistant_datasets.datasets.dataset_card import read_dataset_card
+from home_assistant_datasets.models import read_model
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -58,8 +59,24 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
 
     categories_str = metafunc.config.getoption("categories")
     categories = set(categories_str.split(",") if categories_str else {})
+    models_opt = metafunc.config.getoption("models", None)
+
+    model_count: int | None = None
+    if models_opt:
+        model_ids = models_opt.split(",")
+        # Check if single model has count override
+        if len(model_ids) == 1:
+            try:
+                m_config = read_model(model_ids[0])
+                if m_config and m_config.count:
+                    model_count = m_config.count
+            except Exception:
+                pass
+
     if count := metafunc.config.getoption("count"):
         count = int(count)
+    elif model_count is not None:
+        count = model_count
     else:
         count = dataset_card.count
 
