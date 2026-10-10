@@ -102,11 +102,14 @@ $ pytest ${DATASET} --model_output_dir=${OUTPUT_DIR}
 
 ### Leaderboard
 
-The leaderboard is generated from all of the model eval results checked into
-the repo. You can update with these commands:
+The official leaderboard in `reports/README.md` is automatically updated by GitHub Actions when pull requests are merged to `main`.
+
+When submitting a PR:
+- Only commit your model configuration (e.g. `models/<model>.yaml`) and evaluation outputs (`reports/<dataset>/<version>/`).
+- **Do not** commit changes to `reports/README.md` in your PR. This prevents merge conflicts across concurrent submissions.
+
+To preview how your evaluation affects the leaderboard locally without modifying files, run:
 
 ```bash
-$ home-assistant-datasets leaderboard build
+$ home-assistant-datasets leaderboard build --dry-run
 ```
-
-You can commit these and send a PR to update the official leaderboard.
