@@ -4,6 +4,7 @@ import itertools
 from inspect import signature
 from typing import Any
 
+import probatio
 import probatio as vol
 from homeassistant.components.blueprint.const import CONF_BLUEPRINT, CONF_INPUT
 from homeassistant.const import (
@@ -77,6 +78,8 @@ def selector_serializer(value: Any) -> Any:
 
 
 def blueprint_openapi_schema() -> dict[str, Any]:
-    return llm.to_openapi(  # type: ignore[no-any-return]
+    to_openapi = getattr(probatio, "to_openapi", getattr(llm, "to_openapi", None))
+    assert to_openapi is not None
+    return to_openapi(  # type: ignore[no-any-return]
         BLUEPRINT_SCHEMA, custom_serializer=selector_serializer
     )
