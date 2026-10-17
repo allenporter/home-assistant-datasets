@@ -84,7 +84,7 @@ $ OUTPUT_DIR="reports/assist/2025.12.4"  # Output based on home assistant versio
 $ pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
 ```
 
-If you don't know the homeassistnat version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
+If you don't know the homeassistant version, you can run `uv pip freeze | grep "^homeassistant=="` to find out.
 
 ### Evaluate
 
@@ -107,6 +107,7 @@ The official leaderboard in `reports/README.md` is automatically updated by GitH
 When submitting a PR:
 - Only commit your model configuration (e.g. `models/<model>.yaml`) and evaluation outputs (`reports/<dataset>/<version>/`).
 - **Do not** commit changes to `reports/README.md` in your PR. This prevents merge conflicts across concurrent submissions.
+- When your PR is opened, GitHub Actions will validate the evaluation reports and render an updated leaderboard preview directly in the workflow summary.
 
 To preview how your evaluation affects the leaderboard locally without modifying files, run:
 
