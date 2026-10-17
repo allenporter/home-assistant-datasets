@@ -60,6 +60,22 @@ def create_arguments(args: argparse.ArgumentParser) -> None:
         default=REPORT_DIR,
         help="Specifies the report dataset directory created by `eval` commands",
     )
+    args.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Run without modifying any files on disk",
+    )
+    args.add_argument(
+        "--check",
+        action="store_true",
+        help="Check if the leaderboard file is up-to-date (returns exit code 1 if differences found)",
+    )
+    args.add_argument(
+        "--output-summary-file",
+        type=str,
+        default=None,
+        help="Write a Markdown summary (leaderboard table) to the specified path (e.g. for $GITHUB_STEP_SUMMARY)",
+    )
 
 
 @dataclass
@@ -332,8 +348,33 @@ def run(args: argparse.Namespace) -> int:
             table.format_model_card(model_card, eval_cost.get(model_card.model_id))
         )
 
+    rendered_content = "\n".join(["".join(row) for row in results])
+
+    if args.output_summary_file:
+        summary_file = pathlib.Path(args.output_summary_file)
+        print(f"Writing summary to {summary_file}")
+        summary_file.write_text(
+            f"## Home LLM Leaderboard Preview\n\n{leaderboard_table}\n"
+        )
+
     leaderboard_file = report_dir / LEADERBOARD_FILE
+
+    if args.check:
+        if not leaderboard_file.exists():
+            print(f"Error: {leaderboard_file} does not exist")
+            return 1
+        current_content = leaderboard_file.read_text()
+        if current_content != rendered_content:
+            print(f"Error: {leaderboard_file} is out of date")
+            return 1
+        print(f"{leaderboard_file} is up to date")
+        return 0
+
+    if args.dry_run:
+        print(f"Dry run: {leaderboard_file} would be updated (skipping write)")
+        return 0
+
     print(f"Updating {leaderboard_file}")
-    leaderboard_file.write_text("\n".join(["".join(row) for row in results]))
+    leaderboard_file.write_text(rendered_content)
 
     return 0
