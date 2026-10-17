@@ -33,6 +33,8 @@ SECRETS_FILE = pathlib.Path(os.environ.get("SECRETS_FILE", DEFAULT_SECRETS_FILE)
 @cache
 def _get_secrets() -> dict[str, Any]:
     """Load the secrets from disk."""
+    if not SECRETS_FILE.exists():
+        return {}
     secrets = yaml.load(open(SECRETS_FILE), Loader=yaml.Loader)
     return secrets or {}
 
