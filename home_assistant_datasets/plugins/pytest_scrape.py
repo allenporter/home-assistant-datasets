@@ -199,9 +199,21 @@ def patch_device_id_fixture(context_device_id: str | None) -> Generator[None]:
         kwargs["device_id"] = context_device_id
         return await original_function(*args, **kwargs)
 
-    with patch(
-        "homeassistant.components.conversation.async_converse",
-        side_effect=add_device_id,
+    with (
+        patch(
+            "homeassistant.components.conversation.async_converse",
+            side_effect=add_device_id,
+        ),
+        patch(
+            "homeassistant.components.conversation.services.async_converse",
+            side_effect=add_device_id,
+            create=True,
+        ),
+        patch(
+            "homeassistant.components.conversation.agent_manager.async_converse",
+            side_effect=add_device_id,
+            create=True,
+        ),
     ):
         yield
 
