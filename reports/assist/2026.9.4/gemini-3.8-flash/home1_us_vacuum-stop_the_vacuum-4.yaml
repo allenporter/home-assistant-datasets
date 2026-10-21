@@ -1,0 +1,597 @@
+---
+uuid: 0d9b3b64-ac31-482e-83c2-9ed99e67dd0e
+task_id: home1_us_vacuum-stop_the_vacuum-4
+model_id: gemini-3.8-flash
+category: vacuum
+task:
+  input_text: Stop the vacuum
+  expect_changes:
+    vacuum.roborock_downstairs:
+      state: returning
+      attributes: null
+response: I have stopped the Roborock Downstairs and sent it back to its base.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Stop the vacuum
+      context:
+        id: 01M5FGF4BAPZQ7A96RNHNSF8M6
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 15:14:53.931083+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Backyard Camera Motion
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Camera Person
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Camera Sound
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Light
+            domain: light
+            areas: Backyard
+          - names: Bedroom 1 Light
+            domain: light
+            areas: Bedroom 1
+          - names: Bedroom 2 Light
+            domain: light
+            areas: Bedroom 2
+          - names: Bedroom 3 Light
+            domain: light
+            areas: Bedroom 3
+          - names: Game Room Light
+            domain: light
+            areas: Game Room
+          - names: Garage Door Opener
+            domain: cover
+            areas: Garage
+          - names: Garage Door Opener
+            domain: light
+            areas: Garage
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living Room
+          - names: Living Room Motion Sensor
+            domain: binary_sensor
+            areas: Living Room
+          - names: Living Room Motion Sensor Battery
+            domain: binary_sensor
+            areas: Living Room
+          - names: Living Room Motion Sensor Battery
+            domain: sensor
+            areas: Living Room
+          - names: Master Bedroom Light
+            domain: light
+            areas: Master Bedroom
+          - names: Master Bedroom Smart Blinds
+            domain: cover
+            areas: Master Bedroom
+          - names: Master Bedroom Smart Blinds Battery
+            domain: sensor
+            areas: Master Bedroom
+          - names: Nest Hub
+            domain: media_player
+            areas: Living Room
+          - names: Rear door lock
+            domain: lock
+            areas: Garage
+          - names: Roborock Downstairs
+            domain: vacuum
+            areas: Living Room
+          - names: Smart Lock
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock
+            domain: lock
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: sensor
+            areas: Entry
+          - names: Smart Lock Tamper
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Speaker
+            domain: media_player
+            areas: Game Room
+          - names: Thermostat
+            domain: climate
+            areas: Kitchen
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Kitchen
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Kitchen
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 15:14:53.943171+00:00
+      - role: user
+        content: Stop the vacuum
+        attachments: null
+        created: 2026-10-21 15:14:53.931213+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Vacuum Control**
+
+          I've identified a single vacuum device, "Roborock Downstairs," in the living room. Now, I'm examining the available tools for controlling it: "vacuum__HassVacuumStart" and "vacuum__HassVacuumReturnToBase." My goal is to determine how to effectively halt the vacuum using these tools.
+
+
+          **Investigating Vacuum Control**
+
+          I'm now diving deeper into vacuum control options. Initially, I considered `vacuum__HassVacuumCleanArea`, but it seems like turning off the device is a more pertinent goal. I discovered `intent__HassTurnOff`, and am probing its compatibility. I'm checking if I can use it with the device name and domain. Specifically, I'm verifying if `intent__HassTurnOff` supports the vacuum domain. Also, I'm checking Home Assistant built-in intents for vacuums to see if they are a better match. I am also checking if `HassTurnOff` has stop/pause/turn off.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOff
+          tool_args:
+            name: Roborock Downstairs
+            domain:
+            - vacuum
+          id: 01M5FGFBG6AFJ9V68C6GWQ330S
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 15:15:01.269674+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FGFBG6AFJ9V68C6GWQ330S
+        tool_name: intent__HassTurnOff
+        tool_result:
+          error: IntentHandleError
+          error_text: 'Failed to call turn_off for: [''vacuum.roborock_downstairs'']'
+        created: 2026-10-21 15:15:01.269697+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Vacuum Controls**
+
+          I've hit a snag with the `turn_off` service for the vacuum. It seems modern Home Assistant vacuums are phasing this out, unless state-based. I'm pivoting to see what other controls are available for the vacuum entity. I'll need to figure out the right alternative.
+
+
+        tool_calls:
+        - tool_name: homeassistant__GetLiveContext
+          tool_args:
+            domain: vacuum
+          id: 01M5FGFEZ0KWDMNG1VJ073JX5B
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: EokFCoYFAWkUfRNXRR9MPv+qZkSI2xp7tx5BWGssyLcnBOopRqPMCGZ2rkIxNU79YZ211Borqj1zAC9PNopZBnuLugIpKJWDL0v2T5Gcm64a3r2xxMDSTBtqld17PeR2CQTIYQVqU8BmZoV9/C5EZKDGkPEiPARkP7JCZs3MKFTI4uO9WlK0ybAhpg8kU5YSjoa4SOy1pErO7V/EVNI02hix8WVEz3G3Oae4zw0r8rFAkmj2IvNDUXIBIOSvAhpDY8Q9MQnVUZGiQkYNP0Jnd5zMlBpUaF2cemZ6+RTzVUSMyWnTP4fkbkmVXIqldJfxIFJreda3RAlUkZOkJCnpY44GR/IctofuE7kszTlh4SU5D6zhP6vw23n8LET2YndanmGmyZIIZPZpkaPNdpLf3s5Ii4w1nQj5CkEWbydZdnGiPSLsA/d2scN2TXyH/Y2eCVZZ1fGJNAskrT1iEs8dLxmGZr70TO8+0EhWBpVpficuhjZTGXPBXMCmCDvup88p9Wpcg2PGgVfjrIhgYW1NIz/iA/vlILWtgj1pP7iplJRnc9NHu6A9FlaMknNS0bfnpQU6Bbv0Rr0GgrvZ8q9hD/+W5hgGfE40KxdkwmAGj720iGp/93xjgF8WruU5rCNoYqEpT0ZXgxvI6BIm2hpHXhhchsIXc5/cD2PYh44kYnBio0gxU3BfdFv0JEXcbgLVXNjp75pUS5x5yeXFrLDyweYCiQjrZWSKmf+ChrqObyOU9n5n+7t/m6G5l41srDKWCDpCD7/YkRXd2uZV5i3he/p/sdy0wzUHlpVBN3Hdz5lgkAWH5E0rA8xq75LE1EhxuQsHZddmZTY5KFdybnxqVl1F1yYGpBGN6aYs5w==
+        created: 2026-10-21 15:15:04.811080+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FGFEZ0KWDMNG1VJ073JX5B
+        tool_name: homeassistant__GetLiveContext
+        tool_result:
+          success: true
+          result: |
+            Live Context: An overview of the areas and the devices in this smart home:
+            - names: Roborock Downstairs
+              domain: vacuum
+              state: cleaning
+              areas: Living Room
+        created: 2026-10-21 15:15:04.811100+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Investigating Vacuum Control**
+
+          I'm now digging into why the "turn_off" intent failed, and it seems related to the vacuum entity type. It appears `vacuum.turn_off` might not be universally supported on modern vacuum entities; perhaps the Roborock integration is at play here. I'm considering if `vacuum__HassVacuumReturnToBase` could be a viable alternative.
+
+
+          **Exploring Vacuum Stopping Intents**
+
+          I'm now investigating stopping intents for vacuums within Home Assistant. I've ruled out `intent__HassStopMoving` directly, as it's cover-focused. It seems I need to figure out how `vacuum.pause` or `vacuum.stop` is triggered, and I haven't found any standard HA intents to call the stop intent. The existing intents are `HassVacuumStart` and `HassVacuumReturnToBase`, and there is no pause or stop. I need to check how to implement this.
+
+
+        tool_calls:
+        - tool_name: intent__HassStopMoving
+          tool_args:
+            name: Roborock Downstairs
+            domain:
+            - vacuum
+          id: 01M5FGFM9WFHM72MHZBR02AXNZ
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 15:15:10.292649+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FGFM9WFHM72MHZBR02AXNZ
+        tool_name: intent__HassStopMoving
+        tool_result:
+          error: IntentHandleError
+          error_text: 'Domain not supported: vacuum'
+        created: 2026-10-21 15:15:10.292677+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Investigating Vacuum Control**
+
+          I'm hitting a snag with this vacuum domain, "vacuum" isn't supported, and I have a failed `turn_off` call. Specifically, the vacuum called "roborock_downstairs" failed to turn off. I'm wondering about the specific service `vacuum__HassVacuumReturnToBase`. It's a bit odd; what happens if a vacuum assistant receives a stop command and has only a `return_to_base` tool?
+
+
+        tool_calls:
+        - tool_name: vacuum__HassVacuumReturnToBase
+          tool_args:
+            name: Roborock Downstairs
+          id: 01M5FGFRWTCA07DJ8X6P4ABNWF
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: EokHCoYHAWkUfRMTIUoXGSQmMKWnOjIvDBo7AigptYoqyzomepIURaALDZS2eKvfDp9waeGSVKe91LhoIg0Akzk4rHk/umW60jxKIVw1/WeYNvX8KpA4kwBdYfDWLU6BbuXWs2n7UagaIQ8LFBEftpYg5TRw99843SivFu++WAO5JTTIfBIQ5P5vbtAMYAJIDQ/2cpZxXu/GPiytCy8Y9XWdEgqiwa8CkKj4aUsBjK9eoYeoAMU/naMdy/HWV5Wn9CcoBe7bqLYVLcMR55xGKQFKWdOL0Y0uBhQwRXlvNiqA/CWzyBco0uX3fk6iS2xXjhqxrLoi4aRUpAe69SHpN7sRu/EG+jfEWanhO896Ppj5N15QNgN/gm28gnLJvNeNWlPTDUpEpHOdHjWqy9vGm7Jt1aohZ9uV79shYq45K35spfmRQhgUkrNm9g5O9PFWA3AtqxSygJ7m8qJtC4beNUyaEsegfzrMJp9lWe/ae6w7uBds6hhGxhML6+oXmhADDOVyyL2FWLd15OzFjszhMFj+wDJeYEEhjvO+pxrFysrZ5nwFbctMfoIra2R2LPsE0uNslrRL+JDySKPO5sQYDtpiqYMmG+cFlTCjlGZxW1kh5+kAQEh6rr81giwgISVYSoMLZTuUvwPfRzkbs2diQA5ILCHVaxZqmWcSKt46tiUR2zFMfub4il2GubRFEwmvlfuoyX/+VMBloY70X2ZmQOGgYpWFy6SeTIQABuYTucpak2JRgFhgwLUKBKkRUPDjxmJ4yD4htAspM99P4gWCSSM09jqsX7syqsm942SHIVr/SOS8NtBsxUHqBIs/YTczVXBFVB+jJTjwD/+vdwut/Z6khEnLkvpUFN2LmUH/7MkzSNbP5mF3ZX0+3MZwUiKQtiG3DB+1uWyGbz5dB1eEH9ChZZcg+Xpsquoao8c5HidzBRoioaShkwyx1rOpWLAkfTarI7DHPikX+El92v0zJi2ZJurmBTKt8u2C5xgP57b6n/P6g0ZDljTdZtS34q9Tg9oc++eEBf0k450C9rI9F6cspAOFKOsru8layN7AR7CfDrZjL1gaY6WvNJMnKFf/O7IZqe7N0W0Qja6TUnplC6vZ53cyfTSaGubFJaUrMfREke9BOi8RWhNYlvqBxarKh7zzStzTK/LscUcQzdlA+6awU1GzFYZqH0dgyxwCw+4k6tG653lDAMrCLI4=
+        created: 2026-10-21 15:15:14.984840+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FGFRWTCA07DJ8X6P4ABNWF
+        tool_name: vacuum__HassVacuumReturnToBase
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Roborock Downstairs
+                type:
+                - entity
+                id: vacuum.roborock_downstairs
+              failed: []
+        created: 2026-10-21 15:15:14.984872+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: I have stopped the Roborock Downstairs and sent it back to its base.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 15:15:16.827671+00:00
+      tools:
+      - name: climate__HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7fcd64b2f060>, ''name'': <function non_empty_string
+          at 0x7fcd64b2f060>, ''floor'': <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fcd6b66c720>, ''domain'': Any(<function
+          string at 0x7fcd6b66c720>, [<function string at 0x7fcd6b66c720>], msg=None),
+          ''area'': <function string at 0x7fcd6b66c720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fcd67b57690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: media_player__HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100,
+          min_included=True, max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7fcd50b65dd0>, msg=None)}'
+      - name: media_player__HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7fcd539b4e00>, msg=None),
+          msg=None), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: media_player__HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd50b67740>}'
+      - name: media_player__HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd50b65380>}'
+      - name: media_player__HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7fcd6b66c720>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: vacuum__HassVacuumStart
+        description: Starts a vacuum
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumReturnToBase
+        description: Returns a vacuum to base
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumCleanArea
+        description: Tells a vacuum to clean a specific area
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>, ''name'': <function
+          string at 0x7fcd6b66c720>}'
+    timestamp: 2026-10-21 15:14:53.943191+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3554
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:14:57.110724+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3554
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:14:59.722092+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3554
+        cached_input_tokens: 0
+        output_tokens: 29
+    timestamp: 2026-10-21 15:15:01.254722+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOff
+      tool_args:
+        name: Roborock Downstairs
+        domain:
+        - vacuum
+    timestamp: 2026-10-21 15:15:01.255246+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3554
+        cached_input_tokens: 0
+        output_tokens: 29
+    timestamp: 2026-10-21 15:15:01.266847+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3845
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:15:04.579170+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3845
+        cached_input_tokens: 0
+        output_tokens: 19
+    timestamp: 2026-10-21 15:15:04.800543+00:00
+  - event_type: tool_call
+    data:
+      tool_name: homeassistant__GetLiveContext
+      tool_args:
+        domain: vacuum
+    timestamp: 2026-10-21 15:15:04.801075+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4519
+        cached_input_tokens: 0
+        output_tokens: 19
+    timestamp: 2026-10-21 15:15:04.808638+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3997
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:15:07.833313+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3997
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:15:10.216030+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3997
+        cached_input_tokens: 0
+        output_tokens: 29
+    timestamp: 2026-10-21 15:15:10.268338+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassStopMoving
+      tool_args:
+        name: Roborock Downstairs
+        domain:
+        - vacuum
+    timestamp: 2026-10-21 15:15:10.268853+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4794
+        cached_input_tokens: 0
+        output_tokens: 29
+    timestamp: 2026-10-21 15:15:10.290807+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4262
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:15:14.536200+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4262
+        cached_input_tokens: 0
+        output_tokens: 24
+    timestamp: 2026-10-21 15:15:14.970182+00:00
+  - event_type: tool_call
+    data:
+      tool_name: vacuum__HassVacuumReturnToBase
+      tool_args:
+        name: Roborock Downstairs
+    timestamp: 2026-10-21 15:15:14.970611+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 5498
+        cached_input_tokens: 2388
+        output_tokens: 24
+    timestamp: 2026-10-21 15:15:14.980572+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4454
+        cached_input_tokens: 0
+        output_tokens: 17
+    timestamp: 2026-10-21 15:15:16.816369+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 5864
+        cached_input_tokens: 0
+        output_tokens: 17
+    timestamp: 2026-10-21 15:15:16.824947+00:00
+  duration_ms: 22897.221
+  tries: 1

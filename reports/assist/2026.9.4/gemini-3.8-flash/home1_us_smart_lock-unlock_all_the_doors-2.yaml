@@ -1,0 +1,504 @@
+---
+uuid: 52627752-3d2d-4c5d-8740-38c57e81139f
+task_id: home1_us_smart_lock-unlock_all_the_doors-2
+model_id: gemini-3.8-flash
+category: lock
+task:
+  input_text: Unlock all the doors
+  expect_changes:
+    lock.smart_lock:
+      state: locked
+      attributes: null
+    lock.rear_door_lock:
+      state: locked
+      attributes: null
+response: All doors have been unlocked.
+context:
+  unexpected_states:
+    lock.smart_lock:
+      expected:
+        state: locked
+      got:
+        state: unlocked
+    lock.rear_door_lock:
+      expected:
+        state: locked
+      got:
+        state: unlocked
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Unlock all the doors
+      context:
+        id: 01M5FFM5BY6137C2H7Q6NM7J3B
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 15:00:10.238994+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Backyard Camera Motion
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Camera Person
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Camera Sound
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Light
+            domain: light
+            areas: Backyard
+          - names: Bedroom 1 Light
+            domain: light
+            areas: Bedroom 1
+          - names: Bedroom 2 Light
+            domain: light
+            areas: Bedroom 2
+          - names: Bedroom 3 Light
+            domain: light
+            areas: Bedroom 3
+          - names: Game Room Light
+            domain: light
+            areas: Game Room
+          - names: Garage Door Opener
+            domain: cover
+            areas: Garage
+          - names: Garage Door Opener
+            domain: light
+            areas: Garage
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living Room
+          - names: Living Room Motion Sensor
+            domain: binary_sensor
+            areas: Living Room
+          - names: Living Room Motion Sensor Battery
+            domain: binary_sensor
+            areas: Living Room
+          - names: Living Room Motion Sensor Battery
+            domain: sensor
+            areas: Living Room
+          - names: Master Bedroom Light
+            domain: light
+            areas: Master Bedroom
+          - names: Master Bedroom Smart Blinds
+            domain: cover
+            areas: Master Bedroom
+          - names: Master Bedroom Smart Blinds Battery
+            domain: sensor
+            areas: Master Bedroom
+          - names: Nest Hub
+            domain: media_player
+            areas: Living Room
+          - names: Rear door lock
+            domain: lock
+            areas: Garage
+          - names: Roborock Downstairs
+            domain: vacuum
+            areas: Living Room
+          - names: Smart Lock
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock
+            domain: lock
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: sensor
+            areas: Entry
+          - names: Smart Lock Tamper
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Speaker
+            domain: media_player
+            areas: Game Room
+          - names: Thermostat
+            domain: climate
+            areas: Kitchen
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Kitchen
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Kitchen
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 15:00:10.251353+00:00
+      - role: user
+        content: Unlock all the doors
+        attachments: null
+        created: 2026-10-21 15:00:10.239123+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Examining Lock Mechanisms**
+
+          I'm focusing on "Unlock all the doors." I've identified two locks: the "Rear door lock" (Garage) and the "Smart Lock" (Entry). I'm examining their respective domains (lock) and areas. A rule about "turning on all devices" triggered a sudden shift in perspective, and I am exploring related patterns.
+
+
+          **Clarifying Command Scope**
+
+          I'm now investigating how the "turn on all devices" rule interacts with unlocking actions, specifically if "unlock" is functionally a "turn off" for locks. My focus is on whether intent__HassTurnOff with domain: ["lock"] can be used for unlocking and if this targets all locks, which is related to scope. I'm checking the intent__HassTurnOff schema and examining its practical implications.
+
+
+          **Analyzing Unlock Intents**
+
+          I'm now focusing on "unlock all doors" and how it relates to the Home Assistant intents. I'm exploring whether `intent__HassTurnOff` with a domain of `["lock"]` can be used for unlocking. I'm now checking if that domain targets all locks, and if I can unlock specific locks by name or by using `intent__HassTurnOff` with the lock domain. I'm also examining the implication of using `intent__HassTurnOff` for locking.
+
+
+          **Interpreting Turn-Off Semantics**
+
+          I'm now diving deeper into how "turn on all devices" relates to unlocking. I've realized "unlock" is functionally a "turn off" within this framework, which is why the prompt suggests requesting a specific area. Furthermore, standard Home Assistant datasets confirm that "turn on all lights" triggers an area-specific clarification, strengthening my understanding of the system's intent handling.
+
+
+          **Investigating Turn-Off Scope**
+
+          I'm now investigating "unlock all doors." It strikes me as odd that the prompt focuses on "turn on" but not "turn off." I'm also considering safety: is unlocking doors safety-critical? I'm now exploring if the `intent__HassTurnOff` with `domain=["lock"]` handles all locks, or if it requires separate calls for each. I'm checking the intent parameters, specifically the "domain" field, which is an array of strings.
+
+
+          **Confirming HA Intent Matching**
+
+          I've confirmed a key insight: `HassTurnOff`, using the `lock` domain without a name or area, does indeed target all locks. The system allows calling `intent__HassTurnOff(domain=['lock'])`, which aligns with the user's intent to unlock all doors. Now, I'm considering if there's a need for additional clarification in the prompting.
+
+
+          **Refining Rule Application**
+
+          I'm now clarifying the application of Home Assistant's intent rules to unlock requests. I've realized the prompt's use of "turn on" refers to a general pattern in Home Assistant where global actions (like turning on all devices of a type) require an area specification. While the prompt author used "turn on" broadly, it implicitly applies to unlocking as well. I'm focusing on why global "turn off" for lights is permitted, but global "turn on" is not, given that intent__HassTurnOff with `domain=['lock']` targeting all locks is permitted.
+
+
+          **Validating Unlock Commands**
+
+          I'm now focusing on how the default "turn off all lights" command contrasts with unlocking all doors. I've confirmed `intent__HassTurnOff(domain=['lock'])` unlocks all doors; it is completely valid, as I've found that all properties of the intent are optional. It seems Home Assistant handles this action directly. Now, I'm verifying if I can unlock specific locks via name and domain, or if a global call is required.
+
+
+          **Comparing Command Options**
+
+          I'm now comparing single vs. multiple calls for unlocking all doors. I'm considering `intent__HassTurnOff(domain=['lock'])` directly against multiple tool calls, such as `intent__HassTurnOff(name='Rear door lock', domain=['lock'])` and `intent__HassTurnOff(name='Smart Lock', domain=['lock'])`. Since the user specified no single device or area, the best approach is a single call.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOff
+          tool_args:
+            domain:
+            - lock
+          id: 01M5FFMYHP90HQKMSTFY8HMZ0T
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 15:00:36.067103+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FFMYHP90HQKMSTFY8HMZ0T
+        tool_name: intent__HassTurnOff
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Smart Lock
+                type:
+                - entity
+                id: lock.smart_lock
+              - name: Rear door lock
+                type:
+                - entity
+                id: lock.rear_door_lock
+              failed: []
+        created: 2026-10-21 15:00:36.067122+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: All doors have been unlocked.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 15:00:39.002136+00:00
+      tools:
+      - name: climate__HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7fcd64b2f060>, ''name'': <function non_empty_string
+          at 0x7fcd64b2f060>, ''floor'': <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fcd6b66c720>, ''domain'': Any(<function
+          string at 0x7fcd6b66c720>, [<function string at 0x7fcd6b66c720>], msg=None),
+          ''area'': <function string at 0x7fcd6b66c720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fcd67b57690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: media_player__HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100,
+          min_included=True, max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7fcd508f73d0>, msg=None)}'
+      - name: media_player__HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7fcd539b4e00>, msg=None),
+          msg=None), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: media_player__HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd508f5d20>}'
+      - name: media_player__HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd508f78a0>}'
+      - name: media_player__HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7fcd6b66c720>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: vacuum__HassVacuumStart
+        description: Starts a vacuum
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumReturnToBase
+        description: Returns a vacuum to base
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumCleanArea
+        description: Tells a vacuum to clean a specific area
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>, ''name'': <function
+          string at 0x7fcd6b66c720>}'
+    timestamp: 2026-10-21 15:00:10.251372+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:14.883696+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:17.214367+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:19.564997+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:21.446813+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:24.164005+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:26.667761+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:29.219526+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:31.790457+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:00:34.095358+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: 19
+    timestamp: 2026-10-21 15:00:36.022530+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOff
+      tool_args:
+        domain:
+        - lock
+    timestamp: 2026-10-21 15:00:36.023057+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3555
+        cached_input_tokens: 0
+        output_tokens: 19
+    timestamp: 2026-10-21 15:00:36.064302+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4583
+        cached_input_tokens: 0
+        output_tokens: 6
+    timestamp: 2026-10-21 15:00:38.988485+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 7118
+        cached_input_tokens: 0
+        output_tokens: 6
+    timestamp: 2026-10-21 15:00:38.999475+00:00
+  duration_ms: 28763.855
+  tries: 1

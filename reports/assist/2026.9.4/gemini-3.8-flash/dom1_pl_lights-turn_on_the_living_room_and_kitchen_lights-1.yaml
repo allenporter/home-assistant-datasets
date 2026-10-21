@@ -1,0 +1,452 @@
+---
+uuid: 732440a4-0fa1-4a9a-9bc4-172edf89eb67
+task_id: dom1_pl_lights-turn_on_the_living_room_and_kitchen_lights-1
+model_id: gemini-3.8-flash
+category: light
+task:
+  input_text: Turn on the living room and kitchen lights
+  expect_changes:
+    light.kitchen_light:
+      state: 'on'
+      attributes: null
+    light.living_room_light:
+      state: 'on'
+      attributes: null
+response: The living room and kitchen lights have been turned on.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Turn on the living room and kitchen lights
+      context:
+        id: 01M5FEKHPYPHCATFJGQ6PP9TB6
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:42:21.534643+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Bedroom 1 Light
+            domain: light
+            areas: Bedroom 1
+          - names: Bedroom 1 Thermostat
+            domain: climate
+            areas: Bedroom 1
+          - names: Bedroom 1 Thermostat Humidity
+            domain: sensor
+            areas: Bedroom 1
+          - names: Bedroom 1 Thermostat Temperature
+            domain: sensor
+            areas: Bedroom 1
+          - names: Bedroom 2 Light
+            domain: light
+            areas: Bedroom 2
+          - names: Bedroom 3 Light
+            domain: light
+            areas: Bedroom 3
+          - names: Bedroom 4 Light
+            domain: light
+            areas: Bedroom 4
+          - names: Coffee Maker
+            domain: switch
+            areas: Kitchen
+          - names: Coffee Maker Energy
+            domain: sensor
+            areas: Kitchen
+          - names: Dining Room Light
+            domain: light
+            areas: Dining Room
+          - names: Garage Camera Motion
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Camera Person
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Camera Sound
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Door Opener
+            domain: cover
+            areas: Garage
+          - names: Garage Door Opener
+            domain: light
+            areas: Garage
+          - names: Garden Light
+            domain: light
+            areas: Backyard
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living Room
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Backyard
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Backyard
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Backyard
+          - names: Personal Tasks
+            domain: todo
+          - names: Smart Speaker
+            domain: media_player
+            areas: Living Room
+          - names: Thermostat
+            domain: climate
+            areas: Kitchen
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Kitchen
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Kitchen
+          - names: Trader Joe'S
+            domain: todo
+          - names: Tv
+            domain: switch
+            areas: Living Room
+          - names: Tv Energy
+            domain: sensor
+            areas: Living Room
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:42:21.546607+00:00
+      - role: user
+        content: Turn on the living room and kitchen lights
+        attachments: null
+        created: 2026-10-21 14:42:21.534785+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Light Entities**
+
+          I'm currently breaking down the request to illuminate the living room and kitchen. It seems the core entities are the "Living Room Light" and the "Kitchen Light," both of the "light" domain. I'm exploring how to translate this into a command to switch them on, considering a function called `intent__HassTurnOn`. I'm starting to think about how to represent these specific lights within that function.
+
+
+          **Refining Command Parameters**
+
+          I've been examining the `intent__HassTurnOn` tool definition and the provided guidelines. I realize I have options, I can either specify the area and domain, or the name and domain. Both methods seem effective for turning on the lights. I am now leaning towards using the "area" parameter, since the instructions suggested doing this when controlling an area.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            domain:
+            - light
+            name: Living Room Light
+          id: 01M5FEKQFRJJEABJSMT7Z0MFNW
+          external: false
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            name: Kitchen Light
+            domain:
+            - light
+          id: 01M5FEKQJ85NE6BS64MSXCS93E
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 14:42:27.549555+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FEKQFRJJEABJSMT7Z0MFNW
+        tool_name: intent__HassTurnOn
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Living Room Light
+                type:
+                - entity
+                id: light.living_room_light
+              failed: []
+        created: 2026-10-21 14:42:27.549574+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FEKQJ85NE6BS64MSXCS93E
+        tool_name: intent__HassTurnOn
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Kitchen Light
+                type:
+                - entity
+                id: light.kitchen_light
+              failed: []
+        created: 2026-10-21 14:42:27.549584+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The living room and kitchen lights have been turned on.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:42:29.197801+00:00
+      tools:
+      - name: climate__HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7fcd64b2f060>, ''name'': <function non_empty_string
+          at 0x7fcd64b2f060>, ''floor'': <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fcd6b66c720>, ''domain'': Any(<function
+          string at 0x7fcd6b66c720>, [<function string at 0x7fcd6b66c720>], msg=None),
+          ''area'': <function string at 0x7fcd6b66c720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fcd67b57690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: media_player__HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100,
+          min_included=True, max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7fcd510592d0>, msg=None)}'
+      - name: media_player__HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7fcd539b4e00>, msg=None),
+          msg=None), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: media_player__HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd51059850>}'
+      - name: media_player__HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd51059900>}'
+      - name: media_player__HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7fcd6b66c720>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: todo__get_items
+        description: Query a to-do list to find out what items are on it. Use this
+          to answer questions like 'What's on my task list?' or 'Read my grocery list'.
+          Filters items by status (needs_action, completed, all).
+        parameters: '{''todo_list'': In([''Personal Tasks'', "Trader Joe''S"]), ''status'':
+          In([''needs_action'', ''completed'', ''all''])}'
+      - name: todo__HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fcd64b2f060>, ''name'':
+          <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: todo__HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fcd64b2f060>, ''name'':
+          <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: todo__HassListRemoveItem
+        description: Remove one or more items from a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fcd64b2f060>, ''name'':
+          <function non_empty_string at 0x7fcd64b2f060>}'
+    timestamp: 2026-10-21 14:42:21.546628+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3635
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:42:24.038092+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3635
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:42:26.219220+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3635
+        cached_input_tokens: 0
+        output_tokens: 27
+    timestamp: 2026-10-21 14:42:27.448348+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        domain:
+        - light
+        name: Living Room Light
+    timestamp: 2026-10-21 14:42:27.448839+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3635
+        cached_input_tokens: 0
+        output_tokens: 53
+    timestamp: 2026-10-21 14:42:27.528203+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        name: Kitchen Light
+        domain:
+        - light
+    timestamp: 2026-10-21 14:42:27.528690+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3635
+        cached_input_tokens: 0
+        output_tokens: 53
+    timestamp: 2026-10-21 14:42:27.548527+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3980
+        cached_input_tokens: 0
+        output_tokens: 4
+    timestamp: 2026-10-21 14:42:29.065792+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3980
+        cached_input_tokens: 0
+        output_tokens: 11
+    timestamp: 2026-10-21 14:42:29.186722+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4588
+        cached_input_tokens: 0
+        output_tokens: 11
+    timestamp: 2026-10-21 14:42:29.194994+00:00
+  duration_ms: 7663.764
+  tries: 1

@@ -1,0 +1,250 @@
+---
+uuid: 70d65147-2d7b-4270-a615-d415e83f96bb
+task_id: dom1_pl_lights_lights-turn_on_the_backyard_light-3
+model_id: gemini-3.8-flash
+category: light
+task:
+  input_text: Turn on the Backyard light
+  expect_changes:
+    light.garden_light:
+      state: 'on'
+      attributes:
+        brightness: 0
+        color_mode: brightness
+response: The Backyard light has been turned on.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Turn on the Backyard light
+      context:
+        id: 01M5FD278R8KG1ZQ3K4A2MV7GY
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:15:25.208376+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Bedroom 1 Light
+            domain: light
+            areas: Bedroom 1
+          - names: Bedroom 2 Light
+            domain: light
+            areas: Bedroom 2
+          - names: Bedroom 3 Light
+            domain: light
+            areas: Bedroom 3
+          - names: Bedroom 4 Light
+            domain: light
+            areas: Bedroom 4
+          - names: Dining Room Light
+            domain: light
+            areas: Dining Room
+          - names: Garden Light
+            domain: light
+            areas: Backyard
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living Room
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:15:25.219380+00:00
+      - role: user
+        content: Turn on the Backyard light
+        attachments: null
+        created: 2026-10-21 14:15:25.208517+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Identifying the Reference**
+
+          I've determined the user is referring to the "Garden Light" in the "Backyard" area. The static context provided was essential for disambiguating the user's intent to switch on the backyard light.
+
+
+          **Refining the Target**
+
+          I'm now zeroing in on the best method for control. Considering the options, I've decided to employ `intent__HassTurnOn` with `area="Backyard"` and `domain=["light"]`. The user's explicit reference to "Backyard light" led me to prioritize area-based control, following the preferred method suggested in the guidelines. This should accurately target the intended action.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            area: Backyard
+            domain:
+            - light
+          id: 01M5FD2BDYCQ9PJFW0ZPWKX5PY
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 14:15:29.485839+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FD2BDYCQ9PJFW0ZPWKX5PY
+        tool_name: intent__HassTurnOn
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Backyard
+                type:
+                - area
+                id: backyard
+              - name: Garden Light
+                type:
+                - entity
+                id: light.garden_light
+              failed: []
+        created: 2026-10-21 14:15:29.485857+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The Backyard light has been turned on.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:15:31.679506+00:00
+      tools:
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fc686390720>, ''domain'': Any(<function
+          string at 0x7fc686390720>, [<function string at 0x7fc686390720>], msg=None),
+          ''area'': <function string at 0x7fc686390720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fc686390720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fc682a77690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-10-21 14:15:25.219404+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1378
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:15:29.057821+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1378
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:15:29.058324+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1378
+        cached_input_tokens: 0
+        output_tokens: 26
+    timestamp: 2026-10-21 14:15:29.470057+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        area: Backyard
+        domain:
+        - light
+    timestamp: 2026-10-21 14:15:29.470519+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1378
+        cached_input_tokens: 0
+        output_tokens: 26
+    timestamp: 2026-10-21 14:15:29.484982+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1625
+        cached_input_tokens: 0
+        output_tokens: 2
+    timestamp: 2026-10-21 14:15:31.414574+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1625
+        cached_input_tokens: 0
+        output_tokens: 8
+    timestamp: 2026-10-21 14:15:31.671938+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2049
+        cached_input_tokens: 0
+        output_tokens: 8
+    timestamp: 2026-10-21 14:15:31.678627+00:00
+  duration_ms: 6471.617
+  tries: 1

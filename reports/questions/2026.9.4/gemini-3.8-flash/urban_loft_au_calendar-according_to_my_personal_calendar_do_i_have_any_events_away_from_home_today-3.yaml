@@ -1,0 +1,488 @@
+---
+uuid: 53c4d57f-cbca-49a6-b295-a14f9db58e64
+task_id: urban_loft_au_calendar-according_to_my_personal_calendar_do_i_have_any_events_away_from_home_today-3
+model_id: gemini-3.8-flash
+category:
+- calendar
+- question
+task:
+  input_text: According to my personal calendar, do I have any events away from home
+    today?
+  expect_response:
+  - 'no'
+  - nothing
+  - not leaving
+  - may not be leaving
+  - do not have any events
+  - don't have any events
+  - do not see
+  - don't see
+  - does not seem
+  - doesn't seem
+  - at home
+  - no plans
+response: No, according to your personal calendar, all of your events today are scheduled
+  at home.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: According to my personal calendar, do I have any events away from home
+        today?
+      context:
+        id: 01M5FBQRTJW644C7FA3WYPAH44
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 13:52:14.162548+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Balcony Light
+            domain: light
+            areas: Balcony
+          - names: Bedroom Light
+            domain: light
+            areas: Bedroom
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room
+            domain: light
+            areas: Living Room
+          - names: Motion Sensor
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Motion Sensor Battery
+            domain: binary_sensor
+            areas: Rooftop Terrace
+          - names: Samsung
+            domain: media_player
+            areas: Living Room
+          - names: Smart Plug
+            domain: switch
+            areas: Rooftop Terrace
+          - names: Smart Plug Energy
+            domain: sensor
+            areas: Rooftop Terrace
+          - names: Tasks
+            domain: todo
+          - names: Terrace Light
+            domain: light
+            areas: Rooftop Terrace
+          - names: Weather Service
+            domain: weather
+            areas: Rooftop Terrace
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 13:52:14.173940+00:00
+      - role: user
+        content: According to my personal calendar, do I have any events away from
+          home today?
+        attachments: null
+        created: 2026-10-21 13:52:14.162674+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Calendar Events**
+
+          I'm currently thinking about the user's question about events away from home today. I've realized the `calendar__get_events` tool is what I need. I'm considering using parameters like "Personal" and "today" (or maybe even "week") for the range. Now, I should carefully assess what the tool needs to deliver the correct results.
+
+
+          **Clarifying Query Intent**
+
+          I'm now grappling with the user's implicit intent: "today" versus "whole week."  The documentation is helpful, mentioning that inquiries about *anything* should trigger a "week" search. But the user asked *today*. I'm thinking I should start by querying "today" and, if that's not sufficient, then expand to "week" to handle a broader range. I am now leaning toward using `calendar__get_events` with "today".
+
+
+        tool_calls:
+        - tool_name: calendar__get_events
+          tool_args:
+            calendar: Personal
+            range: today
+          id: 01M5FBQZ6A7BJNEHNPEN7QA6H7
+          external: false
+        - tool_name: llm__GetDateTime
+          tool_args: {}
+          id: 01M5FBQZ7HSC86BH3ZM11WJQ8Q
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 13:52:20.739105+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FBQZ6A7BJNEHNPEN7QA6H7
+        tool_name: calendar__get_events
+        tool_result:
+          success: true
+          result:
+          - start: '2025-04-02T08:00:00+10:00'
+            end: '2025-04-02T11:55:00+10:00'
+            summary: Rest & Relax
+            location: Home
+          - start: '2025-04-02T13:00:00+10:00'
+            end: '2025-04-02T14:25:00+10:00'
+            summary: Clean the garage
+            location: Home
+          - start: '2025-04-02T18:00:00+10:00'
+            end: '2025-04-02T18:15:00+10:00'
+            summary: Order delivery
+            location: Home
+          - start: '2025-04-02T18:00:00+10:00'
+            end: '2025-04-02T20:25:00+10:00'
+            summary: Netflix w/ Liza
+            location: Home
+        created: 2026-10-21 13:52:20.739129+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FBQZ7HSC86BH3ZM11WJQ8Q
+        tool_name: llm__GetDateTime
+        tool_result:
+          success: true
+          result:
+            date: '2025-04-02'
+            time: 08:30:00
+            timezone: UTC+10:00
+            weekday: Wednesday
+        created: 2026-10-21 13:52:20.739140+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Home Activities**
+
+          I'm currently analyzing a list of activities. Specifically, I'm focusing on those centered around "Home." I've identified "Rest & Relax," "Clean the garage," and "Order delivery." I noticed "Netflix w/ Liza" is also included, though its location is undefined. I am waiting for more details to clarify its location.
+
+
+        tool_calls:
+        - tool_name: calendar__get_events
+          tool_args:
+            range: week
+            calendar: Personal
+          id: 01M5FBR2QSWZ6XDR7D69K4F4TA
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: ErIHCq8HAWkUfRMaeue83hngG5g/JhKffwgYXTAoiRVnxsKTWVAoYhhO1pTUAHBmsCe4X81zi+clsMe07Y3ZYsT1h+OfSuxgrSmq9fJpS1UTMqdVZm62tJlAyVT7ayrBdyFQDD7OLopNVTXjUHqkNe+bpkVDFsrs8k70VVCVZiex5Ca/EN1cjcpoIQ5xIfbrFsyNlx9ihS4XuderZqCaD6bR9sNELWot22JVYWaqmustlX5KexShSj6/hA6HXaiELOyTg0CUdXrVtFlE+I7WCgiSNdGJzTZ/UajJGj31SwsZV4UN1VnBQLZmZ20JEHI7KMOI2UcQX8YO9dUfgu+8biMRp9ge943VutdJ1y+1n5+cq7bLi8rUhxnCr7y3t1T6U1XD0aUNfxm+5LT26ah838yVh+r5UgTqN3/XdMz9uBNp6g/L61W/YQQbHuyWUNN2YdHeI+uWtD9iezTvE8PX3RX4iNNsfGT+XGC0HNVKzHJDTmsGOFUNGTS2/Z1CHaka8VGHQHO5mz9SooNfZHGvszp6imsyWmAEvHr6w65sD+6dEucFYQxl9+KkPla7D0P9GnwSmv9W8K4HdjJey1aqgH/7KLHZnOxPsH4sLWWW0pKIzfXiKUIDBpHpLGtmEZAeikoD4NrmVeRlyXG8iAXFq8qinl00+DGsjczCksOml3kvxD7gX6qMta+8NJlHWJ189bXQcY9RZ6Af2hCByBoPlcPJONqg+o6LHFTP3bgE7Pd2lzKHjQuCbAUw3nZFJBp7lLUrOo7ig7MPbIXsoJ2QYfx/lkvzve8qiDMsWFIwg1/gmXiICUXgVbdQQXHpqQPJK0PnwO/+eCjtoDelwjvW8GtKNCXmDED2bmQkB078TZRmoLot7Ye8prMd5U9USFYHyfPqYKxdobg7LVqOM2f51867hr5CTynM4FpBFK5PDFy45E+4WzSoA9c3vd165P4CUqtJVVg9Aog74V3E89vIQarz7hqxVJWNvzbYo6BwMXkUCuyxgxdd3eJYhU7FAmErUqa+nHKvl9WSlkHdooKn62ingL7hKY7acLK+fTA3afHhCQnO8NF3b2X4YU+COBvaE2cFiKd+je2PryVGH2bIBECaQgLca30/2mxj/u1OiOYLm4pR3mFRbCr0PTukMPeSF6lJW1QG6AzC7cWLYQDMTKb9qgIJWBadKHa2SwUGDxhzeAe6oODcQfM/sgmoaW+onsb/+zUy1dtjTEXkXFnqMTCxCC2tKFXG9yB7Y2+RIre1wcDiBQ==
+        created: 2026-10-21 13:52:24.328575+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FBR2QSWZ6XDR7D69K4F4TA
+        tool_name: calendar__get_events
+        tool_result:
+          success: true
+          result:
+          - start: '2025-04-02T08:00:00+10:00'
+            end: '2025-04-02T11:55:00+10:00'
+            summary: Rest & Relax
+            location: Home
+          - start: '2025-04-02T13:00:00+10:00'
+            end: '2025-04-02T14:25:00+10:00'
+            summary: Clean the garage
+            location: Home
+          - start: '2025-04-02T18:00:00+10:00'
+            end: '2025-04-02T18:15:00+10:00'
+            summary: Order delivery
+            location: Home
+          - start: '2025-04-02T18:00:00+10:00'
+            end: '2025-04-02T20:25:00+10:00'
+            summary: Netflix w/ Liza
+            location: Home
+          - start: '2025-04-06'
+            end: '2025-04-07'
+            summary: Cynthia's Birthday
+            description: Remember to give her a phone call.
+            all_day: true
+        created: 2026-10-21 13:52:24.328595+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: No, according to your personal calendar, all of your events today
+          are scheduled at home.
+        thinking_content: |+
+          **Verifying Query Parameters**
+
+          I've confirmed that the 'week' query now correctly includes the 'location: Home' parameter. This fixes the previous discrepancy. Further testing with diverse location-based queries is planned to ensure consistency and refine the result set for varied date ranges, refining parameter accuracy, and optimizing for edge cases.
+
+
+        tool_calls: null
+        native: null
+        created: 2026-10-21 13:52:28.105589+00:00
+      tools:
+      - name: calendar__get_events
+        description: Get events from a calendar. When asked if something happens,
+          search the whole week. Results are RFC 5545 which means 'end' is exclusive.
+        parameters: '{''calendar'': In([''Personal'']), ''range'': In([''today'',
+          ''week''])}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7f40469f8720>, ''domain'': Any(<function
+          string at 0x7f40469f8720>, [<function string at 0x7f40469f8720>], msg=None),
+          ''area'': <function string at 0x7f40469f8720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [<function string at 0x7f40469f8720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f40469f4720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [<function string at 0x7f40469f8720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7f40469f4720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7f40469f8720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7f4042e9f690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: media_player__HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f40469f4720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f40469f4720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f40469f4720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f40469f4720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f40469f4720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100,
+          min_included=True, max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7f402b7ef480>, msg=None)}'
+      - name: media_player__HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7f402eec2a30>, msg=None),
+          msg=None), ''name'': <function string at 0x7f40469f8720>, ''area'': <function
+          string at 0x7f40469f8720>, ''floor'': <function string at 0x7f40469f8720>}'
+      - name: media_player__HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f40469f4720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7f402b7ef110>}'
+      - name: media_player__HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7f40400d7060>, ''domain'': All(<function ensure_list at 0x7f40469f4720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7f40469f4720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7f402b7ee980>}'
+      - name: media_player__HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7f40469f8720>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7f40469f8720>, ''area'': <function
+          string at 0x7f40469f8720>, ''floor'': <function string at 0x7f40469f8720>}'
+      - name: todo__get_items
+        description: Query a to-do list to find out what items are on it. Use this
+          to answer questions like 'What's on my task list?' or 'Read my grocery list'.
+          Filters items by status (needs_action, completed, all).
+        parameters: '{''todo_list'': In([''Tasks'']), ''status'': In([''needs_action'',
+          ''completed'', ''all''])}'
+      - name: todo__HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f40400d7060>, ''name'':
+          <function non_empty_string at 0x7f40400d7060>}'
+      - name: todo__HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f40400d7060>, ''name'':
+          <function non_empty_string at 0x7f40400d7060>}'
+      - name: todo__HassListRemoveItem
+        description: Remove one or more items from a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7f40400d7060>, ''name'':
+          <function non_empty_string at 0x7f40400d7060>}'
+    timestamp: 2026-10-21 13:52:14.173976+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3066
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 13:52:16.941801+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3066
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 13:52:19.298137+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3066
+        cached_input_tokens: 0
+        output_tokens: 24
+    timestamp: 2026-10-21 13:52:20.682359+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar__get_events
+      tool_args:
+        calendar: Personal
+        range: today
+    timestamp: 2026-10-21 13:52:20.682832+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3066
+        cached_input_tokens: 0
+        output_tokens: 36
+    timestamp: 2026-10-21 13:52:20.721070+00:00
+  - event_type: tool_call
+    data:
+      tool_name: llm__GetDateTime
+      tool_args: {}
+    timestamp: 2026-10-21 13:52:20.721562+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3066
+        cached_input_tokens: 1065
+        output_tokens: 36
+    timestamp: 2026-10-21 13:52:20.732513+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3670
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 13:52:23.481637+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3670
+        cached_input_tokens: 0
+        output_tokens: 24
+    timestamp: 2026-10-21 13:52:24.313445+00:00
+  - event_type: tool_call
+    data:
+      tool_name: calendar__get_events
+      tool_args:
+        range: week
+        calendar: Personal
+    timestamp: 2026-10-21 13:52:24.314048+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4223
+        cached_input_tokens: 0
+        output_tokens: 24
+    timestamp: 2026-10-21 13:52:24.325495+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4146
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 13:52:26.990114+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4146
+        cached_input_tokens: 0
+        output_tokens: 3
+    timestamp: 2026-10-21 13:52:27.982794+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4146
+        cached_input_tokens: 0
+        output_tokens: 18
+    timestamp: 2026-10-21 13:52:28.084485+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4935
+        cached_input_tokens: 0
+        output_tokens: 18
+    timestamp: 2026-10-21 13:52:28.104227+00:00
+  duration_ms: 13943.637
+  tries: 1
