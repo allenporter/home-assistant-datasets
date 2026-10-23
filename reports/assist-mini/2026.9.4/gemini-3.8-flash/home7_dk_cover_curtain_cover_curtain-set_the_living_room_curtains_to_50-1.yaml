@@ -1,0 +1,313 @@
+---
+uuid: 81f39570-0d8a-4cc0-ba30-d7a14bac02f2
+task_id: home7_dk_cover_curtain_cover_curtain-set_the_living_room_curtains_to_50-1
+model_id: gemini-3.8-flash
+category: cover
+task:
+  input_text: Set the living room curtains to 50%
+  expect_changes:
+    cover.smart_curtain:
+      state: open
+      attributes:
+        current_position: 50
+response: The living room curtains have been set to 50%.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Set the living room curtains to 50%
+      context:
+        id: 01M5FDXF8514QWH2X6EJJ61PFJ
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:30:18.117687+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Smart Curtain
+            domain: cover
+            areas: Living Room
+          - names: Smart Curtain Battery
+            domain: sensor
+            areas: Living Room
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:30:18.123328+00:00
+      - role: user
+        content: Set the living room curtains to 50%
+        attachments: null
+        created: 2026-10-21 14:30:18.117769+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Curtain Intent**
+
+          I am now focusing on the intent to set the living room curtains. My immediate goal is to understand how the `intent__HassSetPosition` tool can be used. It has parameters for area, device class, and domain. I need to figure out how to best map the user's intent to these parameters based on the provided context.
+
+
+          **Refining Command Specificity**
+
+          I'm now zeroing in on the best method for commanding the curtain. It seems I can either use `name` with "Smart Curtain" or `area` with "Living Room" plus the domain "cover". The guidance prefers device control via `name` and domain, or area control via `area` and domain. Since "Smart Curtain" is the curtain in the living room, I can use either of these: `intent__HassSetPosition(domain=['cover'], name='Smart Curtain', position=50)` or `intent__HassSetPosition(area='Living Room', domain=['cover'], position=50)`.
+
+
+          **Prioritizing Area vs. Device**
+
+          I'm now grappling with the user's intent when the device's name ("Smart Curtain") or area ("Living Room") is explicitly stated. The challenge is whether to use the device name with domain or the area with the domain. I'm focusing on "Set the living room curtains to 50%," so I'm trying to figure out which takes priority. It seems I must use `name="Smart Curtain", domain=["cover"]`, but what if the user clearly identifies the area?
+
+
+          **Clarifying Curtain Control Parameters**
+
+          I'm now clarifying the parameters for curtain control. I've re-examined the intent parsing, focusing on device versus area commands. I'm focusing on "Set the living room curtains," and considering whether it means controlling the area or the device. Both name and area with the domain are acceptable parameters. I'm checking if HassSetPosition accepts both name and area, along with the domain and then how to apply these parameters effectively. I'm also ensuring the provided device name and area do not conflict.
+
+
+          **Confirming HA Intent Handling**
+
+          I'm now confirming the HA intent handling, focusing on the example of setting the living room curtains. I realized I needed to use `HassSetPosition(area="Living Room", domain=["cover"], position=50)` after re-reading the documentation. I verified that this approach aligns with HA's intent handlers. I've been reviewing other examples for consistency.
+
+
+          **Interpreting Intent Distinction**
+
+          I'm now clarifying the distinctions in intent.  The prompt's guidance is key: device control prefers name/domain, while area control prefers area/domain.  "Living room curtains" seem like an area ("Living Room") with a specific device type ("curtain" -> domain "cover"). I'm exploring whether the `device_class` parameter is relevant. It seems `area: "Living Room", domain: ["cover"], position: 50` is the correct approach.
+
+
+          **Prioritizing Intent Resolution**
+
+          I'm now focusing on how to resolve the ambiguous intent of "living room curtains." The guidance favors passing either area/domain or name/domain. I'm leaning toward interpreting "living room curtains" as an area ("Living Room") with a "cover" domain. This seems more aligned with the user specifying the *location* of the device rather than the device's exact name ("Smart Curtain"). I'm revisiting the HA intent tools to see if the area/domain approach is supported and how it resolves to the specific device.
+
+
+          **Confirming Preferred Parameters**
+
+          I am now confirming the best parameters. While I see the `name: "Smart Curtain"` as a possibility, the user didn't specify the device's name. I now understand "living room curtains" implies `area: "Living Room"` and `domain: ["cover"]`. I'm confirming that this aligns with the guidance's preference for area/domain when controlling an area, which is what the user requested. Therefore, I believe `area: "Living Room", domain: ["cover"], position: 50` is the correct approach. I have double-checked the documentation to see if `name="Smart Curtain"` is necessary, but I believe it is not, given the guidance.
+
+
+        tool_calls:
+        - tool_name: intent__HassSetPosition
+          tool_args:
+            position: 50
+            domain:
+            - cover
+            area: Living Room
+          id: 01M5FDY4RR7A4NYDZKG9H19175
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 14:30:40.187011+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FDY4RR7A4NYDZKG9H19175
+        tool_name: intent__HassSetPosition
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Living Room
+                type:
+                - area
+                id: living_room
+              - name: Smart Curtain
+                type:
+                - entity
+                id: cover.smart_curtain
+              failed: []
+        created: 2026-10-21 14:30:40.187034+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The living room curtains have been set to 50%.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:30:42.226345+00:00
+      tools:
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fc686390720>, ''domain'': Any(<function
+          string at 0x7fc686390720>, [<function string at 0x7fc686390720>], msg=None),
+          ''area'': <function string at 0x7fc686390720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fc686390720>}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-10-21 14:30:18.123344+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:22.180909+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:24.476793+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:26.928054+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:29.370773+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:31.865385+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:34.481772+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:36.339415+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:30:39.157013+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: 31
+    timestamp: 2026-10-21 14:30:40.152796+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassSetPosition
+      tool_args:
+        position: 50
+        domain:
+        - cover
+        area: Living Room
+    timestamp: 2026-10-21 14:30:40.153313+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1435
+        cached_input_tokens: 0
+        output_tokens: 31
+    timestamp: 2026-10-21 14:30:40.185825+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2469
+        cached_input_tokens: 0
+        output_tokens: 2
+    timestamp: 2026-10-21 14:30:42.093159+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2469
+        cached_input_tokens: 0
+        output_tokens: 12
+    timestamp: 2026-10-21 14:30:42.217083+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4694
+        cached_input_tokens: 0
+        output_tokens: 12
+    timestamp: 2026-10-21 14:30:42.224776+00:00
+  duration_ms: 24108.99
+  tries: 1

@@ -1,0 +1,395 @@
+---
+uuid: 8e6871ec-bd79-46b5-ba3a-1dbc05a1afd2
+task_id: home2_ru_water_valve-turn_off_the_water_in_the_front_yard-2
+model_id: gemini-3.8-flash
+category: valve
+task:
+  input_text: turn off the water in the front yard
+  expect_changes:
+    valve.irrigation_valve:
+      state: closed
+      attributes:
+        current_position: 0
+response: The front yard irrigation valve has been turned off.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: turn off the water in the front yard
+      context:
+        id: 01M5FH1W4P1FF3P78VQWCC78HR
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 15:25:08.119054+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Bedroom 1 Light
+            domain: light
+            areas: Bedroom 1
+          - names: Bedroom 2 Light
+            domain: light
+            areas: Bedroom 2
+          - names: Bedroom 3 Light
+            domain: light
+            areas: Bedroom 3
+          - names: Bedroom 4 Light
+            domain: light
+            areas: Bedroom 4
+          - names: Coffee Maker
+            domain: switch
+            areas: Kitchen
+          - names: Coffee Maker Energy
+            domain: sensor
+            areas: Kitchen
+          - names: Dining Room Light
+            domain: light
+            areas: Dining Room
+          - names: Garage Camera Motion
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Camera Person
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Camera Sound
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Door
+            domain: cover
+            areas: Garage
+          - names: Garage Door
+            domain: light
+            areas: Garage
+          - names: Garden Light
+            domain: light
+            areas: Front yard
+          - names: Irrigation Valve
+            domain: valve
+            areas: Front yard
+          - names: Irrigation Valve Battery
+            domain: sensor
+            areas: Front yard
+          - names: Irrigation Valve Meter-reading
+            domain: sensor
+            areas: Front yard
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living Room
+          - names: Thermostat
+            domain: climate
+            areas: Kitchen
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Kitchen
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Kitchen
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 15:25:08.129864+00:00
+      - role: user
+        content: turn off the water in the front yard
+        attachments: null
+        created: 2026-10-21 15:25:08.119174+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Irrigation Systems**
+
+          I'm currently focused on turning off the water in the front yard. I've identified the "Irrigation Valve" as the relevant device, confirming its domain as a valve and location as the front yard. There are also two sensors associated with it, one for battery level and another for meter readings. I am considering using the available `intent` tool.
+
+
+          **Refining Turn-Off Parameters**
+
+          I'm now zeroing in on the correct parameters for the `intent__HassTurnOff` tool. The key is understanding how to specify the target device for turning off. I've considered name "Irrigation Valve" with domain ["valve"], and the option of area="Front yard" with domain ["valve"]. Given the instructions, I'm leaning toward using the name and domain parameters. However, I still need to finalize the best combination to accurately target the irrigation valve for deactivation.
+
+
+          **Prioritizing Device Specificity**
+
+          I'm now focusing on the best way to ensure the correct device is targeted. I'm considering both `area` and `name` parameters, along with the `domain`, but leaning towards prioritizing specificity. The name of the device is "Irrigation Valve" and it's located in the front yard. I'm now certain that using `name: "Irrigation Valve"`, paired with `domain: ["valve"]`, offers the highest degree of precision when using the `intent__HassTurnOff` tool, effectively ensuring the intended valve deactivation.
+
+
+          **Evaluating Entity Precision**
+
+          I'm now comparing approaches. The user's phrasing, like "turn off the water in the front yard," is key. I'm evaluating `device_class: ["water"]` versus `name: "Irrigation Valve"` using the `intent__HassTurnOff` schema. In Home Assistant standard intents, `device_class` does include `water`. However, my goal is the *exact* valve. The `domain` for the "Irrigation Valve" is `valve`. Can I use `name: "Irrigation Valve"`? I am now considering: `name: "Irrigation Valve"` versus  `area: "Front yard", domain: ["valve"]`.
+
+
+          **Prioritizing Intent Specificity**
+
+          I'm now focusing on intent tool guidelines. The recommendation emphasizes preferring name and domain for device control and area with domain for area control. For "turn off the water in the front yard", I'm now evaluating if this references a specific device named or a generalized area request. If I pass `"Irrigation Valve"` as the name, the intent is specific. However, considering the user's phrasing, area specification could make the intent generalized. Should I include area, even though it's less specific? I'm debating what to use.
+
+
+          **Confirming Domain-Based Specificity**
+
+          I've been reevaluating parameter combinations based on "the water" in the user input. I'm now leaning towards prioritizing the provided domain of `valve` and the `name` "Irrigation Valve" as the most reliable approach. Comparing this to similar Home Assistant cases, I have confirmed that relying on `device_class: ["water"]` might not be the best strategy given the static context provided. I've re-examined the context data, noting there's no `device_class` listed for this particular entity. Given the schema restrictions, I think I have a solid approach.
+
+
+          **Determining Parameter Specificity**
+
+          I'm now determining how to handle "the water in the front yard". Considering Home Assistant's intent guidelines, I'm analyzing whether this phrase refers to a specific device or a generalized area. The user didn't mention the device name, so is it an area command? Could I use `"Front yard"` with `domain: ["valve"]`? Let me revisit: "When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain." I am considering the command's specificity.
+
+
+          **Refining Target Precision**
+
+          I'm now refining how to interpret "the water" and "front yard" in the context of the intent tool. I'm focusing on the Home Assistant intent guidelines that prioritize `name` and `domain` for specific device control. If I pass `area: "Front yard", domain: ["valve"]`, I'll be targeting all valves in the front yard. But, if I pass `name: "Irrigation Valve", domain: ["valve"]`, I target the desired device. Considering the phrasing and guidelines, I will prefer `name: "Irrigation Valve", domain: ["valve"]`.
+
+
+          **Prioritizing Final Parameter Choice**
+
+          I am now clarifying my strategy, focusing on ensuring the correct device is targeted. I'm choosing between using both area and name parameters versus a more focused approach, and I've reached the point where I am focusing on the user command, which suggests a specific action on a named device, and the intent schema. Given my context, the `name` "Irrigation Valve" and `domain: ["valve"]` will be my preferred parameters, and am ready to submit to the test.
+
+
+          **Interpreting User Intent**
+
+          I'm now grappling with the user's phrasing "the water in the front yard". Should I infer `area: "Front yard"` even when a specific device name exists? Considering Home Assistant intent guidelines, I'm questioning if the intent is to control the "Irrigation Valve" directly, or the area. I must determine if the phrasing implies a generalized area command or a specific device control. I'm focusing on the implied specificity.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOff
+          tool_args:
+            domain:
+            - valve
+            name: Irrigation Valve
+          id: 01M5FH2N6X830DRX9E8WRC7SEY
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 15:25:33.821330+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FH2N6X830DRX9E8WRC7SEY
+        tool_name: intent__HassTurnOff
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Irrigation Valve
+                type:
+                - entity
+                id: valve.irrigation_valve
+              failed: []
+        created: 2026-10-21 15:25:33.821344+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The front yard irrigation valve has been turned off.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 15:25:36.354984+00:00
+      tools:
+      - name: climate__HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7fcd64b2f060>, ''name'': <function non_empty_string
+          at 0x7fcd64b2f060>, ''floor'': <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fcd6b66c720>, ''domain'': Any(<function
+          string at 0x7fcd6b66c720>, [<function string at 0x7fcd6b66c720>], msg=None),
+          ''area'': <function string at 0x7fcd6b66c720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fcd67b57690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-10-21 15:25:08.129881+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:12.359579+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:14.447041+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:16.752631+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:19.747760+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:22.000643+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:24.390364+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:26.237445+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:28.548669+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:30.466022+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:25:32.354999+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: 27
+    timestamp: 2026-10-21 15:25:33.789010+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOff
+      tool_args:
+        domain:
+        - valve
+        name: Irrigation Valve
+    timestamp: 2026-10-21 15:25:33.789486+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1987
+        cached_input_tokens: 0
+        output_tokens: 27
+    timestamp: 2026-10-21 15:25:33.819732+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3272
+        cached_input_tokens: 0
+        output_tokens: 10
+    timestamp: 2026-10-21 15:25:36.341599+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 6148
+        cached_input_tokens: 0
+        output_tokens: 10
+    timestamp: 2026-10-21 15:25:36.354125+00:00
+  duration_ms: 28236.33
+  tries: 1

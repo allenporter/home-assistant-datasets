@@ -1,0 +1,225 @@
+---
+uuid: a47308a6-01e5-4614-89f1-b488be4a51e0
+task_id: home1_us_vacuum_vacuum-start_vacuum_in_the_living_room-0
+model_id: gemini-3.8-flash
+category: vacuum
+task:
+  input_text: Start vacuum in the living room
+  expect_changes:
+    vacuum.roborock_downstairs:
+      state: cleaning
+      attributes: null
+response: Started the vacuum in the living room.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Start vacuum in the living room
+      context:
+        id: 01M5FDCABKH1VEY190ZPWRHH1A
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:20:56.051540+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Roborock Downstairs
+            domain: vacuum
+            areas: Living Room
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:20:56.057792+00:00
+      - role: user
+        content: Start vacuum in the living room
+        attachments: null
+        created: 2026-10-21 14:20:56.051622+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Considering Vacuum Commands**
+
+          I'm now focusing on how to translate "Start vacuum in the living room" into a concrete command. I've identified a "Roborock Downstairs" vacuum in the "Living Room". I'm trying to decide between `vacuum__HassVacuumStart` and `vacuum__HassVacuumCleanArea`. I'm leaning toward the latter but need to confirm the correct parameters. I'm also ensuring the area's correct.
+
+
+          **Clarifying Device Control**
+
+          I'm now certain "Start vacuum in the living room" maps to `vacuum__HassVacuumStart`. `HassVacuumStart` uses "area" for the device's location, which aligns with my Roborock in the "Living Room". Device control favors name and domain, while area-based commands prefer just the area. Thus, `HassVacuumStart` with `area="Living Room"` is the correct approach.
+
+
+        tool_calls:
+        - tool_name: vacuum__HassVacuumStart
+          tool_args:
+            domain:
+            - vacuum
+            area: Living Room
+          id: 01M5FDCFJY3BJ0SY8CD0Z02H39
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 14:21:01.422646+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FDCFJY3BJ0SY8CD0Z02H39
+        tool_name: vacuum__HassVacuumStart
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Living Room
+                type:
+                - area
+                id: living_room
+              - name: Roborock Downstairs
+                type:
+                - entity
+                id: vacuum.roborock_downstairs
+              failed: []
+        created: 2026-10-21 14:21:01.422664+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: Started the vacuum in the living room.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:21:03.465121+00:00
+      tools:
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fc686390720>, ''domain'': Any(<function
+          string at 0x7fc686390720>, [<function string at 0x7fc686390720>], msg=None),
+          ''area'': <function string at 0x7fc686390720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fc686390720>}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: vacuum__HassVacuumStart
+        description: Starts a vacuum
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumReturnToBase
+        description: Returns a vacuum to base
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumCleanArea
+        description: Tells a vacuum to clean a specific area
+        parameters: '{''area'': <function string at 0x7fc686390720>, ''name'': <function
+          string at 0x7fc686390720>}'
+    timestamp: 2026-10-21 14:20:56.057807+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1324
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:20:58.805147+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1324
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:21:00.759020+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1324
+        cached_input_tokens: 0
+        output_tokens: 26
+    timestamp: 2026-10-21 14:21:01.406029+00:00
+  - event_type: tool_call
+    data:
+      tool_name: vacuum__HassVacuumStart
+      tool_args:
+        domain:
+        - vacuum
+        area: Living Room
+    timestamp: 2026-10-21 14:21:01.406465+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1324
+        cached_input_tokens: 0
+        output_tokens: 26
+    timestamp: 2026-10-21 14:21:01.421726+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1632
+        cached_input_tokens: 0
+        output_tokens: 8
+    timestamp: 2026-10-21 14:21:03.456451+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2122
+        cached_input_tokens: 0
+        output_tokens: 8
+    timestamp: 2026-10-21 14:21:03.464104+00:00
+  duration_ms: 7414.001
+  tries: 1
