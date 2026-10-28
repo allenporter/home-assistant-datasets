@@ -1,0 +1,224 @@
+---
+uuid: 29004eeb-2668-46ac-b871-8dec9da97038
+task_id: home1_us_cover_garage_cover_garage-close_the_garage_door-1
+model_id: gemini-3.8-flash
+category: cover
+task:
+  input_text: Close the garage door
+  expect_changes:
+    cover.garage_door_opener:
+      state: closed
+      attributes: null
+response: Closed the garage door.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Close the garage door
+      context:
+        id: 01M5FD6F59GFWWBGDM3E8BSV1J
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:17:44.361743+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Garage Door Opener
+            domain: cover
+            areas: Garage
+          - names: Garage Door Opener
+            domain: light
+            areas: Garage
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:17:44.367559+00:00
+      - role: user
+        content: Close the garage door
+        attachments: null
+        created: 2026-10-21 14:17:44.361846+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Closing Requirements**
+
+          I'm currently focused on the intent to "Close the garage door." Based on the static context, I've identified the "Garage Door Opener" as the target device within the "Garage" area, which functions as both a "cover" and a "light." Home Assistant's `intent__HassTurnOff` seems relevant to this task for closing a "cover" device. I'm exploring how to best translate this intent.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOff
+          tool_args:
+            name: Garage Door Opener
+            domain:
+            - cover
+          id: 01M5FD6N7XPTZDJSBVVFQJ92PY
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 14:17:50.600304+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FD6N7XPTZDJSBVVFQJ92PY
+        tool_name: intent__HassTurnOff
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Garage Door Opener
+                type:
+                - entity
+                id: cover.garage_door_opener
+              failed: []
+        created: 2026-10-21 14:17:50.600315+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: Closed the garage door.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:17:52.293277+00:00
+      tools:
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fc686390720>, ''domain'': Any(<function
+          string at 0x7fc686390720>, [<function string at 0x7fc686390720>], msg=None),
+          ''area'': <function string at 0x7fc686390720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fc686390720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fc682a77690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-10-21 14:17:44.367572+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1568
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:17:49.356409+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1568
+        cached_input_tokens: 0
+        output_tokens: 28
+    timestamp: 2026-10-21 14:17:50.588991+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOff
+      tool_args:
+        name: Garage Door Opener
+        domain:
+        - cover
+    timestamp: 2026-10-21 14:17:50.589357+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1568
+        cached_input_tokens: 0
+        output_tokens: 28
+    timestamp: 2026-10-21 14:17:50.598839+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1756
+        cached_input_tokens: 0
+        output_tokens: 5
+    timestamp: 2026-10-21 14:17:52.279278+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2096
+        cached_input_tokens: 0
+        output_tokens: 5
+    timestamp: 2026-10-21 14:17:52.292365+00:00
+  duration_ms: 7931.972
+  tries: 1
