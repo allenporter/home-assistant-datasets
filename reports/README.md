@@ -8,6 +8,7 @@
 | gemini-2.5-flash | $${88.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.7.1)}}}$$ | $${94.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, 2025.7.1)}}}$$ | $${73.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.2, 2025.4.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
 | gemma4-26b-a4b | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.2.3)}}}$$ | $${83.3\\% \space\color{gray}\tiny{\textsf{(CI: 9.4, 2026.2.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
 | gemma4-12b | $${83.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.2.3)}}}$$ | $${97.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, 2026.2.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.2.3)}}}$$ |  | $${92.1\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
+| nvidia-nemotron-3.5-bolt-e4b | $${85.7\\% \space\color{gray}\tiny{\textsf{(CI: 3.3, 2026.9.2)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2026.9.2)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.9.2)}}}$$ | $${13.3\\% \space\color{gray}\tiny{\textsf{(CI: 8.6, 2026.9.2)}}}$$ | $${92.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | minimax-m2.5 | $${88.5\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2026.2.1)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.1)}}}$$ | $${93.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.6, 2026.2.1)}}}$$ | $${61.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.3, 2026.2.1)}}}$$ | $${92.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | qwen3-30b-a3b-instruct | $${83.9\\% \space\color{gray}\tiny{\textsf{(CI: 3.4, 2026.1.1)}}}$$ | $${97.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, 2026.1.1)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.1.1)}}}$$ | $${0.0\\% \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.1.1)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, avg)}}}$$ |
 | gemini-2.5-pro | $${\textbf{91.3}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 2.6, 2025.4.3)}}}$$ | $${98.5\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2025.4.3)}}}$$ | $${83.2\\% \space\color{gray}\tiny{\textsf{(CI: 5.4, 2025.4.3)}}}$$ | $${76.7\\% \space\color{gray}\tiny{\textsf{(CI: 10.7, 2025.4.3)}}}$$ | $${91.2\\% \space\color{gray}\tiny{\textsf{(CI: 1.9, avg)}}}$$ |
@@ -87,7 +88,7 @@ config:
 ---
 xychart-beta
   title "assist"
-  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, .]
+  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, .]
   y-axis "Score" 1 --> 100
   bar [90.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 87.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -96,11 +97,11 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 88.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 86.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.5, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.3, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 89.4, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.3, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.5, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.9, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.3, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 89.4, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -145,7 +146,7 @@ config:
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, .]
+  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, .]
   y-axis "Score" 1 --> 100
   bar [98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -154,11 +155,11 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.5, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.5, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -195,7 +196,7 @@ config:
 ---
 xychart-beta
   title "questions"
-  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, .]
+  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, claude-3-7-sonnet, .]
   y-axis "Score" 1 --> 100
   bar [97.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -204,11 +205,11 @@ xychart-beta
   bar [0.0, 0.0, 0.0, 0.0, 94.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.2, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.2, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 84.1, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 89.7, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.2, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.2, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 84.1, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -242,25 +243,25 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#4285f4, #0f9d58, #fbbc04, #34a853, #46bdc6, #d5a6bd, #6aa84f, #674ea7, #d9ead3, #4285f4, #0f9d58, #f4b400, #4285f4"
+            plotColorPalette: "#4285f4, #0f9d58, #fbbc04, #34a853, #46bdc6, #1155cc, #6aa84f, #674ea7, #d9ead3, #4285f4, #0f9d58, #f4b400, #4285f4"
 
 ---
 xychart-beta
   title "automations"
-  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, minimax-m2.5, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, glm-4.7-flash, devstral-2512, claude-3-5-haiku, ministral-3-14b, .]
+  x-axis "Model" [muse-glimmer, gemini-3.1-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, gemini-2.5-pro, claude-3-7-sonnet, qwen3.6-27b, glm-4.7-flash, devstral-2512, claude-3-5-haiku, .]
   y-axis "Score" 1 --> 100
   bar [51.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 6.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 73.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 83.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 61.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 17.2, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 60.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 61.7, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 13.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 61.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 81.7, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 76.7, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 17.2, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 60.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 56.7, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 ## Models
@@ -758,6 +759,27 @@ More information:
 - https://github.com/DylanGerloski/hometiny/tree/main/hometiny-run/custom_components/hometiny_needle
 - https://github.com/cactus-compute/needle
 - https://huggingface.co/Cactus-Compute/needle3
+
+
+### nvidia-nemotron-3.5-bolt-e4b
+
+NVIDIA Nemotron 3.5 Bolt E4B is an 8-billion-parameter
+language model with 4B effective parameters,
+post-trained from Gemma-4-E4B-it and purpose-built for
+fast local voice and device assistants.
+The model integrates multi-turn tool use, instruction following,
+input grounding, and low-latency inference into
+a single model that runs locally without
+requiring cloud infrastructure or network access.
+
+The model was run with thinking disabled and in conversation mode
+to improve latency and reduce output formatting for better answers.
+
+
+
+
+More information:
+
 
 
 ### qwen3-1.7b
