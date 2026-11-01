@@ -5,6 +5,7 @@
 | muse-glimmer | $${90.2\\% \space\color{gray}\tiny{\textsf{(CI: 2.7, 2026.9.2)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.9.2)}}}$$ | $${97.6\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, 2026.9.2)}}}$$ | $${51.7\\% \space\color{gray}\tiny{\textsf{(CI: 12.6, 2026.9.2)}}}$$ | $${94.3\\% \space\color{gray}\tiny{\textsf{(CI: 1.4, avg)}}}$$ |
 | gemini-3.1-flash-lite | $${87.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${\textbf{100.0}\\% \space * \space\color{gray}\tiny{\textsf{(CI: 0.0, 2026.2.3)}}}$$ | $${6.7\\% \space\color{gray}\tiny{\textsf{(CI: 6.3, 2026.2.3)}}}$$ | $${93.8\\% \space\color{gray}\tiny{\textsf{(CI: 1.5, avg)}}}$$ |
 | gpt-5.4-mini | $${87.8\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, 2026.9.4)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2026.9.4)}}}$$ | $${97.6\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, 2026.9.4)}}}$$ |  | $${93.1\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
+| claude-haiku-5-5 | $${86.5\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.9.4)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.9.4)}}}$$ | $${98.1\\% \space\color{gray}\tiny{\textsf{(CI: 1.4, 2026.9.4)}}}$$ |  | $${92.9\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
 | gemini-3.5-flash-lite | $${88.0\\% \space\color{gray}\tiny{\textsf{(CI: 3.0, 2026.9.4)}}}$$ | $${97.4\\% \space\color{gray}\tiny{\textsf{(CI: 2.2, 2026.9.4)}}}$$ | $${95.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.9.4)}}}$$ |  | $${92.7\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
 | gemini-2.5-flash | $${88.7\\% \space\color{gray}\tiny{\textsf{(CI: 2.9, 2025.4.3)}}}$$ | $${96.9\\% \space\color{gray}\tiny{\textsf{(CI: 2.4, 2025.7.1)}}}$$ | $${94.6\\% \space\color{gray}\tiny{\textsf{(CI: 2.3, 2025.7.1)}}}$$ | $${73.3\\% \space\color{gray}\tiny{\textsf{(CI: 11.2, 2025.4.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
 | gemma4-26b-a4b | $${86.3\\% \space\color{gray}\tiny{\textsf{(CI: 3.1, 2026.2.3)}}}$$ | $${98.0\\% \space\color{gray}\tiny{\textsf{(CI: 2.0, 2026.2.3)}}}$$ | $${97.0\\% \space\color{gray}\tiny{\textsf{(CI: 1.7, 2026.2.3)}}}$$ | $${83.3\\% \space\color{gray}\tiny{\textsf{(CI: 9.4, 2026.2.3)}}}$$ | $${92.4\\% \space\color{gray}\tiny{\textsf{(CI: 1.6, avg)}}}$$ |
@@ -90,20 +91,20 @@ config:
 ---
 xychart-beta
   title "assist"
-  x-axis "Model" [gemini-3.8-flash, muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, .]
+  x-axis "Model" [gemini-3.8-flash, muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, claude-haiku-5-5, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, .]
   y-axis "Score" 1 --> 100
   bar [90.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 90.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 87.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 87.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 88.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 88.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.5, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.5, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.9, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 91.3, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 86.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 88.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 86.3, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.5, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 85.7, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 88.5, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.9, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -148,20 +149,20 @@ config:
 ---
 xychart-beta
   title "assist-mini"
-  x-axis "Model" [gemini-3.8-flash, muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, .]
+  x-axis "Model" [gemini-3.8-flash, muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, claude-haiku-5-5, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, .]
   y-axis "Score" 1 --> 100
   bar [98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.5, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 96.9, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.4, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -198,20 +199,20 @@ config:
 ---
 xychart-beta
   title "questions"
-  x-axis "Model" [gemini-3.8-flash, muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, gemini-2.5-pro, .]
+  x-axis "Model" [gemini-3.8-flash, muse-glimmer, gemini-3.1-flash-lite, gpt-5.4-mini, claude-haiku-5-5, gemini-3.5-flash-lite, gemini-2.5-flash, gemma4-26b-a4b, gemma4-12b, nvidia-nemotron-3.5-bolt-e4b, minimax-m2.5, qwen3-30b-a3b-instruct, .]
   y-axis "Score" 1 --> 100
   bar [98.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 97.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   bar [0.0, 0.0, 0.0, 97.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 94.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.2, 0.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0]
-  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 83.2, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 98.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 95.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 94.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 93.2, 0.0, 0.0]
+  bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 97.0, 0.0]
   bar [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 ```
 
@@ -245,7 +246,7 @@ config:
     themeVariables:
         xyChart:
             titleColor: "#ff0000"
-            plotColorPalette: "#0f9d58, #f4b400, #34a853, #ff6d01, #1155cc, #d5a6bd, #674ea7, #d9ead3, #4285f4, #0f9d58, #f4b400, #ea4335, #4285f4"
+            plotColorPalette: "#0f9d58, #f4b400, #ff6d01, #46bdc6, #d5a6bd, #6aa84f, #d9ead3, #4285f4, #0f9d58, #f4b400, #ea4335, #fbbc04, #4285f4"
 
 ---
 xychart-beta
@@ -300,6 +301,26 @@ capability with toggleable extended thinking
 
 More information:
 - https://www.anthropic.com/news/claude-3-7-sonnet
+
+
+### claude-haiku-5-5
+
+Anthropic integration using Claude Haiku 5.5.
+
+
+#### Assist Eval Performance Metrics
+
+- Average Latency: 2327 (ms)
+- Total Eval Cost: $0.05
+- Cost breakdown:
+    - 181667 input tokens, $0.10/1M tokens
+    - 72332 output tokens, $0.50/1M tokens
+
+None
+
+
+More information:
+- https://www.anthropic.com/claude/haiku
 
 
 ### devstral-2512
