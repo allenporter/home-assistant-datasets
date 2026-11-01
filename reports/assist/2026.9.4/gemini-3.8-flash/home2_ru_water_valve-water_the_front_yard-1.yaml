@@ -1,0 +1,294 @@
+---
+uuid: b4705c5f-1dac-416c-8e2e-a31688d9a42f
+task_id: home2_ru_water_valve-water_the_front_yard-1
+model_id: gemini-3.8-flash
+category: valve
+task:
+  input_text: water the front yard
+  expect_changes:
+    valve.irrigation_valve:
+      state: open
+      attributes:
+        current_position: 100
+response: The front yard irrigation valve has been opened.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: water the front yard
+      context:
+        id: 01M5FGVS99G6SN6525SVB773VG
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 15:21:48.585574+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Bedroom 1 Light
+            domain: light
+            areas: Bedroom 1
+          - names: Bedroom 2 Light
+            domain: light
+            areas: Bedroom 2
+          - names: Bedroom 3 Light
+            domain: light
+            areas: Bedroom 3
+          - names: Bedroom 4 Light
+            domain: light
+            areas: Bedroom 4
+          - names: Coffee Maker
+            domain: switch
+            areas: Kitchen
+          - names: Coffee Maker Energy
+            domain: sensor
+            areas: Kitchen
+          - names: Dining Room Light
+            domain: light
+            areas: Dining Room
+          - names: Garage Camera Motion
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Camera Person
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Camera Sound
+            domain: binary_sensor
+            areas: Garage
+          - names: Garage Door
+            domain: cover
+            areas: Garage
+          - names: Garage Door
+            domain: light
+            areas: Garage
+          - names: Garden Light
+            domain: light
+            areas: Front yard
+          - names: Irrigation Valve
+            domain: valve
+            areas: Front yard
+          - names: Irrigation Valve Battery
+            domain: sensor
+            areas: Front yard
+          - names: Irrigation Valve Meter-reading
+            domain: sensor
+            areas: Front yard
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living Room
+          - names: Thermostat
+            domain: climate
+            areas: Kitchen
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Kitchen
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Kitchen
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 15:21:48.591544+00:00
+      - role: user
+        content: water the front yard
+        attachments: null
+        created: 2026-10-21 15:21:48.585665+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Irrigation Action**
+
+          Okay, I'm trying to figure out how to interpret "water the front yard." I see two relevant devices: an Irrigation Valve and a Garden Light, both in the front yard. My current focus is on how to *actually* open or activate the irrigation valve, so I can fulfill the request to water the front yard. I need to use the `intent__HassTurn` tool to do it!
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            domain:
+            - valve
+            name: Irrigation Valve
+          id: 01M5FGVYWN92AEQNKT87XHDYV9
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 15:21:54.336944+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FGVYWN92AEQNKT87XHDYV9
+        tool_name: intent__HassTurnOn
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Irrigation Valve
+                type:
+                - entity
+                id: valve.irrigation_valve
+              failed: []
+        created: 2026-10-21 15:21:54.336975+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The front yard irrigation valve has been opened.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 15:21:56.313821+00:00
+      tools:
+      - name: climate__HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7fcd64b2f060>, ''name'': <function non_empty_string
+          at 0x7fcd64b2f060>, ''floor'': <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fcd6b66c720>, ''domain'': Any(<function
+          string at 0x7fcd6b66c720>, [<function string at 0x7fcd6b66c720>], msg=None),
+          ''area'': <function string at 0x7fcd6b66c720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fcd67b57690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-10-21 15:21:48.591555+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1983
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 15:21:52.071085+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1983
+        cached_input_tokens: 0
+        output_tokens: 27
+    timestamp: 2026-10-21 15:21:54.325853+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        domain:
+        - valve
+        name: Irrigation Valve
+    timestamp: 2026-10-21 15:21:54.326382+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1983
+        cached_input_tokens: 0
+        output_tokens: 27
+    timestamp: 2026-10-21 15:21:54.336029+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2160
+        cached_input_tokens: 0
+        output_tokens: 8
+    timestamp: 2026-10-21 15:21:56.131727+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2160
+        cached_input_tokens: 0
+        output_tokens: 9
+    timestamp: 2026-10-21 15:21:56.306611+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 2506
+        cached_input_tokens: 0
+        output_tokens: 9
+    timestamp: 2026-10-21 15:21:56.312568+00:00
+  duration_ms: 7728.587
+  tries: 1

@@ -1,0 +1,207 @@
+---
+uuid: a33935ef-39ea-4e29-9347-7c04cf1558b3
+task_id: home1_us_lock_smart_lock-unlock_smart_lock-2
+model_id: gemini-3.8-flash
+category: lock
+task:
+  input_text: Unlock smart lock
+  expect_changes:
+    lock.smart_lock:
+      state: unlocked
+      attributes: null
+response: Smart Lock unlocked.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Unlock smart lock
+      context:
+        id: 01M5FDB5JWTBFWYX38MTHH513P
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:20:18.396298+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Smart Lock
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock
+            domain: lock
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: sensor
+            areas: Entry
+          - names: Smart Lock Tamper
+            domain: binary_sensor
+            areas: Entry
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:20:18.406185+00:00
+      - role: user
+        content: Unlock smart lock
+        attachments: null
+        created: 2026-10-21 14:20:18.396428+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Examining Control Intent**
+
+          I'm focusing on how to unlock the smart lock, according to instructions. I'll need to call the intent tools. The instructions say to use `intent__HassTurnOff`. I'm checking that this is the best approach for this situation.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOff
+          tool_args:
+            domain:
+            - lock
+            name: Smart Lock
+          id: 01M5FDB8JZYVG6K4C35MNDYFBQ
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: EtoGCtcGAWkUfRPm9YSK/vuY8KoB4/+R81AQkTpfzEjIMlgkzQx+Djk2196NKNnS89DMrsXG7J30wNLrJZCJirRqhgZCV7bU00xxDSnex1rEajFN+3JSRS+hhDDCCV8/pRbmPnOIHTmxS94khMsyxHY8Po5RNXmyMZU7soYj5mobCnpgSHvQ2+vJIY7YsVJWiPt1as5yxYs22DQVXDGadahy3Lta3IMvk2u39XvGrmdRTSWolCL3B7qXigNd2Bv3ng/zx26SpSbxz/JnZ/HZTPriVku+98fK1b3NggTfQUW/WvLelJfPRqhbzV/e02yP1lbNQ8Cmk0sqxIxl3Mj0/9IiFUr/gbMRfvymVLtlkn0M18h4OTGKlobJVJoOz6Cg64g1PcRKTvvnyZRlAYGD61daSrkWTlLW1lQ2Q0YAWjW3Hlwehc9HaTBVIc7Ivc9xWtED2Vx2jd2pjeYwrIMTcXAiFYsZyBW44ki/CbUptX1ajULKPRRmZCdQqOnSd2FocoTh4beDqOll/6EAASaeoLWbeiOai5f4knpvRIrOsJHsaMnovIITr+A3sihB+2ssRI4eCTnj094rGs1BA6PmmDvJ8ZyY2Z48iegGMozSZl5rvmoi0QKPjupRvabO2+Dc40ZVLNuTfFyvSIpVNVqlSA5gvpSPPtJdCu3KsJwkcRR/rkjwmxDq6a1OiOwRGC8IkB2qt6UgwgP8x504U8vj1/nMGzgEwtVYCzvWzlkYkTugc8EfFDtfxS7gwu/vvvmATxCf3tlZE+/bcVgs4u52hcik3HQjQ4YwyejoLB9ri1wQnnROg2KYRIwbHU6m4qpsCbp5G1HwV8A5JjJwUwuoCFH12AwbCJkYlvW7MvgZ7hVkom0VYzXjOevyQgDnFsbb1QhbpSGcznJPevS2YlPUamFQ95OFhJM2YO3pLgWT2rrLrqqigVNx6+XJtW+qPxRSWQZUpRsjU48a8t8ByYmZ9HDa748jyx1SkTdnh26uB7pF70/zhmN3M9UPOCY7U1K5fhRwThDuX+aRu6vu9r8yxUGm2g0/HU5I6ihqlM/Y7K5amOAeg33waeXI1eceq9pdkmtIfCu+33bnCxYj3TDf2ZjqGfQV8gPqeXybN72T3JG1zBkl5R66TLFgWrRW
+        created: 2026-10-21 14:20:21.490029+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FDB8JZYVG6K4C35MNDYFBQ
+        tool_name: intent__HassTurnOff
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Smart Lock
+                type:
+                - entity
+                id: lock.smart_lock
+              failed: []
+        created: 2026-10-21 14:20:21.490049+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: Smart Lock unlocked.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:20:23.928022+00:00
+      tools:
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fc686390720>, ''domain'': Any(<function
+          string at 0x7fc686390720>, [<function string at 0x7fc686390720>], msg=None),
+          ''area'': <function string at 0x7fc686390720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fc686390720>}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-10-21 14:20:18.406201+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1180
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:20:20.903144+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1180
+        cached_input_tokens: 0
+        output_tokens: 26
+    timestamp: 2026-10-21 14:20:21.471752+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOff
+      tool_args:
+        domain:
+        - lock
+        name: Smart Lock
+    timestamp: 2026-10-21 14:20:21.472308+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1180
+        cached_input_tokens: 0
+        output_tokens: 26
+    timestamp: 2026-10-21 14:20:21.487999+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1324
+        cached_input_tokens: 0
+        output_tokens: 4
+    timestamp: 2026-10-21 14:20:23.919273+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1493
+        cached_input_tokens: 0
+        output_tokens: 4
+    timestamp: 2026-10-21 14:20:23.927050+00:00
+  duration_ms: 5532.153
+  tries: 1
