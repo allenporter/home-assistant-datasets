@@ -27,15 +27,27 @@ def test_create_arguments(parser: argparse.ArgumentParser) -> None:
     assert args.report_dir == "reports"
 
 
-def test_build_check_up_to_date() -> None:
-    """Test leaderboard build check against existing repo reports."""
+def test_build_check_up_to_date(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test leaderboard build check passes against a freshly built README.
+
+    The checked in reports/README.md is regenerated on merge to main, so it
+    is expected to be stale in pull requests that add new reports.
+    """
     args = argparse.Namespace(
         report_dir="reports",
         dry_run=False,
-        check=True,
+        check=False,
         output_summary_file=None,
     )
-    assert build.run(args) == 0
+    test_file = pathlib.Path("reports/UP_TO_DATE_README_TEST.md")
+    try:
+        monkeypatch.setattr(build, "LEADERBOARD_FILE", "UP_TO_DATE_README_TEST.md")
+        assert build.run(args) == 0
+        args.check = True
+        assert build.run(args) == 0
+    finally:
+        if test_file.exists():
+            test_file.unlink()
 
 
 def test_build_dry_run_with_summary(tmp_path: pathlib.Path) -> None:
