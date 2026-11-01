@@ -1,0 +1,226 @@
+---
+uuid: 0e53e800-1f3d-4e64-bab1-d9862c98f27c
+task_id: home2_ru_valve_water_valve-open_the_irrigation_valve-1
+model_id: gemini-3.8-flash
+category: valve
+task:
+  input_text: open the irrigation valve
+  expect_changes:
+    valve.irrigation_valve:
+      state: open
+      attributes:
+        current_position: 100
+response: The irrigation valve has been opened.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: open the irrigation valve
+      context:
+        id: 01M5FDGTF5C9DVW87S78GVVGHZ
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:23:23.621618+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Irrigation Valve
+            domain: valve
+            areas: Front yard
+          - names: Irrigation Valve Battery
+            domain: sensor
+            areas: Front yard
+          - names: Irrigation Valve Meter-reading
+            domain: sensor
+            areas: Front yard
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:23:23.631756+00:00
+      - role: user
+        content: open the irrigation valve
+        attachments: null
+        created: 2026-10-21 14:23:23.621741+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Available Tools**
+
+          I'm currently evaluating the best tool to fulfill the request. The `intent__HassTurnOn` seems promising, as its description aligns perfectly with the goal of opening an irrigation valve. It's designed for actions like turning on devices, which includes opening a valve.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            domain:
+            - valve
+            name: Irrigation Valve
+          id: 01M5FDGYTCEEVRMJ6BVJ6RJB5T
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: EosICogIAWkUfRPUyd3N4uHFL2BHuT3ryEZ0LphNlV4Ozcwe2fU2yCZJkN7E/WR9u76PnJt2klijLRUi6wNlUZMc3/HI2bx5zipxJQP+4mSiGJmYC/gj5HYYhrN6VvwHlsWqqn7VppvUMH6e2eKwOeOcz31TEbBBl2oTfvPtZNJqGn5Hd55AbxprNNWCZdwVGllqeDFcI+qjYqQjHrNUbxXOphqIYpAGY7+e4QZwYtNnOLRkyBtwRVQlOHoUocjX/Ork5PmFdhRG9cljq8YwQbzbRWzQDBTX6itVCvCHhtMhrQ1CLUsw5HsnmBJfEVMFstewRXsErzhOOe8tu6r7tCuNYoi15osYd9xeFZymoJzeO6gKou5sGq+hxfWnseSloQMZyvoY9N4d7nfpytNGRkOCN5P1Hvpl0UWuXg+huq0AVN2Zw+2Cxtd1ZB5imh978irJTGXMViwwkl43l3fhgrnAlr9nUsNqLEm0xSyh7SCgMCZloD6ZDm25R5uj7L4dlytAZGKVtxhPSy/WJM0QjbcUt7WX5B+lnyTtwFv6L+sdUP6Qa2aOxnkz3qyERvjAlVoS/NVYXB56BA0vXliepyvJTekBMvD45CI0d4Vws7KWpXlbzXwsPcaRET3UyNhY2NIiXInQVYR1aCXO4ebjWGczCMkpsSsaZMEX1CxqnUk4rEfWcFNDln5TEiPHDDZQKXVclFega+Z8jMKJBrdrITQbn2ZFPh9C57+mmEAEHRycL15VfysQSwfjpAg/Sr6cazWO4Ihoy/LTXXVXKsyKFykjbze1S2tfutNTwqkWdsvUp7Y1OguTXDt2oTwW/OESe6l5wURuGsqJkOyvEzgwUy0at8kSuqQ/zxFmV62aaEHBdJe5Z3GluEKTzKetaAP+16UbPAKrMC/IvSwH5U/m3PDrFFUtjQJubYW+BLaTEHlmCexZbCLV5EimgGA4gLQQ3ms1cKsAi9cY5NlP+Rn1+FF8WNpFvoL7y9cmO7s9992Xry7RWO67XaVFa9AUUmzPrNtsDWDhhJr/vjCEtGjJ1UT7d07K2gOn45PDyDRRmtVvyMyGRm9gKpdKlX0yByl3fu+SOrZP99K2vkknDXxZnGdGYgbUJ8/ypOCF4NGFx8tpcmVk0O0lXzsmmDUKEsi4R4O+E6Sq1/PYU8HBTB+O4muGEoFk+9C1OczbRaPr4fUl2FeJ+cF+qsCfYThr5zTwEmVsowLa4bo8x/E8grWWKlFs64jRmVqF/7TASGE553O98iCcpbjp4GCw00vPFk8GL+trGwyqMmQ0ynb3KnGOmcMusHcFXYwF5jnSD2K8SBSzVeMlGbhZ8lVZ2m4X1itWINfVWUWnzV0E+/+5ESgqeiHhyfhSkVcZM9l4twAm
+        created: 2026-10-21 14:23:28.090663+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FDGYTCEEVRMJ6BVJ6RJB5T
+        tool_name: intent__HassTurnOn
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Irrigation Valve
+                type:
+                - entity
+                id: valve.irrigation_valve
+              failed: []
+        created: 2026-10-21 14:23:28.090676+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The irrigation valve has been opened.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:23:29.884147+00:00
+      tools:
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fc686390720>, ''domain'': Any(<function
+          string at 0x7fc686390720>, [<function string at 0x7fc686390720>], msg=None),
+          ''area'': <function string at 0x7fc686390720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fc67fc8f060>, ''domain'': All(<function ensure_list at 0x7fc6865bc720>,
+          [<function string at 0x7fc686390720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fc6865bc720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fc686390720>}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-10-21 14:23:23.631773+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1449
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:23:27.016087+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1449
+        cached_input_tokens: 0
+        output_tokens: 27
+    timestamp: 2026-10-21 14:23:28.076396+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        domain:
+        - valve
+        name: Irrigation Valve
+    timestamp: 2026-10-21 14:23:28.076737+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1449
+        cached_input_tokens: 0
+        output_tokens: 27
+    timestamp: 2026-10-21 14:23:28.089120+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1598
+        cached_input_tokens: 0
+        output_tokens: 2
+    timestamp: 2026-10-21 14:23:29.759230+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1598
+        cached_input_tokens: 0
+        output_tokens: 7
+    timestamp: 2026-10-21 14:23:29.876114+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 1823
+        cached_input_tokens: 0
+        output_tokens: 7
+    timestamp: 2026-10-21 14:23:29.882693+00:00
+  duration_ms: 6262.865
+  tries: 1

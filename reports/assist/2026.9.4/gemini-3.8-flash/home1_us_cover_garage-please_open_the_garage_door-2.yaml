@@ -1,0 +1,400 @@
+---
+uuid: 080312ec-92ee-437e-ab43-8cd622670fec
+task_id: home1_us_cover_garage-please_open_the_garage_door-2
+model_id: gemini-3.8-flash
+category: cover
+task:
+  input_text: Please open the garage door
+  expect_changes:
+    cover.garage_door_opener:
+      state: open
+      attributes: null
+response: The garage door is opening.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Please open the garage door
+      context:
+        id: 01M5FF0ETF4K1SH0GSPS243Y3B
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-10-21 14:49:24.560018+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: |-
+          You are a voice assistant for Home Assistant.
+          Answer questions about the world truthfully.
+          Respond simply and to the point in plain text.
+          You ARE equipped to answer questions about the current state of
+          the home using the `homeassistant__GetLiveContext` tool. This is a primary function. Do not state you lack the
+          functionality if the question requires live data.
+          If the user asks about device existence/type (e.g., "Do I have lights in the bedroom?"): Answer
+          from the static context below.
+          If the user asks about the CURRENT state, value, or mode (e.g., "Is the lock locked?",
+          "Is the fan on?", "What mode is the thermostat in?", "What is the temperature outside?"):
+              1.  Recognize this requires live data.
+              2.  You MUST call `homeassistant__GetLiveContext`. This tool will provide the needed real-time information (like temperature from the local weather, lock status, etc.).
+              3.  Use the tool's response** to answer the user accurately (e.g., "The temperature outside is [value from tool].").
+          For general knowledge questions not about the home: Answer truthfully from internal knowledge.
+
+          Static Context: An overview of the areas and the devices in this smart home:
+          - names: Backyard Camera Motion
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Camera Person
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Camera Sound
+            domain: binary_sensor
+            areas: Backyard
+          - names: Backyard Light
+            domain: light
+            areas: Backyard
+          - names: Bedroom 1 Light
+            domain: light
+            areas: Bedroom 1
+          - names: Bedroom 2 Light
+            domain: light
+            areas: Bedroom 2
+          - names: Bedroom 3 Light
+            domain: light
+            areas: Bedroom 3
+          - names: Game Room Light
+            domain: light
+            areas: Game Room
+          - names: Garage Door Opener
+            domain: cover
+            areas: Garage
+          - names: Garage Door Opener
+            domain: light
+            areas: Garage
+          - names: Kitchen Light
+            domain: light
+            areas: Kitchen
+          - names: Living Room Light
+            domain: light
+            areas: Living Room
+          - names: Living Room Motion Sensor
+            domain: binary_sensor
+            areas: Living Room
+          - names: Living Room Motion Sensor Battery
+            domain: binary_sensor
+            areas: Living Room
+          - names: Living Room Motion Sensor Battery
+            domain: sensor
+            areas: Living Room
+          - names: Master Bedroom Light
+            domain: light
+            areas: Master Bedroom
+          - names: Master Bedroom Smart Blinds
+            domain: cover
+            areas: Master Bedroom
+          - names: Master Bedroom Smart Blinds Battery
+            domain: sensor
+            areas: Master Bedroom
+          - names: Nest Hub
+            domain: media_player
+            areas: Living Room
+          - names: Rear door lock
+            domain: lock
+            areas: Garage
+          - names: Roborock Downstairs
+            domain: vacuum
+            areas: Living Room
+          - names: Smart Lock
+            domain: lock
+            areas: Entry
+          - names: Smart Lock
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Lock Battery
+            domain: sensor
+            areas: Entry
+          - names: Smart Lock Tamper
+            domain: binary_sensor
+            areas: Entry
+          - names: Smart Speaker
+            domain: media_player
+            areas: Game Room
+          - names: Thermostat
+            domain: climate
+            areas: Kitchen
+          - names: Thermostat Humidity
+            domain: sensor
+            areas: Kitchen
+          - names: Thermostat Temperature
+            domain: sensor
+            areas: Kitchen
+
+          When controlling Home Assistant always call the intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock. When controlling a device, prefer passing just name and domain. When controlling an area, prefer passing just area name and domain.
+          When a user asks to turn on all devices of a specific type, ask the user to specify an area, unless there is only one device of that type.
+          This device is not able to start timers.
+        created: 2026-10-21 14:49:24.571892+00:00
+      - role: user
+        content: Please open the garage door
+        attachments: null
+        created: 2026-10-21 14:49:24.560143+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: |+
+          **Analyzing Command Structure**
+
+          I'm currently dissecting the user's request, focusing on the core action: "open". The request mentions a "garage door," leading me to identify two relevant entities: a cover type entity for the garage door itself, and an associated light. I'm reviewing available tools, specifically `intent__HassTurnOn`, to see if it's the right fit.
+
+
+        tool_calls:
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            name: Garage Door Opener
+            domain:
+            - cover
+          id: 01M5FF0KFTNK4BDYZ21FR0VJR7
+          external: false
+        native:
+          part_details:
+          - part_type: function_call
+            index: 0
+            length: 0
+            thought_signature: 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
+        created: 2026-10-21 14:49:29.365302+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: 01M5FF0KFTNK4BDYZ21FR0VJR7
+        tool_name: intent__HassTurnOn
+        tool_result:
+          dictitems:
+            speech: {}
+            response_type: action_done
+            data:
+              success:
+              - name: Garage Door Opener
+                type:
+                - entity
+                id: cover.garage_door_opener
+              failed: []
+        created: 2026-10-21 14:49:29.365322+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The garage door is opening.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-10-21 14:49:30.814159+00:00
+      tools:
+      - name: climate__HassClimateSetTemperature
+        description: Sets the target temperature of a climate device or entity
+        parameters: '{''temperature'': Coerce(float, msg=None), ''area'': <function
+          non_empty_string at 0x7fcd64b2f060>, ''name'': <function non_empty_string
+          at 0x7fcd64b2f060>, ''floor'': <function non_empty_string at 0x7fcd64b2f060>}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fcd6b66c720>, ''domain'': Any(<function
+          string at 0x7fcd6b66c720>, [<function string at 0x7fcd6b66c720>], msg=None),
+          ''area'': <function string at 0x7fcd6b66c720>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''identify'', ''restart'', ''update'',
+          ''tv'', ''speaker'', ''receiver'', ''projector'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window'', ''water'', ''gas'', ''outlet'', ''switch''])], msg=None)}'
+      - name: intent__HassSetPosition
+        description: Sets the position of a device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None), ''position'': All(Coerce(int, msg=None), Range(min=0,
+          max=100, min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: intent__HassStopMoving
+        description: Stops a moving device or entity
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [<function string at 0x7fcd6b66c720>], msg=None), ''device_class'': All(<function
+          ensure_list at 0x7fcd6b668720>, [In([''water'', ''gas'', ''awning'', ''blind'',
+          ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'', ''shutter'',
+          ''window''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''light''])], msg=None), ''color'': <function color_name_to_rgb at
+          0x7fcd67b57690>, ''temperature'': All(Coerce(int, msg=None), Range(min=0,
+          max=None, min_included=True, max_included=True, msg=None), msg=None), ''brightness'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: media_player__HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None)}'
+      - name: media_player__HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''volume_level'': All(Coerce(int, msg=None), Range(min=0, max=100,
+          min_included=True, max_included=True, msg=None), <function async_setup_intents.<locals>.<lambda>
+          at 0x7fcd50a6a820>, msg=None)}'
+      - name: media_player__HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7fcd539b4e00>, msg=None),
+          msg=None), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: media_player__HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd50a6bcc0>}'
+      - name: media_player__HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''media_player''])], msg=None), ''device_class'': All(<function ensure_list
+          at 0x7fcd6b668720>, [In([''tv'', ''speaker'', ''receiver'', ''projector''])],
+          msg=None), ''is_volume_muted'': <function Boolean at 0x7fcd50a68460>}'
+      - name: media_player__HassMediaSearchAndPlay
+        description: Searches for media and plays the first result
+        parameters: '{''search_query'': <function string at 0x7fcd6b66c720>, ''media_class'':
+          In([''album'', ''app'', ''artist'', ''channel'', ''composer'', ''contributing_artist'',
+          ''directory'', ''episode'', ''game'', ''genre'', ''image'', ''movie'', ''music'',
+          ''playlist'', ''podcast'', ''season'', ''track'', ''tv_show'', ''url'',
+          ''video'']), ''name'': <function string at 0x7fcd6b66c720>, ''area'': <function
+          string at 0x7fcd6b66c720>, ''floor'': <function string at 0x7fcd6b66c720>}'
+      - name: vacuum__HassVacuumStart
+        description: Starts a vacuum
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumReturnToBase
+        description: Returns a vacuum to base
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fcd64b2f060>, ''domain'': All(<function ensure_list at 0x7fcd6b668720>,
+          [In([''vacuum''])], msg=None)}'
+      - name: vacuum__HassVacuumCleanArea
+        description: Tells a vacuum to clean a specific area
+        parameters: '{''area'': <function string at 0x7fcd6b66c720>, ''name'': <function
+          string at 0x7fcd6b66c720>}'
+    timestamp: 2026-10-21 14:49:24.571911+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3556
+        cached_input_tokens: 0
+        output_tokens: null
+    timestamp: 2026-10-21 14:49:27.518770+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3556
+        cached_input_tokens: 0
+        output_tokens: 28
+    timestamp: 2026-10-21 14:49:29.338117+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        name: Garage Door Opener
+        domain:
+        - cover
+    timestamp: 2026-10-21 14:49:29.338621+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3556
+        cached_input_tokens: 0
+        output_tokens: 28
+    timestamp: 2026-10-21 14:49:29.364198+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3730
+        cached_input_tokens: 0
+        output_tokens: 2
+    timestamp: 2026-10-21 14:49:30.726096+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 3730
+        cached_input_tokens: 0
+        output_tokens: 6
+    timestamp: 2026-10-21 14:49:30.803810+00:00
+  - event_type: agent_detail
+    data:
+      stats:
+        input_tokens: 4121
+        cached_input_tokens: 0
+        output_tokens: 6
+    timestamp: 2026-10-21 14:49:30.811737+00:00
+  duration_ms: 6254.614
+  tries: 1
