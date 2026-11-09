@@ -1,0 +1,247 @@
+uuid: a930c4c8-8463-4699-a871-434e00fc60f5
+task_id: urban_loft_au_weather-is_today_sunny_or_cloudy-2
+model_id: Robam-Shishen-HomeMind
+category:
+- weather
+- question
+task:
+  input_text: Is today sunny or cloudy?
+  expect_response:
+  - cloudy
+response: It is cloudy today.
+context:
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Is today sunny or cloudy?
+      context:
+        id: 01M6QQY5THEJMYZS9GQ6FR4ET1
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-11-06 06:15:04.274011+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: "You are a voice assistant for Home Assistant.\nAnswer questions\
+          \ about the world truthfully.\nRespond simply and to the point in plain\
+          \ text.\nYou ARE equipped to answer questions about the current state of\n\
+          the home by retrieving live context. This is a primary function. Do not\
+          \ state you lack the\nfunctionality if the question requires live data.\n\
+          If the user asks about device existence/type (e.g., \"Do I have lights in\
+          \ the bedroom?\"): Answer\nfrom the static context below.\nIf the user asks\
+          \ about the CURRENT state, value, or mode (e.g., \"Is the lock locked?\"\
+          ,\n\"Is the fan on?\", \"What mode is the thermostat in?\", \"What is the\
+          \ temperature outside?\"):\n    1.  Recognize this requires live data.\n\
+          \    2.  You MUST use the provided tool to retrieve live context. This tool\
+          \ will provide the needed real-time information (like temperature from the\
+          \ local weather, lock status, etc.).\n    3.  Use the tool's response**\
+          \ to answer the user accurately (e.g., \"The temperature outside is [value\
+          \ from tool].\").\nFor general knowledge questions not about the home: Answer\
+          \ truthfully from internal knowledge.\n\nStatic Context: An overview of\
+          \ the areas and the devices in this smart home:\n- names: Balcony Light\n\
+          \  domain: light\n  areas: Balcony\n- names: Bedroom Light\n  domain: light\n\
+          \  areas: Bedroom\n- names: Kitchen Light\n  domain: light\n  areas: Kitchen\n\
+          - names: Living Room\n  domain: light\n  areas: Living Room\n- names: Motion\
+          \ Sensor\n  domain: binary_sensor\n  areas: Rooftop Terrace\n- names: Motion\
+          \ Sensor Battery\n  domain: binary_sensor\n  areas: Rooftop Terrace\n- names:\
+          \ Motion Sensor Battery\n  domain: sensor\n  areas: Rooftop Terrace\n- names:\
+          \ Samsung\n  domain: media_player\n  areas: Living Room\n- names: Smart\
+          \ Plug\n  domain: switch\n  areas: Rooftop Terrace\n- names: Smart Plug\
+          \ Energy\n  domain: sensor\n  areas: Rooftop Terrace\n- names: Tasks\n \
+          \ domain: todo\n- names: Terrace Light\n  domain: light\n  areas: Rooftop\
+          \ Terrace\n- names: Weather Service\n  domain: weather\n  areas: Rooftop\
+          \ Terrace\n\nWhen controlling Home Assistant always call the intent tools.\
+          \ Use intent__HassTurnOn to lock and intent__HassTurnOff to unlock a lock.\
+          \ When controlling a device, prefer passing just name and domain. When controlling\
+          \ an area, prefer passing just area name and domain.\nWhen a user asks to\
+          \ turn on all devices of a specific type, ask the user to specify an area,\
+          \ unless there is only one device of that type.\nThis device is not able\
+          \ to start timers."
+        created: 2026-11-06 06:15:04.280739+00:00
+      - role: user
+        content: Is today sunny or cloudy?
+        attachments: null
+        created: 2026-11-06 06:15:04.274087+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: null
+        tool_calls:
+        - tool_name: homeassistant__GetLiveContext
+          tool_args:
+            domain: weather
+          id: chatcmpl-tool-be5e40af5e81a92c
+          external: false
+        native: null
+        created: 2026-11-06 06:15:06.637827+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: chatcmpl-tool-be5e40af5e81a92c
+        tool_name: homeassistant__GetLiveContext
+        result:
+          data:
+            result: "Live Context: An overview of the areas and the devices in this\
+              \ smart home:\n- names: Weather Service\n  domain: weather\n  state:\
+              \ cloudy\n  areas: Rooftop Terrace\n  attributes:\n    temperature:\
+              \ 16.7\n    temperature_unit: °C\n    humidity: '60'\n"
+          error: false
+        created: 2026-11-06 06:15:06.638578+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: It is cloudy today.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-11-06 06:15:07.221358+00:00
+      tools:
+      - name: calendar__get_events
+        description: Get events from a calendar. When asked if something happens,
+          search the whole week. Results are RFC 5545 which means 'end' is exclusive.
+        parameters: '{''calendar'': In([''Personal'']), ''range'': In([''today'',
+          ''week''])}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fe3af9347d0>, ''domain'': Any(<function
+          string at 0x7fe3af9347d0>, [<function string at 0x7fe3af9347d0>], msg=None),
+          ''area'': <function string at 0x7fe3af9347d0>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe301b83480>, [<function string at 0x7fe3af9347d0>], msg=None),
+          ''device_class'': All(<probatio.validators.structural.EnsureList object
+          at 0x7fe301cd8230>, [In([''identify'', ''restart'', ''update'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window'', ''tv'', ''speaker'', ''receiver'', ''projector'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe301cdb480>, [<function string at 0x7fe3af9347d0>], msg=None),
+          ''device_class'': All(<probatio.validators.structural.EnsureList object
+          at 0x7fe2e2910e10>, [In([''identify'', ''restart'', ''update'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window'', ''tv'', ''speaker'', ''receiver'', ''projector'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fe3af9347d0>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe2e29118b0>, [In([''light''])], msg=None), ''color'': <function
+          color_name_to_rgb at 0x7fe3ad336610>, ''temperature'': All(Coerce(int, msg=None),
+          Range(min=0, max=None, min_included=True, max_included=True, msg=None),
+          msg=None), ''brightness'': All(Coerce(int, msg=None), Range(min=0, max=100,
+          min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+      - name: media_player__HassMediaUnpause
+        description: Resumes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe2e2912cb0>, [In([''media_player''])], msg=None), ''device_class'':
+          All(<probatio.validators.structural.EnsureList object at 0x7fe2e2913430>,
+          [In([''tv'', ''speaker'', ''receiver'', ''projector''])], msg=None)}'
+      - name: media_player__HassMediaPause
+        description: Pauses a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe2e2911b80>, [In([''media_player''])], msg=None), ''device_class'':
+          All(<probatio.validators.structural.EnsureList object at 0x7fe2e2b12df0>,
+          [In([''tv'', ''speaker'', ''receiver'', ''projector''])], msg=None)}'
+      - name: media_player__HassMediaNext
+        description: Skips a media player to the next item
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe2e2b12d00>, [In([''media_player''])], msg=None), ''device_class'':
+          All(<probatio.validators.structural.EnsureList object at 0x7fe2e2b105a0>,
+          [In([''tv'', ''speaker'', ''receiver'', ''projector''])], msg=None)}'
+      - name: media_player__HassMediaPrevious
+        description: Replays the previous item for a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe2e2b101e0>, [In([''media_player''])], msg=None), ''device_class'':
+          All(<probatio.validators.structural.EnsureList object at 0x7fe302dcdae0>,
+          [In([''tv'', ''speaker'', ''receiver'', ''projector''])], msg=None)}'
+      - name: media_player__HassSetVolume
+        description: Sets the volume percentage of a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe302dcd270>, [In([''media_player''])], msg=None), ''device_class'':
+          All(<probatio.validators.structural.EnsureList object at 0x7fe302dcf890>,
+          [In([''tv'', ''speaker'', ''receiver'', ''projector''])], msg=None), ''volume_level'':
+          All(Coerce(int, msg=None), Range(min=0, max=100, min_included=True, max_included=True,
+          msg=None), <function async_setup_intents.<locals>.<lambda> at 0x7fe2e2a5c670>,
+          msg=None)}'
+      - name: media_player__HassSetVolumeRelative
+        description: Increases or decreases the volume of a media player
+        parameters: '{''volume_step'': Any(''up'', ''down'', All(Coerce(int, msg=None),
+          Range(min=-100, max=100, min_included=True, max_included=True, msg=None),
+          <function MediaSetVolumeRelativeHandler.<lambda> at 0x7fe30043d850>, msg=None),
+          msg=None), ''name'': <function string at 0x7fe3af9347d0>, ''area'': <function
+          string at 0x7fe3af9347d0>, ''floor'': <function string at 0x7fe3af9347d0>}'
+      - name: media_player__HassMediaPlayerMute
+        description: Mutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe302dcd770>, [In([''media_player''])], msg=None), ''device_class'':
+          All(<probatio.validators.structural.EnsureList object at 0x7fe301254f00>,
+          [In([''tv'', ''speaker'', ''receiver'', ''projector''])], msg=None), ''is_volume_muted'':
+          <function Boolean at 0x7fe2e2a5f7f0>}'
+      - name: media_player__HassMediaPlayerUnmute
+        description: Unmutes a media player
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fe3ab83d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fe3012559a0>, [In([''media_player''])], msg=None), ''device_class'':
+          All(<probatio.validators.structural.EnsureList object at 0x7fe3012559f0>,
+          [In([''tv'', ''speaker'', ''receiver'', ''projector''])], msg=None), ''is_volume_muted'':
+          <function Boolean at 0x7fe2e2a5fd70>}'
+      - name: todo__get_items
+        description: Query a to-do list to find out what items are on it. Use this
+          to answer questions like 'What's on my task list?' or 'Read my grocery list'.
+          Filters items by status (needs_action, completed, all).
+        parameters: '{''todo_list'': In([''Tasks'']), ''status'': In([''needs_action'',
+          ''completed'', ''all''])}'
+      - name: todo__HassListAddItem
+        description: Add item to a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fe3ab83d0c0>, ''name'':
+          <function non_empty_string at 0x7fe3ab83d0c0>}'
+      - name: todo__HassListCompleteItem
+        description: Complete item on a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fe3ab83d0c0>, ''name'':
+          <function non_empty_string at 0x7fe3ab83d0c0>}'
+      - name: todo__HassListRemoveItem
+        description: Remove one or more items from a todo list
+        parameters: '{''item'': <function non_empty_string at 0x7fe3ab83d0c0>, ''name'':
+          <function non_empty_string at 0x7fe3ab83d0c0>}'
+    timestamp: 2026-11-06 06:15:04.280752+00:00
+  - event_type: tool_call
+    data:
+      tool_name: homeassistant__GetLiveContext
+      tool_args:
+        domain: weather
+    timestamp: 2026-11-06 06:15:06.638180+00:00
+  duration_ms: 2947.681
+  tries: 1
+  original_model_id: qwen36-auto-r01-checkpoint-192
