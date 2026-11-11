@@ -9,21 +9,48 @@ echo "==> Bootstrapping..."
 
 if command -v uv >/dev/null 2>&1; then
   echo "==> Using uv for synchronization..."
-  uv sync --all-extras
-  uv pip install -r requirements_dev.txt
+  if [ -z "${VIRTUAL_ENV}" ] && [ ! -d ".venv" ]; then
+    uv venv
+  fi
+  uv pip install -r requirements_dev.txt -e . --prerelease=allow
 elif command -v python3 >/dev/null 2>&1; then
   echo "==> Using pip for installation..."
   python3 -m pip install --upgrade pip
-  python3 -m pip install -e ".[all]"
-  python3 -m pip install -r requirements_dev.txt
+  python3 -m pip install -r requirements_dev.txt -e .
 else
   echo "Aborting: python3 not found."
   exit 1
 fi
 
+echo "==> Setting up custom components..."
+COMPONENTS=(
+  "synthetic_home;https://github.com/allenporter/home-assistant-synthetic-home.git;home-assistant-synthetic-home"
+)
+
+mkdir -p deps
+mkdir -p custom_components
+touch custom_components/__init__.py
+
+for entry in "${COMPONENTS[@]}"; do
+  IFS=";" read -r name repo_url repo_dir <<< "$entry"
+  dep_dir="deps/$repo_dir"
+
+  if [ ! -d "$dep_dir" ]; then
+    echo "    Cloning $name dependency..."
+    git clone --depth 1 "$repo_url" "$dep_dir"
+  fi
+
+  echo "    Linking $name custom component..."
+  ln -sf "../$dep_dir/custom_components/$name" "custom_components/$name" || {
+    echo "    Warning: Failed to create symbolic link for $name. Copying instead..."
+    rm -rf "custom_components/$name"
+    cp -R "$dep_dir/custom_components/$name" "custom_components/$name"
+  }
+done
+
 echo "==> Installing pre-commit hooks..."
 if command -v uv >/dev/null 2>&1; then
-  uv run pre-commit install
+  uv run --no-project pre-commit install
 else
   pre-commit install
 fi

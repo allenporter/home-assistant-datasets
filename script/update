@@ -8,6 +8,16 @@ cd "$(dirname "$0")/.."
 echo "==> Updating codebase..."
 git pull
 
+if [ -d "deps" ]; then
+  echo "==> Updating custom component dependencies..."
+  for dep_dir in deps/*/; do
+    if [ -d "${dep_dir}.git" ]; then
+      echo "    Updating ${dep_dir%/}..."
+      git -C "$dep_dir" pull --ff-only || echo "    Warning: Could not fast-forward ${dep_dir%/} (local changes or diverged branch). Skipping."
+    fi
+  done
+fi
+
 echo "==> Running bootstrap..."
 ./script/bootstrap
 

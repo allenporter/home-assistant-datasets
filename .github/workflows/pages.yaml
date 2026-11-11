@@ -38,19 +38,18 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "requirements_dev.txt"
           activate-environment: true
-      - name: Install dependencies
-        run: |
-          uv pip install -r requirements_dev.txt
       - name: Prepare allenporter/home-assistant-synthetic-home
         uses: actions/checkout@v7
         with:
           repository: allenporter/home-assistant-synthetic-home
-          path: home-assistant-synthetic-home
+          path: deps/home-assistant-synthetic-home
           sparse-checkout: |
             custom_components
+      - name: Bootstrap environment
+        run: |
+          ./script/bootstrap
       - name: Build documentation
         run: |
-          export PYTHONPATH="${PYTHONPATH}:./home-assistant-synthetic-home/"
           pdoc ./home_assistant_datasets -o docs/ --mermaid
       - name: Setup Pages
         uses: actions/configure-pages@v6

@@ -39,11 +39,18 @@ if [ ! -d "${OUTPUT_DIR}" ]; then
 fi
 
 # Ensure the synthetic home component is setup
-SYNTHETIC_HOME_DIR="/workspaces/home-assistant-synthetic-home/"
-if [ ! -d "${SYNTHETIC_HOME_DIR}" ]; then
-  echo "Synthetic home directory ${SYNTHETIC_HOME_DIR} does not exist. Please check the path."
+if [ -d "custom_components/synthetic_home" ]; then
+  # If local custom_components setup exists, pytest.ini will load it automatically
+  echo "==> Using local custom_components/synthetic_home"
+elif [ -d "/workspaces/home-assistant-synthetic-home/" ]; then
+  echo "==> Using legacy Codespace synthetic home component"
+  export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home/"
+elif [ -d "deps/home-assistant-synthetic-home/" ]; then
+  echo "==> Using deps/home-assistant-synthetic-home/"
+  export PYTHONPATH="${PYTHONPATH}:${PWD}/deps/home-assistant-synthetic-home/"
+else
+  echo "Synthetic home directory not found. Please run ./script/bootstrap first."
   exit 1
 fi
-export PYTHONPATH="${PYTHONPATH}:${SYNTHETIC_HOME_DIR}"
 
 pytest home_assistant_datasets/tool/assist/collect --models=${MODEL} --dataset=${DATASET} --model_output_dir=${OUTPUT_DIR}
