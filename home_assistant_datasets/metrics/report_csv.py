@@ -24,12 +24,12 @@ class CsvWriter(TaskResultWriter):
     def start(self) -> None:
         """Write the csv header."""
 
-    def row(self, record: ScrapeRecord, result: TaskResult) -> None:
+    def row(self, scrape: ScrapeRecord, result: TaskResult) -> None:
         """Dump the record in csv format."""
         if result.skipped:
             return
         result_data: dict[str, Any] = result.as_report_data()  # type: ignore[assignment]
-        item_row = {**record.as_report_data(), **result_data}
+        item_row = {**scrape.as_report_data(), **result_data}
 
         # Print the header
         if self._cols is None:
