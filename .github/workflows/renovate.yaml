@@ -1,0 +1,37 @@
+---
+name: Renovate Config
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - .github/renovate.json5
+      - .github/workflows/renovate.yaml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/renovate.json5
+      - .github/workflows/renovate.yaml
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache npm packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-renovate-validator-${{ hashFiles('.github/workflows/renovate.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-renovate-validator-
+      - name: Validate Renovate configuration
+        run: |
+          npx --yes --package=renovate@44 -- renovate-config-validator .github/renovate.json5
