@@ -1,0 +1,181 @@
+uuid: 9215be73-a77d-4853-bba0-f17bc44043b3
+task_id: home5_cn_fan-turn_on_the_bedroom_fan-4
+model_id: Robam-Shishen-HomeMind
+category: fan
+task:
+  input_text: Turn on the bedroom fan
+  expect_changes:
+    fan.bedroom_fan:
+      state: 'on'
+      attributes:
+        percentage: 100
+response: The Bedroom Fan is now on.
+context:
+  unexpected_states: {}
+  conversation_trace:
+  - event_type: async_process
+    data:
+      text: Turn on the bedroom fan
+      context:
+        id: 01M6QQGSAQ9FJJC735PH6K7X6P
+        parent_id: null
+        user_id: null
+      conversation_id: null
+      device_id: null
+      satellite_id: null
+      language: en
+      agent_id: conversation.mock_title
+      extra_system_prompt: null
+    timestamp: 2026-11-06 06:07:45.495423+00:00
+  - event_type: agent_detail
+    data:
+      messages:
+      - role: system
+        content: "You are a voice assistant for Home Assistant.\nAnswer questions\
+          \ about the world truthfully.\nRespond simply and to the point in plain\
+          \ text.\nYou ARE equipped to answer questions about the current state of\n\
+          the home by retrieving live context. This is a primary function. Do not\
+          \ state you lack the\nfunctionality if the question requires live data.\n\
+          If the user asks about device existence/type (e.g., \"Do I have lights in\
+          \ the bedroom?\"): Answer\nfrom the static context below.\nIf the user asks\
+          \ about the CURRENT state, value, or mode (e.g., \"Is the lock locked?\"\
+          ,\n\"Is the fan on?\", \"What mode is the thermostat in?\", \"What is the\
+          \ temperature outside?\"):\n    1.  Recognize this requires live data.\n\
+          \    2.  You MUST use the provided tool to retrieve live context. This tool\
+          \ will provide the needed real-time information (like temperature from the\
+          \ local weather, lock status, etc.).\n    3.  Use the tool's response**\
+          \ to answer the user accurately (e.g., \"The temperature outside is [value\
+          \ from tool].\").\nFor general knowledge questions not about the home: Answer\
+          \ truthfully from internal knowledge.\n\nStatic Context: An overview of\
+          \ the areas and the devices in this smart home:\n- names: Bedroom 1 Light\n\
+          \  domain: light\n  areas: Bedroom 1\n- names: Bedroom 2 Light\n  domain:\
+          \ light\n  areas: Bedroom 2\n- names: Bedroom Fan\n  domain: fan\n  areas:\
+          \ Bedroom 1\n- names: Kitchenette Light\n  domain: light\n  areas: Kitchenette\n\
+          - names: Living Room Light\n  domain: light\n  areas: Living Room\n- names:\
+          \ Motion Sensor\n  domain: binary_sensor\n  areas: Front Porch\n- names:\
+          \ Motion Sensor Battery\n  domain: binary_sensor\n  areas: Front Porch\n\
+          - names: Motion Sensor Battery\n  domain: sensor\n  areas: Front Porch\n\
+          - names: Porch Light\n  domain: light\n  areas: Front Porch\n- names: Wood\
+          \ Stove Temperature Sensor Humidity\n  domain: sensor\n  areas: Living Room\n\
+          - names: Wood Stove Temperature Sensor Temperature\n  domain: sensor\n \
+          \ areas: Living Room\n\nWhen controlling Home Assistant always call the\
+          \ intent tools. Use intent__HassTurnOn to lock and intent__HassTurnOff to\
+          \ unlock a lock. When controlling a device, prefer passing just name and\
+          \ domain. When controlling an area, prefer passing just area name and domain.\n\
+          When a user asks to turn on all devices of a specific type, ask the user\
+          \ to specify an area, unless there is only one device of that type.\nThis\
+          \ device is not able to start timers."
+        created: 2026-11-06 06:07:45.501963+00:00
+      - role: user
+        content: Turn on the bedroom fan
+        attachments: null
+        created: 2026-11-06 06:07:45.495513+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: null
+        thinking_content: null
+        tool_calls:
+        - tool_name: intent__HassTurnOn
+          tool_args:
+            name: Bedroom Fan
+            domain:
+            - fan
+          id: chatcmpl-tool-b1f281c7663bd6b3
+          external: false
+        native: null
+        created: 2026-11-06 06:07:46.713122+00:00
+      - role: tool_result
+        agent_id: conversation.mock_title
+        tool_call_id: chatcmpl-tool-b1f281c7663bd6b3
+        tool_name: intent__HassTurnOn
+        result:
+          data:
+            dictitems:
+              speech: {}
+              response_type: action_done
+              data:
+                success:
+                - name: Bedroom Fan
+                  type:
+                  - entity
+                  id: fan.bedroom_fan
+                failed: []
+          error: false
+        created: 2026-11-06 06:07:46.716197+00:00
+      - role: assistant
+        agent_id: conversation.mock_title
+        content: The Bedroom Fan is now on.
+        thinking_content: null
+        tool_calls: null
+        native: null
+        created: 2026-11-06 06:07:47.519171+00:00
+      tools:
+      - name: fan__HassFanSetSpeed
+        description: Sets a fan's speed by percentage
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fdf3c96d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fde8774e710>, [In([''fan''])], msg=None), ''percentage'': All(Coerce(int,
+          msg=None), Range(min=0, max=100, min_included=True, max_included=True, msg=None),
+          msg=None)}'
+      - name: homeassistant__GetLiveContext
+        description: 'Provides real-time information about the CURRENT state, value,
+          or mode of devices, sensors, entities, or areas. Use this tool for: 1. Answering
+          questions about current conditions (e.g., ''Is the light on?''). 2. As the
+          first step in conditional actions (e.g., ''If the weather is rainy, turn
+          off sprinklers'' requires checking the weather first). You may filter for
+          devices by name, domain, and area, including combining those filters. Prefer
+          filtering by domain when searching for multiple devices of the same type.'
+        parameters: '{''name'': <function string at 0x7fdf40c847d0>, ''domain'': Any(<function
+          string at 0x7fdf40c847d0>, [<function string at 0x7fdf40c847d0>], msg=None),
+          ''area'': <function string at 0x7fdf40c847d0>}'
+      - name: intent__HassTurnOn
+        description: Turns on/opens/presses a device or entity. For locks, this performs
+          a 'lock' action. Use for requests like 'turn on', 'activate', 'enable',
+          or 'lock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fdf3c96d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fde86d7acb0>, [<function string at 0x7fdf40c847d0>], msg=None),
+          ''device_class'': All(<probatio.validators.structural.EnsureList object
+          at 0x7fde86d7bf70>, [In([''identify'', ''restart'', ''update'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window'', ''tv'', ''speaker'', ''receiver'', ''projector'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: intent__HassTurnOff
+        description: Turns off/closes a device or entity. For locks, this performs
+          an 'unlock' action. Use for requests like 'turn off', 'deactivate', 'disable',
+          or 'unlock'.
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fdf3c96d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fde86d7b390>, [<function string at 0x7fdf40c847d0>], msg=None),
+          ''device_class'': All(<probatio.validators.structural.EnsureList object
+          at 0x7fde86d7a440>, [In([''identify'', ''restart'', ''update'', ''awning'',
+          ''blind'', ''curtain'', ''damper'', ''door'', ''garage'', ''gate'', ''shade'',
+          ''shutter'', ''window'', ''tv'', ''speaker'', ''receiver'', ''projector'',
+          ''outlet'', ''switch'', ''water'', ''gas''])], msg=None)}'
+      - name: intent__HassCancelAllTimers
+        description: Cancels all timers
+        parameters: '{''area'': <function string at 0x7fdf40c847d0>}'
+      - name: light__HassLightSet
+        description: Sets the brightness percentage or color of a light
+        parameters: '{Any(''name'', ''area'', ''floor'', msg=None): <function non_empty_string
+          at 0x7fdf3c96d0c0>, ''domain'': All(<probatio.validators.structural.EnsureList
+          object at 0x7fde87fba3f0>, [In([''light''])], msg=None), ''color'': <function
+          color_name_to_rgb at 0x7fdf3e58a610>, ''temperature'': All(Coerce(int, msg=None),
+          Range(min=0, max=None, min_included=True, max_included=True, msg=None),
+          msg=None), ''brightness'': All(Coerce(int, msg=None), Range(min=0, max=100,
+          min_included=True, max_included=True, msg=None), msg=None)}'
+      - name: llm__GetDateTime
+        description: Provides the current date and time.
+        parameters: '{}'
+    timestamp: 2026-11-06 06:07:45.501976+00:00
+  - event_type: tool_call
+    data:
+      tool_name: intent__HassTurnOn
+      tool_args:
+        name: Bedroom Fan
+        domain:
+        - fan
+    timestamp: 2026-11-06 06:07:46.713455+00:00
+  duration_ms: 2024.045
+  tries: 1
+  original_model_id: qwen36-auto-r01-checkpoint-192
