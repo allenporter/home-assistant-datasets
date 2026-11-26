@@ -27,27 +27,13 @@ $ uv pip install -e /workspaces/core
 
 ## Synthetic Home Custom Component (required)
 
-You will need the [synthetic-home custom component](https://github.com/allenporter/home-assistant-synthetic-home)
-and need to configure `PYTHONPATH` so that Home Assistant can find it. This is
-typical setup for a custom component in a separate directory:
+The [synthetic-home custom component](https://github.com/allenporter/home-assistant-synthetic-home) is managed automatically when you run `./script/bootstrap`. This clones the repository into `deps/home-assistant-synthetic-home` and creates the necessary symbolic links in `custom_components/synthetic_home`. You can run `./script/update` to pull newer versions of custom component dependencies alongside codebase updates.
 
-```bash
-$ cd /workspaces
-$ git clone https://github.com/allenporter/home-assistant-synthetic-home
-$ export PYTHONPATH="${PYTHONPATH}:/workspaces/home-assistant-synthetic-home/"
-```
+The workspace `pytest.ini` automatically adds the repository root to `pythonpath`, so no manual `export PYTHONPATH` configuration is required.
 
 ## Additional custom components (optional)
 
-If you want to run additional custom components
-
-Or using a `custom_components` directory in the local directory if you have multiple
-custom components you want to evaluate. This means you will need to sym link
-all of the custom components (including synthetic home) into that directory:
-
-```bash
-$ export PYTHONPATH="${PYTHONPATH}:${PWD}"
-```
+If you want to evaluate additional custom components, place or symlink them into the `custom_components/` directory (or add them to the `COMPONENTS` array in `script/bootstrap`).
 
 ## Model setup
 
@@ -69,10 +55,10 @@ config_entry_options:
 
 This includes referencing a secret defined in `secrets.yaml` in the root dir.
 
-### Scape
+### Scrape
 
 You can scrape the model by running the `collect` command which will invoke
-the onversation agent, using pytest. This loads the input `$DATASET`,
+the conversation agent, using pytest. This loads the input `$DATASET`,
 scrapes the model `$MODEL`, and the output to `$OUTPUT_DIR`.
 
 Common datasets to evaluate against are `assist`, `assist-mini`, and `intents`.
@@ -94,6 +80,7 @@ a list of the wins and losses for manual inspection.
 ```bash
 $ pytest home_assistant_datasets/tool/assist/eval --model_output_dir=${OUTPUT_DIR}
 ```
+
 To evaluate `automations` dataset, run the following instead:
 
 ```bash
